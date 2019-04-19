@@ -4,11 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start:server": "node index.js",
+    "dev:server": "nodemon index.js",
+    "test:server": "jest ./__tests__"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.11"
