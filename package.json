@@ -1,0 +1,13 @@
+{
+  "name": "ten-hands",
+  "version": "1.0.0",
+  "repository": "git@github.com:saisandeepvaddi/ten-hands.git",
+  "author": "Sai Sandeep Vaddi <saisandeepvaddi@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "ui",
+    "server",
+    "cli"
+  ]
+}
