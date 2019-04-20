@@ -29,4 +29,18 @@ describe("Server", () => {
     const projectsAfter = await server.getAllProjects();
     expect(projectsAfter.length).toBe(projectsBefore.length + 1);
   });
+
+  it("should update an existing project", async () => {
+    const projectsBefore = await server.getAllProjects();
+    const sampleProject = projectsBefore[Object.keys(projectsBefore)[0]];
+    const randomName = "random-" + Math.random() * 100;
+    const sampleProjectWithNewName = {
+      ...sampleProject,
+      name: randomName
+    };
+    await server.updateProject(sampleProjectWithNewName);
+    const projectsAfter = await server.getAllProjects();
+    const namesOfAllProjects = projectsAfter.map(project => project.name);
+    expect(namesOfAllProjects).toContain(sampleProjectWithNewName.name);
+  });
 });

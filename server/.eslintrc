@@ -16,6 +16,7 @@
   "extends": "eslint:recommended",
   "rules": {
     "semi": ["error", "always"],
-    "quotes": ["error", "double"]
+    "quotes": ["error", "double"],
+    "no-console": "off"
   }
 }

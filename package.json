@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest --no-cache"
   },
   "workspaces": [
     "ui",
