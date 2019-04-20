@@ -1,18 +1,53 @@
 {
-  "name": "@ten-hands/server",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "name": "server",
+  "description": "Server for ten-hands ui and cli",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Sai Sandeep Vaddi",
+    "email": "saisandeepvaddi@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^10.0.0",
+    "yarn": ">= 0.18.0"
+  },
   "scripts": {
-    "start:server": "node index.js",
-    "dev:server": "nodemon index.js",
-    "test": "jest"
+    "test": "yarn run eslint && set NODE_ENV=production && yarn run jest",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "jest": "jest --watch"
   },
   "dependencies": {
-    "fs-extra": "^7.0.1",
-    "uuid": "^3.3.2"
+    "@feathersjs/configuration": "^2.0.4",
+    "@feathersjs/errors": "^3.3.4",
+    "@feathersjs/express": "^1.2.7",
+    "@feathersjs/feathers": "^3.2.3",
+    "@feathersjs/socketio": "^3.2.7",
+    "compression": "^1.7.3",
+    "cors": "^2.8.5",
+    "feathers-nedb": "^4.0.0",
+    "helmet": "^3.15.0",
+    "nedb": "^1.8.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.11"
+    "eslint": "^5.9.0",
+    "jest": "^24.7.1",
+    "nodemon": "^1.18.7",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   }
 }
