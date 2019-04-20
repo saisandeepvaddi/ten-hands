@@ -6,7 +6,7 @@
   "scripts": {
     "start:server": "node index.js",
     "dev:server": "nodemon index.js",
-    "test:server": "jest ./__tests__"
+    "test": "jest"
   },
   "dependencies": {
     "uuid": "^3.3.2"
