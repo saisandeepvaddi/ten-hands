@@ -18,6 +18,7 @@ const channels = require("./channels");
 const app = express(feathers());
 
 // Load app configuration
+process.env.NODE_CONFIG_STRICT_MODE = false;
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
 app.use(helmet());
