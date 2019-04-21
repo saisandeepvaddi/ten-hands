@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "execa": "^1.0.0",
+    "express": "^4.16.4",
+    "lowdb": "^1.0.0",
+    "socket.io": "^2.2.0",
+    "tree-kill": "^1.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
