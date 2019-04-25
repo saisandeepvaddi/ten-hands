@@ -1,76 +1,58 @@
-import React, { Component } from "react";
+import React from "react";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+import { Colors } from "@blueprintjs/core";
 import "./App.css";
-import io from "socket.io-client";
+import SplitPane from "react-split-pane";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.socket = io("http://localhost:1010");
-    this.state = {
-      command: "node functions.js",
-      jobs: [],
-      stdout: []
-    };
-    this.cmdRef = React.createRef();
+import styled, { ThemeProvider } from "styled-components";
+
+const THEME = {
+  light: {
+    lightBackground1: Colors.LIGHT_GRAY1,
+    lightBackground2: Colors.LIGHT_GRAY2,
+    lightBackground3: Colors.LIGHT_GRAY3
+  },
+  dark: {
+    darkBackground1: Colors.DARK_GRAY1,
+    darkBackground2: Colors.DARK_GRAY2,
+    darkBackground3: Colors.DARK_GRAY3
   }
+};
 
-  componentDidMount() {
-    this.socket.on("connect", () => {
-      console.log("Connected to socket");
-    });
+const TopBar = styled.div`
+  height: 50px;
+  background-color: ${props => props.theme.dark.darkBackground2};
+`;
 
-    this.socket.on("disconnect", () => {
-      console.log("Disconnected to socket");
-    });
+const SplitContainer = styled.div`
+  height: calc(100vh - 50px);
+`;
 
-    this.socket.on("result", result => {
-      console.log(result);
-      this.setState(prevState => ({
-        stdout: [...prevState.stdout, result]
-      }));
-    });
-  }
+const Sidebar = styled.div`
+  background: ${Colors.DARK_GRAY3};
+  height: 100%;
+`;
 
-  updateJobs = async () => {};
+const Main = styled.div`
+  background: ${Colors.DARK_GRAY2};
+  height: 100%;
+`;
 
-  removeJobs = async () => {};
-
-  createJob = async () => {
-    console.log("this.state.command:", this.state.command);
-    this.socket.emit("start", {
-      command: this.state.command
-    });
-  };
-
-  removeJob = async id => {};
-
-  render() {
-    return (
-      <div>
-        <input
-          type="text"
-          value={this.state.command}
-          ref={this.cmdRef}
-          onChange={e => this.setState({ command: e.target.value })}
-        />
-        <button onClick={this.createJob}>Create Job</button>
-        <button onClick={this.removeJobs}>Remove Jobs</button>
-        <div
-          style={{
-            border: "1px solid black",
-            background: "#EEEEEE",
-            color: "black",
-            fontSize: "12px",
-            fontFamily: "consolas"
-          }}
-        >
-          {this.state.stdout.map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
+const App = () => {
+  return (
+    <ThemeProvider theme={THEME}>
+      <>
+        <TopBar />
+        <SplitContainer>
+          <SplitPane split="vertical" defaultSize={200} maxSize={500}>
+            <Sidebar />
+            <Main />
+          </SplitPane>
+        </SplitContainer>
+      </>
+    </ThemeProvider>
+  );
+};
 
 export default App;
