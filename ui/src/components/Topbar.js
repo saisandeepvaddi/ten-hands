@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { Colors } from "@blueprintjs/core";
 
 const Container = styled.div`
-  background: ${Colors.DARK_GRAY2};
-  height: 100%;
+  background: ${Colors.DARK_GRAY3};
+  height: 50px;
 `;
 
-const Sidebar = () => {
+const Topbar = () => {
   return <Container />;
 };
 
-export default Sidebar;
+export default Topbar;
