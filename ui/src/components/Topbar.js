@@ -1,5 +1,5 @@
 import React from "react";
-import { Colors, Button, Navbar, Alignment } from "@blueprintjs/core";
+import { Button, Navbar, Alignment } from "@blueprintjs/core";
 
 const Topbar = ({ theme, setTheme }) => {
   return (
