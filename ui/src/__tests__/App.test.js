@@ -1,9 +1,11 @@
+import "jest-dom/extend-expect";
 import React from "react";
-import ReactDOM from "react-dom";
-import App from "../App";
+import { render } from "react-testing-library";
+import App from "../components/App";
 
-it("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe("App Component", () => {
+  it("renders without crashing", () => {
+    const { container } = render(<App />);
+    expect(container).not.toBeNull();
+  });
 });
