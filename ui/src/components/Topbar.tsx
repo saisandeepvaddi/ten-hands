@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Navbar, Alignment } from "@blueprintjs/core";
 
-const Topbar = ({ theme, setTheme }) => {
+const Topbar: React.FC<IMyTheme> = ({ theme, setTheme }: IMyTheme) => {
   return (
     <Navbar fixedToTop>
       <Navbar.Group align={Alignment.LEFT}>
