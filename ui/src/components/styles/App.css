@@ -26,6 +26,15 @@ body {
   position: relative;
 }
 
+.w-100 {
+  width: 100%;
+}
+
+.w-100 > .bp3-tab-list {
+  width: 100%;
+}
+
+/* Styles for React-Split-Pane resizer */
 .Resizer {
   background: #000;
   opacity: 0.2;

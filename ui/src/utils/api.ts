@@ -35,7 +35,7 @@ const projects = [
   }
 ];
 
-export const getProjects = async () => {
+export const getProjects: () => Promise<any> = async () => {
   try {
     return Promise.resolve(projects);
   } catch (error) {
