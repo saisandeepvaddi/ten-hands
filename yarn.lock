@@ -8459,7 +8459,7 @@ prompts@^2.0.1:
     kleur "^3.0.2"
     sisteransi "^1.0.0"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8773,6 +8773,14 @@ react-split-pane@^0.1.87:
     prop-types "^15.5.10"
     react-lifecycles-compat "^3.0.4"
     react-style-proptype "^3.0.0"
+
+react-split@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-split/-/react-split-2.0.4.tgz#db45ec5dfa9e34a3d17e894b9c48dfa8f4239ac3"
+  integrity sha512-NBKm9MaqzG/00laMUaS8GS9RnItVSekNNwItgGLMbFTeUa9w4bIY8Co/LszNBnpza9n2am0MXIw3SmyiMnhs+w==
+  dependencies:
+    prop-types "^15.5.7"
+    split.js "^1.5.9"
 
 react-style-proptype@^3.0.0:
   version "3.2.2"
@@ -9681,6 +9689,11 @@ split-string@^3.0.1, split-string@^3.0.2:
   integrity sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
   dependencies:
     extend-shallow "^3.0.0"
+
+split.js@^1.5.9:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/split.js/-/split.js-1.5.10.tgz#11f63a7ea21780a6022e6dffe8f8eaa18c9c819e"
+  integrity sha512-/J52X5c4ZypVwu4WAhD8E1T9uXQtNokvG6mIBHauzyA1aKH6bmETVSv3RPjBXEz6Gcc4mIThgmjGQL39LD16jQ==
 
 sprintf-js@~1.0.2:
   version "1.0.3"

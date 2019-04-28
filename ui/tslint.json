@@ -1,3 +1,8 @@
 {
-  "extends": "@blueprintjs/tslint-config"
+  "extends": "@blueprintjs/tslint-config",
+  "rules": {
+    "no-default-export": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false
+  }
 }

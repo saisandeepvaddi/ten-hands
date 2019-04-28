@@ -13,19 +13,30 @@ import "./styles/App.css";
 import Topbar from "./Topbar";
 
 const SplitContainer = styled.div`
-    height: calc(100vh - 50px);
+    min-height: calc(100vh - 50px);
     padding-top: 50px;
+    height: 100%;
+    /* overflow: auto; */
 `;
 
 const App = () => {
     const [theme, setTheme] = React.useState(getItem("theme") || Classes.DARK);
     const [projects, setProjects] = React.useState([]);
-    const [activeProject, setActiveProject] = React.useState({});
+    const [activeProject, setActiveProject] = React.useState({
+        id: "",
+        name: "",
+        type: "",
+        commands: [],
+    });
 
     React.useEffect(() => {
         async function getProjectsFromApi() {
             const savedProjects: any = await getProjects();
             setProjects(savedProjects);
+            if (savedProjects) {
+                // Set first project as default active project if there projects found
+                setActiveProject(savedProjects[0]);
+            }
         }
         getProjectsFromApi();
     }, [projects]);

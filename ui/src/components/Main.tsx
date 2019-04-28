@@ -1,12 +1,16 @@
-import { Button, Classes, Code, Colors } from "@blueprintjs/core";
+import { Button, Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../utils/Context";
+import CommandsArea from "./CommandsArea";
+import ProjectTopbar from "./ProjectTopbar";
 
 const Container = styled.div`
+    position: relative;
     border-top: 1px solid transparent; /* To prevent margin-collapse for first child doesn't happen */
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY1 : Colors.LIGHT_GRAY1)};
     height: 100%;
+    /* overflow-y: auto; */
 `;
 
 const Footer = styled.div`
@@ -22,22 +26,28 @@ const Footer = styled.div`
 `;
 
 interface IMainProps {
-    activeProject?: IProject | {};
+    activeProject: IProject;
 }
 
 const Main: React.FC<IMainProps> = ({ activeProject }) => {
-    console.log("activeProject:", activeProject);
     const theme = React.useContext(ThemeContext);
+    const commandsInProject: IProjectCommand[] = activeProject.commands;
     return (
-        <Container theme={theme} className="test">
-            <div className={Classes.RUNNING_TEXT} style={{ marginTop: 30 }}>
-                <Code>Test</Code>
-            </div>
-            <Footer>
-                <Button icon="add" intent="success" text="New Command" large={true} />
-            </Footer>
+        <Container theme={theme} className="main-container">
+            <ProjectTopbar activeProject={activeProject} />
+            <CommandsArea commands={commandsInProject} splitDirection={`horizontal`} />
+            <Footer>{/*  */}</Footer>
         </Container>
     );
+};
+
+Main.defaultProps = {
+    activeProject: {
+        id: "",
+        name: "",
+        type: "",
+        commands: [],
+    },
 };
 
 export default Main;

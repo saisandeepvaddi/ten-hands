@@ -15,7 +15,7 @@ const Topbar: React.FC<ITopbarProps> = ({ theme, setTheme }) => {
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
                 {theme === Classes.DARK ? (
-                    <Button data-testid="theme-light" icon="flash" onClick={() => setTheme(``)} minimal={true} />
+                    <Button data-testid="theme-light" icon="flash" onClick={() => setTheme(`light`)} minimal={true} />
                 ) : (
                     <Button
                         data-testid="theme-dark"

@@ -3,13 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import { ProjectsContext, ThemeContext } from "../utils/Context";
 
+import SplitPane from "react-split-pane";
 import { JsonArray } from "type-fest";
 import { getProjects } from "../utils/api";
 import ProjectsList from "./ProjectsList";
 
 const Container = styled.div`
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2)};
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -8,6 +8,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.0",
+    "react-split": "^2.0.4",
     "react-split-pane": "^0.1.87",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
