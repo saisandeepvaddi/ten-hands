@@ -1,4 +1,4 @@
-import { Classes, Divider, H3, InputGroup, Tab, Tabs } from "@blueprintjs/core";
+import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
 
 interface IProjectProps {

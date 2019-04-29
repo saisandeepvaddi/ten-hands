@@ -1,4 +1,4 @@
-import { Card, Classes, Elevation, H3, H5, Pre } from "@blueprintjs/core";
+import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 import Command from "./Command";

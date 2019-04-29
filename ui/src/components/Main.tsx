@@ -1,4 +1,4 @@
-import { Button, Classes, Colors } from "@blueprintjs/core";
+import { Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../utils/Context";
@@ -13,18 +13,6 @@ const Container = styled.div`
     /* overflow-y: auto; */
 `;
 
-const Footer = styled.div`
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    padding: 1rem;
-    align-items: center;
-    & > button {
-        margin-left: auto;
-    }
-`;
-
 interface IMainProps {
     activeProject: IProject;
 }
@@ -36,7 +24,6 @@ const Main: React.FC<IMainProps> = ({ activeProject }) => {
         <Container theme={theme} className="main-container">
             <ProjectTopbar activeProject={activeProject} />
             <CommandsArea commands={commandsInProject} splitDirection={`horizontal`} />
-            <Footer>{/*  */}</Footer>
         </Container>
     );
 };
