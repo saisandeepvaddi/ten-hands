@@ -1,13 +1,19 @@
 import app from "./app";
+import { createServer } from "http";
 
-const http = require("http").Server(app);
+import socketIO from "socket.io";
 
-const io = require("socket.io")(http);
+async function startServer() {
+  const port = app.get("port");
+  const server = createServer(app);
 
-const port = app.get("port");
+  const io = socketIO(server);
 
-http.listen(port, function() {
-  console.log("listening on " + port);
-});
+  require("./socket")(io);
 
-require("./socket")(io);
+  server.listen(port, () => {
+    console.log(`Server running on ${port}`);
+  });
+}
+
+startServer();
