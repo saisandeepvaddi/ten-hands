@@ -1,0 +1,7 @@
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Launch Server",
+  "runtimeArgs": ["-r", "ts-node/register"],
+  "args": ["${workspaceFolder}\\server\\src\\server.ts"]
+}

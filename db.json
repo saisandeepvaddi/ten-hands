@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "name": "Test3",
+      "path": "C:\\Test2",
+      "type": "node",
+      "commands": [
+        {
+          "name": "start",
+          "cmd": "npm run start",
+          "execDir": "/src",
+          "pid": ""
+        }
+      ]
+    }
+  ],
+  "commands": []
+}
