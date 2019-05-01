@@ -1,18 +1,6 @@
 import low, { AdapterSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 
-interface IProjectCommand {
-  [name: string]: string;
-}
-
-interface IProject {
-  _id?: string;
-  name: string;
-  type: string;
-  path: string;
-  commands: IProjectCommand[];
-}
-
 function uuid(a?: any) {
   return a
     ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)

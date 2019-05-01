@@ -5,10 +5,11 @@
   "license": "MIT",
   "scripts": {
     "debug": "ts-node --inspect=5858 src/server.ts",
-    "start": "ts-node  --project ./tsconfig.json src/server.ts",
+    "start": "ts-node  --files src/server.ts",
     "dev": "./node_modules/.bin/nodemon src/server.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "build": "tsc"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
