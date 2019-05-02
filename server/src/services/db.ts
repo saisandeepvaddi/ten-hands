@@ -1,11 +1,6 @@
 import low, { AdapterSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
-
-function uuid(a?: any) {
-  return a
-    ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
-    : (([1e7] as any) + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
-}
+import { v4 as uuidv4 } from "uuid";
 
 class Database {
   private static _instance: Database;
@@ -33,9 +28,20 @@ class Database {
   }
 
   public addProject(project: IProject) {
+    // Create IDs for commands submitted
+    const commands = project.commands.map(command => {
+      return {
+        _id: uuidv4(),
+        ...command
+      };
+    });
+    const projectWithUpdatedCommands = {
+      ...project,
+      commands
+    };
     const result = this.db
       .get("projects")
-      .push({ _id: uuid(), ...project })
+      .push({ _id: uuidv4(), ...projectWithUpdatedCommands })
       .write();
     return result;
   }
@@ -54,6 +60,16 @@ class Database {
       .find({ _id: id })
       .value();
     return project;
+  }
+
+  public getProjectCommand(projectId: string, commandId: string) {
+    const command = this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .get("commands")
+      .find({ _id: commandId })
+      .value();
+    return command;
   }
 }
 

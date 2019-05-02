@@ -17,8 +17,8 @@ POST http://localhost:1010/projects
 Content-Type: application/json
 
 {
-      "name": "Test3",
-      "path": "C:\\Test2",
+      "name": "SaiTest1",
+      "path": "C:\\SaiTest1",
       "type": "node",
       "commands": [
         {
@@ -48,6 +48,6 @@ router.use("/:projectId/commands", commandRoutes);
 // Command is plain JS Object about a command details like executionDirectory, project name, actual command etc.
 // Job is a running process of that command
 // It can be called simply process but there will be confustion about the actual process with pid running in OS which we are gonna use in Job
-router.use("/:projectId/jobs/", jobRoutes);
+router.use("/:projectId/jobs", jobRoutes);
 
 export default router;

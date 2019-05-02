@@ -1,12 +1,13 @@
 {
   "projects": [
     {
-      "_id": "c92517d8-91de-48b4-a7fa-ea51de885f96",
-      "name": "Test3",
-      "path": "C:\\Test2",
+      "_id": "75034ae2-c231-497d-a3d6-adb7048bb696",
+      "name": "SaiTest1",
+      "path": "C:\\SaiTest1",
       "type": "node",
       "commands": [
         {
+          "_id": "e1da46bc-22b9-47b5-abae-3b1523c07ddc",
           "name": "start",
           "cmd": "npm run start",
           "execDir": "/src",
