@@ -11,7 +11,6 @@ app.use(cors());
 app.set("port", process.env.PORT || 1010);
 app.use(express.static(path.join(__dirname, "public")));
 
-// Routes
 app.use("/projects", projectRoutes);
 
 // Default Error Handler

@@ -15,3 +15,11 @@ export function addProject(req: Request, res: Response) {
     data: project
   });
 }
+
+export function deleteProject(req: Request, res: Response) {
+  const { projectId } = req.params;
+  const project = db.deleteProject(projectId);
+  return res.status(200).send({
+    data: project
+  });
+}

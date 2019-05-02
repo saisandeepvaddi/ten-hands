@@ -35,8 +35,15 @@ class Database {
   public addProject(project: IProject) {
     const result = this.db
       .get("projects")
-      .push(project)
-      .assign({ _id: uuid() })
+      .push({ _id: uuid(), ...project })
+      .write();
+    return result;
+  }
+
+  public deleteProject(projectId: string) {
+    const result = this.db
+      .get("projects")
+      .remove({ _id: projectId })
       .write();
     return result;
   }
