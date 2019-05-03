@@ -9,7 +9,14 @@
         {
           "_id": "e1da46bc-22b9-47b5-abae-3b1523c07ddc",
           "name": "start",
-          "cmd": "npm run start",
+          "cmd": "node /Programming/ten-hands/server/src/functions.js",
+          "execDir": "/src",
+          "pid": ""
+        },
+        {
+          "_id": "40d2af3f-ca86-4997-86e6-e1e74684a223",
+          "name": "start",
+          "cmd": "node /Programming/ten-hands/server/src/functions.js",
           "execDir": "/src",
           "pid": ""
         }

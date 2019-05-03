@@ -3,9 +3,10 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import React from "react";
 import SplitPane from "react-split-pane";
+import io from "socket.io-client";
 import styled from "styled-components";
 import ApiProvider from "../utils/api";
-import { ProjectsContext, ThemeContext } from "../utils/Context";
+import { ProjectsContext, SocketContext, ThemeContext } from "../utils/Context";
 import { getItem, setItem } from "../utils/storage";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
@@ -29,6 +30,11 @@ const App = () => {
         commands: [],
     });
 
+    const [socket, setSocket] = React.useState(() => {
+        const socket = io("http://localhost:1010");
+        return socket;
+    });
+
     React.useEffect(() => {
         async function getProjectsFromApi() {
             const savedProjects: any = await ApiProvider.getAllProjects();
@@ -48,15 +54,17 @@ const App = () => {
     return (
         <ThemeContext.Provider value={theme}>
             <ProjectsContext.Provider value={projects}>
-                <div className={theme}>
-                    <Topbar theme={theme} setTheme={setTheme} />
-                    <SplitContainer>
-                        <SplitPane split="vertical" defaultSize={350} maxSize={500}>
-                            <Sidebar setActiveProject={setActiveProject} />
-                            <Main activeProject={activeProject} />
-                        </SplitPane>
-                    </SplitContainer>
-                </div>
+                <SocketContext.Provider value={socket}>
+                    <div className={theme}>
+                        <Topbar theme={theme} setTheme={setTheme} />
+                        <SplitContainer>
+                            <SplitPane split="vertical" defaultSize={350} maxSize={500}>
+                                <Sidebar setActiveProject={setActiveProject} />
+                                <Main activeProject={activeProject} />
+                            </SplitPane>
+                        </SplitContainer>
+                    </div>
+                </SocketContext.Provider>
             </ProjectsContext.Provider>
         </ThemeContext.Provider>
     );
