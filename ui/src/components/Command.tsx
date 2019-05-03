@@ -1,4 +1,4 @@
-import { Button, Collapse, H5, Pre } from "@blueprintjs/core";
+import { Button, Collapse, H5, H6, Pre } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 
@@ -8,9 +8,24 @@ interface ICommandProps {
 
 const Container = styled.div``;
 
+const CommandTitleActions = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > h5 {
+        margin: 0 0 4px;
+        max-width: 5rem;
+    }
+    & > * {
+        margin-left: 1rem;
+    }
+`;
+
 const CommandHeader = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
 `;
 
 const Command: React.SFC<ICommandProps> = ({ command }) => {
@@ -18,10 +33,14 @@ const Command: React.SFC<ICommandProps> = ({ command }) => {
     return (
         <Container>
             <CommandHeader>
-                <H5>{command.name}</H5>
+                <CommandTitleActions>
+                    <H5>{command.name}</H5>
+                    <Button data-testid="job-start" icon="play" intent="success" minimal={true} />
+                    <Button data-testid="job-stop" intent="danger" icon="stop" minimal={true} />
+                </CommandTitleActions>
+                <span>{command.command}</span>
                 <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
             </CommandHeader>
-            <span>{command.command}</span>
             <Collapse isOpen={isOutputOpen}>
                 <Pre>{JSON.stringify(command, null, 2)}</Pre>
             </Collapse>
