@@ -18,26 +18,26 @@ class Job {
 
     const room = this.room;
     const n = execa(job);
-    io.to(room).emit("job_started", { room, data: n });
+    io.to(room).emit(`job_started-${room}`, { room, data: n });
     n.stdout.on("data", chunk => {
       // console.log("output:", chunk.toString());
 
-      io.to(room).emit("output", { room, data: chunk.toString() });
+      io.to(room).emit(`output-${room}`, { room, data: chunk.toString() });
     });
 
     n.stderr.on("data", chunk => {
-      io.to(room).emit("output", { room, data: chunk.toString() });
+      io.to(room).emit(`output-${room}`, { room, data: chunk.toString() });
     });
 
     n.on("close", (code, signal) => {
-      io.to(room).emit("output", {
+      io.to(room).emit(`output-${room}`, {
         room,
         data: `Exited with code ${code} by signal ${signal}`
       });
     });
 
     n.on("exit", (code, signal) => {
-      io.to(room).emit("output", {
+      io.to(room).emit(`output-${room}`, {
         room,
         data: `Exited with code ${code} by signal ${signal}`
       });
@@ -60,19 +60,20 @@ export class JobManager {
   private killJob(job, room, pid) {
     console.log(`Killing Job`);
     pKill(pid);
-    this.io.to(room).emit("job_killed", pid);
+    this.io.to(room).emit(`job_killed-${room}`, {
+      room,
+      data: pid
+    });
   }
 
   private bindEvents() {
     this.socket.on("subscribe", ({ job, room }) => {
       this.socket.join(room, () => {
-        let rooms = Object.keys(this.socket.rooms);
-        console.log(rooms);
-
         console.log(`${job} joined room ${room}`);
-        this.io
-          .to(room)
-          .emit("joined_room", { room, data: `${job} joined room ${room}` });
+        this.io.to(room).emit(`joined_room-${room}`, {
+          room,
+          data: `${job} joined room ${room}`
+        });
         const process = new Job(this.io, room);
         process.start(job);
       });

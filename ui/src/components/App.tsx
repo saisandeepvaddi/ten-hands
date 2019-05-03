@@ -6,7 +6,8 @@ import SplitPane from "react-split-pane";
 import io from "socket.io-client";
 import styled from "styled-components";
 import ApiProvider from "../utils/api";
-import { ProjectsContext, SocketContext, ThemeContext } from "../utils/Context";
+import { ProjectsContext, ThemeContext } from "../utils/Context";
+import JobSocket from "../utils/socket";
 import { getItem, setItem } from "../utils/storage";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
@@ -30,11 +31,6 @@ const App = () => {
         commands: [],
     });
 
-    const [socket, setSocket] = React.useState(() => {
-        const socket = io("http://localhost:1010");
-        return socket;
-    });
-
     React.useEffect(() => {
         async function getProjectsFromApi() {
             const savedProjects: any = await ApiProvider.getAllProjects();
@@ -45,6 +41,8 @@ const App = () => {
             }
         }
         getProjectsFromApi();
+        const socket = io("http://localhost:1010");
+        JobSocket.bindSocket(socket);
     }, []);
 
     React.useEffect(() => {
@@ -54,17 +52,15 @@ const App = () => {
     return (
         <ThemeContext.Provider value={theme}>
             <ProjectsContext.Provider value={projects}>
-                <SocketContext.Provider value={socket}>
-                    <div className={theme}>
-                        <Topbar theme={theme} setTheme={setTheme} />
-                        <SplitContainer>
-                            <SplitPane split="vertical" defaultSize={350} maxSize={500}>
-                                <Sidebar setActiveProject={setActiveProject} />
-                                <Main activeProject={activeProject} />
-                            </SplitPane>
-                        </SplitContainer>
-                    </div>
-                </SocketContext.Provider>
+                <div className={theme}>
+                    <Topbar theme={theme} setTheme={setTheme} />
+                    <SplitContainer>
+                        <SplitPane split="vertical" defaultSize={350} maxSize={500}>
+                            <Sidebar setActiveProject={setActiveProject} />
+                            <Main activeProject={activeProject} />
+                        </SplitPane>
+                    </SplitContainer>
+                </div>
             </ProjectsContext.Provider>
         </ThemeContext.Provider>
     );
