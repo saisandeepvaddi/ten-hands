@@ -35,6 +35,7 @@ interface IState {
     socket: any;
     jobOutput: string;
     pid: string | number;
+    room: string;
 }
 
 class Command extends React.PureComponent<ICommandProps, IState> {
@@ -45,6 +46,7 @@ class Command extends React.PureComponent<ICommandProps, IState> {
             socket: null,
             jobOutput: "",
             pid: "",
+            room: "",
         };
     }
 
@@ -56,33 +58,41 @@ class Command extends React.PureComponent<ICommandProps, IState> {
 
     public startJob = socket => {
         const { command } = this.props;
+        const room = command._id;
+        const job = command.cmd;
         socket.emit("subscribe", {
-            room: command._id,
-            job: command.cmd,
+            room,
+            job,
         });
-        socket.on("joined_room", data => {
-            console.log(`Room Joined`, data);
+        socket.on("joined_room", message => {
+            console.log("message:", message);
+            if (room === message.room) {
+                console.log(message.data);
+            }
         });
-        socket.on("job_started", data => {
-            console.log("data:", data);
-            this.setState({
-                pid: data.pid,
-            });
+        // socket.on("job_started", message => {
+        //     console.log("message:", message);
+        //     this.setState({
+        //         pid: message.pid,
+        //     });
+        // });
+        socket.on("output", message => {
+            if (room === message.room) {
+                this.setState(prevState => {
+                    return {
+                        jobOutput: prevState.jobOutput + message.data,
+                    };
+                });
+            }
         });
-        socket.on("output", data => {
-            console.log("data:", data);
-            this.setState(prevState => {
-                return {
-                    jobOutput: prevState.jobOutput + data,
-                };
-            });
-        });
-        socket.on("job_killed", data => {
-            this.setState(prevState => {
-                return {
-                    jobOutput: prevState.jobOutput + "process with id " + data + " killed by user.",
-                };
-            });
+        socket.on("job_killed", message => {
+            if (room === message.room) {
+                this.setState(prevState => {
+                    return {
+                        jobOutput: prevState.jobOutput + "process with id " + message.data + " killed by user.",
+                    };
+                });
+            }
         });
     };
 
@@ -96,6 +106,11 @@ class Command extends React.PureComponent<ICommandProps, IState> {
         });
     };
 
+    public componentDidUpdate() {
+        const { command } = this.props;
+
+        // console.log(`${command._id} is updating`);
+    }
     public render() {
         const { command } = this.props;
         const { isOutputOpen, jobOutput } = this.state;

@@ -19,6 +19,13 @@
           "cmd": "node /Programming/ten-hands/server/src/functions.js",
           "execDir": "/src",
           "pid": ""
+        },
+        {
+          "_id": "1d456d9c-1256-4f85-bb30-6a5e2f607550",
+          "name": "start",
+          "cmd": "node /Programming/ten-hands/server/src/functions.js",
+          "execDir": "/src",
+          "pid": ""
         }
       ]
     }

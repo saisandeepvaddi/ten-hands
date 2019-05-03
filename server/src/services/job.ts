@@ -3,41 +3,44 @@ import execa from "execa";
 import pKill from "tree-kill";
 import io from "socket.io";
 
-enum EventTypes {
-  SUBSCRIBE = "SUBSCRIBE",
-  UNSUBSCRIBE = "UNSUBSCRIBE"
-}
+class Job {
+  private io: any;
+  private room: any;
+  constructor(io, room) {
+    this.io = io;
+    this.room = room;
+  }
 
-export class JobManager {
-  public static _instance: JobManager;
-  io: any;
-  socket: any;
-  private constructor() {}
+  public start(job) {
+    // console.log("job:", job);
+    const io = this.io;
+    console.log(io.rooms);
 
-  private startJob(job, room) {
+    const room = this.room;
     const n = execa(job);
-    this.io.to(room).emit("job_started", n);
+    io.to(room).emit("job_started", { room, data: n });
     n.stdout.on("data", chunk => {
-      console.log("output:", chunk.toString());
-      this.io.to(room).emit("output", chunk.toString());
+      // console.log("output:", chunk.toString());
+
+      io.to(room).emit("output", { room, data: chunk.toString() });
     });
 
     n.stderr.on("data", chunk => {
-      console.log("data: ", chunk.toString());
-
-      this.io.to(room).emit("output", chunk.toString());
+      io.to(room).emit("output", { room, data: chunk.toString() });
     });
 
     n.on("close", (code, signal) => {
-      this.io
-        .to(room)
-        .emit("output", `Exited with code ${code} by signal ${signal}`);
+      io.to(room).emit("output", {
+        room,
+        data: `Exited with code ${code} by signal ${signal}`
+      });
     });
 
     n.on("exit", (code, signal) => {
-      this.io
-        .to(room)
-        .emit("output", `Exited with code ${code} by signal ${signal}`);
+      io.to(room).emit("output", {
+        room,
+        data: `Exited with code ${code} by signal ${signal}`
+      });
     });
 
     setTimeout(() => {
@@ -46,6 +49,13 @@ export class JobManager {
       pKill(n.pid);
     }, 10000);
   }
+}
+
+export class JobManager {
+  public static _instance: JobManager;
+  io: any;
+  socket: any;
+  private constructor() {}
 
   private killJob(job, room, pid) {
     console.log(`Killing Job`);
@@ -55,10 +65,16 @@ export class JobManager {
 
   private bindEvents() {
     this.socket.on("subscribe", ({ job, room }) => {
-      console.log(`${job} joining room ${room}`);
       this.socket.join(room, () => {
-        this.io.to(room).emit("joined_room", room);
-        this.startJob(job, room);
+        let rooms = Object.keys(this.socket.rooms);
+        console.log(rooms);
+
+        console.log(`${job} joined room ${room}`);
+        this.io
+          .to(room)
+          .emit("joined_room", { room, data: `${job} joined room ${room}` });
+        const process = new Job(this.io, room);
+        process.start(job);
       });
     });
 
@@ -82,36 +98,6 @@ export class JobManager {
   }
   public static getInstance() {
     return this._instance || new this();
-  }
-}
-
-class Job implements IJob {
-  _id?: string;
-  pid: number;
-  status: JobStatus;
-  command: IProjectCommand;
-  createdAt: Date;
-  // Room of socket. Each Job will get a room with the name of id
-  room: any;
-  manager: JobManager;
-  constructor(command: IProjectCommand) {
-    // Pass a command to create Job
-    const id = uuid();
-    this._id = id;
-    this.room = id;
-    this.command = command;
-    this.manager = JobManager.getInstance();
-  }
-
-  start(): number {
-    this.createdAt = new Date();
-
-    return 0;
-  }
-
-  kill(): number {
-    pKill(this.pid);
-    return 0;
   }
 }
 
