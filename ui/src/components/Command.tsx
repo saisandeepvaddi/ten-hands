@@ -1,6 +1,8 @@
-import { Button, Collapse, H5, H6, Pre } from "@blueprintjs/core";
+import { Button, Collapse, H5, Pre } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
+
+import { SocketContext } from "../utils/Context";
 
 interface ICommandProps {
     command: IProjectCommand;
@@ -30,12 +32,19 @@ const CommandHeader = styled.div`
 
 const Command: React.SFC<ICommandProps> = ({ command }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
+    const socket = React.useContext(SocketContext);
+    function startJob() {
+        console.log(command);
+    }
+
+    function stopJob() {}
+
     return (
         <Container>
             <CommandHeader>
                 <CommandTitleActions>
                     <H5>{command.name}</H5>
-                    <Button data-testid="job-start" icon="play" intent="success" minimal={true} />
+                    <Button data-testid="job-start" icon="play" intent="success" minimal={true} onClick={startJob} />
                     <Button data-testid="job-stop" intent="danger" icon="stop" minimal={true} />
                 </CommandTitleActions>
                 <span>{command.command}</span>

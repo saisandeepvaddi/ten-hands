@@ -30,7 +30,7 @@ const Main: React.FC<IMainProps> = ({ activeProject }) => {
 
 Main.defaultProps = {
     activeProject: {
-        id: "",
+        _id: "",
         name: "",
         type: "",
         commands: [],

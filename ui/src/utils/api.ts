@@ -1,46 +1,18 @@
-const projects = [
-    {
-        id: "1",
-        name: "Project 1",
-        type: "node",
-        configFile: "package.json",
-        commands: [
-            {
-                name: "Start",
-                command: "yarn start",
-            },
-            {
-                name: "Dev",
-                command: "yarn dev",
-            },
-        ],
-    },
-    {
-        id: "2",
-        name: "Project 2",
-        type: "node",
-        configFile: "package.json",
-        commands: [
-            {
-                name: "Start",
-                command: "npm start",
-            },
-            {
-                name: "Dev",
-                command: "npm dev",
-            },
-            {
-                name: "Test",
-                command: "npm test",
-            },
-        ],
-    },
-];
+import axios, { AxiosInstance } from "axios";
 
-export const getProjects: () => Promise<any> = async () => {
-    try {
-        return Promise.resolve(projects);
-    } catch (error) {
-        console.log("error:", error);
+class ApiProvider {
+    private instance: AxiosInstance;
+    constructor() {
+        this.instance = axios.create({
+            baseURL: "http://localhost:1010",
+        });
     }
-};
+    public async getAllProjects(): Promise<any[]> {
+        const response = await this.instance.get("/projects");
+        const projects = response.data.data;
+        console.log("projects:", projects);
+        return projects;
+    }
+}
+
+export default new ApiProvider();

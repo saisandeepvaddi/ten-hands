@@ -4,7 +4,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import React from "react";
 import SplitPane from "react-split-pane";
 import styled from "styled-components";
-import { getProjects } from "../utils/api";
+import ApiProvider from "../utils/api";
 import { ProjectsContext, ThemeContext } from "../utils/Context";
 import { getItem, setItem } from "../utils/storage";
 import Main from "./Main";
@@ -23,7 +23,7 @@ const App = () => {
     const [theme, setTheme] = React.useState(getItem("theme") || Classes.DARK);
     const [projects, setProjects] = React.useState([]);
     const [activeProject, setActiveProject] = React.useState({
-        id: "",
+        _id: "",
         name: "",
         type: "",
         commands: [],
@@ -31,7 +31,7 @@ const App = () => {
 
     React.useEffect(() => {
         async function getProjectsFromApi() {
-            const savedProjects: any = await getProjects();
+            const savedProjects: any = await ApiProvider.getAllProjects();
             setProjects(savedProjects);
             if (savedProjects) {
                 // Set first project as default active project if there projects found
@@ -39,7 +39,7 @@ const App = () => {
             }
         }
         getProjectsFromApi();
-    }, [projects]);
+    }, []);
 
     React.useEffect(() => {
         setItem("theme", theme);

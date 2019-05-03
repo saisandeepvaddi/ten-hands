@@ -1,4 +1,11 @@
-module.exports = function(io) {
+class SocketManager {
+  private io: any;
+  constructor(io: any) {
+    this.io = io;
+  }
+}
+
+function Demo(io) {
   const execa = require("execa");
   const kill = require("tree-kill");
 
@@ -31,4 +38,6 @@ module.exports = function(io) {
       }, 10000);
     });
   });
-};
+}
+
+export default SocketManager;

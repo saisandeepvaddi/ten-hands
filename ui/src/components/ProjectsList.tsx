@@ -8,7 +8,7 @@ interface IProjectProps {
 
 const ProjectsList: React.FC<IProjectProps> = ({ projects, setActiveProject }) => {
     const changeActiveProject = projectId => {
-        const activeProjectWithId = projects.find(project => project.id === projectId);
+        const activeProjectWithId = projects.find(project => project._id === projectId);
         setActiveProject(activeProjectWithId);
     };
     if (projects.length === 0) {
@@ -20,12 +20,12 @@ const ProjectsList: React.FC<IProjectProps> = ({ projects, setActiveProject }) =
             className={`w-100`}
             large={true}
             onChange={changeActiveProject}
-            defaultSelectedTabId={projects[0].id}
+            defaultSelectedTabId={projects[0]._id}
         >
             {/* <InputGroup className={Classes.FILL} type="text" placeholder="Search..." /> */}
             <Divider />
             {projects.map(project => (
-                <Tab key={project.id} id={project.id} title={project.name} />
+                <Tab key={project._id} id={project._id} title={project.name} />
             ))}
         </Tabs>
     );
