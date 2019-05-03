@@ -7,7 +7,7 @@ import ProjectsList from "./ProjectsList";
 
 const Container = styled.div`
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2)};
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

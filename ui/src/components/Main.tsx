@@ -10,7 +10,6 @@ const Container = styled.div`
     border-top: 1px solid transparent; /* To prevent margin-collapse for first child doesn't happen */
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY1 : Colors.LIGHT_GRAY1)};
     height: 100%;
-    /* overflow-y: auto; */
 `;
 
 interface IMainProps {

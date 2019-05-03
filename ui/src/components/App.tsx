@@ -17,8 +17,6 @@ import Topbar from "./Topbar";
 const SplitContainer = styled.div`
     min-height: calc(100vh - 50px);
     padding-top: 50px;
-    height: 100%;
-    /* overflow: auto; */
 `;
 
 const App = () => {

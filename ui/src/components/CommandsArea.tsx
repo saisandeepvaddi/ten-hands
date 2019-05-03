@@ -9,7 +9,7 @@ interface ICommandsAreaProps {
 }
 
 const Container = styled.div`
-    height: 100%;
+    height: 94%;
     overflow-y: auto;
 `;
 
