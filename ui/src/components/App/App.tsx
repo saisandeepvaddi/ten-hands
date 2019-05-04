@@ -1,11 +1,11 @@
 import { Classes } from "@blueprintjs/core";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SplitPane from "react-split-pane";
 import io from "socket.io-client";
 import styled from "styled-components";
-import ApiProvider from "../../utils/api";
+import { useApi } from "../../utils/api";
 import { ProjectsContext, ThemeContext } from "../../utils/Context";
 import JobSocket from "../../utils/socket";
 import { getItem, setItem } from "../../utils/storage";
@@ -20,30 +20,28 @@ const SplitContainer = styled.div`
 `;
 
 const App = () => {
-    const [theme, setTheme] = React.useState(getItem("theme") || Classes.DARK);
-    const [projects, setProjects] = React.useState([]);
-    const [activeProject, setActiveProject] = React.useState({
+    const [theme, setTheme] = useState(getItem("theme") || Classes.DARK);
+    // const [projects, setProjects] = useState([]);
+    const { data: projects } = useApi("projects");
+    const [activeProject, setActiveProject] = useState({
         _id: "",
         name: "",
         type: "",
         commands: [],
     });
 
-    React.useEffect(() => {
-        async function getProjectsFromApi() {
-            const savedProjects: any = await ApiProvider.getAllProjects();
-            setProjects(savedProjects);
-            if (savedProjects) {
-                // Set first project as default active project if there projects found
-                setActiveProject(savedProjects[0]);
-            }
-        }
-        getProjectsFromApi();
+    useEffect(() => {
         const socket = io("http://localhost:1010");
         JobSocket.bindSocket(socket);
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
+        if (projects.length > 0) {
+            setActiveProject(projects[0]);
+        }
+    }, [projects]);
+
+    useEffect(() => {
         setItem("theme", theme);
     }, [theme]);
 
