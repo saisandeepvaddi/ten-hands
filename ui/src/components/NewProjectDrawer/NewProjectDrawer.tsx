@@ -1,4 +1,4 @@
-import { Drawer, FileInput, FormGroup } from "@blueprintjs/core";
+import { Classes, Drawer, FileInput, FormGroup, HTMLSelect, InputGroup, Label } from "@blueprintjs/core";
 import { Field, Form, Formik, FormikActions } from "formik";
 import React from "react";
 import styled from "styled-components";
@@ -6,10 +6,10 @@ import { ThemeContext } from "../../utils/Context";
 
 const DrawerContainer = styled.div`
     height: 100%;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 1rem;
+    align-items: center; */
+    padding: 2rem;
 `;
 
 interface INewDrawerProps {
@@ -40,12 +40,42 @@ const NewProjectDrawer: React.FC<INewDrawerProps> = ({ isDrawerOpen, setDrawerOp
                                 name="path"
                                 render={field => (
                                     <FormGroup
-                                        label="Project File"
                                         labelFor="path"
+                                        label="Project Config File"
                                         labelInfo="*"
                                         helperText="E.g., package.json"
                                     >
-                                        <FileInput text="Open Project file" {...field} />
+                                        <FileInput text="Choose file..." inputProps={{ id: "path" }} fill={true} />
+                                    </FormGroup>
+                                )}
+                            />
+                            <Field
+                                name="name"
+                                render={field => (
+                                    <FormGroup
+                                        label="Project Name"
+                                        labelFor="name"
+                                        labelInfo="*"
+                                        helperText="Will be auto-filled if available in config file"
+                                    >
+                                        <InputGroup id="name" type="text" />
+                                    </FormGroup>
+                                )}
+                            />
+                            <Field
+                                name="type"
+                                render={field => (
+                                    <FormGroup
+                                        label="Project Type"
+                                        labelFor="type"
+                                        labelInfo="*"
+                                        helperText="Will be auto-filled if can be determined from config file"
+                                    >
+                                        <HTMLSelect fill={true} id="type">
+                                            <option value="nodejs">NodeJS</option>
+                                            <option value="nodejs">.NET Core</option>
+                                            <option value="other">Other</option>
+                                        </HTMLSelect>
                                     </FormGroup>
                                 )}
                             />
