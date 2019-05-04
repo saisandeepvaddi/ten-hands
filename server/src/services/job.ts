@@ -26,18 +26,18 @@ class Job {
     });
 
     n.stderr.on("data", chunk => {
-      io.to(room).emit(`output-${room}`, { room, data: chunk.toString() });
+      io.to(room).emit(`error-${room}`, { room, data: chunk.toString() });
     });
 
     n.on("close", (code, signal) => {
-      io.to(room).emit(`output-${room}`, {
+      io.to(room).emit(`close-${room}`, {
         room,
         data: `Exited with code ${code} by signal ${signal}`
       });
     });
 
     n.on("exit", (code, signal) => {
-      io.to(room).emit(`output-${room}`, {
+      io.to(room).emit(`exit-${room}`, {
         room,
         data: `Exited with code ${code} by signal ${signal}`
       });
