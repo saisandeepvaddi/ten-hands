@@ -2,7 +2,7 @@ import { Button, Collapse, H5, Pre } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 
-import JobSocket from "../utils/socket";
+import JobSocket from "../../utils/socket";
 
 const Container = styled.div``;
 

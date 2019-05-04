@@ -5,14 +5,14 @@ import React from "react";
 import SplitPane from "react-split-pane";
 import io from "socket.io-client";
 import styled from "styled-components";
-import ApiProvider from "../utils/api";
-import { ProjectsContext, ThemeContext } from "../utils/Context";
-import JobSocket from "../utils/socket";
-import { getItem, setItem } from "../utils/storage";
-import Main from "./Main";
-import Sidebar from "./Sidebar";
-import "./styles/App.css";
-import Topbar from "./Topbar";
+import ApiProvider from "../../utils/api";
+import { ProjectsContext, ThemeContext } from "../../utils/Context";
+import JobSocket from "../../utils/socket";
+import { getItem, setItem } from "../../utils/storage";
+import Main from "../Main/Main";
+import Sidebar from "../Sidebar/Sidebar";
+import Topbar from "../Topbar/Topbar";
+import "./App.css";
 
 const SplitContainer = styled.div`
     min-height: calc(100vh - 50px);

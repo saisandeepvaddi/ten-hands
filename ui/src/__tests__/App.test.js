@@ -2,7 +2,7 @@ import "jest-dom/extend-expect";
 import "react-testing-library/cleanup-after-each";
 import React from "react";
 import { render, waitForElement } from "react-testing-library";
-import App from "../components/App";
+import App from "../components/App/App";
 import { act } from "react-dom/test-utils";
 
 jest.mock("../utils/api", () => {

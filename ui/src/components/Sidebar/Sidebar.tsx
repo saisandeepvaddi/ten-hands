@@ -1,9 +1,9 @@
 import { Button, Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { ProjectsContext, ThemeContext } from "../utils/Context";
+import { ProjectsContext, ThemeContext } from "../../utils/Context";
 
-import ProjectsList from "./ProjectsList";
+import ProjectsList from "../ProjectsList/ProjectsList";
 
 const Container = styled.div`
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2)};

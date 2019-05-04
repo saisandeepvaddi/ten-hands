@@ -1,5 +1,5 @@
 import React from "react";
-import Topbar from "../components/Topbar";
+import Topbar from "../components/Topbar/Topbar";
 import { render } from "react-testing-library";
 
 describe("Topbar Component", () => {

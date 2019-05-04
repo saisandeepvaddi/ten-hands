@@ -1,7 +1,7 @@
 import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import Command from "./Command";
+import Command from "../Command/Command";
 
 interface ICommandsAreaProps {
     commands: IProjectCommand[];

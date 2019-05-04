@@ -2,7 +2,7 @@ import "jest-dom/extend-expect";
 import "react-testing-library/cleanup-after-each";
 import React from "react";
 import { render, wait, waitForElement, fireEvent } from "react-testing-library";
-import ProjectsList from "../components/ProjectsList";
+import ProjectsList from "../components/ProjectsList/ProjectsList";
 
 const projects = [
   {

@@ -1,9 +1,9 @@
 import { Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { ThemeContext } from "../utils/Context";
-import CommandsArea from "./CommandsArea";
-import ProjectTopbar from "./ProjectTopbar";
+import { ThemeContext } from "../../utils/Context";
+import CommandsArea from "../CommandsArea";
+import ProjectTopbar from "../ProjectTopbar";
 
 const Container = styled.div`
     position: relative;
