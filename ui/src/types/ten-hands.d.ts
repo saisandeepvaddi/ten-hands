@@ -8,8 +8,9 @@ interface IProjectCommand {
 }
 
 interface IProject {
-    readonly _id: string;
+    readonly _id?: string;
     readonly name: string;
     readonly type: string;
+    readonly path?: string;
     readonly commands: IProjectCommand[];
 }
