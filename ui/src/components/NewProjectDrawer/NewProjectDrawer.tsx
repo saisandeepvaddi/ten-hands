@@ -19,6 +19,16 @@ interface INewDrawerProps {
     setDrawerOpen: (isOpen: boolean) => any;
 }
 
+const initialProject: IProject = {
+    name: "",
+    type: "none",
+    commands: [],
+    configFile: "",
+    path: "",
+};
+
+// type FormikFormProps = IProjectProps
+
 const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     isDrawerOpen,
     setDrawerOpen,
@@ -42,13 +52,14 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
 
         reader.onloadend = () => {
             const { name: selectedFileName } = file;
-            console.log("file:", file);
+            console.info("file:", file);
             setFileName(selectedFileName);
             const readerResult = reader.result;
             const parsedProjectData = handleConfigFiles(file, readerResult);
+            console.info("parsedProjectData:", parsedProjectData);
             if (parsedProjectData !== null) {
                 const { name: projectName, type, commands, configFile, path } = parsedProjectData;
-                console.log("{ name: projectName, type, commands, configFile }:", {
+                console.info("{ name: projectName, type, commands, configFile }:", {
                     name: projectName,
                     type,
                     commands,
@@ -60,6 +71,13 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
                 setFieldValue("type", type);
                 setFieldValue("commands", commands);
                 setFieldValue("path", path);
+            } else {
+                // If file not recognized, then fill empty values
+                setFieldValue("configFile", selectedFileName);
+                setFieldValue("name", "");
+                setFieldValue("type", "");
+                setFieldValue("commands", "");
+                setFieldValue("path", "");
             }
         };
 
@@ -70,10 +88,10 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
         <Drawer className={theme} isOpen={isDrawerOpen} title="Add Project" onClose={() => setDrawerOpen(false)}>
             <DrawerContainer>
                 <Form>
-                    <FormGroup labelFor="path" label="Project Config File" helperText="E.g., package.json">
+                    <FormGroup labelFor="configFile" label="Project Config File" helperText="E.g., package.json">
                         <FileInput
                             text={fileName}
-                            inputProps={{ id: "path" }}
+                            inputProps={{ id: "configFile" }}
                             fill={true}
                             onInputChange={onProjectFileChange}
                         />
@@ -98,7 +116,7 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
                         helperText="Will be auto-filled if can be determined from config file."
                     >
                         <HTMLSelect fill={true} id="type" onChange={handleChange} value={values.type}>
-                            <option value="none">Select Project Type</option>
+                            <option value="">Select Project Type</option>
                             <option value="nodejs">NodeJS</option>
                             <option value="dotnet-core">.NET Core</option>
                             <option value="other">Other</option>
@@ -108,14 +126,6 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
             </DrawerContainer>
         </Drawer>
     );
-};
-
-const initialProject: IProject = {
-    name: "",
-    type: "none",
-    commands: [],
-    configFile: "",
-    path: "",
 };
 
 const NewProjectFormWithFormik = {
