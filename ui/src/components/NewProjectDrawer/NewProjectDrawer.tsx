@@ -1,6 +1,6 @@
 import { Classes, Drawer, FileInput, FormGroup, HTMLSelect, InputGroup, Label } from "@blueprintjs/core";
 import { Field, Form, Formik, FormikActions, FormikFormProps, FormikProps, FormikValues, withFormik } from "formik";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../../utils/Context";
 import handleConfigFiles from "./handleConfigFiles";
@@ -44,8 +44,9 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     const [fileName, setFileName] = useState("Choose file...");
     function onSubmit(values: IProject, { setSubmitting }: FormikActions<IProject>) {}
 
-    function onProjectFileChange(e) {
+    const onProjectFileChange = useCallback(e => {
         e.preventDefault();
+        console.log("here");
 
         const reader = new FileReader();
         const file = e.target.files[0];
@@ -81,8 +82,13 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
             }
         };
 
-        reader.readAsText(file);
-    }
+        try {
+            reader.readAsText(file);
+        } catch (error) {
+            // Happens when a file selected once and opens file dialog again and cancel without selecting any file.
+            console.warn(`Error reading file. Did you select any file ?.`);
+        }
+    }, []);
 
     return (
         <Drawer className={theme} isOpen={isDrawerOpen} title="Add Project" onClose={() => setDrawerOpen(false)}>
