@@ -5,6 +5,7 @@
       "name": "SaiTest1",
       "path": "C:\\SaiTest1",
       "type": "node",
+      "configFile": "package.json",
       "commands": [
         {
           "_id": "e1da46bc-22b9-47b5-abae-3b1523c07ddc",

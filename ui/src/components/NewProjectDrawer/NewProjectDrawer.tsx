@@ -1,8 +1,10 @@
 import { Classes, Drawer, FileInput, FormGroup, HTMLSelect, InputGroup, Label } from "@blueprintjs/core";
-import { Field, Form, Formik, FormikActions } from "formik";
-import React from "react";
+import { Field, Form, Formik, FormikActions, FormikFormProps, FormikProps, FormikValues, withFormik } from "formik";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../../utils/Context";
+import handleConfigFiles from "./handleConfigFiles";
+import NewProjectCommands from "./NewProjectCommands";
 
 const DrawerContainer = styled.div`
     height: 100%;
@@ -17,74 +19,111 @@ interface INewDrawerProps {
     setDrawerOpen: (isOpen: boolean) => any;
 }
 
-const NewProjectDrawer: React.FC<INewDrawerProps> = ({ isDrawerOpen, setDrawerOpen }) => {
+const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
+    isDrawerOpen,
+    setDrawerOpen,
+    handleSubmit,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    values,
+    errors,
+}) => {
     const theme = React.useContext(ThemeContext);
-    const intialProject: IProject = {
-        name: "",
-        type: "node",
-        commands: [],
-        path: "",
-    };
 
+    const [fileName, setFileName] = useState("Choose file...");
     function onSubmit(values: IProject, { setSubmitting }: FormikActions<IProject>) {}
+
+    function onProjectFileChange(e) {
+        e.preventDefault();
+
+        const reader = new FileReader();
+        const file = e.target.files[0];
+
+        reader.onloadend = () => {
+            const { name: selectedFileName } = file;
+            console.log("file:", file);
+            setFileName(selectedFileName);
+            const readerResult = reader.result;
+            const parsedProjectData = handleConfigFiles(file, readerResult);
+            if (parsedProjectData !== null) {
+                const { name: projectName, type, commands, configFile, path } = parsedProjectData;
+                console.log("{ name: projectName, type, commands, configFile }:", {
+                    name: projectName,
+                    type,
+                    commands,
+                    configFile,
+                    path,
+                });
+                setFieldValue("configFile", configFile);
+                setFieldValue("name", projectName);
+                setFieldValue("type", type);
+                setFieldValue("commands", commands);
+                setFieldValue("path", path);
+            }
+        };
+
+        reader.readAsText(file);
+    }
 
     return (
         <Drawer className={theme} isOpen={isDrawerOpen} title="Add Project" onClose={() => setDrawerOpen(false)}>
             <DrawerContainer>
-                <Formik
-                    initialValues={intialProject}
-                    onSubmit={onSubmit}
-                    render={() => (
-                        <Form>
-                            <Field
-                                name="path"
-                                render={field => (
-                                    <FormGroup
-                                        labelFor="path"
-                                        label="Project Config File"
-                                        labelInfo="*"
-                                        helperText="E.g., package.json"
-                                    >
-                                        <FileInput text="Choose file..." inputProps={{ id: "path" }} fill={true} />
-                                    </FormGroup>
-                                )}
-                            />
-                            <Field
-                                name="name"
-                                render={field => (
-                                    <FormGroup
-                                        label="Project Name"
-                                        labelFor="name"
-                                        labelInfo="*"
-                                        helperText="Will be auto-filled if available in config file"
-                                    >
-                                        <InputGroup id="name" type="text" />
-                                    </FormGroup>
-                                )}
-                            />
-                            <Field
-                                name="type"
-                                render={field => (
-                                    <FormGroup
-                                        label="Project Type"
-                                        labelFor="type"
-                                        labelInfo="*"
-                                        helperText="Will be auto-filled if can be determined from config file"
-                                    >
-                                        <HTMLSelect fill={true} id="type">
-                                            <option value="nodejs">NodeJS</option>
-                                            <option value="nodejs">.NET Core</option>
-                                            <option value="other">Other</option>
-                                        </HTMLSelect>
-                                    </FormGroup>
-                                )}
-                            />
-                        </Form>
-                    )}
-                />
+                <Form>
+                    <FormGroup labelFor="path" label="Project Config File" helperText="E.g., package.json">
+                        <FileInput
+                            text={fileName}
+                            inputProps={{ id: "path" }}
+                            fill={true}
+                            onInputChange={onProjectFileChange}
+                        />
+                    </FormGroup>
+                    <FormGroup
+                        label="Project Name"
+                        labelFor="name"
+                        helperText="Will be auto-filled if available in config file."
+                    >
+                        <InputGroup id="name" type="text" onChange={handleChange} value={values.name} />
+                    </FormGroup>
+                    <FormGroup
+                        label="Project Path"
+                        labelFor="path"
+                        helperText="Will be auto-filled if provided by user in config file (E.g., tenHandsConfig.path in package.json). Browsers won't tell path of uploaded file."
+                    >
+                        <InputGroup id="path" type="text" onChange={handleChange} value={values.path} />
+                    </FormGroup>
+                    <FormGroup
+                        label="Project Type"
+                        labelFor="type"
+                        helperText="Will be auto-filled if can be determined from config file."
+                    >
+                        <HTMLSelect fill={true} id="type" onChange={handleChange} value={values.type}>
+                            <option value="none">Select Project Type</option>
+                            <option value="nodejs">NodeJS</option>
+                            <option value="dotnet-core">.NET Core</option>
+                            <option value="other">Other</option>
+                        </HTMLSelect>
+                    </FormGroup>
+                </Form>
             </DrawerContainer>
         </Drawer>
     );
 };
 
-export default NewProjectDrawer;
+const initialProject: IProject = {
+    name: "",
+    type: "none",
+    commands: [],
+    configFile: "",
+    path: "",
+};
+
+const NewProjectFormWithFormik = {
+    mapPropsToValues: props => {
+        return initialProject;
+    },
+
+    handleSubmit: values => {},
+};
+
+export default withFormik<INewDrawerProps, IProject>(NewProjectFormWithFormik)(NewProjectDrawer);

@@ -1,5 +1,5 @@
 interface IMyTheme {
-    readonly theme: string;
+    theme: string;
     setTheme: any;
 }
 
@@ -8,9 +8,10 @@ interface IProjectCommand {
 }
 
 interface IProject {
-    readonly _id?: string;
-    readonly name: string;
-    readonly type: string;
-    readonly path?: string;
-    readonly commands: IProjectCommand[];
+    _id?: string;
+    name: string;
+    type: string;
+    path?: string;
+    configFile?: string;
+    commands: IProjectCommand[];
 }

@@ -8,6 +8,9 @@
   "scripts": {
     "test": "jest --no-cache"
   },
+  "tenHandsConfig": {
+    "path": "D:\\Programming\\ten-hands"
+  },
   "workspaces": [
     "ui",
     "server",
