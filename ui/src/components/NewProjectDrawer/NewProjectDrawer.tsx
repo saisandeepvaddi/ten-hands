@@ -1,16 +1,14 @@
 import { Classes, Drawer, FileInput, FormGroup, HTMLSelect, InputGroup, Label } from "@blueprintjs/core";
 import { Field, Form, Formik, FormikActions, FormikFormProps, FormikProps, FormikValues, withFormik } from "formik";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../../utils/Context";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
+import NewProjectForm from "./NewProjectForm";
 
 const DrawerContainer = styled.div`
     height: 100%;
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
     padding: 2rem;
 `;
 
@@ -27,7 +25,6 @@ const initialProject: IProject = {
     path: "",
 };
 
-
 const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     isDrawerOpen,
     setDrawerOpen,
@@ -41,6 +38,7 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     const theme = React.useContext(ThemeContext);
 
     const [fileName, setFileName] = useState("Choose file...");
+
     function onSubmit(formValues: IProject, { setSubmitting }: FormikActions<IProject>) {}
 
     const onProjectFileChange = useCallback(e => {
@@ -66,6 +64,8 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
                     configFile,
                     path,
                 });
+
+                // Manually set each field after parsing the file
                 setFieldValue("configFile", configFile);
                 setFieldValue("name", projectName);
                 setFieldValue("type", type);
@@ -92,42 +92,12 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     return (
         <Drawer className={theme} isOpen={isDrawerOpen} title="Add Project" onClose={() => setDrawerOpen(false)}>
             <DrawerContainer>
-                <Form>
-                    <FormGroup labelFor="configFile" label="Project Config File" helperText="E.g., package.json">
-                        <FileInput
-                            text={fileName}
-                            inputProps={{ id: "configFile" }}
-                            fill={true}
-                            onInputChange={onProjectFileChange}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label="Project Name"
-                        labelFor="name"
-                        helperText="Will be auto-filled if available in config file."
-                    >
-                        <InputGroup id="name" type="text" onChange={handleChange} value={values.name} />
-                    </FormGroup>
-                    <FormGroup
-                        label="Project Path"
-                        labelFor="path"
-                        helperText="Will be auto-filled if provided by user in config file (E.g., tenHandsConfig.path in package.json). Browsers won't tell path of uploaded file."
-                    >
-                        <InputGroup id="path" type="text" onChange={handleChange} value={values.path} />
-                    </FormGroup>
-                    <FormGroup
-                        label="Project Type"
-                        labelFor="type"
-                        helperText="Will be auto-filled if can be determined from config file."
-                    >
-                        <HTMLSelect fill={true} id="type" onChange={handleChange} value={values.type}>
-                            <option value="">Select Project Type</option>
-                            <option value="nodejs">NodeJS</option>
-                            <option value="dotnet-core">.NET Core</option>
-                            <option value="other">Other</option>
-                        </HTMLSelect>
-                    </FormGroup>
-                </Form>
+                <NewProjectForm
+                    values={values}
+                    fileName={fileName}
+                    handleChange={handleChange}
+                    onProjectFileChange={onProjectFileChange}
+                />
             </DrawerContainer>
         </Drawer>
     );
