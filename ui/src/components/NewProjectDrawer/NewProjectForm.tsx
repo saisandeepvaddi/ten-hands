@@ -1,6 +1,7 @@
 import { FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
 import { Form } from "formik";
 import React from "react";
+import NewProjectCommands from "./NewProjectCommands";
 
 const NewProjectForm = props => {
     const { fileName, values, handleChange, onProjectFileChange } = props;
@@ -39,6 +40,13 @@ const NewProjectForm = props => {
                     <option value="dotnet-core">.NET Core</option>
                     <option value="other">Other</option>
                 </HTMLSelect>
+            </FormGroup>
+            <FormGroup
+                label="Commands"
+                labelFor="commands"
+                helperText="Will be auto-filled if can be determined from config file."
+            >
+                <NewProjectCommands commands={values.commands} />
             </FormGroup>
         </Form>
     );
