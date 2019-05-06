@@ -14,8 +14,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = ({ activeProject }) => {
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
                 <Button icon="add" intent="success" text="New Command" />
-                <Navbar.Divider />
-                <Button icon="grid-view" onClick={() => {}} minimal={true} />
             </Navbar.Group>
         </Navbar>
     );

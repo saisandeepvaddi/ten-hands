@@ -27,7 +27,6 @@ const initialProject: IProject = {
     path: "",
 };
 
-// type FormikFormProps = IProjectProps
 
 const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     isDrawerOpen,
@@ -42,11 +41,11 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     const theme = React.useContext(ThemeContext);
 
     const [fileName, setFileName] = useState("Choose file...");
-    function onSubmit(values: IProject, { setSubmitting }: FormikActions<IProject>) {}
+    function onSubmit(formValues: IProject, { setSubmitting }: FormikActions<IProject>) {}
 
     const onProjectFileChange = useCallback(e => {
         e.preventDefault();
-        console.log("here");
+        console.info("here");
 
         const reader = new FileReader();
         const file = e.target.files[0];
