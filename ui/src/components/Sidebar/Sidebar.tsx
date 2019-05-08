@@ -1,10 +1,10 @@
 import { Button, Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { ProjectsContext, ThemeContext } from "../../utils/Context";
 
 import NewProjectDrawer from "../NewProjectDrawer";
 import ProjectsList from "../ProjectsList";
+import { useTheme } from "../shared/Themes";
 
 const Container = styled.div`
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2)};
@@ -15,13 +15,8 @@ const Container = styled.div`
     padding: 1rem;
 `;
 
-interface ISidebarProps {
-    setActiveProject?: any;
-}
-
-const Sidebar: React.FC<ISidebarProps> = React.memo(({ setActiveProject }) => {
-    const theme = React.useContext(ThemeContext);
-    const projects = React.useContext(ProjectsContext);
+const Sidebar = React.memo(() => {
+    const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
     return (
@@ -34,7 +29,7 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(({ setActiveProject }) => {
                 style={{ width: "100%" }}
                 onClick={() => setDrawerOpen(true)}
             />
-            <ProjectsList projects={projects} setActiveProject={setActiveProject} />
+            <ProjectsList />
             <NewProjectDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </Container>
     );

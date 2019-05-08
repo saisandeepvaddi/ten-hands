@@ -1,9 +1,10 @@
 import { Classes, Colors } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { ThemeContext } from "../../utils/Context";
 import CommandsArea from "../CommandsArea";
 import ProjectTopbar from "../ProjectTopbar";
+import { useProjects } from "../shared/Projects";
+import { useTheme } from "../shared/Themes";
 
 const Container = styled.div`
     position: relative;
@@ -12,12 +13,9 @@ const Container = styled.div`
     height: 100%;
 `;
 
-interface IMainProps {
-    activeProject: IProject;
-}
-
-const Main: React.FC<IMainProps> = React.memo(({ activeProject }) => {
-    const theme = React.useContext(ThemeContext);
+const Main = React.memo(() => {
+    const { theme } = useTheme();
+    const { activeProject } = useProjects();
     const commandsInProject: IProjectCommand[] = activeProject.commands;
     return (
         <Container theme={theme} className="main-container">
@@ -26,14 +24,5 @@ const Main: React.FC<IMainProps> = React.memo(({ activeProject }) => {
         </Container>
     );
 });
-
-Main.defaultProps = {
-    activeProject: {
-        _id: "",
-        name: "",
-        type: "",
-        commands: [],
-    },
-};
 
 export default Main;

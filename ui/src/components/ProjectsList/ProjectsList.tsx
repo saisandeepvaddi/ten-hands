@@ -1,15 +1,14 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
+import { useProjects } from "../shared/Projects";
 
-interface IProjectProps {
-    projects: IProject[];
-    setActiveProject: any;
-}
-
-const ProjectsList: React.FC<IProjectProps> = React.memo(({ projects, setActiveProject }) => {
+const ProjectsList = React.memo(() => {
+    const { projects, setActiveProject } = useProjects();
     const changeActiveProject = projectId => {
         const activeProjectWithId = projects.find(project => project._id === projectId);
-        setActiveProject(activeProjectWithId);
+        if (activeProjectWithId) {
+            setActiveProject(activeProjectWithId);
+        }
     };
     if (projects.length === 0) {
         return <div />;

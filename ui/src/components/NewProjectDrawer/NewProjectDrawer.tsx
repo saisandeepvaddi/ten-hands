@@ -2,7 +2,7 @@ import { Drawer } from "@blueprintjs/core";
 import { FormikProps, withFormik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
-import { ThemeContext } from "../../utils/Context";
+import { useTheme } from "../shared/Themes";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectForm from "./NewProjectForm";
 
@@ -34,7 +34,7 @@ const NewProjectDrawer: React.FC<INewDrawerProps & FormikProps<IProject>> = ({
     values,
     errors,
 }) => {
-    const theme = React.useContext(ThemeContext);
+    const { theme } = useTheme();
 
     const [fileName, setFileName] = useState("Choose file...");
 

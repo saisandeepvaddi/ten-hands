@@ -1,12 +1,14 @@
 import { Alignment, Button, Classes, Navbar } from "@blueprintjs/core";
 import React from "react";
+import { useTheme } from "../shared/Themes";
 
 interface ITopbarProps {
     theme?: string;
     setTheme?: any;
 }
 
-const Topbar: React.FC<ITopbarProps> = React.memo(({ theme, setTheme }) => {
+const Topbar: React.FC<ITopbarProps> = React.memo(() => {
+    const { theme, setTheme } = useTheme();
     return (
         <Navbar fixedToTop={true}>
             <Navbar.Group align={Alignment.LEFT}>
