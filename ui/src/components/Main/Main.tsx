@@ -16,7 +16,7 @@ interface IMainProps {
     activeProject: IProject;
 }
 
-const Main: React.FC<IMainProps> = ({ activeProject }) => {
+const Main: React.FC<IMainProps> = React.memo(({ activeProject }) => {
     const theme = React.useContext(ThemeContext);
     const commandsInProject: IProjectCommand[] = activeProject.commands;
     return (
@@ -25,7 +25,7 @@ const Main: React.FC<IMainProps> = ({ activeProject }) => {
             <CommandsArea commands={commandsInProject} splitDirection={`horizontal`} />
         </Container>
     );
-};
+});
 
 Main.defaultProps = {
     activeProject: {

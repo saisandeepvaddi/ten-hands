@@ -6,7 +6,7 @@ interface ITopbarProps {
     setTheme?: any;
 }
 
-const Topbar: React.FC<ITopbarProps> = ({ theme, setTheme }) => {
+const Topbar: React.FC<ITopbarProps> = React.memo(({ theme, setTheme }) => {
     return (
         <Navbar fixedToTop={true}>
             <Navbar.Group align={Alignment.LEFT}>
@@ -27,6 +27,6 @@ const Topbar: React.FC<ITopbarProps> = ({ theme, setTheme }) => {
             </Navbar.Group>
         </Navbar>
     );
-};
+});
 
 export default Topbar;

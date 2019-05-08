@@ -19,7 +19,7 @@ interface ISidebarProps {
     setActiveProject?: any;
 }
 
-const Sidebar: React.FC<ISidebarProps> = ({ setActiveProject }) => {
+const Sidebar: React.FC<ISidebarProps> = React.memo(({ setActiveProject }) => {
     const theme = React.useContext(ThemeContext);
     const projects = React.useContext(ProjectsContext);
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
@@ -38,6 +38,6 @@ const Sidebar: React.FC<ISidebarProps> = ({ setActiveProject }) => {
             <NewProjectDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </Container>
     );
-};
+});
 
 export default Sidebar;

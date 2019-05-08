@@ -5,7 +5,7 @@ interface IProjectTopbarProps {
     activeProject: IProject;
 }
 
-const ProjectTopbar: React.FC<IProjectTopbarProps> = ({ activeProject }) => {
+const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     return (
         <Navbar>
             <Navbar.Group>
@@ -17,6 +17,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = ({ activeProject }) => {
             </Navbar.Group>
         </Navbar>
     );
-};
+});
 
 export default ProjectTopbar;

@@ -6,7 +6,7 @@ interface IProjectProps {
     setActiveProject: any;
 }
 
-const ProjectsList: React.FC<IProjectProps> = ({ projects, setActiveProject }) => {
+const ProjectsList: React.FC<IProjectProps> = React.memo(({ projects, setActiveProject }) => {
     const changeActiveProject = projectId => {
         const activeProjectWithId = projects.find(project => project._id === projectId);
         setActiveProject(activeProjectWithId);
@@ -29,6 +29,6 @@ const ProjectsList: React.FC<IProjectProps> = ({ projects, setActiveProject }) =
             ))}
         </Tabs>
     );
-};
+});
 
 export default ProjectsList;

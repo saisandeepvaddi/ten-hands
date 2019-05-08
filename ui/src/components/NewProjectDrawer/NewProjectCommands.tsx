@@ -5,7 +5,7 @@ interface INewProjectCommandsProps {
     commands: IProjectCommand[];
 }
 
-const NewProjectCommands: React.FC<INewProjectCommandsProps> = ({ commands }) => {
+const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ commands }) => {
     return (
         <div>
             {commands.map((command, key) => {
@@ -27,6 +27,6 @@ const NewProjectCommands: React.FC<INewProjectCommandsProps> = ({ commands }) =>
             })}
         </div>
     );
-};
+});
 
 export default NewProjectCommands;
