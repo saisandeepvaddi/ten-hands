@@ -1,4 +1,4 @@
-import { Button } from "@blueprintjs/core";
+import { Button, Classes, HTMLTable } from "@blueprintjs/core";
 import React from "react";
 
 interface INewProjectCommandsProps {
@@ -6,25 +6,29 @@ interface INewProjectCommandsProps {
 }
 
 const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ commands }) => {
+    if (commands.length === 0) {
+        return <div />;
+    }
     return (
         <div>
-            {commands.map((command, key) => {
-                if (key === commands.length - 1) {
-                    return (
-                        <div key={key}>
-                            <Button icon="add" intent="success" minimal={true} />
-                            <span>{command.name}</span>
-                            <span>{command.cmd}</span>
-                        </div>
-                    );
-                }
-                return (
-                    <div key={key}>
-                        <span>{command.name}</span>
-                        <span>{command.cmd}</span>
-                    </div>
-                );
-            })}
+            <HTMLTable className={Classes.HTML_TABLE}>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {commands.map((command, key) => {
+                        return (
+                            <tr key={key}>
+                                <td>{command.name}</td>
+                                <td>{command.cmd}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </HTMLTable>
         </div>
     );
 });

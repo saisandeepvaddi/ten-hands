@@ -31,11 +31,11 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
             reader.onloadend = () => {
                 const { name: selectedFileName } = file;
-                console.info("file:", file);
+                // console.info("file:", file);
                 setFileName(selectedFileName);
                 const readerResult = reader.result;
                 const parsedProjectData = handleConfigFiles(file, readerResult);
-                console.info("parsedProjectData:", parsedProjectData);
+                // console.info("parsedProjectData:", parsedProjectData);
                 if (parsedProjectData !== null) {
                     const { name: projectName, type, commands, configFile, path } = parsedProjectData;
                     console.info("{ name: projectName, type, commands, configFile }:", {
@@ -119,7 +119,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                     <FormGroup
                         label="Project Path"
                         labelFor="path"
-                        helperText="Will be auto-filled if provided by user in config file (E.g., tenHandsConfig.path in package.json). Browsers won't tell path of uploaded file."
+                        helperText="Will be auto-filled if provided by user in config file (E.g., tenHandsConfig.path in package. Browsers do not reveal the path of selected file. Adding project with Ten-Hands CLI could be useful."
                     >
                         <InputGroup id="path" type="text" onChange={props.handleChange} value={props.values.path} />
                     </FormGroup>
