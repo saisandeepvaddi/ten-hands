@@ -39,25 +39,18 @@ interface IState {
     isRunning: boolean;
 }
 
-class Command extends React.PureComponent<ICommandProps, IState> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isOutputOpen: true,
-            isRunning: false,
-            socket: null,
-            jobOutput: "",
-            process: null,
-            room: "",
-        };
-    }
-    public componentDidMount() {
+const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
+    const [isOutputOpen, setOutputOpen] = React.useState(true);
+    const [isRunning, setIsRunning] = React.useState(false);
+    const [socket, setSocket] = React.useState(null);
+    const [jobOutput, setJobOutput] = React.useState("");
+    const [process, setProcess] = React.useState<any>(null);
+    const [room, setRoom] = React.useState("");
+
+    React.useEffect(() => {
         const socket = JobSocket.getSocket();
-        const { command } = this.props;
-        const room = command._id;
-        this.setState({
-            socket,
-        });
+        setRoom(command._id);
+        setSocket(socket);
         socket.on(`joined_room-${room}`, message => {
             if (room === message.room) {
                 console.info(message.data);
@@ -65,81 +58,50 @@ class Command extends React.PureComponent<ICommandProps, IState> {
         });
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
-            this.setState({
-                isRunning: true,
-                process: message.data,
-                jobOutput: "",
-            });
+            setIsRunning(true);
+            setProcess(message.data);
+            setJobOutput("");
         });
         socket.on(`output-${room}`, message => {
             if (room === message.room) {
-                this.setState(prevState => {
-                    return {
-                        jobOutput: prevState.jobOutput + message.data,
-                    };
-                });
+                setJobOutput(jobOutput + message.data);
             }
         });
 
         socket.on(`close-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process close in room: ${room}`);
-                this.setState(prevState => {
-                    return {
-                        isRunning: false,
-                        jobOutput: prevState.jobOutput + message.data,
-                    };
-                });
+                setIsRunning(false);
+                setJobOutput(jobOutput + message.data);
             }
         });
 
         socket.on(`error-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process error in room: ${room}`);
-                this.setState(prevState => {
-                    return {
-                        isRunning: true,
-                        jobOutput: prevState.jobOutput + message.data,
-                    };
-                });
+                setIsRunning(true);
+                setJobOutput(jobOutput + message.data);
             }
         });
 
         socket.on(`exit-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process exit in room: ${room}`);
-
-                this.setState(prevState => {
-                    return {
-                        isRunning: false,
-                        jobOutput: prevState.jobOutput + message.data,
-                    };
-                });
+                setIsRunning(false);
+                setJobOutput(jobOutput + message.data);
             }
         });
 
         socket.on(`job_killed-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
-
-                this.setState(prevState => {
-                    return {
-                        isRunning: false,
-                        jobOutput: prevState.jobOutput + "process with id " + message.data + " killed by user.",
-                    };
-                });
+                setIsRunning(false);
+                setJobOutput(jobOutput + "process with id " + message.data + " killed by user.");
             }
         });
-    }
+    }, [command._id]);
 
-    public setOutputOpen = (value: boolean) => {
-        this.setState({
-            isOutputOpen: value,
-        });
-    };
-
-    public startJob = socket => {
-        const { command } = this.props;
+    const startJob = socket => {
         const room = command._id;
         const job = command.cmd;
         socket.emit("subscribe", {
@@ -148,11 +110,8 @@ class Command extends React.PureComponent<ICommandProps, IState> {
         });
     };
 
-    public stopJob = socket => {
-        const { command } = this.props;
-        const {
-            process: { pid },
-        } = this.state;
+    const stopJob = socket => {
+        const { pid } = process;
         socket.emit("unsubscribe", {
             room: command._id,
             job: command.cmd,
@@ -160,42 +119,36 @@ class Command extends React.PureComponent<ICommandProps, IState> {
         });
     };
 
-    public render() {
-        const { command } = this.props;
-        const { isOutputOpen, jobOutput, socket, isRunning } = this.state;
-        return (
-            <Container>
-                <CommandHeader>
-                    <CommandTitleActions>
-                        <H5>{command.name}</H5>
-                        <Button
-                            data-testid="job-start"
-                            icon="play"
-                            intent="success"
-                            minimal={true}
-                            disabled={isRunning}
-                            onClick={() => this.startJob(socket)}
-                        />
-                        <Button
-                            data-testid="job-stop"
-                            intent="danger"
-                            icon="stop"
-                            minimal={true}
-                            disabled={!isRunning}
-                            onClick={() => this.stopJob(socket)}
-                        />
-                    </CommandTitleActions>
-                    <span>{command.command}</span>
-                    <Button onClick={() => this.setOutputOpen(!isOutputOpen)}>
-                        {isOutputOpen ? "Hide" : "Show"} Output
-                    </Button>
-                </CommandHeader>
-                <Collapse isOpen={isOutputOpen}>
-                    <Pre>{jobOutput ? jobOutput : "Process not running"}</Pre>
-                </Collapse>
-            </Container>
-        );
-    }
-}
+    return (
+        <Container>
+            <CommandHeader>
+                <CommandTitleActions>
+                    <H5>{command.name}</H5>
+                    <Button
+                        data-testid="job-start"
+                        icon="play"
+                        intent="success"
+                        minimal={true}
+                        disabled={isRunning}
+                        onClick={() => startJob(socket)}
+                    />
+                    <Button
+                        data-testid="job-stop"
+                        intent="danger"
+                        icon="stop"
+                        minimal={true}
+                        disabled={!isRunning}
+                        onClick={() => stopJob(socket)}
+                    />
+                </CommandTitleActions>
+                <span>{command.command}</span>
+                <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
+            </CommandHeader>
+            <Collapse isOpen={isOutputOpen}>
+                <Pre>{jobOutput ? jobOutput : "Process not running"}</Pre>
+            </Collapse>
+        </Container>
+    );
+});
 
 export default Command;
