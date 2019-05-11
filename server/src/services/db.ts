@@ -39,11 +39,15 @@ class Database {
       ...project,
       commands
     };
-    const result = this.db
+    const newProject = {
+      _id: uuidv4(),
+      ...projectWithUpdatedCommands
+    };
+    this.db
       .get("projects")
-      .push({ _id: uuidv4(), ...projectWithUpdatedCommands })
+      .push(newProject)
       .write();
-    return result;
+    return newProject;
   }
 
   public deleteProject(projectId: string) {

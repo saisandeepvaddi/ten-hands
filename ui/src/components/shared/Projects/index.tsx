@@ -6,6 +6,7 @@ interface IProjectContextValue {
     activeProject: IProject;
     setActiveProject: (activeProject: IProject) => void;
     setProjects: any;
+    updateProjects: () => void;
 }
 
 interface IProjectsProviderProps {
@@ -25,21 +26,25 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState([]);
-
-    React.useEffect(() => {
-        async function getProjects() {
-            try {
-                const response = await Axios.get("http://localhost:1010/projects");
-                const receivedProjects = response.data;
-                if (receivedProjects.length > 0) {
-                    setProjects(receivedProjects);
-                    setActiveProject(receivedProjects[0]);
-                }
-            } catch (error) {
-                console.error(error);
+    const updateProjects = React.useCallback(async () => {
+        try {
+            const response = await Axios.get("http://localhost:1010/projects");
+            const receivedProjects = response.data;
+            if (receivedProjects.length > 0) {
+                setProjects(receivedProjects);
+                setActiveProject(receivedProjects[0]);
+            } else {
+                setProjects([]);
             }
+        } catch (error) {
+            console.error(error);
         }
-        getProjects();
+    }, []);
+    React.useEffect(() => {
+        async function updateNewProjects() {
+            await updateProjects();
+        }
+        updateNewProjects();
     }, []);
 
     const value = React.useMemo(() => {
@@ -48,8 +53,9 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             activeProject,
             setActiveProject,
             setProjects,
+            updateProjects,
         };
-    }, [projects, activeProject]);
+    }, [projects.length, activeProject._id]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }
@@ -60,14 +66,7 @@ function useProjects() {
         throw new Error("useProjects must be used within a ProjectsProvider");
     }
 
-    const { projects, activeProject, setActiveProject, setProjects } = context;
-
-    return {
-        projects,
-        activeProject,
-        setActiveProject,
-        setProjects,
-    };
+    return context;
 }
 
 export { ProjectsProvider, useProjects };

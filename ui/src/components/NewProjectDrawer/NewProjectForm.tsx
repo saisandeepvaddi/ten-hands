@@ -20,7 +20,7 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [fileName, setFileName] = useState("Choose file...");
-    const { setProjects } = useProjects();
+    const { updateProjects, setActiveProject } = useProjects();
 
     const onProjectFileChange = useCallback(
         (e, setFieldValue) => {
@@ -69,7 +69,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 console.warn(`Error reading file. Did you select any file ?.`);
             }
         },
-        [setDrawerOpen, setProjects],
+        [setDrawerOpen],
     );
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
@@ -85,9 +85,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 data: values,
             });
             actions.setSubmitting(false);
-            const updatedProjects = responseData.data;
-            setProjects(updatedProjects);
+            const updatedProject = responseData.data;
+            await updateProjects();
             setDrawerOpen(false);
+            setActiveProject(updatedProject);
         } catch (error) {
             console.error(error);
             actions.setSubmitting(false);

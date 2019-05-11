@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import NewProjectDrawer from "../NewProjectDrawer";
 import ProjectsList from "../ProjectsList";
+import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 
 const Container = styled.div`
@@ -18,6 +19,7 @@ const Container = styled.div`
 const Sidebar = React.memo(() => {
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+    const { projects } = useProjects();
 
     return (
         <Container theme={theme}>
@@ -29,7 +31,7 @@ const Sidebar = React.memo(() => {
                 style={{ width: "100%" }}
                 onClick={() => setDrawerOpen(true)}
             />
-            <ProjectsList />
+            {projects.length && <ProjectsList />}
             <NewProjectDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </Container>
     );

@@ -31,29 +31,29 @@
       ]
     },
     {
-      "_id": "4f26ec0b-2f71-4d27-ad59-4ac08a407005",
-      "name": "ten-hands",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "09d17847-0a90-4f8a-bf17-4811405169ae",
-          "name": "test",
-          "cmd": "jest --no-cache",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\ten-hands"
-    },
-    {
-      "_id": "be46814d-0430-482e-ad0c-03165b9590f5",
+      "_id": "4c80d057-c13f-4137-b239-e607120397c4",
       "name": "execa-test",
       "type": "nodejs",
       "commands": [
         {
-          "_id": "ccc9c93c-6790-497e-9150-109a4896b5a9",
+          "_id": "0158fe66-bc11-420d-aef6-25b1cac5e85d",
           "name": "start",
           "cmd": "nodemon index.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": ""
+    },
+    {
+      "_id": "590c0bce-e6a8-4e6e-a84c-4a7d2b931299",
+      "name": "my-ip-is",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "215d1cb2-816c-4218-858c-5e22da0af504",
+          "name": "start",
+          "cmd": "node src/index.js",
           "execDir": "./"
         }
       ],
