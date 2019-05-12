@@ -20,4 +20,5 @@ interface IJobAction {
     room: string;
     type: ACTION_TYPES;
     data?: string;
+    isRunning?: boolean;
 }

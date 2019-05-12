@@ -4,7 +4,7 @@ import React from "react";
 
 enum ACTION_TYPES {
     ADD_JOB,
-    UPDATE_OUTPUT,
+    UPDATE_JOB,
     CLEAR_OUTPUT,
 }
 
@@ -27,20 +27,22 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
                     ...state,
                     [room]: {
                         stdout: "",
+                        isRunning: false,
                     },
                 };
             }
 
             return state;
         }
-        case ACTION_TYPES.UPDATE_OUTPUT: {
-            const room = action.room;
-            const data = action.data;
+        case ACTION_TYPES.UPDATE_JOB: {
+            const { room, data, isRunning } = action;
 
             return {
                 ...state,
                 [room]: {
+                    ...state[room],
                     stdout: state[room].stdout + data,
+                    isRunning,
                 },
             };
         }
@@ -49,6 +51,7 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
             return {
                 ...state,
                 [room]: {
+                    ...state[room],
                     stdout: "",
                 },
             };

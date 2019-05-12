@@ -9,6 +9,7 @@
     "no-default-export": false,
     "object-literal-sort-keys": false,
     "jsx-no-lambda": false,
-    "linebreak-style": false
+    "linebreak-style": false,
+    "no-console": false
   }
 }

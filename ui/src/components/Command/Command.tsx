@@ -33,22 +33,23 @@ interface ICommandProps {
 }
 
 function getJobData(state, room) {
-    return (state[room] && state[room].stdout) || "";
+    return state[room] || "";
 }
 
 const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const [isRunning, setIsRunning] = React.useState(false);
+    // const [isRunning, setIsRunning] = React.useState(false);
     const [process, setProcess] = React.useState<any>(null);
     const room = command._id;
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
-    const updateJobOutput = useCallback(
-        data => {
+    const updateJob = useCallback(
+        (data, isRunning) => {
             dispatch({
                 room,
-                type: ACTION_TYPES.UPDATE_OUTPUT,
+                type: ACTION_TYPES.UPDATE_JOB,
                 data,
+                isRunning,
             });
         },
         [room],
@@ -82,45 +83,42 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
         addJobToState();
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
-            setIsRunning(true);
+            // setIsRunning(true);
             setProcess(message.data);
-            updateJobOutput("");
+            console.log("message.data:", message.data);
+            updateJob("", true);
         });
         socket.on(`output-${room}`, message => {
             if (room === message.room) {
-                updateJobOutput(message.data);
+                updateJob(message.data, true);
             }
         });
 
         socket.on(`close-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process close in room: ${room}`);
-                setIsRunning(false);
-                updateJobOutput(message.data);
+                updateJob(message.data, false);
             }
         });
 
         socket.on(`error-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process error in room: ${room}`);
-                setIsRunning(true);
-                updateJobOutput(message.data);
+                updateJob(message.data, false);
             }
         });
 
         socket.on(`exit-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process exit in room: ${room}`);
-                setIsRunning(false);
-                updateJobOutput(message.data);
+                updateJob(message.data, false);
             }
         });
 
         socket.on(`job_killed-${room}`, message => {
             if (room === message.room) {
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
-                setIsRunning(false);
-                updateJobOutput("process with id " + message.data + " killed by user.");
+                updateJob("process with id " + message.data + " killed by user.", false);
             }
         });
     };
@@ -146,6 +144,10 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
         });
     };
 
+    const isProcessRunning = (): boolean => {
+        return getJobData(jobState, room).isRunning || false;
+    };
+
     return (
         <Container>
             <CommandHeader>
@@ -156,7 +158,7 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
                         icon="play"
                         intent="success"
                         minimal={true}
-                        disabled={isRunning}
+                        disabled={isProcessRunning()}
                         onClick={startJob}
                     />
                     <Button
@@ -164,7 +166,7 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
                         intent="danger"
                         icon="stop"
                         minimal={true}
-                        disabled={!isRunning}
+                        disabled={!isProcessRunning()}
                         onClick={stopJob}
                     />
                 </CommandTitleActions>
@@ -172,7 +174,7 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
                 <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen}>
-                <CommandOutput output={getJobData(jobState, room) || "Process not running"} />
+                <CommandOutput output={getJobData(jobState, room).stdout || "Process not running"} />
             </Collapse>
         </Container>
     );
