@@ -15,3 +15,9 @@ interface IProject {
     configFile?: string;
     commands: IProjectCommand[];
 }
+
+interface IJobAction {
+    room: string;
+    type: ACTION_TYPES;
+    data?: string;
+}

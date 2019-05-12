@@ -1,11 +1,11 @@
 import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
+import JobSocket from "../../utils/socket";
 import Command from "../Command/Command";
 
 interface ICommandsAreaProps {
     commands: IProjectCommand[];
-    splitDirection: string;
 }
 
 const Container = styled.div`
@@ -13,13 +13,14 @@ const Container = styled.div`
     overflow-y: auto;
 `;
 
-const CommandsArea: React.SFC<ICommandsAreaProps> = ({ commands, splitDirection }) => {
+const CommandsArea: React.SFC<ICommandsAreaProps> = ({ commands }) => {
+    const socket = JobSocket.getSocket();
     return (
         <Container>
             {commands.map((command, key) => {
                 return (
                     <Card key={key} elevation={Elevation.ONE} style={{ margin: 20 }}>
-                        <Command command={command} />
+                        <Command command={command} socket={socket} />
                     </Card>
                 );
             })}

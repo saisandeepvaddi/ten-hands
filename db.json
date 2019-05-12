@@ -31,36 +31,6 @@
       ]
     },
     {
-      "_id": "4c80d057-c13f-4137-b239-e607120397c4",
-      "name": "execa-test",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "0158fe66-bc11-420d-aef6-25b1cac5e85d",
-          "name": "start",
-          "cmd": "nodemon index.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": ""
-    },
-    {
-      "_id": "590c0bce-e6a8-4e6e-a84c-4a7d2b931299",
-      "name": "my-ip-is",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "215d1cb2-816c-4218-858c-5e22da0af504",
-          "name": "start",
-          "cmd": "node src/index.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": ""
-    },
-    {
       "_id": "20c9893b-941d-45fc-8d8f-6de5b3319dc7",
       "name": "styled-loaders-react",
       "type": "nodejs",
@@ -98,6 +68,36 @@
       ],
       "configFile": "package.json",
       "path": ""
+    },
+    {
+      "_id": "b5137f19-a315-46bb-a8ee-6c25f1b004e9",
+      "name": "execa-test",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "994928ee-c0e2-4fa1-a2fe-f8f47e52e5c1",
+          "name": "start",
+          "cmd": "nodemon index.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": ""
+    },
+    {
+      "_id": "e124c10d-2c9c-46df-9954-a4b7cc04813a",
+      "name": "ten-hands",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "d6478870-d9f6-4ebb-8120-d9fbe99fb322",
+          "name": "test",
+          "cmd": "jest --no-cache",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\ten-hands"
     }
   ],
   "commands": []

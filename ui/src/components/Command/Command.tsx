@@ -1,8 +1,8 @@
 import { Button, Collapse, H5, Pre } from "@blueprintjs/core";
-import React from "react";
+import React, { useCallback, useReducer } from "react";
 import styled from "styled-components";
-
-import JobSocket from "../../utils/socket";
+import { useJobs } from "../shared/Jobs";
+import CommandOutput from "./CommandOutput";
 
 const Container = styled.div``;
 
@@ -28,43 +28,49 @@ const CommandHeader = styled.div`
 
 interface ICommandProps {
     command: IProjectCommand;
-}
-
-interface IState {
-    isOutputOpen: boolean;
     socket: any;
-    jobOutput: string;
-    process: any;
-    room: string;
-    isRunning: boolean;
 }
 
-const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
+function getJobData(state, room) {
+    return (state[room] && state[room].stdout) || "";
+}
+
+const Command: React.FC<ICommandProps> = ({ command, socket }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const [isRunning, setIsRunning] = React.useState(false);
-    const [socket, setSocket] = React.useState(null);
-    const [jobOutput, setJobOutput] = React.useState("");
     const [process, setProcess] = React.useState<any>(null);
-    const [room, setRoom] = React.useState("");
+    const room = command._id;
+    const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
-    React.useEffect(() => {
-        const socket = JobSocket.getSocket();
-        setRoom(command._id);
-        setSocket(socket);
-        socket.on(`joined_room-${room}`, message => {
-            if (room === message.room) {
-                console.info(message.data);
-            }
+    const updateJobOutput = useCallback(
+        data => {
+            dispatch({
+                room,
+                type: ACTION_TYPES.UPDATE_OUTPUT,
+                data,
+            });
+        },
+        [room],
+    );
+
+    const addJobToState = useCallback(() => {
+        dispatch({
+            type: ACTION_TYPES.ADD_JOB,
+            room,
         });
+    }, [room]);
+
+    const initializeSocket = () => {
+        addJobToState();
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
             setIsRunning(true);
             setProcess(message.data);
-            setJobOutput("");
+            updateJobOutput("");
         });
         socket.on(`output-${room}`, message => {
             if (room === message.room) {
-                setJobOutput(jobOutput + message.data);
+                updateJobOutput(message.data);
             }
         });
 
@@ -72,7 +78,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
             if (room === message.room) {
                 console.info(`Process close in room: ${room}`);
                 setIsRunning(false);
-                setJobOutput(jobOutput + message.data);
+                updateJobOutput(message.data);
             }
         });
 
@@ -80,7 +86,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
             if (room === message.room) {
                 console.info(`Process error in room: ${room}`);
                 setIsRunning(true);
-                setJobOutput(jobOutput + message.data);
+                updateJobOutput(message.data);
             }
         });
 
@@ -88,7 +94,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
             if (room === message.room) {
                 console.info(`Process exit in room: ${room}`);
                 setIsRunning(false);
-                setJobOutput(jobOutput + message.data);
+                updateJobOutput(message.data);
             }
         });
 
@@ -96,13 +102,16 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
             if (room === message.room) {
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
                 setIsRunning(false);
-                setJobOutput(jobOutput + "process with id " + message.data + " killed by user.");
+                updateJobOutput("process with id " + message.data + " killed by user.");
             }
         });
-    }, [command._id]);
+    };
 
-    const startJob = socket => {
-        const room = command._id;
+    React.useEffect(() => {
+        initializeSocket();
+    }, [room]);
+
+    const startJob = () => {
         const job = command.cmd;
         socket.emit("subscribe", {
             room,
@@ -110,7 +119,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
         });
     };
 
-    const stopJob = socket => {
+    const stopJob = () => {
         const { pid } = process;
         socket.emit("unsubscribe", {
             room: command._id,
@@ -130,7 +139,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
                         intent="success"
                         minimal={true}
                         disabled={isRunning}
-                        onClick={() => startJob(socket)}
+                        onClick={startJob}
                     />
                     <Button
                         data-testid="job-stop"
@@ -138,17 +147,17 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
                         icon="stop"
                         minimal={true}
                         disabled={!isRunning}
-                        onClick={() => stopJob(socket)}
+                        onClick={stopJob}
                     />
                 </CommandTitleActions>
-                <span>{command.command}</span>
+                <span>{command.cmd}</span>
                 <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen}>
-                <Pre>{jobOutput ? jobOutput : "Process not running"}</Pre>
+                <CommandOutput output={getJobData(jobState, room) || "Process not running"} />
             </Collapse>
         </Container>
     );
-});
+};
 
 export default Command;

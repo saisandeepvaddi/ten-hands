@@ -20,7 +20,7 @@ const Main = React.memo(() => {
     return (
         <Container theme={theme} className="main-container">
             <ProjectTopbar activeProject={activeProject} />
-            <CommandsArea commands={commandsInProject} splitDirection={`horizontal`} />
+            <CommandsArea commands={commandsInProject} />
         </Container>
     );
 });
