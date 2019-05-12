@@ -1,4 +1,4 @@
-import { Button, Classes, HTMLTable } from "@blueprintjs/core";
+import { Classes, HTMLTable } from "@blueprintjs/core";
 import React from "react";
 
 interface INewProjectCommandsProps {

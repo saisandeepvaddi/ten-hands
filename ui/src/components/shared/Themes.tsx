@@ -1,7 +1,7 @@
 import { Classes } from "@blueprintjs/core";
 import React from "react";
 
-import { getItem, setItem } from "../../../utils/storage";
+import { getItem, setItem } from "../../utils/storage";
 
 interface IThemeContextValue {
     theme: string;

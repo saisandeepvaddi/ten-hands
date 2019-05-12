@@ -25,10 +25,10 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                     }
                 }
             } catch (error) {
-                console.error(`Error deleting project`);
+                console.error(`Error deleting project: `, error);
             }
         },
-        [activeProject._id],
+        [activeProject],
     );
     return (
         <Navbar>

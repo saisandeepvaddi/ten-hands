@@ -29,66 +29,6 @@
           "pid": ""
         }
       ]
-    },
-    {
-      "_id": "20c9893b-941d-45fc-8d8f-6de5b3319dc7",
-      "name": "styled-loaders-react",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "272115be-27c7-4d7e-8c40-2411b16625f1",
-          "name": "start",
-          "cmd": "styleguidist server",
-          "execDir": "./"
-        },
-        {
-          "_id": "9fa8bdcf-104d-486c-b8be-f3c2bbd2c081",
-          "name": "build",
-          "cmd": "styleguidist build",
-          "execDir": "./"
-        },
-        {
-          "_id": "adc4416b-923c-4411-b9a9-bc48a45c00f5",
-          "name": "compile",
-          "cmd": "rm -rf lib/ && babel -d lib/ src/",
-          "execDir": "./"
-        },
-        {
-          "_id": "baa91e30-dd66-4d92-84f1-8fa2a1ed7029",
-          "name": "prepublish",
-          "cmd": "yarn compile",
-          "execDir": "./"
-        },
-        {
-          "_id": "c24ffdd5-92ad-4910-8159-5ed94ab31e7e",
-          "name": "test",
-          "cmd": "",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": ""
-    },
-    {
-      "_id": "f60a69b6-9898-4ebf-b3bd-77c95ca7cf14",
-      "name": "test-project",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "6a061ae0-83ca-4221-bf53-fc364dd2fad7",
-          "name": "one",
-          "cmd": "node test.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "39b5c213-5742-4d0d-ba03-df0526aedb15",
-          "name": "two",
-          "cmd": "node test.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\test-project"
     }
   ],
   "commands": []

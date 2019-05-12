@@ -11,7 +11,7 @@ const ProjectsList = React.memo(() => {
                 setActiveProject(activeProjectWithId);
             }
         },
-        [projects.length],
+        [projects, setActiveProject],
     );
     if (projects.length === 0) {
         return <div />;
