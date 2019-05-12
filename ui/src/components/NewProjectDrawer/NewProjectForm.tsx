@@ -121,7 +121,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         labelFor="path"
                         helperText="Will be auto-filled if provided by user in config file (E.g., tenHandsConfig.path in package. Browsers do not reveal the path of selected file. Adding project with Ten-Hands CLI could be useful."
                     >
-                        <InputGroup id="path" type="text" onChange={props.handleChange} value={props.values.path} />
+                        <InputGroup
+                            required={true}
+                            id="path"
+                            type="text"
+                            onChange={props.handleChange}
+                            value={props.values.path}
+                        />
                     </FormGroup>
                     <FormGroup
                         label="Project Type"

@@ -68,36 +68,6 @@
       ],
       "configFile": "package.json",
       "path": ""
-    },
-    {
-      "_id": "b5137f19-a315-46bb-a8ee-6c25f1b004e9",
-      "name": "execa-test",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "994928ee-c0e2-4fa1-a2fe-f8f47e52e5c1",
-          "name": "start",
-          "cmd": "nodemon index.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": ""
-    },
-    {
-      "_id": "e124c10d-2c9c-46df-9954-a4b7cc04813a",
-      "name": "ten-hands",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "d6478870-d9f6-4ebb-8120-d9fbe99fb322",
-          "name": "test",
-          "cmd": "jest --no-cache",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\ten-hands"
     }
   ],
   "commands": []
