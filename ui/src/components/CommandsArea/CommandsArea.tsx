@@ -5,7 +5,7 @@ import JobSocket from "../../utils/socket";
 import Command from "../Command/Command";
 
 interface ICommandsAreaProps {
-    commands: IProjectCommand[];
+    activeProject: IProject;
 }
 
 const Container = styled.div`
@@ -13,19 +13,21 @@ const Container = styled.div`
     overflow-y: auto;
 `;
 
-const CommandsArea: React.SFC<ICommandsAreaProps> = ({ commands }) => {
+const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject }) => {
     const socket = JobSocket.getSocket();
+    const commands: IProjectCommand[] = activeProject.commands;
+
     return (
         <Container>
             {commands.map((command, key) => {
                 return (
                     <Card key={key} elevation={Elevation.ONE} style={{ margin: 20 }}>
-                        <Command command={command} socket={socket} />
+                        <Command projectPath={activeProject.path} command={command} socket={socket} />
                     </Card>
                 );
             })}
         </Container>
     );
-};
+});
 
 export default CommandsArea;

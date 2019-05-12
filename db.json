@@ -3,29 +3,29 @@
     {
       "_id": "75034ae2-c231-497d-a3d6-adb7048bb696",
       "name": "SaiTest1",
-      "path": "C:\\SaiTest1",
+      "path": "D:\\Programming\\ten-hands\\server",
       "type": "node",
       "configFile": "package.json",
       "commands": [
         {
           "_id": "e1da46bc-22b9-47b5-abae-3b1523c07ddc",
           "name": "start",
-          "cmd": "node /Programming/ten-hands/server/src/functions.js",
-          "execDir": "/src",
+          "cmd": "node src/functions.js",
+          "execDir": "./",
           "pid": ""
         },
         {
           "_id": "40d2af3f-ca86-4997-86e6-e1e74684a223",
           "name": "start",
-          "cmd": "node /Programming/ten-hands/server/src/functions.js",
-          "execDir": "/src",
+          "cmd": "node src/functions.js",
+          "execDir": "./",
           "pid": ""
         },
         {
           "_id": "1d456d9c-1256-4f85-bb30-6a5e2f607550",
           "name": "start",
-          "cmd": "node /Programming/ten-hands/server/src/functions.js",
-          "execDir": "/src",
+          "cmd": "node src/functions.js",
+          "execDir": "./",
           "pid": ""
         }
       ]
@@ -68,6 +68,27 @@
       ],
       "configFile": "package.json",
       "path": ""
+    },
+    {
+      "_id": "f60a69b6-9898-4ebf-b3bd-77c95ca7cf14",
+      "name": "test-project",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "6a061ae0-83ca-4221-bf53-fc364dd2fad7",
+          "name": "one",
+          "cmd": "node test.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "39b5c213-5742-4d0d-ba03-df0526aedb15",
+          "name": "two",
+          "cmd": "node test.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\test-project"
     }
   ],
   "commands": []

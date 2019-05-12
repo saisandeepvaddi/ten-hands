@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import execa from "execa";
 import pKill from "tree-kill";
 import io from "socket.io";
+import path from "path";
 
 class Job {
   private io: any;
@@ -11,13 +12,19 @@ class Job {
     this.room = room;
   }
 
-  public start(job) {
-    // console.log("job:", job);
+  public start(command, projectPath) {
     const io = this.io;
-    console.log(io.rooms);
+
+    const job = command.cmd;
+    // const execDir = command.execDir;
+    const execPath = path.normalize(projectPath);
+    console.log("execPath:", execPath);
+    console.log("job:", job);
 
     const room = this.room;
-    const n = execa(job);
+    const n = execa(job, {
+      cwd: execPath || process.cwd()
+    });
     io.to(room).emit(`job_started-${room}`, { room, data: n });
     n.stdout.on("data", chunk => {
       // console.log("output:", chunk.toString());
@@ -57,7 +64,7 @@ export class JobManager {
   socket: any;
   private constructor() {}
 
-  private killJob(job, room, pid) {
+  private killJob(room, pid) {
     console.log(`Killing Job`);
     pKill(pid);
     this.io.to(room).emit(`job_killed-${room}`, {
@@ -67,21 +74,32 @@ export class JobManager {
   }
 
   private bindEvents() {
-    this.socket.on("subscribe", ({ job, room }) => {
-      this.socket.join(room, () => {
-        console.log(`${job} joined room ${room}`);
-        this.io.to(room).emit(`joined_room-${room}`, {
-          room,
-          data: `${job} joined room ${room}`
-        });
-        const process = new Job(this.io, room);
-        process.start(job);
-      });
-    });
+    this.socket.on(
+      "subscribe",
+      ({
+        command,
+        room,
+        projectPath
+      }: {
+        command: IProjectCommand;
+        room: string;
+        projectPath: string;
+      }) => {
+        const job = command.cmd;
 
-    this.socket.on("unsubscribe", ({ job, room, pid }) => {
-      console.log(`${job} leaving room ${room}`);
-      this.killJob(job, room, pid);
+        this.socket.join(room, () => {
+          this.io.to(room).emit(`joined_room-${room}`, {
+            room,
+            data: `${job} joined room ${room}`
+          });
+          const process = new Job(this.io, room);
+          process.start(command, projectPath);
+        });
+      }
+    );
+
+    this.socket.on("unsubscribe", ({ room, pid }) => {
+      this.killJob(room, pid);
       this.socket.leave(room);
     });
   }

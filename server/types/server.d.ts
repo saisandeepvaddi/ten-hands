@@ -1,5 +1,6 @@
 interface IProjectCommand {
   _id?: string;
+  execDir?: string;
   [name: string]: string;
 }
 

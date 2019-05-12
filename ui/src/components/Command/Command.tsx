@@ -29,13 +29,14 @@ const CommandHeader = styled.div`
 interface ICommandProps {
     command: IProjectCommand;
     socket: any;
+    projectPath: string;
 }
 
 function getJobData(state, room) {
     return (state[room] && state[room].stdout) || "";
 }
 
-const Command: React.FC<ICommandProps> = ({ command, socket }) => {
+const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const [isRunning, setIsRunning] = React.useState(false);
     const [process, setProcess] = React.useState<any>(null);
@@ -77,7 +78,7 @@ const Command: React.FC<ICommandProps> = ({ command, socket }) => {
             return;
         }
 
-        console.info("Initializing new room");
+        console.info("Initializing room: ", room);
         addJobToState();
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
@@ -130,10 +131,10 @@ const Command: React.FC<ICommandProps> = ({ command, socket }) => {
 
     const startJob = () => {
         clearJobOutput();
-        const job = command.cmd;
         socket.emit("subscribe", {
             room,
-            job,
+            command,
+            projectPath,
         });
     };
 
@@ -141,7 +142,6 @@ const Command: React.FC<ICommandProps> = ({ command, socket }) => {
         const { pid } = process;
         socket.emit("unsubscribe", {
             room: command._id,
-            job: command.cmd,
             pid,
         });
     };

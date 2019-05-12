@@ -21,6 +21,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         _id: "",
         name: "",
         type: "",
+        path: "",
         commands: [],
     };
 

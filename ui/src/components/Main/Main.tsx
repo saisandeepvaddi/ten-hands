@@ -16,11 +16,10 @@ const Container = styled.div`
 const Main = React.memo(() => {
     const { theme } = useTheme();
     const { activeProject } = useProjects();
-    const commandsInProject: IProjectCommand[] = activeProject.commands;
     return (
         <Container theme={theme} className="main-container">
             <ProjectTopbar activeProject={activeProject} />
-            <CommandsArea commands={commandsInProject} />
+            <CommandsArea activeProject={activeProject} />
         </Container>
     );
 });
