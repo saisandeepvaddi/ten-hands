@@ -60,7 +60,24 @@ const Command: React.FC<ICommandProps> = ({ command, socket }) => {
         });
     }, [room]);
 
+    const clearJobOutput = useCallback(() => {
+        dispatch({
+            type: ACTION_TYPES.CLEAR_OUTPUT,
+            room,
+        });
+    }, [room]);
+
     const initializeSocket = () => {
+        // Check socket.on events for this room already initialized.
+        // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
+        // keys of jobState are registered rooms
+        const currentRooms = Object.keys(jobState);
+        if (currentRooms.indexOf(room) > -1) {
+            console.info(`Room ${room} already exists. Skip initializing`);
+            return;
+        }
+
+        console.info("Initializing new room");
         addJobToState();
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
@@ -112,6 +129,7 @@ const Command: React.FC<ICommandProps> = ({ command, socket }) => {
     }, [room]);
 
     const startJob = () => {
+        clearJobOutput();
         const job = command.cmd;
         socket.emit("subscribe", {
             room,

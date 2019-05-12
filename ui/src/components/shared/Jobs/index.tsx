@@ -35,10 +35,7 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
         }
         case ACTION_TYPES.UPDATE_OUTPUT: {
             const room = action.room;
-            console.log(`Current Data: `, state[room].stdout);
-
             const data = action.data;
-            console.log(`Incoming Data: `, data);
 
             return {
                 ...state,
