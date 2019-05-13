@@ -19,6 +19,13 @@ interface IProject {
 interface IJobAction {
     room: string;
     type: ACTION_TYPES;
-    data?: string;
+    stdout?: string;
+    state?: object;
     isRunning?: boolean;
+    process?: any;
+}
+
+interface IStateAction {
+    type: ACTION_TYPES;
+    state: object;
 }

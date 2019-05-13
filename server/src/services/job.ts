@@ -109,9 +109,12 @@ export class JobManager {
       this.io = io;
     }
     this.io.on("connection", socket => {
-      console.log(`Client connected to socket`);
+      console.log(`Client connected to socket: `, socket.id);
 
       this.socket = socket;
+      this.socket.on("disconnect", function() {
+        console.log("Disconnecting: ", socket.id);
+      });
       this.bindEvents();
     });
   }

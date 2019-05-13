@@ -4,6 +4,9 @@ class JobSocket {
     }
 
     public static bindSocket(socket: any) {
+        socket.on(`disconnect`, () => {
+            console.log(`Disconnecting: `);
+        });
         JobSocket.socket = socket;
     }
 

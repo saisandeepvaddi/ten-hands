@@ -1,3 +1,4 @@
+import localforage from "localforage";
 import React from "react";
 
 // Reducer that saves state of jobs output
@@ -6,6 +7,8 @@ enum ACTION_TYPES {
     ADD_JOB,
     UPDATE_JOB,
     CLEAR_OUTPUT,
+    RESTORE_STATE_FROM_STORAGE,
+    UPDATE_JOB_PROCESS,
 }
 
 /* 
@@ -15,9 +18,10 @@ enum ACTION_TYPES {
   }
 
 */
+
 export const initialState = {};
 
-export const jobsReducer = (state = initialState, action: IJobAction) => {
+export const jobsReducer = (state = initialState, action: IJobAction): object => {
     switch (action.type) {
         case ACTION_TYPES.ADD_JOB: {
             const room = action.room;
@@ -28,6 +32,7 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
                     [room]: {
                         stdout: "",
                         isRunning: false,
+                        process: {},
                     },
                 };
             }
@@ -35,14 +40,25 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
             return state;
         }
         case ACTION_TYPES.UPDATE_JOB: {
-            const { room, data, isRunning } = action;
-
+            const { room, stdout, isRunning } = action;
             return {
                 ...state,
                 [room]: {
                     ...state[room],
-                    stdout: state[room].stdout + data,
+                    stdout: state[room].stdout + stdout,
                     isRunning,
+                },
+            };
+        }
+        case ACTION_TYPES.UPDATE_JOB_PROCESS: {
+            const { room, process } = action;
+            const pid = process && process.pid ? process.pid : -1;
+            return {
+                ...state,
+                [room]: {
+                    ...state[room],
+                    isRunning: pid === -1 ? false : state[room].isRunning,
+                    process,
                 },
             };
         }
@@ -55,6 +71,9 @@ export const jobsReducer = (state = initialState, action: IJobAction) => {
                     stdout: "",
                 },
             };
+        }
+        case ACTION_TYPES.RESTORE_STATE_FROM_STORAGE: {
+            return action.state!;
         }
         default:
             return state;
@@ -72,9 +91,26 @@ interface IJobsProviderProps {
 }
 
 export const JobsContext = React.createContext<IJobsContextValue | undefined>(undefined);
+localforage.config({
+    name: "ten-hands",
+});
 
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
+    React.useEffect(() => {
+        localforage.getItem("state").then(storedState => {
+            if (storedState) {
+                dispatch({
+                    type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
+                    room: "none",
+                    state: storedState,
+                });
+            }
+        });
+    }, []);
+    React.useEffect(() => {
+        localforage.setItem("state", state);
+    }, [state]);
     const value = React.useMemo(() => {
         return {
             state,

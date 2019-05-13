@@ -1,4 +1,5 @@
-import { Button, Collapse, H5, Pre } from "@blueprintjs/core";
+import { Button, Code, Collapse, H5, Pre } from "@blueprintjs/core";
+import localforage from "localforage";
 import React, { useCallback, useReducer } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
@@ -39,16 +40,19 @@ function getJobData(state, room) {
 const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     // const [isRunning, setIsRunning] = React.useState(false);
-    const [process, setProcess] = React.useState<any>(null);
+    const [process, setProcess] = React.useState<any>({
+        pid: -1,
+    });
+
     const room = command._id;
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
     const updateJob = useCallback(
-        (data, isRunning) => {
+        (stdout, isRunning) => {
             dispatch({
                 room,
                 type: ACTION_TYPES.UPDATE_JOB,
-                data,
+                stdout,
                 isRunning,
             });
         },
@@ -62,6 +66,14 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
         });
     }, [room]);
 
+    const updateJobProcess = useCallback(jobProcess => {
+        dispatch({
+            room,
+            type: ACTION_TYPES.UPDATE_JOB_PROCESS,
+            process: jobProcess,
+        });
+    }, []);
+
     const clearJobOutput = useCallback(() => {
         dispatch({
             type: ACTION_TYPES.CLEAR_OUTPUT,
@@ -69,26 +81,26 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
         });
     }, [room]);
 
-    const initializeSocket = () => {
+    const initializeSocket = async () => {
         // Check socket.on events for this room already initialized.
         // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
         // keys of jobState are registered rooms
         const currentRooms = Object.keys(jobState);
+
         if (currentRooms.indexOf(room) > -1) {
             console.info(`Room ${room} already exists. Skip initializing`);
             return;
         }
 
-        console.info("Initializing room: ", room);
         addJobToState();
         socket.on(`job_started-${room}`, message => {
             console.info(`Job Started in room: ${room}`);
-            // setIsRunning(true);
             setProcess(message.data);
-            console.log("message.data:", message.data);
             updateJob("", true);
+            updateJobProcess(message.data);
         });
         socket.on(`output-${room}`, message => {
+            console.log("Updating");
             if (room === message.room) {
                 updateJob(message.data, true);
             }
@@ -138,10 +150,13 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
 
     const stopJob = () => {
         const { pid } = process;
+
         socket.emit("unsubscribe", {
             room: command._id,
             pid,
         });
+        console.log("process:", process);
+        updateJobProcess(process);
     };
 
     const isProcessRunning = (): boolean => {
