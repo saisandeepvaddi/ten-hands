@@ -1,5 +1,6 @@
 import localforage from "localforage";
 import React from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 // Reducer that saves state of jobs output
 
@@ -25,6 +26,7 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
     switch (action.type) {
         case ACTION_TYPES.ADD_JOB: {
             const room = action.room;
+            const socketId = action.socketId;
 
             if (!state.hasOwnProperty(room)) {
                 return {
@@ -33,9 +35,12 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
                         stdout: "",
                         isRunning: false,
                         process: {},
+                        socketId,
                     },
                 };
             }
+
+            console.log(`here: `);
 
             return state;
         }
@@ -95,6 +100,16 @@ localforage.config({
     name: "ten-hands",
 });
 
+const initialStateFromStore = async state => {
+    try {
+        const stateInStore = await localforage.getItem("state");
+        console.log("stateInStore:", stateInStore);
+        return stateInStore;
+    } catch (error) {
+        return state;
+    }
+};
+
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
     React.useEffect(() => {
@@ -108,7 +123,7 @@ function JobsProvider(props: IJobsProviderProps) {
             }
         });
     }, []);
-    React.useEffect(() => {
+    useDeepCompareEffect(() => {
         localforage.setItem("state", state);
     }, [state]);
     const value = React.useMemo(() => {

@@ -29,6 +29,27 @@
           "pid": ""
         }
       ]
+    },
+    {
+      "_id": "7e4fe89c-8bb5-4e45-9de0-eb34c5aedf33",
+      "name": "test-project",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "4b22531e-2c7c-4366-9618-578bc1769bef",
+          "name": "one",
+          "cmd": "node test.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "2d258fe3-0b8f-40ac-9c17-53d7004e3819",
+          "name": "two",
+          "cmd": "node test.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\test-project"
     }
   ],
   "commands": []

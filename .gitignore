@@ -64,3 +64,5 @@ typings/
 # Dist folders
 server/dist
 cli/dist
+
+.idea

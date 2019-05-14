@@ -47,39 +47,38 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
     const room = command._id;
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
-    const updateJob = useCallback(
-        (stdout, isRunning) => {
-            dispatch({
-                room,
-                type: ACTION_TYPES.UPDATE_JOB,
-                stdout,
-                isRunning,
-            });
-        },
-        [room],
-    );
+    console.log("Updating");
 
-    const addJobToState = useCallback(() => {
+    const updateJob = (stdout, isRunning) => {
+        dispatch({
+            room,
+            type: ACTION_TYPES.UPDATE_JOB,
+            stdout,
+            isRunning,
+        });
+    };
+
+    const addJobToState = () => {
         dispatch({
             type: ACTION_TYPES.ADD_JOB,
             room,
         });
-    }, [room]);
+    };
 
-    const updateJobProcess = useCallback(jobProcess => {
+    const updateJobProcess = jobProcess => {
         dispatch({
             room,
             type: ACTION_TYPES.UPDATE_JOB_PROCESS,
             process: jobProcess,
         });
-    }, []);
+    };
 
-    const clearJobOutput = useCallback(() => {
+    const clearJobOutput = () => {
         dispatch({
             type: ACTION_TYPES.CLEAR_OUTPUT,
             room,
         });
-    }, [room]);
+    };
 
     const initializeSocket = async () => {
         // Check socket.on events for this room already initialized.

@@ -14,7 +14,8 @@
     "react-split-pane": "^0.1.87",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "use-deep-compare-effect": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

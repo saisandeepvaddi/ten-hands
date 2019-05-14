@@ -22,6 +22,7 @@ interface IJobAction {
     stdout?: string;
     state?: object;
     isRunning?: boolean;
+    socketId?: string;
     process?: any;
 }
 
