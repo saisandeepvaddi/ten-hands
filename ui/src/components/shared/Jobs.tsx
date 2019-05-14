@@ -34,13 +34,13 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
                     [room]: {
                         stdout: "",
                         isRunning: false,
-                        process: {},
+                        process: {
+                            pid: -1,
+                        },
                         socketId,
                     },
                 };
             }
-
-            console.log(`here: `);
 
             return state;
         }

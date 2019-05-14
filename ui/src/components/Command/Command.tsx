@@ -33,39 +33,33 @@ interface ICommandProps {
     projectPath: string;
 }
 
-function getJobData(state, room) {
+function getJobData(state, room: string) {
     return state[room] || "";
 }
 
-const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
+const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    // const [isRunning, setIsRunning] = React.useState(false);
-    const [process, setProcess] = React.useState<any>({
-        pid: -1,
-    });
 
     const room = command._id;
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
-    console.log("Updating");
+    // const updateJob = (room, stdout, isRunning) => {
+    //     dispatch({
+    //         room,
+    //         type: ACTION_TYPES.UPDATE_JOB,
+    //         stdout,
+    //         isRunning,
+    //     });
+    // };
 
-    const updateJob = (stdout, isRunning) => {
-        dispatch({
-            room,
-            type: ACTION_TYPES.UPDATE_JOB,
-            stdout,
-            isRunning,
-        });
-    };
+    // const addJobToState = room => {
+    //     dispatch({
+    //         type: ACTION_TYPES.ADD_JOB,
+    //         room,
+    //     });
+    // };
 
-    const addJobToState = () => {
-        dispatch({
-            type: ACTION_TYPES.ADD_JOB,
-            room,
-        });
-    };
-
-    const updateJobProcess = jobProcess => {
+    const updateJobProcess = (room, jobProcess) => {
         dispatch({
             room,
             type: ACTION_TYPES.UPDATE_JOB_PROCESS,
@@ -73,73 +67,73 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
         });
     };
 
-    const clearJobOutput = () => {
+    const clearJobOutput = room => {
         dispatch({
             type: ACTION_TYPES.CLEAR_OUTPUT,
             room,
         });
     };
 
-    const initializeSocket = async () => {
-        // Check socket.on events for this room already initialized.
-        // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
-        // keys of jobState are registered rooms
-        const currentRooms = Object.keys(jobState);
+    // const initializeSocket = async () => {
+    //     // Check socket.on events for this room already initialized.
+    //     // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
+    //     // keys of jobState are registered rooms
 
-        if (currentRooms.indexOf(room) > -1) {
-            console.info(`Room ${room} already exists. Skip initializing`);
-            return;
-        }
+    //     const currentRooms = Object.keys(jobState);
 
-        addJobToState();
-        socket.on(`job_started-${room}`, message => {
-            console.info(`Job Started in room: ${room}`);
-            setProcess(message.data);
-            updateJob("", true);
-            updateJobProcess(message.data);
-        });
-        socket.on(`output-${room}`, message => {
-            console.log("Updating");
-            if (room === message.room) {
-                updateJob(message.data, true);
-            }
-        });
+    //     if (currentRooms.indexOf(room) > -1) {
+    //         console.info(`Room ${room} already exists. Skip initializing`);
+    //         return;
+    //     }
 
-        socket.on(`close-${room}`, message => {
-            if (room === message.room) {
-                console.info(`Process close in room: ${room}`);
-                updateJob(message.data, false);
-            }
-        });
+    //     addJobToState(room);
+    //     socket.on(`job_started-${room}`, message => {
+    //         console.info(`Job Started in room: ${room}`);
+    //         // setProcess(message.data);
+    //         // updateJob("", true);
+    //         updateJobProcess(room, message.data);
+    //     });
+    //     socket.on(`output-${room}`, message => {
+    //         if (room === message.room) {
+    //             updateJob(room, message.data, true);
+    //         }
+    //     });
 
-        socket.on(`error-${room}`, message => {
-            if (room === message.room) {
-                console.info(`Process error in room: ${room}`);
-                updateJob(message.data, false);
-            }
-        });
+    //     socket.on(`close-${room}`, message => {
+    //         if (room === message.room) {
+    //             console.info(`Process close in room: ${room}`);
+    //             updateJob(room, message.data, false);
+    //         }
+    //     });
 
-        socket.on(`exit-${room}`, message => {
-            if (room === message.room) {
-                console.info(`Process exit in room: ${room}`);
-                updateJob(message.data, false);
-            }
-        });
+    //     socket.on(`error-${room}`, message => {
+    //         if (room === message.room) {
+    //             console.info(`Process error in room: ${room}`);
+    //             updateJob(room, message.data, false);
+    //         }
+    //     });
 
-        socket.on(`job_killed-${room}`, message => {
-            if (room === message.room) {
-                console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
-                updateJob("process with id " + message.data + " killed by user.", false);
-            }
-        });
-    };
+    //     socket.on(`exit-${room}`, message => {
+    //         if (room === message.room) {
+    //             console.info(`Process exit in room: ${room}`);
+    //             updateJob(room, message.data, false);
+    //         }
+    //     });
 
-    React.useEffect(() => {
-        initializeSocket();
-    }, [room]);
+    //     socket.on(`job_killed-${room}`, message => {
+    //         if (room === message.room) {
+    //             console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
+    //             updateJob(room, "process with id " + message.data + " killed by user.", false);
+    //         }
+    //     });
+    // };
+
+    // React.useEffect(() => {
+    //     initializeSocket();
+    // }, []);
 
     const startJob = () => {
-        clearJobOutput();
+        clearJobOutput(room);
         socket.emit("subscribe", {
             room,
             command,
@@ -148,19 +142,25 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
     };
 
     const stopJob = () => {
+        const process = getJobData(jobState, room).process;
         const { pid } = process;
+        console.log("pid:", pid);
 
         socket.emit("unsubscribe", {
             room: command._id,
             pid,
         });
         console.log("process:", process);
-        updateJobProcess(process);
+        updateJobProcess(room, {
+            pid: -1,
+        });
     };
 
     const isProcessRunning = (): boolean => {
         return getJobData(jobState, room).isRunning || false;
     };
+
+    console.log(`updating: ${room}`);
 
     return (
         <Container>
@@ -192,6 +192,6 @@ const Command: React.FC<ICommandProps> = ({ command, socket, projectPath }) => {
             </Collapse>
         </Container>
     );
-};
+});
 
 export default Command;
