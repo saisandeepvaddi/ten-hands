@@ -112,12 +112,11 @@ const initialStateFromStore = async state => {
 
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
+    if (!window.tenHands) {
+        window.tenHands = {};
+    }
     React.useEffect(() => {
         localforage.getItem("state").then(storedState => {
-            if (!window.tenHands) {
-                window.tenHands = {};
-            }
-
             window.tenHands.state = { ...storedState };
             if (storedState) {
                 dispatch({
