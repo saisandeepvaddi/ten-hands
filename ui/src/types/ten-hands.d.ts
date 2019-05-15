@@ -30,3 +30,7 @@ interface IStateAction {
     type: ACTION_TYPES;
     state: object;
 }
+
+interface Window {
+    tenHands: any;
+}

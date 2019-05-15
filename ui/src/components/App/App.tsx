@@ -13,7 +13,12 @@ import { ProjectsProvider } from "../shared/Projects";
 import "./App.css";
 import AppLayout from "./AppLayout";
 
+import { hijackEffects } from "stop-runaway-react-effects";
+
 const App = () => {
+    if (process.env.NODE_ENV !== "production") {
+        hijackEffects();
+    }
     return (
         <ThemeProvider>
             <ProjectsProvider>

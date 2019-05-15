@@ -18,8 +18,6 @@ class Job {
     const job = command.cmd;
     // const execDir = command.execDir;
     const execPath = path.normalize(projectPath);
-    console.log("execPath:", execPath);
-    console.log("job:", job);
 
     const room = this.room;
     const n = execa(job, {
@@ -28,6 +26,7 @@ class Job {
     io.to(room).emit(`job_started-${room}`, { room, data: n });
     n.stdout.on("data", chunk => {
       // console.log("output:", chunk.toString());
+      console.log(`output to room: ${room}`);
 
       io.to(room).emit(`output-${room}`, { room, data: chunk.toString() });
     });

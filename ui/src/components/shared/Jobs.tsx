@@ -114,6 +114,11 @@ function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
     React.useEffect(() => {
         localforage.getItem("state").then(storedState => {
+            if (!window.tenHands) {
+                window.tenHands = {};
+            }
+
+            window.tenHands.state = { ...storedState };
             if (storedState) {
                 dispatch({
                     type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
@@ -125,6 +130,7 @@ function JobsProvider(props: IJobsProviderProps) {
     }, []);
     useDeepCompareEffect(() => {
         localforage.setItem("state", state);
+        window.tenHands.state = { ...state };
     }, [state]);
     const value = React.useMemo(() => {
         return {

@@ -59,6 +59,8 @@ const ProjectsList = React.memo(() => {
     useDeepCompareEffect(() => {
         // TODO: save initialized sockets to ref or somewhere
         const initializeSocket = async room => {
+            console.log(`here`);
+
             // Check socket.on events for this room already initialized.
             // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
             // keys of jobState are registered rooms
