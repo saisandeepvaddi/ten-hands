@@ -62,7 +62,8 @@ typings/
 
 
 # Dist folders
-server/dist
-cli/dist
+app/dist
+ui/dist
+ui/build
 
 .idea

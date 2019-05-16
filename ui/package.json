@@ -1,0 +1,78 @@
+{
+  "name": "@ten-hands/ui",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "main": "./electron/index.ts",
+  "scripts": {
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
+    "eject": "react-scripts eject",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-start": "tsc",
+    "electron-only": "./node_modules/.bin/electron .",
+    "electron-pack": "build -w",
+    "electron-dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && .\\node_modules\\.bin\\electron ./electron/index.js \""
+  },
+  "author": {
+    "name": "Sai Sandeep Vaddi",
+    "email": "saisandeepvaddi@gmail.com",
+    "url": "https://svaddi.dev"
+  },
+  "build": {
+    "appId": "com.saisandeepvaddi.tenhands",
+    "productName": "Ten Hands",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "dependencies": {
+    "@blueprintjs/core": "^3.15.1",
+    "axios": "^0.18.0",
+    "formik": "^1.5.4",
+    "localforage": "^1.7.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
+    "react-split": "^2.0.4",
+    "react-split-pane": "^0.1.87",
+    "socket.io-client": "^2.2.0",
+    "styled-components": "^4.2.0",
+    "typescript": "^3.4.5",
+    "use-deep-compare-effect": "^1.2.0"
+  },
+  "devDependencies": {
+    "@blueprintjs/tslint-config": "^1.8.0",
+    "@rescripts/cli": "^0.0.10",
+    "@rescripts/rescript-env": "^0.0.10",
+    "@types/react": "^16.8.17",
+    "@types/react-dom": "^16.8.4",
+    "@types/styled-components": "^4.1.15",
+    "concurrently": "^4.1.0",
+    "jest-dom": "^3.2.2",
+    "react-testing-library": "^7.0.0",
+    "stop-runaway-react-effects": "^1.1.1",
+    "tslint": "^5.16.0",
+    "tslint-react-hooks": "^2.1.0",
+    "wait-on": "^3.2.0"
+  }
+}

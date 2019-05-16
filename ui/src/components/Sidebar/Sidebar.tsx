@@ -31,7 +31,7 @@ const Sidebar = React.memo(() => {
                 style={{ width: "100%" }}
                 onClick={() => setDrawerOpen(true)}
             />
-            {projects.length && <ProjectsList />}
+            {projects.length > 0 && <ProjectsList />}
             <NewProjectDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </Container>
     );
