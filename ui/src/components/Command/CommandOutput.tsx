@@ -6,7 +6,20 @@ interface ICommandProps {
 }
 
 const CommandOutput: React.FC<ICommandProps> = React.memo(({ output }) => {
-    return <Pre>{output || "Process not running"}</Pre>;
+    return (
+        <Pre
+            className="command-output"
+            style={{
+                maxHeight: 400,
+                overflow: "auto",
+                display: "flex",
+                flexDirection: "column-reverse",
+                paddingTop: 10,
+            }}
+        >
+            {output || "Process not running"}
+        </Pre>
+    );
 });
 
 export default CommandOutput;

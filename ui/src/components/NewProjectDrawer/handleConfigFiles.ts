@@ -26,10 +26,10 @@ const nodeConfigFileParser = (file: File, readerResult: ReaderResult): IProject 
         // Node projects use package.json, so parse package.json file
         const data = JSON.parse(readerResult.toString());
 
-        if (data.tenHandsConfig) {
+        if (data.tenHands) {
             // Browsers don't let read the file paths on FS.
             // So if config files have tenHandsConfig with users mentioning path, take it
-            const userConfig = data.tenHandsConfig;
+            const userConfig = data.tenHands;
             project.path = userConfig.path ? userConfig.path : "";
         }
         project.name = data.name;

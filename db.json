@@ -1,18 +1,18 @@
 {
   "projects": [
     {
-      "_id": "0de68e0c-00c7-4980-86d1-11bf53ef8989",
+      "_id": "258b4517-2b34-46c2-96ed-5bc2564c4bfb",
       "name": "test-project",
       "type": "nodejs",
       "commands": [
         {
-          "_id": "30392bfa-f2bf-4930-b827-6810070f2da0",
+          "_id": "c335466d-41b9-4154-b231-3f329d29fd8a",
           "name": "one",
           "cmd": "node test.js",
           "execDir": "./"
         },
         {
-          "_id": "b76363e2-5d70-42ab-a382-80ed0d925eb4",
+          "_id": "f4482d5f-ce58-469b-8417-b20690922447",
           "name": "two",
           "cmd": "node test.js",
           "execDir": "./"

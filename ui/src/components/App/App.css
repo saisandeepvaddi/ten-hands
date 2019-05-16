@@ -87,3 +87,37 @@ body {
 .Resizer.disabled:hover {
   border-color: transparent;
 }
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+
+.bp3-dark .command-output::-webkit-scrollbar-thumb {
+  background-color: #182026;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+.bp3-dark ::-webkit-scrollbar-thumb {
+  background-color: #bfccd654;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202b335d;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
+}

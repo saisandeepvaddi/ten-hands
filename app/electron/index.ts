@@ -1,7 +1,4 @@
-try {
-  require("electron-reloader")(module);
-} catch (err) {}
-
+import "./prestart";
 const electron = require("electron");
 const { BrowserWindow } = electron;
 const app = electron.app;
@@ -54,7 +51,9 @@ async function startElectronApp() {
         createWindow();
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log("error:", error);
+  }
 }
 
 startElectronApp();

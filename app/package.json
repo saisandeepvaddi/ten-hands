@@ -6,34 +6,38 @@
   "main": "./dist/electron/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "yarn build && electron .",
+    "build:watch": "tsc -w",
+    "start": "concurrently \"yarn build:watch\" && \"yarn electron-only\"",
     "dev": "./node_modules/.bin/nodemon",
-    "electron-only": "electron ."
+    "electron-only": "./node_modules/.bin/electron ./dist/electron/index.js"
   },
   "dependencies": {
-    "electron-is-dev": "^1.1.0",
-    "typescript": "^3.4.5",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "electron-is-dev": "^1.1.0",
     "execa": "^1.0.0",
     "express": "^4.16.4",
     "lowdb": "^1.0.0",
     "socket.io": "^2.2.0",
     "tree-kill": "^1.2.1",
+    "typescript": "^3.4.5",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "electron": "^5.0.1",
-    "electron-builder": "^20.40.2",
-    "electron-reloader": "^0.2.0",
+    "@types/express": "^4.16.1",
+    "@types/jest": "^24.0.12",
+    "@types/lowdb": "^1.0.7",
     "@types/node": "^11.13.8",
     "@types/socket.io": "^2.1.2",
+    "electron": "^5.0.1",
+    "electron-builder": "^20.40.2",
+    "electron-debug": "^3.0.0",
+    "electron-react-devtools": "^0.5.3",
+    "electron-reloader": "^0.2.0",
+    "log-process-errors": "^4.1.1",
     "nodemon": "^1.18.11",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
-    "ts-node": "^8.1.0",
-    "@types/express": "^4.16.1",
-    "@types/jest": "^24.0.12",
-    "@types/lowdb": "^1.0.7"
+    "ts-node": "^8.1.0"
   }
 }
