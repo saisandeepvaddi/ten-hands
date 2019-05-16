@@ -59,8 +59,6 @@ const ProjectsList = React.memo(() => {
     useDeepCompareEffect(() => {
         // TODO: save initialized sockets to ref or somewhere
         const initializeSocket = async room => {
-            console.log(`here`);
-
             // Check socket.on events for this room already initialized.
             // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
             // keys of jobState are registered rooms
@@ -72,7 +70,6 @@ const ProjectsList = React.memo(() => {
                 return;
             }
 
-            addJobToState(room);
             socket.on(`job_started-${room}`, message => {
                 console.info(`Job Started in room: ${room}`);
                 // setProcess(message.data);
@@ -112,6 +109,8 @@ const ProjectsList = React.memo(() => {
                     updateJob(room, "process with id " + message.data + " killed by user.", false);
                 }
             });
+
+            addJobToState(room);
         };
 
         projects.forEach(project => {
@@ -121,7 +120,7 @@ const ProjectsList = React.memo(() => {
                 initializeSocket(room);
             });
         });
-    }, projects);
+    }, [projects, jobState]);
 
     return (
         <Tabs

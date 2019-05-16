@@ -2,6 +2,11 @@ import localforage from "localforage";
 import React from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
+localforage.config({
+    name: "ten-hands",
+});
+// localforage.setDriver(localforage.LOCALSTORAGE);
+
 // Reducer that saves state of jobs output
 
 enum ACTION_TYPES {
@@ -23,6 +28,7 @@ enum ACTION_TYPES {
 export const initialState = {};
 
 export const jobsReducer = (state = initialState, action: IJobAction): object => {
+    console.log("action.type:", ACTION_TYPES[action.type]);
     switch (action.type) {
         case ACTION_TYPES.ADD_JOB: {
             const room = action.room;
@@ -96,40 +102,34 @@ interface IJobsProviderProps {
 }
 
 export const JobsContext = React.createContext<IJobsContextValue | undefined>(undefined);
-localforage.config({
-    name: "ten-hands",
-});
-
-const initialStateFromStore = async state => {
-    try {
-        const stateInStore = await localforage.getItem("state");
-        console.log("stateInStore:", stateInStore);
-        return stateInStore;
-    } catch (error) {
-        return state;
-    }
-};
 
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
-    if (!window.tenHands) {
-        window.tenHands = {};
-    }
+
     React.useEffect(() => {
-        localforage.getItem("state").then(storedState => {
-            window.tenHands.state = { ...storedState };
-            if (storedState) {
-                dispatch({
-                    type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
-                    room: "none",
-                    state: storedState,
-                });
+        const restoreData = async () => {
+            try {
+                const storedState = await localforage.getItem("state");
+                console.log("storedState:", storedState);
+                if (storedState) {
+                    dispatch({
+                        type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
+                        room: "none",
+                        state: storedState,
+                    });
+                }
+            } catch (error) {
+                console.log("error:", error);
             }
-        });
+        };
+        restoreData();
     }, []);
     useDeepCompareEffect(() => {
-        localforage.setItem("state", state);
-        window.tenHands.state = { ...state };
+        const updateData = async () => {
+            localforage.setItem("state", state);
+        };
+
+        updateData();
     }, [state]);
     const value = React.useMemo(() => {
         return {

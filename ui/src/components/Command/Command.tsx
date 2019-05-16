@@ -1,6 +1,5 @@
-import { Button, Code, Collapse, H5, Pre } from "@blueprintjs/core";
-import localforage from "localforage";
-import React, { useCallback, useReducer } from "react";
+import { Button, Collapse, H5 } from "@blueprintjs/core";
+import React from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
 import CommandOutput from "./CommandOutput";
@@ -160,7 +159,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
         return getJobData(jobState, room).isRunning || false;
     };
 
-    console.log(`updating: ${room}`);
+    // console.log(`updating: ${room}`);
 
     return (
         <Container>
