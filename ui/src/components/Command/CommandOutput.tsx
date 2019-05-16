@@ -10,7 +10,7 @@ const CommandOutput: React.FC<ICommandProps> = React.memo(({ output }) => {
         <Pre
             className="command-output"
             style={{
-                maxHeight: 400,
+                maxHeight: 250,
                 overflow: "auto",
                 display: "flex",
                 flexDirection: "column-reverse",
