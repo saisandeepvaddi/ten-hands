@@ -98,7 +98,7 @@ const ProjectsList = React.memo(() => {
                 // updateJob("", true);
                 updateJobProcess(room, message.data);
             });
-            socket.on(`output`, message => {
+            socket.on(`job_output`, message => {
                 console.log("message:", message);
                 const room = message.room;
 
@@ -108,21 +108,21 @@ const ProjectsList = React.memo(() => {
                 updateJob(room, message.data, true);
             });
 
-            socket.on(`close`, message => {
+            socket.on(`job_close`, message => {
                 const room = message.room;
 
                 console.info(`Process close in room: ${room}`);
                 updateJob(room, message.data, false);
             });
 
-            socket.on(`error`, message => {
+            socket.on(`job_error`, message => {
                 const room = message.room;
 
                 console.info(`Process error in room: ${room}`);
                 updateJob(room, message.data, false);
             });
 
-            socket.on(`exit`, message => {
+            socket.on(`job_exit`, message => {
                 const room = message.room;
 
                 console.info(`Process exit in room: ${room}`);

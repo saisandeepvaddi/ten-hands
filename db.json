@@ -26,6 +26,27 @@
       ],
       "configFile": "package.json",
       "path": "D:\\Programming\\ten-hands-test\\server"
+    },
+    {
+      "_id": "ce487821-bd48-4353-ac85-840bcd233f01",
+      "name": "test-project",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "a442bbdb-9c81-4309-afbf-8611a0c48ae4",
+          "name": "one",
+          "cmd": "node test.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "9eb2fbb4-9ca7-4773-8c60-b009176ce4e5",
+          "name": "two",
+          "cmd": "node test.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\test-project"
     }
   ],
   "commands": []

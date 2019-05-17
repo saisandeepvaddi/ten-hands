@@ -15,7 +15,9 @@ app.use("/projects", projectRoutes);
 
 // Default Error Handler
 app.use(function(error, req, res, next) {
-  console.error(error.stack);
+  // console.error(error.stack);
+  console.log("Error here");
+
   return res.status(500).send({ error });
 });
 
