@@ -1,8 +1,7 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
-import useDeepCompareEffect from "use-deep-compare-effect";
 import JobSocket from "../../utils/socket";
-import { roomSocketState, useJobs } from "../shared/Jobs";
+import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 
 const ProjectsList = React.memo(() => {
@@ -21,7 +20,7 @@ const ProjectsList = React.memo(() => {
         return <div />;
     }
 
-    const { state: jobState, dispatch, ACTION_TYPES, isJobsStateLoaded } = useJobs();
+    const { dispatch, ACTION_TYPES } = useJobs();
 
     const socket = JobSocket.getSocket();
 
@@ -31,14 +30,6 @@ const ProjectsList = React.memo(() => {
             type: ACTION_TYPES.UPDATE_JOB,
             stdout,
             isRunning,
-        });
-    };
-
-    const addJobToState = room => {
-        dispatch({
-            type: ACTION_TYPES.ADD_JOB,
-            room,
-            socketId: socket.id,
         });
     };
 
@@ -104,13 +95,6 @@ const ProjectsList = React.memo(() => {
         };
 
         initializeSocket();
-        projects.forEach(project => {
-            project.commands.forEach(command => {
-                const room = command._id;
-                addJobToState(room);
-                // initializeSocket(room);
-            });
-        });
     }, [projects, isSocketInitialized]);
 
     return (
