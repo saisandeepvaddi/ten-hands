@@ -5,13 +5,8 @@ import JobSocket from "../../utils/socket";
 import { roomSocketState, useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 
-const isSocketInitialized = room => {
-    return !!roomSocketState[room];
-};
-
-let isInit = false;
-
 const ProjectsList = React.memo(() => {
+    const [isSocketInitialized, setSocketInitialized] = React.useState(false);
     const { projects, setActiveProject, activeProject } = useProjects();
     const changeActiveProject = React.useCallback(
         projectId => {
@@ -62,55 +57,25 @@ const ProjectsList = React.memo(() => {
         });
     };
 
-    useDeepCompareEffect(() => {
+    React.useEffect(() => {
         // TODO: save initialized sockets to ref or somewhere
         const initializeSocket = async () => {
-            // If jobs are not loaded from data store, skip initializing
-            // because this hook will run on job state change as well any way.
-            // Skipping here prevents cleaning the store when reducer initialized with {} state
-            // if (!isJobsStateLoaded) {
-            //     return;
-            // }
-
-            // console.log("isSocketInitialized(room):", isSocketInitialized(room));
-            if (isInit) {
+            if (isSocketInitialized) {
                 return;
             }
-            // Check socket.on events for this room already initialized.
-            // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
-            // keys of jobState are registered rooms
 
-            // const currentRooms = Object.keys(jobState);
-
-            // if (currentRooms.indexOf(room) > -1) {
-            //     console.info(`Room ${room} already exists. Skip initializing`);
-            //     return;
-            // // }
-
-            // if (room === "c335466d-41b9-4154-b231-3f329d29fd8a") {
-            //     console.log(`socket.id: ${socket.id}`);
-            // }
-
-            console.log("socket:", socket.id);
             socket.on(`job_started`, message => {
                 const room = message.room;
-                // setProcess(message.data);
-                // updateJob("", true);
+                console.info(`Process started for cmd: ${room}`);
                 updateJobProcess(room, message.data);
             });
             socket.on(`job_output`, message => {
-                console.log("message:", message);
                 const room = message.room;
-
-                if (room === "c335466d-41b9-4154-b231-3f329d29fd8a") {
-                    console.log(`output`);
-                }
                 updateJob(room, message.data, true);
             });
 
             socket.on(`job_close`, message => {
                 const room = message.room;
-
                 console.info(`Process close in room: ${room}`);
                 updateJob(room, message.data, false);
             });
@@ -135,7 +100,7 @@ const ProjectsList = React.memo(() => {
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
                 updateJob(room, "process with id " + message.data + " killed by user.", false);
             });
-            isInit = true;
+            setSocketInitialized(true);
         };
 
         initializeSocket();
@@ -146,7 +111,7 @@ const ProjectsList = React.memo(() => {
                 // initializeSocket(room);
             });
         });
-    }, [projects, jobState, isJobsStateLoaded]);
+    }, [projects, isSocketInitialized]);
 
     return (
         <Tabs

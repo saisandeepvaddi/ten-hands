@@ -58,6 +58,10 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
     //     });
     // };
 
+    React.useEffect(() => {
+        console.log("jobState: ", jobState);
+    }, [jobState]);
+
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
             room,

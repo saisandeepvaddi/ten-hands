@@ -33,6 +33,7 @@ const setSocketInitialized = room => {
 export const initialState = {};
 
 export const jobsReducer = (state = initialState, action: IJobAction): object => {
+    console.log("action.type:", action.type);
     switch (action.type) {
         case ACTION_TYPES.ADD_JOB: {
             const room = action.room;
@@ -123,6 +124,7 @@ function JobsProvider(props: IJobsProviderProps) {
         const restoreData = async () => {
             try {
                 const storedState = await localforage.getItem("state");
+                console.log("storedState:", storedState);
                 if (storedState) {
                     dispatch({
                         type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
@@ -140,8 +142,9 @@ function JobsProvider(props: IJobsProviderProps) {
     }, []);
     useDeepCompareEffect(() => {
         const updateData = async () => {
-            console.log("state:", state);
-            localforage.setItem("state", state);
+            if (Object.keys(state).length > 0) {
+                await localforage.setItem("state", state);
+            }
         };
 
         updateData();
