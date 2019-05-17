@@ -1,3 +1,4 @@
+import produce from "immer";
 import localforage from "localforage";
 import React from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
@@ -17,22 +18,26 @@ enum ACTION_TYPES {
     UPDATE_JOB_PROCESS,
 }
 
-/* 
-  each job in state is
-  "job-id": {
-    "stdout": "",
-  }
+export let roomSocketState = {};
 
-*/
+const initializeRoomSocketState = state => {
+    Object.keys(state).forEach(room => {
+        roomSocketState[room] = false;
+    });
+};
+
+const setSocketInitialized = room => {
+    roomSocketState[room] = true;
+};
 
 export const initialState = {};
 
 export const jobsReducer = (state = initialState, action: IJobAction): object => {
-    console.log("action.type:", ACTION_TYPES[action.type]);
     switch (action.type) {
         case ACTION_TYPES.ADD_JOB: {
             const room = action.room;
             const socketId = action.socketId;
+            setSocketInitialized(room);
 
             if (!state.hasOwnProperty(room)) {
                 return {
@@ -48,7 +53,13 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
                 };
             }
 
-            return state;
+            return {
+                ...state,
+                [room]: {
+                    ...state[room],
+                    socketId,
+                },
+            };
         }
         case ACTION_TYPES.UPDATE_JOB: {
             const { room, stdout, isRunning } = action;
@@ -94,6 +105,7 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
 interface IJobsContextValue {
     state: object;
     dispatch: React.Dispatch<IJobAction>;
+    isJobsStateLoaded: boolean;
 }
 
 interface IJobsProviderProps {
@@ -105,19 +117,21 @@ export const JobsContext = React.createContext<IJobsContextValue | undefined>(un
 
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
+    const [isJobsStateLoaded, updateJobsState] = React.useState(false);
 
     React.useEffect(() => {
         const restoreData = async () => {
             try {
                 const storedState = await localforage.getItem("state");
-                console.log("storedState:", storedState);
                 if (storedState) {
                     dispatch({
                         type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
                         room: "none",
                         state: storedState,
                     });
+                    initializeRoomSocketState(storedState);
                 }
+                updateJobsState(true);
             } catch (error) {
                 console.log("error:", error);
             }
@@ -135,8 +149,9 @@ function JobsProvider(props: IJobsProviderProps) {
         return {
             state,
             dispatch,
+            isJobsStateLoaded,
         };
-    }, [state, dispatch]);
+    }, [state, dispatch, isJobsStateLoaded]);
     return <JobsContext.Provider value={value} {...props} />;
 }
 

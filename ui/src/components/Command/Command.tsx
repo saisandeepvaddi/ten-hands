@@ -143,13 +143,11 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
     const stopJob = () => {
         const process = getJobData(jobState, room).process;
         const { pid } = process;
-        console.log("pid:", pid);
 
         socket.emit("unsubscribe", {
             room: command._id,
             pid,
         });
-        console.log("process:", process);
         updateJobProcess(room, {
             pid: -1,
         });

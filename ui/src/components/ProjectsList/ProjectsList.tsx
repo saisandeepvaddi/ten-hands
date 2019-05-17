@@ -2,8 +2,12 @@ import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import JobSocket from "../../utils/socket";
-import { useJobs } from "../shared/Jobs";
+import { roomSocketState, useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
+
+const isSocketInitialized = room => {
+    return !!roomSocketState[room];
+};
 
 const ProjectsList = React.memo(() => {
     const { projects, setActiveProject, activeProject } = useProjects();
@@ -20,7 +24,7 @@ const ProjectsList = React.memo(() => {
         return <div />;
     }
 
-    const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
+    const { state: jobState, dispatch, ACTION_TYPES, isJobsStateLoaded } = useJobs();
 
     const socket = JobSocket.getSocket();
 
@@ -59,24 +63,41 @@ const ProjectsList = React.memo(() => {
     useDeepCompareEffect(() => {
         // TODO: save initialized sockets to ref or somewhere
         const initializeSocket = async room => {
+            // If jobs are not loaded from data store, skip initializing
+            // because this hook will run on job state change as well any way.
+            // Skipping here prevents cleaning the store when reducer initialized with {} state
+            if (!isJobsStateLoaded) {
+                return;
+            }
+
+            // console.log("isSocketInitialized(room):", isSocketInitialized(room));
+            if (isSocketInitialized(room)) {
+                return;
+            }
             // Check socket.on events for this room already initialized.
             // Otherwise, adds duplicate event listeners on switching tabs and coming back which makes duplicate joboutput
             // keys of jobState are registered rooms
 
-            const currentRooms = Object.keys(jobState);
+            // const currentRooms = Object.keys(jobState);
 
-            if (currentRooms.indexOf(room) > -1) {
-                console.info(`Room ${room} already exists. Skip initializing`);
-                return;
+            // if (currentRooms.indexOf(room) > -1) {
+            //     console.info(`Room ${room} already exists. Skip initializing`);
+            //     return;
+            // }
+
+            if (room === "c335466d-41b9-4154-b231-3f329d29fd8a") {
+                console.log(`socket.id: ${socket.id}`);
             }
 
             socket.on(`job_started-${room}`, message => {
-                console.info(`Job Started in room: ${room}`);
                 // setProcess(message.data);
                 // updateJob("", true);
                 updateJobProcess(room, message.data);
             });
             socket.on(`output-${room}`, message => {
+                if (room === "c335466d-41b9-4154-b231-3f329d29fd8a") {
+                    console.log(`output`);
+                }
                 if (room === message.room) {
                     updateJob(room, message.data, true);
                 }
@@ -116,11 +137,10 @@ const ProjectsList = React.memo(() => {
         projects.forEach(project => {
             project.commands.forEach(command => {
                 const room = command._id;
-                console.log("room:", room);
                 initializeSocket(room);
             });
         });
-    }, [projects, jobState]);
+    }, [projects, jobState, isJobsStateLoaded]);
 
     return (
         <Tabs
