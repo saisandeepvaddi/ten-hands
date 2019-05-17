@@ -140,6 +140,7 @@ function JobsProvider(props: IJobsProviderProps) {
     }, []);
     useDeepCompareEffect(() => {
         const updateData = async () => {
+            console.log("state:", state);
             localforage.setItem("state", state);
         };
 

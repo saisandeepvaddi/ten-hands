@@ -1,27 +1,6 @@
 {
   "projects": [
     {
-      "_id": "258b4517-2b34-46c2-96ed-5bc2564c4bfb",
-      "name": "test-project",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "c335466d-41b9-4154-b231-3f329d29fd8a",
-          "name": "one",
-          "cmd": "node test.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "f4482d5f-ce58-469b-8417-b20690922447",
-          "name": "two",
-          "cmd": "node test.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\test-project"
-    },
-    {
       "_id": "def746a0-9869-41b9-85e0-5258948f10b9",
       "name": "server",
       "type": "nodejs",

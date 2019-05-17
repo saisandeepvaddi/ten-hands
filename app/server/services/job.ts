@@ -4,56 +4,62 @@ import pKill from "tree-kill";
 import io from "socket.io";
 import path from "path";
 
+let jobSocket = null;
 class Job {
-  private io: any;
+  // static socket: any;
   private room: any;
-  constructor(io, room) {
-    this.io = io;
+  constructor(room) {
     this.room = room;
   }
 
   public start(command, projectPath) {
-    const io = this.io;
+    try {
+      const job = command.cmd;
+      // const execDir = command.execDir;
+      const execPath = path.normalize(projectPath);
 
-    const job = command.cmd;
-    // const execDir = command.execDir;
-    const execPath = path.normalize(projectPath);
-
-    const room = this.room;
-    const n = execa(job, {
-      cwd: execPath || process.cwd()
-    });
-    io.to(room).emit(`job_started-${room}`, { room, data: n });
-    n.stdout.on("data", chunk => {
-      // console.log("output:", chunk.toString());
-      console.log(`output to room: ${room}`);
-
-      io.to(room).emit(`output-${room}`, { room, data: chunk.toString() });
-    });
-
-    n.stderr.on("data", chunk => {
-      io.to(room).emit(`error-${room}`, { room, data: chunk.toString() });
-    });
-
-    n.on("close", (code, signal) => {
-      io.to(room).emit(`close-${room}`, {
-        room,
-        data: `Exited with code ${code} by signal ${signal}`
+      const room = this.room;
+      const n = execa(job, {
+        cwd: execPath || process.cwd()
       });
-    });
-
-    n.on("exit", (code, signal) => {
-      io.to(room).emit(`exit-${room}`, {
-        room,
-        data: `Exited with code ${code} by signal ${signal}`
+      jobSocket.emit(`job_started`, { room, data: n });
+      n.stdout.on("data", chunk => {
+        jobSocket.emit(`output`, { room, data: chunk.toString() });
       });
-    });
 
-    setTimeout(() => {
-      console.log("Attempt Kill");
+      n.stderr.on("data", chunk => {
+        try {
+          jobSocket.emit(`error`, { room, data: chunk.toString() });
+        } catch (error) {
+          console.log(`Catching: ${chunk.toString()}`);
+        } finally {
+          jobSocket.emit(`error`, { room, data: chunk.toString() });
+          console.log(`id in crash: ${jobSocket.id}`);
+        }
+      });
 
-      pKill(n.pid);
-    }, 10000);
+      n.on("close", (code, signal) => {
+        jobSocket.emit(`close`, {
+          room,
+          data: `Exited with code ${code} by signal ${signal}`
+        });
+      });
+
+      n.on("exit", (code, signal) => {
+        jobSocket.emit(`exit`, {
+          room,
+          data: `Exited with code ${code} by signal ${signal}`
+        });
+      });
+
+      setTimeout(() => {
+        console.log("Attempt Kill");
+
+        pKill(n.pid);
+      }, 10000);
+    } catch (error) {
+      console.log(`Big Catch: ${error.message}`);
+    }
   }
 }
 
@@ -86,20 +92,20 @@ export class JobManager {
       }) => {
         const job = command.cmd;
 
-        this.socket.join(room, () => {
-          this.io.to(room).emit(`joined_room-${room}`, {
-            room,
-            data: `${job} joined room ${room}`
-          });
-          const process = new Job(this.io, room);
-          process.start(command, projectPath);
-        });
+        // this.socket.join(room, () => {
+        //   this.io.to(room).emit(`joined_room-${room}`, {
+        //     room,
+        //     data: `${job} joined room ${room}`
+        //   });
+        // });
+        const process = new Job(room);
+        process.start(command, projectPath);
       }
     );
 
     this.socket.on("unsubscribe", ({ room, pid }) => {
       this.killJob(room, pid);
-      this.socket.leave(room);
+      // this.socket.leave(room);
     });
   }
 
@@ -109,7 +115,7 @@ export class JobManager {
     }
     this.io.on("connection", socket => {
       console.log(`Client connected to socket: `, socket.id);
-
+      jobSocket = socket;
       this.socket = socket;
       this.socket.on("disconnect", function() {
         console.log("Disconnecting: ", socket.id);

@@ -19,4 +19,9 @@ app.use(function(error, req, res, next) {
   return res.status(500).send({ error });
 });
 
+process.on("uncaughtException", function(err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
+});
+
 export default app;

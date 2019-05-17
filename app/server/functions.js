@@ -5,7 +5,7 @@
   }, 1000);
 
   setTimeout(() => {
-    throw new Error("test error");
+    // throw new Error("test error");
     clearInterval(interval);
   }, 5000);
 })();
