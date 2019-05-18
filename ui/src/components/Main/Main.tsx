@@ -7,10 +7,10 @@ import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 
 const Container = styled.div`
-    position: relative;
     border-top: 1px solid transparent; /* To prevent margin-collapse for first child doesn't happen */
     background: ${props => (props.theme === Classes.DARK ? Colors.DARK_GRAY1 : Colors.LIGHT_GRAY1)};
     height: 100%;
+    max-width: 100%;
 `;
 
 const Main = React.memo(() => {

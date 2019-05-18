@@ -3,52 +3,96 @@ const path = require("path");
 const execa = require("execa");
 
 const buildUI = async () => {
-  try {
-    const uiBuild = execa.shellSync("yarn build", {
-      cwd: path.resolve(__dirname, "ui")
-    });
+  return new Promise((resolve, reject) => {
+    try {
+      const uiBuild = execa("yarn build", {
+        cwd: path.join(__dirname, "ui")
+      });
 
-    uiBuild.stdout.on("data", chunk => {
-      console.log(chunk.toString());
-    });
+      uiBuild.stdout.on("data", chunk => {
+        console.log(chunk.toString());
+      });
 
-    return true;
-  } catch (error) {
-    console.log("error:", error);
-  }
+      uiBuild.stderr.on("data", chunk => {
+        console.log(chunk.toString());
+        reject(new Error("UI Build Failed"));
+      });
+
+      uiBuild.on("exit", chunk => {
+        console.log(chunk.toString());
+        resolve(true);
+      });
+    } catch (error) {
+      console.log("error:", error);
+      reject(new Error("UI Build Failed"));
+    }
+  });
 };
 
 const buildElectron = async () => {
-  try {
-    const electronBuild = execa.shellSync("yarn build", {
-      cwd: path.resolve(__dirname, "app")
-    });
+  return new Promise((resolve, reject) => {
+    try {
+      const electronBuild = execa("yarn build:installer", {
+        cwd: path.join(__dirname, "app")
+      });
 
-    electronBuild.stdout.on("data", chunk => {
-      console.log(chunk.toString());
-    });
+      electronBuild.stdout.on("data", chunk => {
+        console.log(chunk.toString());
+      });
 
-    return true;
-  } catch (error) {
-    console.log("error:", error);
-  }
+      electronBuild.stderr.on("data", chunk => {
+        console.log(chunk.toString());
+        reject(new Error("Electron Build Failed"));
+      });
+
+      electronBuild.on("exit", chunk => {
+        console.log(chunk.toString());
+        resolve(true);
+      });
+    } catch (error) {
+      console.log("error:", error);
+      reject(new Error("Electron Build Failed"));
+    }
+  });
 };
 
 const moveBuilds = async () => {
   try {
-    await fs.move(
-      path.resolve(__dirname, "ui", "build"),
-      path.resolve(__dirname, "build"),
-      { overwrite: true }
-    );
-    await fs.move(
-      path.resolve(__dirname, "app", "build"),
-      path.resolve(__dirname, "build"),
-      { overwrite: true }
+    console.log(`Moving UI build`);
+    await fs.copy(
+      path.join(__dirname, "ui", "build"),
+      path.join(__dirname, "app", "build", "ui")
     );
   } catch (error) {
     console.log("error:", error);
   }
+};
+
+const buildInstaller = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const installerBuild = execa("yarn build:installer", {
+        cwd: path.join(__dirname, "app")
+      });
+
+      installerBuild.stdout.on("data", chunk => {
+        console.log(chunk.toString());
+      });
+
+      installerBuild.stderr.on("data", chunk => {
+        console.log(chunk.toString());
+        reject(new Error("Installer Build Failed"));
+      });
+
+      installerBuild.on("exit", chunk => {
+        console.log(chunk.toString());
+        resolve(true);
+      });
+    } catch (error) {
+      console.log("error:", error);
+      reject(new Error("Installer Build Failed"));
+    }
+  });
 };
 
 const startBuild = async () => {
@@ -56,6 +100,7 @@ const startBuild = async () => {
     await buildUI();
     await buildElectron();
     await moveBuilds();
+    await buildInstaller();
   } catch (error) {
     console.log("error:", error);
   }

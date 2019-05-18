@@ -47,6 +47,21 @@
       ],
       "configFile": "package.json",
       "path": "D:\\Programming\\test-project"
+    },
+    {
+      "_id": "bb8b00f1-318b-42ed-8c1e-199af82e7773",
+      "name": "ten-hands",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "a3e0b4e8-8a59-4b85-885d-e1bfe5ed13e8",
+          "name": "build:installer",
+          "cmd": "node build.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\ten-hands"
     }
   ],
   "commands": []

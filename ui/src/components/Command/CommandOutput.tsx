@@ -10,10 +10,12 @@ const CommandOutput: React.FC<ICommandProps> = React.memo(({ output }) => {
         <Pre
             className="command-output"
             style={{
+                flex: 1,
                 maxHeight: 250,
                 overflow: "auto",
                 display: "flex",
                 flexDirection: "column-reverse",
+
                 paddingTop: 10,
             }}
         >

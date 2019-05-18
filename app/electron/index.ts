@@ -1,4 +1,3 @@
-import "./prestart";
 const electron = require("electron");
 const { BrowserWindow } = electron;
 const app = electron.app;
@@ -18,18 +17,12 @@ function createWindow() {
       nodeIntegration: true
     }
   });
-  console.log(path.join(__dirname, "../build/index.html"));
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../index.html")}`
-  );
-  if (isDev) {
-    // Open the DevTools.
-    // BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    mainWindow.webContents.openDevTools();
-  }
+  const uiUrl = isDev
+    ? "http://localhost:3000"
+    : `file://${path.join(__dirname, "../ui/index.html")}`;
+  mainWindow.loadURL(uiUrl);
+
   mainWindow.on("closed", () => (mainWindow = null));
   return mainWindow;
 }

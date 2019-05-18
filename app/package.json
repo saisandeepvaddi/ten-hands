@@ -1,15 +1,32 @@
 {
   "name": "@ten-hands/app",
+  "description": "Project script runner",
   "version": "1.0.0",
   "private": true,
+  "author": {
+    "name": "Sai Sandeep Vaddi",
+    "email": "saisandeepvaddi@gmail.com",
+    "url": "https://svaddi.dev"
+  },
   "license": "MIT",
-  "main": "./dist/electron/index.js",
+  "main": "./build/electron/index.js",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
     "start": "concurrently \"yarn build:watch\" && \"yarn electron-only\"",
     "dev": "./node_modules/.bin/nodemon",
+    "pack": "./node_modules/.bin/electron-builder --dir",
+    "build:installer": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
     "electron-only": "./node_modules/.bin/electron ./dist/electron/index.js"
+  },
+  "build": {
+    "appId": "com.saisandeepvaddi.tenhands",
+    "productName": "Ten Hands",
+    "compression": "maximum",
+    "files": [
+      "build/**/*",
+      "package.json"
+    ]
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -35,7 +52,6 @@
     "electron-debug": "^3.0.0",
     "electron-react-devtools": "^0.5.3",
     "electron-reloader": "^0.2.0",
-    "log-process-errors": "^4.1.1",
     "nodemon": "^1.18.11",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",

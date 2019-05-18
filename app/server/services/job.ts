@@ -43,12 +43,6 @@ class Job {
           data: `Exited with code ${code} by signal ${signal}`
         });
       });
-
-      setTimeout(() => {
-        console.log("Attempt Kill");
-
-        pKill(n.pid);
-      }, 10000);
     } catch (error) {
       console.log(`Big Catch: ${error.message}`);
     }

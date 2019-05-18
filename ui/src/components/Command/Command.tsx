@@ -4,16 +4,19 @@ import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
 import CommandOutput from "./CommandOutput";
 
-const Container = styled.div``;
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 
 const CommandTitleActions = styled.div`
     display: flex;
+    max-width: 100%;
     justify-content: space-between;
     align-items: center;
 
     & > h5 {
         margin: 0 0 4px;
-        max-width: 5rem;
     }
     & > * {
         margin-left: 1rem;
@@ -110,7 +113,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                 <span>{command.cmd}</span>
                 <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
             </CommandHeader>
-            <Collapse isOpen={isOutputOpen}>
+            <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
                 <CommandOutput output={getJobData(jobState, room).stdout || "Process not running"} />
             </Collapse>
         </Container>
