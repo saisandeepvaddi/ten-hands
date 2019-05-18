@@ -32,7 +32,7 @@ const buildUI = async () => {
 const buildElectron = async () => {
   return new Promise((resolve, reject) => {
     try {
-      const electronBuild = execa("yarn build:installer", {
+      const electronBuild = execa("yarn build", {
         cwd: path.join(__dirname, "app")
       });
 
@@ -59,9 +59,10 @@ const buildElectron = async () => {
 const moveBuilds = async () => {
   try {
     console.log(`Moving UI build`);
-    await fs.copy(
+    await fs.move(
       path.join(__dirname, "ui", "build"),
-      path.join(__dirname, "app", "build", "ui")
+      path.join(__dirname, "app", "build", "ui"),
+      { overwrite: true }
     );
   } catch (error) {
     console.log("error:", error);
