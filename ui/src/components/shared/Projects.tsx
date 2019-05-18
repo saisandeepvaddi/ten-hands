@@ -36,6 +36,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                 setActiveProject(receivedProjects[0]);
             } else {
                 setProjects([]);
+                setActiveProject(initialProject);
             }
         } catch (error) {
             console.error(error);
@@ -56,7 +57,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             setProjects,
             updateProjects,
         };
-    }, [projects.length, activeProject._id]);
+    }, [projects, activeProject, setActiveProject, setProjects]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }

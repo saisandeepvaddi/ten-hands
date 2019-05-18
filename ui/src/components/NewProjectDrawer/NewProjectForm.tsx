@@ -38,13 +38,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 // console.info("parsedProjectData:", parsedProjectData);
                 if (parsedProjectData !== null) {
                     const { name: projectName, type, commands, configFile, path } = parsedProjectData;
-                    console.info("{ name: projectName, type, commands, configFile }:", {
-                        name: projectName,
-                        type,
-                        commands,
-                        configFile,
-                        path,
-                    });
+                    // console.info("{ name: projectName, type, commands, configFile }:", {
+                    //     name: projectName,
+                    //     type,
+                    //     commands,
+                    //     configFile,
+                    //     path,
+                    // });
 
                     // Manually set each field after parsing the file
                     setFieldValue("configFile", configFile);
@@ -74,7 +74,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = useCallback(async (values, actions) => {
-        console.info("values:", values);
+        // console.info("values:", values);
         try {
             actions.setSubmitting(true);
             const responseData: AxiosResponse = await Axios({

@@ -27,7 +27,7 @@ const Main = React.memo(() => {
     if (activeProject._id === "") {
         return (
             <EmptyContainer theme={theme} className="main-container">
-                Add a new project using New Project button
+                Add a project using New Project button
             </EmptyContainer>
         );
     }

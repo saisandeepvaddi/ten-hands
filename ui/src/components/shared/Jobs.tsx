@@ -26,8 +26,6 @@ const initializeRoomSocketState = state => {
 export const initialState = {};
 
 export const jobsReducer = (state = initialState, action: IJobAction): object => {
-    console.log("state:", state);
-    console.log("action.type:", action.type);
     switch (action.type) {
         case ACTION_TYPES.UPDATE_JOB: {
             const { room, stdout, isRunning } = action;
@@ -89,7 +87,6 @@ function JobsProvider(props: IJobsProviderProps) {
         const restoreData = async () => {
             try {
                 const storedState = await localforage.getItem("state");
-                console.log("storedState:", storedState);
                 if (storedState) {
                     dispatch({
                         type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,

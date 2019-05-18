@@ -20,15 +20,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                     await Axios.delete(`http://localhost:1010/projects/${activeProject._id}`);
                     await updateProjects();
                     setDeleteAlertOpen(false);
-                    if (projects.length > 0) {
-                        setActiveProject(projects[0]);
-                    }
                 }
             } catch (error) {
                 console.error(`Error deleting project: `, error);
             }
         },
-        [activeProject],
+        [activeProject, projects],
     );
     return (
         <Navbar>
