@@ -15,7 +15,6 @@ const buildUI = async () => {
 
       uiBuild.stderr.on("data", chunk => {
         console.log(chunk.toString());
-        reject(new Error("UI Build Failed"));
       });
 
       uiBuild.on("exit", chunk => {
@@ -42,7 +41,6 @@ const buildElectron = async () => {
 
       electronBuild.stderr.on("data", chunk => {
         console.log(chunk.toString());
-        reject(new Error("Electron Build Failed"));
       });
 
       electronBuild.on("exit", chunk => {
@@ -58,7 +56,6 @@ const buildElectron = async () => {
 
 const moveBuilds = async () => {
   try {
-    console.log(`Moving UI build`);
     await fs.move(
       path.join(__dirname, "ui", "build"),
       path.join(__dirname, "app", "build", "ui"),
@@ -82,7 +79,6 @@ const buildInstaller = async () => {
 
       installerBuild.stderr.on("data", chunk => {
         console.log(chunk.toString());
-        reject(new Error("Installer Build Failed"));
       });
 
       installerBuild.on("exit", chunk => {
@@ -96,12 +92,30 @@ const buildInstaller = async () => {
   });
 };
 
+const moveInstallers = async () => {
+  try {
+    await fs.move(
+      path.join(__dirname, "app", "dist"),
+      path.join(__dirname, "dist"),
+      { overwrite: true }
+    );
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
 const startBuild = async () => {
   try {
+    console.log(`Building UI...`);
     await buildUI();
+    console.log(`Building Electron...`);
     await buildElectron();
+    console.log(`Moving Builds...`);
     await moveBuilds();
+    console.log(`Building Installer...`);
     await buildInstaller();
+    console.log(`Moving Installer for release...`);
+    await moveInstallers();
   } catch (error) {
     console.log("error:", error);
   }
