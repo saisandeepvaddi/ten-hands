@@ -12,6 +12,14 @@ const ProjectsList = React.memo(() => {
             const activeProjectWithId = projects.find(project => project._id === projectId);
             if (activeProjectWithId) {
                 setActiveProject(activeProjectWithId);
+            } else {
+                setActiveProject({
+                    _id: "",
+                    name: "",
+                    type: "",
+                    path: "",
+                    commands: [],
+                });
             }
         },
         [projects, setActiveProject],
