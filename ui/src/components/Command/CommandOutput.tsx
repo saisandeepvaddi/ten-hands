@@ -15,7 +15,6 @@ const CommandOutput: React.FC<ICommandProps> = React.memo(({ output }) => {
                 overflow: "auto",
                 display: "flex",
                 flexDirection: "column-reverse",
-
                 paddingTop: 10,
             }}
         >

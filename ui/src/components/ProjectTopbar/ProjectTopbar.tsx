@@ -37,7 +37,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                 <Navbar.Divider />
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
-                <Button icon="add" intent="success" text="New Command" />
+                {/* <Button icon="add" intent="success" text="New Command" minimal={true} /> */}
                 <Navbar.Divider />
                 <Alert
                     cancelButtonText="Cancel"
@@ -56,8 +56,8 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                 <Popover position="left-top">
                     <Button icon="cog" minimal={true} />
                     <Menu key="menu">
-                        <MenuDivider title="Layout" />
-                        <MenuItem icon="list" text="Fixed Height output" />
+                        {/* <MenuDivider title="Layout" />
+                        <MenuItem icon="list" text="Fixed Height output" /> */}
                         <MenuDivider title="Danger" />
                         <MenuItem
                             icon="trash"
