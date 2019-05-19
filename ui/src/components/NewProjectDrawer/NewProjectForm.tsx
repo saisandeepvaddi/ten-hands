@@ -171,7 +171,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Type"
                             labelFor="type"
-                            helperText="Will be auto-filled if can be determined from config file."
+                            helperText="Will be auto-filled if they can be determined from config file."
                         >
                             <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
                                 <option value="">Select Project Type</option>

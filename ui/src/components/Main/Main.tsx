@@ -17,7 +17,11 @@ const EmptyContainer = styled(Container)`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 2em;
+    & > span {
+        padding: 10px;
+        border-bottom: 1px solid #0a6640;
+    }
 `;
 
 const Main = React.memo(() => {
@@ -26,7 +30,7 @@ const Main = React.memo(() => {
     if (activeProject._id === "") {
         return (
             <EmptyContainer theme={theme} className="main-container">
-                Add a project using New Project button
+                Add a project using <span>New Project</span> button
             </EmptyContainer>
         );
     }
