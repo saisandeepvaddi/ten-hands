@@ -13,7 +13,19 @@
     "app",
     "ui"
   ],
-  "repository": "git@github.com:saisandeepvaddi/ten-hands.git",
-  "author": "Sai Sandeep Vaddi <saisandeepvaddi@gmail.com>",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/saisandeepvaddi/ten-hands.git"
+  },
+  "author": {
+    "name": "Sai Sandeep Vaddi",
+    "email": "saisandeepvaddi@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saisandeepvaddi/ten-hands/issues"
+  },
+  "readme": "ERROR: No README data found!",
+  "homepage": "https://github.com/saisandeepvaddi/ten-hands#readme",
+  "_id": "ten-hands@1.0.0"
 }
