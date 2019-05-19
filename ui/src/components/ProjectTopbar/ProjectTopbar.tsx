@@ -11,7 +11,7 @@ interface IProjectTopbarProps {
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
     const { theme } = useTheme();
-    const { updateProjects, setActiveProject, projects } = useProjects();
+    const { updateProjects } = useProjects();
     const deleteProject = React.useCallback(
         async shouldDelete => {
             try {
@@ -25,7 +25,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                 console.error(`Error deleting project: `, error);
             }
         },
-        [activeProject, projects],
+        [activeProject, updateProjects],
     );
     return (
         <Navbar>

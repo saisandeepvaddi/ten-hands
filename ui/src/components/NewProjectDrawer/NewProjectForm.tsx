@@ -2,6 +2,7 @@ import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprint
 import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
+import { isRunningInElectron } from "../../utils/electron";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -94,6 +95,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
             actions.setSubmitting(false);
         }
     }, []);
+
+    console.log("isRunningInElectron: ", isRunningInElectron());
 
     return (
         <Formik

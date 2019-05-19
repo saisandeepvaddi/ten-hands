@@ -41,7 +41,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         } catch (error) {
             console.error(error);
         }
-    }, []);
+    }, [initialProject]);
     React.useEffect(() => {
         async function updateNewProjects() {
             await updateProjects();
@@ -57,7 +57,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             setProjects,
             updateProjects,
         };
-    }, [projects, activeProject, setActiveProject, setProjects]);
+    }, [projects, activeProject, setActiveProject, setProjects, updateProjects]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }

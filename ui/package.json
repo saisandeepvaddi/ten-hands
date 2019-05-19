@@ -5,8 +5,10 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start": "rescripts start",
-    "build": "rescripts build",
+    "start:electron": "rescripts start",
+    "start:browser": "react-scripts start",
+    "build:electron": "rescripts build",
+    "build:browser": "react-scripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
     "postinstall": "electron-builder install-app-deps",

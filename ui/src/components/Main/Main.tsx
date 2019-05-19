@@ -23,7 +23,6 @@ const EmptyContainer = styled(Container)`
 const Main = React.memo(() => {
     const { theme } = useTheme();
     const { activeProject } = useProjects();
-    console.log("activeProject:", activeProject);
     if (activeProject._id === "") {
         return (
             <EmptyContainer theme={theme} className="main-container">

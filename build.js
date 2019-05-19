@@ -5,7 +5,7 @@ const execa = require("execa");
 const buildUI = async () => {
   return new Promise((resolve, reject) => {
     try {
-      const uiBuild = execa("yarn build", {
+      const uiBuild = execa("yarn build:electron", {
         cwd: path.join(__dirname, "ui")
       });
 

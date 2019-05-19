@@ -8,12 +8,6 @@ class JobSocket {
             JobSocket.socket.destroy();
             JobSocket.socket = null;
         }
-        // socket.on("connect", () => {
-        //     console.log(`connected: ${socket.id}`);
-        // });
-        // socket.on("reconnect", () => {
-        //     console.log("reconencted: ", socket.id);
-        // });
         socket.on(`disconnect`, () => {
             console.log(`Disconnecting: `);
         });

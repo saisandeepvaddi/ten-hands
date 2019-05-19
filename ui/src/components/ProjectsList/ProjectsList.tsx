@@ -49,13 +49,6 @@ const ProjectsList = React.memo(() => {
         });
     };
 
-    const clearJobOutput = room => {
-        dispatch({
-            type: ACTION_TYPES.CLEAR_OUTPUT,
-            room,
-        });
-    };
-
     React.useEffect(() => {
         // TODO: save initialized sockets to ref or somewhere
         const initializeSocket = async () => {

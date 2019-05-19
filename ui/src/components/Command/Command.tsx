@@ -23,6 +23,12 @@ const CommandTitleActions = styled.div`
     }
 `;
 
+const CommandOutputButtonsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 10%;
+`;
+
 const CommandHeader = styled.div`
     display: flex;
     justify-content: space-between;
@@ -111,7 +117,12 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                     />
                 </CommandTitleActions>
                 <span>{command.cmd}</span>
-                <Button onClick={() => setOutputOpen(!isOutputOpen)}>{isOutputOpen ? "Hide" : "Show"} Output</Button>
+                <CommandOutputButtonsContainer>
+                    <Button onClick={() => clearJobOutput(room)} icon="eraser" minimal={true} />
+                    <Button onClick={() => setOutputOpen(!isOutputOpen)}>
+                        {isOutputOpen ? "Hide" : "Show"} Output
+                    </Button>
+                </CommandOutputButtonsContainer>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
                 <CommandOutput output={getJobData(jobState, room).stdout || "Process not running"} />
