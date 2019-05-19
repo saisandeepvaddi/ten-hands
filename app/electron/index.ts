@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { BrowserWindow } = electron;
+const { BrowserWindow, ipcMain } = electron;
 const app = electron.app;
 
 const path = require("path");
@@ -19,7 +19,7 @@ function createWindow() {
   });
 
   const uiUrl = isDev
-    ? "http://localhost:3000"
+    ? "http://localhost:3010"
     : `file://${path.join(__dirname, "../ui/index.html")}`;
   mainWindow.loadURL(uiUrl);
 
@@ -32,6 +32,10 @@ async function startElectronApp() {
     await startServer();
 
     app.on("ready", createWindow);
+
+    ipcMain.on(`config-file-drop`, (e, msg) => {
+      console.log(msg);
+    });
 
     app.on("window-all-closed", () => {
       if (process.platform !== "darwin") {

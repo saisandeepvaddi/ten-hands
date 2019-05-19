@@ -34,3 +34,9 @@ interface IStateAction {
 interface Window {
     tenHands: any;
 }
+
+interface ITenHandsFile {
+    name: string;
+    path?: string;
+    data: string | ArrayBuffer | null;
+}

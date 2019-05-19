@@ -1,9 +1,6 @@
-// taken from FileReader interface in lib.dom.d.ts
-type ReaderResult = string | ArrayBuffer | null;
-
 // This is a project parser function which takes data of FileReader.
 // These functions can be added by users to parse config files of framework of their choice.
-const nodeConfigFileParser = (file: File, readerResult: ReaderResult): IProject | null => {
+const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
     const project: IProject = {
         name: "",
         type: "",
@@ -13,7 +10,7 @@ const nodeConfigFileParser = (file: File, readerResult: ReaderResult): IProject 
     };
     try {
         // Return if file came as null, otherwise, cant do JSON.parse later
-        if (!readerResult) {
+        if (!file.data) {
             return null;
         }
 
@@ -23,18 +20,23 @@ const nodeConfigFileParser = (file: File, readerResult: ReaderResult): IProject 
             return null;
         }
 
-        // Node projects use package.json, so parse package.json file
-        const data = JSON.parse(readerResult.toString());
+        // NodeJS projects use package.json, so parse package.json file
+        const packageJsonData = JSON.parse(file.data.toString());
 
-        if (data.tenHands) {
+        if (file.path) {
+            project.path = file.path;
+        } else if (packageJsonData.tenHands) {
             // Browsers don't let read the file paths on FS.
             // So if config files have tenHandsConfig with users mentioning path, take it
-            const userConfig = data.tenHands;
+            const userConfig = packageJsonData.tenHands;
             project.path = userConfig.path ? userConfig.path : "";
+        } else {
+            project.path = "";
         }
-        project.name = data.name;
+
+        project.name = packageJsonData.name;
         project.type = "nodejs";
-        project.commands = Object.entries(data.scripts).map(script => {
+        project.commands = Object.entries(packageJsonData.scripts).map(script => {
             const [name, cmd] = script;
             return {
                 name,
@@ -50,9 +52,9 @@ const nodeConfigFileParser = (file: File, readerResult: ReaderResult): IProject 
 
 const projectParsers = [nodeConfigFileParser];
 
-const getProjectData = (file: File, readerResult: ReaderResult): IProject | null => {
+const getProjectData = (file: ITenHandsFile): IProject | null => {
     for (const parser of projectParsers) {
-        const parsedData = parser(file, readerResult);
+        const parsedData = parser(file);
         // Return the result of first parser or null
         if (parsedData === null) {
             continue;
@@ -63,9 +65,9 @@ const getProjectData = (file: File, readerResult: ReaderResult): IProject | null
     return null;
 };
 
-export default (file: File, readerResult: ReaderResult): IProject | null => {
-    if (readerResult !== null) {
-        const project = getProjectData(file, readerResult);
+export default (file: ITenHandsFile): IProject | null => {
+    if (file.data !== null) {
+        const project = getProjectData(file);
         return project;
     }
     return null;

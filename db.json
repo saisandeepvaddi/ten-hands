@@ -1,41 +1,4 @@
 {
-  "projects": [
-    {
-      "_id": "81ff96ea-1261-4051-bde8-be7b21ea80fa",
-      "name": "ten-hands",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "65df8c57-910b-466d-94bd-b84e7c6e26eb",
-          "name": "build:installer",
-          "cmd": "node build.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\ten-hands"
-    },
-    {
-      "_id": "cdf18243-b05f-44e9-89eb-d51e3da087ba",
-      "name": "test-project",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "59f197ec-120d-4c19-a2d6-88a6614189cb",
-          "name": "one",
-          "cmd": "node test.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "6733ef75-e80d-47af-8389-b28ef71a2488",
-          "name": "two",
-          "cmd": "node test.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\test-project"
-    }
-  ],
+  "projects": [],
   "commands": []
 }

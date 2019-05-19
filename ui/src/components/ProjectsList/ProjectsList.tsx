@@ -96,7 +96,7 @@ const ProjectsList = React.memo(() => {
         };
 
         initializeSocket();
-    }, [projects, isSocketInitialized]);
+    }, [projects, isSocketInitialized]); // NEED TO THINK IF I SHOULD ADD OTHER DEPENDENCIES AS PER LINT WARNINGS. DON'T REINITIALIZE SOCKET ON CHANGE. WILL MESS UP
 
     return (
         <Tabs

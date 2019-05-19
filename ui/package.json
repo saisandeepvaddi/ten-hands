@@ -5,7 +5,7 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start:electron": "rescripts start",
+    "start:electron": "set PORT=3010 && rescripts start",
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",

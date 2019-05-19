@@ -47,7 +47,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             await updateProjects();
         }
         updateNewProjects();
-    }, []);
+    }, []); // DO NOT ADD DEPENDENCY. IT WILL RUN INFINITE. NEED TO FIGURE OUT ANOTHER WAY
 
     const value = React.useMemo(() => {
         return {
