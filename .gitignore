@@ -67,6 +67,10 @@ app/build
 app/ui_build
 ui/dist
 ui/build
+cli/build
+
+
+
 dist
 
 .idea

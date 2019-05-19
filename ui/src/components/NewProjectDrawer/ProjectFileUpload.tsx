@@ -21,10 +21,11 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(({ confi
             try {
                 const { dialog } = require("electron").remote;
                 dialog.showOpenDialog(filePaths => {
-                    const configFilePath: string | undefined = filePaths.length > 0 ? filePaths[0] : undefined;
+                    const configFilePath: string | undefined =
+                        filePaths && filePaths.length > 0 ? filePaths[0] : undefined;
                     if (configFilePath === undefined) {
                         console.log("No file uploaded");
-                        throw new Error("No config file uploaded");
+                        return null;
                     }
                     require("fs").readFile(configFilePath, "utf-8", (err, fileData) => {
                         if (err) {
@@ -35,6 +36,7 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(({ confi
                 });
             } catch (error) {
                 console.log("error:", error);
+                return null;
             }
         }
     };

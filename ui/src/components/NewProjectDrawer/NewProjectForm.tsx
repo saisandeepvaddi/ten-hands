@@ -99,6 +99,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = useCallback(
         async (values, actions) => {
+            console.log("values:", values);
             // console.info("values:", values);
             try {
                 actions.setSubmitting(true);

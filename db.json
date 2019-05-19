@@ -1,4 +1,19 @@
 {
-  "projects": [],
+  "projects": [
+    {
+      "_id": "f1402da2-1d7d-437b-b835-c02e5069a2c8",
+      "name": "Awesome",
+      "type": "NodeJS",
+      "path": "D:\\Programming\\ten-hands\\cli\\build",
+      "commands": [
+        {
+          "_id": "467f531f-7022-4e10-b1ff-436eb0805afd",
+          "name": "Awesome",
+          "cmd": "yarn start",
+          "execDir": "./"
+        }
+      ]
+    }
+  ],
   "commands": []
 }

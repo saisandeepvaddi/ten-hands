@@ -9,6 +9,6 @@
     "allowJs": true,
     "typeRoots": ["./node_modules/@types", "types"]
   },
-  "include": ["server/**/*", "electron/**/*"],
-  "exclude": ["node_modules", "__tests__", "./server/__tests__"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "__tests__"]
 }
