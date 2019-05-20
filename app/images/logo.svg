@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="979.5" height="520" viewBox="0 0 979.5 520">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #008075;
+      }
+
+      .cls-1 {
+        stroke: #008075;
+        font-size: 432px;
+        font-family: FiraCode-Retina, Fira Code Retina;
+      }
+
+      .cls-2 {
+        stroke: #707070;
+      }
+    </style>
+  </defs>
+  <g id="Symbol_1_1" data-name="Symbol 1 – 1" transform="translate(-470.5 -280)">
+    <text id="_th" class="cls-1" transform="translate(671 685)"><tspan x="0" y="0">_th</tspan></text>
+    <path id="Path_1" data-name="Path 1" class="cls-2" d="M242.434,522.814l226.116,200-226.116,200Z" transform="translate(228.566 -156.314)"/>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-Web_1920_2);
+      }
+
+      .cls-2, .cls-3 {
+        fill: #008075;
+      }
+
+      .cls-2 {
+        stroke: #008075;
+        font-size: 432px;
+        font-family: FiraCode-Retina, Fira Code Retina;
+      }
+
+      .cls-3 {
+        stroke: #707070;
+      }
+
+      .cls-4 {
+        fill: #293742;
+      }
+    </style>
+    <clipPath id="clip-Web_1920_2">
+      <rect width="1200" height="1200"/>
+    </clipPath>
+  </defs>
+  <g id="Web_1920_2" data-name="Web 1920 – 2" class="cls-1">
+    <rect class="cls-4" width="1200" height="1200"/>
+    <g id="Group_2" data-name="Group 2" transform="translate(-489 226.5)">
+      <text id="_th" class="cls-2" transform="translate(800 518.5)"><tspan x="0" y="0">_th</tspan></text>
+      <path id="Path_1" data-name="Path 1" class="cls-3" d="M242.434,522.814l226.116,200-226.116,200Z" transform="translate(357.566 -322.814)"/>
+    </g>
+  </g>
+</svg>
