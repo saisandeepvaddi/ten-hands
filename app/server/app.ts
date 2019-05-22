@@ -8,16 +8,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.set("port", process.env.PORT || 1010);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/projects", projectRoutes);
 
 // Default Error Handler
 app.use(function(error, req, res, next) {
-  console.log("error:", error);
-  // console.error(error.stack);
-  console.log("Error here");
+  console.error(error.stack);
 
   return res.status(500).send({ error });
 });
