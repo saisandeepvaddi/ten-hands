@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import chalk from "chalk";
 import fetch from "node-fetch";
+import { startServer } from "./server";
 
 const saveProject = async (project: IProject) => {
   try {
@@ -70,9 +71,15 @@ const createProject = answers => {
 
 const startTenHands = async () => {
   try {
-    const answers = await startQuestions();
-    const project: IProject = createProject(answers);
-    await saveProject(project);
+    const args = process.argv;
+    const isServerRelated = args[2] === "server";
+    if (isServerRelated) {
+      await startServer();
+    } else {
+      const answers = await startQuestions();
+      const project: IProject = createProject(answers);
+      await saveProject(project);
+    }
   } catch (error) {
     console.log(chalk.redBright(error.message));
   }

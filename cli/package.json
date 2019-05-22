@@ -1,5 +1,5 @@
 {
-  "name": "ten-hands-cli",
+  "name": "@ten-hands/cli",
   "version": "1.0.0",
   "description": "CLI for ten-hands app",
   "main": "build/index.js",
@@ -12,7 +12,8 @@
     "ten-hands": "build/index.js"
   },
   "files": [
-    "build"
+    "build",
+    "package.json"
   ],
   "license": "MIT",
   "private": true,
