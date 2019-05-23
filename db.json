@@ -1,41 +1,6 @@
 {
   "projects": [
     {
-      "_id": "f1402da2-1d7d-437b-b835-c02e5069a2c8",
-      "name": "Awesome",
-      "type": "NodeJS",
-      "path": "D:\\Programming\\ten-hands\\cli\\build",
-      "commands": [
-        {
-          "_id": "467f531f-7022-4e10-b1ff-436eb0805afd",
-          "name": "Awesome",
-          "cmd": "yarn start",
-          "execDir": "./"
-        }
-      ]
-    },
-    {
-      "_id": "6f351eee-3607-4068-935d-bf8c824af8f5",
-      "name": "test-project",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "db5de18c-4f0a-4a7c-be7e-220e7bc1eaf8",
-          "name": "one",
-          "cmd": "node test.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "3d519f78-c7e5-4903-8bba-55d7412f8e2e",
-          "name": "two",
-          "cmd": "node test.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\test-project"
-    },
-    {
       "_id": "08436996-a1c1-4973-9f9d-3d7944b73c64",
       "name": "gatekeeper-hub",
       "type": "nodejs",
@@ -73,6 +38,48 @@
       ],
       "configFile": "package.json",
       "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
+    },
+    {
+      "_id": "f7cccba6-5b3d-4bbe-b427-3c56f3b76ba3",
+      "name": "test-project",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "4e469fae-9eb0-42a1-8f64-30f2b11858c9",
+          "name": "one",
+          "cmd": "node test.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "5bd63832-9772-46a7-a89a-44c31c335ff8",
+          "name": "two",
+          "cmd": "node test.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\test-project"
+    },
+    {
+      "_id": "e460100b-5f82-4dfc-ae0c-4af7e1d8866d",
+      "name": "GKWeb",
+      "type": "other",
+      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web",
+      "configFile": "",
+      "commands": [
+        {
+          "_id": "42b4f7cc-b157-4676-b3d1-60ef32208b35",
+          "name": "Dotnet Run",
+          "cmd": "dotnet run",
+          "execDir": "./"
+        },
+        {
+          "_id": "9d3ba427-4179-4a65-8ba4-152f9aec6541",
+          "name": "Yarn Dev",
+          "cmd": "yarn dev",
+          "execDir": "./"
+        }
+      ]
     }
   ],
   "commands": []

@@ -1,70 +1,70 @@
 #!/usr/bin/env node
 import { startQuestions } from "./cli";
-import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import chalk from "chalk";
-import fetch from "node-fetch";
 import { startServer } from "./server";
+import Axios, { AxiosResponse } from "axios";
 
 const saveProject = async (project: IProject) => {
   try {
-    const response = await fetch("http://localhost:1010/projects", {
+    const responseData: AxiosResponse = await Axios({
+      timeout: 2000,
       method: "post",
-      body: JSON.stringify({ ...project }),
-      headers: {
-        "Content-Type": "application/json"
-      }
+      baseURL: `http://localhost:1010`,
+      url: "projects",
+      data: project
     });
 
-    console.log(
-      chalk.green(
-        `Added command ${
-          project.name
-        } to Ten-Hands. Open the desktop app or web app to execute command. Refresh app if already opened.`
-      )
-    );
+    if (responseData.status === 200) {
+      console.log(
+        chalk.green(
+          `Added command ${
+            project.name
+          } to Ten-Hands. Open the desktop app or web app to execute command. Refresh app if already opened.`
+        )
+      );
+    }
   } catch (error) {
     throw new Error(error);
   }
 };
 
 const createProject = answers => {
-  console.log("answers:", answers);
-  const { name, type, projectPath, cmd } = answers;
+  const { name, type, projectPath, cmds } = answers;
   let project: IProject = {
-    _id: "",
     name: "",
     type: "",
     path: "",
+    configFile: "",
     commands: []
   };
   if (!name) {
     throw new Error("Invalid Command/Project Name");
   }
 
-  project._id = uuidv4();
-
   project.name = name;
 
   project.type = type;
 
   if (projectPath === "") {
-    project.path = path.normalize(__dirname);
+    project.path = path.normalize(process.cwd());
   } else {
     project.path = path.normalize(projectPath);
   }
 
-  const command: IProjectCommand = {
-    name,
-    cmd,
-    execDir: "./"
-  };
-
-  if (!cmd) {
+  if (!cmds || cmds.length < 1) {
     throw new Error("Invalid Command. You might have missed entering command.");
   }
 
-  project.commands = [command];
+  const commands: IProjectCommand[] = cmds.map(command => {
+    return {
+      name: command.name,
+      cmd: command.cmd,
+      execDir: "./"
+    };
+  });
+
+  project.commands = commands.slice();
 
   return project;
 };
@@ -78,6 +78,7 @@ const startTenHands = async () => {
     } else {
       const answers = await startQuestions();
       const project: IProject = createProject(answers);
+      // console.log("project:", project);
       await saveProject(project);
     }
   } catch (error) {
