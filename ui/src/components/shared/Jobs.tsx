@@ -1,3 +1,4 @@
+import { htmlEscape } from "escape-goat";
 import localforage from "localforage";
 import React from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
@@ -33,7 +34,7 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
                 ...state,
                 [room]: {
                     ...state[room],
-                    stdout: state[room].stdout + stdout,
+                    stdout: state[room].stdout + (stdout || "").toString(),
                     isRunning,
                 },
             };

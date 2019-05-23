@@ -1,4 +1,5 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
+import { htmlEscape } from "escape-goat";
 import throttle from "lodash/throttle";
 import React from "react";
 import JobSocket from "../../utils/socket";
@@ -64,6 +65,8 @@ const ProjectsList = React.memo(() => {
             });
             socket.on(`job_output`, message => {
                 const room = message.room;
+                console.log(message.data);
+
                 updateJob(room, message.data, true);
             });
 
@@ -76,7 +79,7 @@ const ProjectsList = React.memo(() => {
             socket.on(`job_error`, message => {
                 const room = message.room;
                 console.info(`Process error in room: ${room}`);
-                updateJob(room, message.data, false);
+                updateJob(room, message.data, true);
             });
 
             socket.on(`job_exit`, message => {

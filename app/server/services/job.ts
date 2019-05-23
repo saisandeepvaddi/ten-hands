@@ -56,7 +56,7 @@ export class JobManager {
   private constructor() {}
 
   private killJob(room, pid) {
-    console.log(`Killing Job`);
+    console.log(`Killing process: ${pid}`);
     pKill(pid);
     this.io.to(room).emit(`job_killed`, {
       room,
