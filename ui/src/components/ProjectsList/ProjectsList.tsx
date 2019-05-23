@@ -1,4 +1,5 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
+import throttle from "lodash/throttle";
 import React from "react";
 import JobSocket from "../../utils/socket";
 import { useJobs } from "../shared/Jobs";
@@ -32,14 +33,14 @@ const ProjectsList = React.memo(() => {
 
     const socket = JobSocket.getSocket();
 
-    const updateJob = (room, stdout, isRunning) => {
+    const updateJob = throttle((room, stdout, isRunning) => {
         dispatch({
             room,
             type: ACTION_TYPES.UPDATE_JOB,
             stdout,
             isRunning,
         });
-    };
+    }, 200);
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
@@ -74,7 +75,6 @@ const ProjectsList = React.memo(() => {
 
             socket.on(`job_error`, message => {
                 const room = message.room;
-
                 console.info(`Process error in room: ${room}`);
                 updateJob(room, message.data, false);
             });

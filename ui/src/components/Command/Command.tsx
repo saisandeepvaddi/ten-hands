@@ -92,8 +92,6 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
         return getJobData(jobState, room).isRunning || false;
     };
 
-    // console.log(`updating: ${room}`);
-
     return (
         <Container>
             <CommandHeader>

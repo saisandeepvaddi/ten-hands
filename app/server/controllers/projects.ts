@@ -9,7 +9,6 @@ export function getAllProjects(req: Request, res: Response) {
 
 export function addProject(req: Request, res: Response) {
   const project = db.addProject(req.body);
-  console.log("req.body:", req.body);
   return res.status(200).send(project);
 }
 

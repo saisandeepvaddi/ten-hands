@@ -13,6 +13,66 @@
           "execDir": "./"
         }
       ]
+    },
+    {
+      "_id": "6f351eee-3607-4068-935d-bf8c824af8f5",
+      "name": "test-project",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "db5de18c-4f0a-4a7c-be7e-220e7bc1eaf8",
+          "name": "one",
+          "cmd": "node test.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "3d519f78-c7e5-4903-8bba-55d7412f8e2e",
+          "name": "two",
+          "cmd": "node test.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\test-project"
+    },
+    {
+      "_id": "08436996-a1c1-4973-9f9d-3d7944b73c64",
+      "name": "gatekeeper-hub",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "d76d16a0-aa3f-43ff-a084-e39380b008e7",
+          "name": "browser-sync",
+          "cmd": "browser-sync start --watch --files \"./**/*.*\" --startPath \"http://localhost:5729\"",
+          "execDir": "./"
+        },
+        {
+          "_id": "7426779b-0cea-42d8-8b8c-7d4dfa785f0e",
+          "name": "lint",
+          "cmd": "eslint wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Complete...' ",
+          "execDir": "./"
+        },
+        {
+          "_id": "412f0657-8316-4698-9bcf-a294219ecd21",
+          "name": "lint:fix",
+          "cmd": "eslint --fix wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Fixing Complete...' ",
+          "execDir": "./"
+        },
+        {
+          "_id": "31612e6c-60ce-4f82-b5b9-4dec0adda88e",
+          "name": "dev",
+          "cmd": "./node_modules/.bin/webpack --config webpack.dev.js --progress",
+          "execDir": "./"
+        },
+        {
+          "_id": "7f255338-5747-4f29-9dea-0b36f4b9e5a7",
+          "name": "prod",
+          "cmd": "./node_modules/.bin/webpack --config webpack.prod.js --progress",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
     }
   ],
   "commands": []
