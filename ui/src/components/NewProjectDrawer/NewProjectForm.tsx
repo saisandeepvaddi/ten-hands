@@ -132,7 +132,11 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 onSubmit={handleSubmit}
                 render={props => (
                     <form onSubmit={props.handleSubmit}>
-                        <FormGroup labelFor="configFile" label="Project Config File" helperText="E.g., package.json">
+                        <FormGroup
+                            labelFor="configFile"
+                            label="Project Config File (Currently supports package.json. You can fill rest of the form manually or use CLI.)"
+                            helperText="E.g., package.json"
+                        >
                             {isRunningInElectron() ? (
                                 <ProjectFileUpload
                                     configFileName={configFileName}
