@@ -1,5 +1,5 @@
-import { htmlEscape } from "escape-goat";
 import localforage from "localforage";
+import throttle from "lodash/throttle";
 import React from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
@@ -24,17 +24,30 @@ const initializeRoomSocketState = state => {
     });
 };
 
+const updateData = throttle(async data => {
+    try {
+        if (Object.keys(data).length > 0) {
+            console.log(`Writing to storage`);
+
+            await localforage.setItem("state", data);
+        }
+    } catch (error) {
+        console.log("error:", error);
+    }
+}, 200);
+
 export const initialState = {};
 
 export const jobsReducer = (state = initialState, action: IJobAction): object => {
     switch (action.type) {
         case ACTION_TYPES.UPDATE_JOB: {
             const { room, stdout, isRunning } = action;
+            const newStdout = state[room] ? state[room].stdout + (stdout || "") : "";
             return {
                 ...state,
                 [room]: {
                     ...state[room],
-                    stdout: state[room].stdout + (stdout || "").toString(),
+                    stdout: newStdout,
                     isRunning,
                 },
             };
@@ -42,17 +55,21 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
         case ACTION_TYPES.UPDATE_JOB_PROCESS: {
             const { room, process } = action;
             const pid = process && process.pid ? process.pid : -1;
-            return {
+
+            const newState = {
                 ...state,
                 [room]: {
                     ...state[room],
-                    isRunning: pid === -1 ? false : state[room].isRunning,
+                    isRunning: pid === -1 ? false : true,
                     process,
                 },
             };
+            updateData(newState);
+            return newState;
         }
         case ACTION_TYPES.CLEAR_OUTPUT: {
             const room = action.room;
+
             return {
                 ...state,
                 [room]: {
@@ -102,15 +119,9 @@ function JobsProvider(props: IJobsProviderProps) {
         };
         restoreData();
     }, []);
-    useDeepCompareEffect(() => {
-        const updateData = async () => {
-            if (Object.keys(state).length > 0) {
-                await localforage.setItem("state", state);
-            }
-        };
-
-        updateData();
-    }, [state]);
+    // useDeepCompareEffect(() => {
+    //     // updateData(state);
+    // }, [state]);
     const value = React.useMemo(() => {
         return {
             state,

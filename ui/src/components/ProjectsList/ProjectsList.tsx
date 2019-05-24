@@ -65,8 +65,6 @@ const ProjectsList = React.memo(() => {
             });
             socket.on(`job_output`, message => {
                 const room = message.room;
-                console.log(message.data);
-
                 updateJob(room, message.data, true);
             });
 
@@ -74,6 +72,9 @@ const ProjectsList = React.memo(() => {
                 const room = message.room;
                 console.info(`Process close in room: ${room}`);
                 updateJob(room, message.data, false);
+                updateJobProcess(room, {
+                    pid: -1,
+                });
             });
 
             socket.on(`job_error`, message => {
@@ -87,6 +88,9 @@ const ProjectsList = React.memo(() => {
 
                 console.info(`Process exit in room: ${room}`);
                 updateJob(room, message.data, false);
+                updateJobProcess(room, {
+                    pid: -1,
+                });
             });
 
             socket.on(`job_killed`, message => {
@@ -94,6 +98,9 @@ const ProjectsList = React.memo(() => {
 
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
                 updateJob(room, "process with id " + message.data + " killed by user.", false);
+                updateJobProcess(room, {
+                    pid: -1,
+                });
             });
             setSocketInitialized(true);
         };
