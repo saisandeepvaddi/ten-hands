@@ -1,5 +1,5 @@
 import { Button, Collapse, H5 } from "@blueprintjs/core";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
 import CommandOutput from "./CommandOutput";
@@ -50,6 +50,10 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
 
     const room = command._id;
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
+
+    useEffect(() => {
+        console.log("Terminal Created for room: " + room);
+    }, []);
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
@@ -123,7 +127,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                 </CommandOutputButtonsContainer>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-                <CommandOutput output={getJobData(jobState, room).stdout || "Process not running"} />
+                <CommandOutput room={room} />
             </Collapse>
         </Container>
     );

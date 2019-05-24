@@ -1,7 +1,7 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
-import { htmlEscape } from "escape-goat";
 import throttle from "lodash/throttle";
 import React from "react";
+import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
 import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
@@ -41,7 +41,7 @@ const ProjectsList = React.memo(() => {
             stdout,
             isRunning,
         });
-    }, 200);
+    }, 0);
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({

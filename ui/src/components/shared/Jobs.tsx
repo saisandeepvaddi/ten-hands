@@ -42,7 +42,8 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
     switch (action.type) {
         case ACTION_TYPES.UPDATE_JOB: {
             const { room, stdout, isRunning } = action;
-            const newStdout = state[room] ? state[room].stdout + (stdout || "") : "";
+            // const newStdout = state[room] ? state[room].stdout + (stdout || "") : "";
+            const newStdout = state[room] ? stdout || "" : "";
             return {
                 ...state,
                 [room]: {

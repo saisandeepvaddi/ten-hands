@@ -63,7 +63,8 @@
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
     "typescript": "^3.4.5",
-    "use-deep-compare-effect": "^1.2.0"
+    "use-deep-compare-effect": "^1.2.0",
+    "xterm": "^3.13.2"
   },
   "devDependencies": {
     "@blueprintjs/tslint-config": "^1.8.0",
@@ -75,7 +76,6 @@
     "concurrently": "^4.1.0",
     "jest-dom": "^3.2.2",
     "react-testing-library": "^7.0.0",
-    "stop-runaway-react-effects": "^1.1.1",
     "tslint": "^5.16.0",
     "tslint-react-hooks": "^2.1.0",
     "wait-on": "^3.2.0"
