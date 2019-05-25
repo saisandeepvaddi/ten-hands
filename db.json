@@ -61,25 +61,31 @@
       "path": "D:\\Programming\\test-project"
     },
     {
-      "_id": "e460100b-5f82-4dfc-ae0c-4af7e1d8866d",
-      "name": "GKWeb",
-      "type": "other",
-      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web",
-      "configFile": "",
+      "_id": "4fc56318-ec52-40ff-ae7e-c82999fc40fb",
+      "name": "server",
+      "type": "nodejs",
       "commands": [
         {
-          "_id": "42b4f7cc-b157-4676-b3d1-60ef32208b35",
-          "name": "Dotnet Run",
-          "cmd": "dotnet run",
+          "_id": "839e355b-eda8-46c4-920b-44e70bf6f1a9",
+          "name": "test1",
+          "cmd": "node src/functions.js",
           "execDir": "./"
         },
         {
-          "_id": "9d3ba427-4179-4a65-8ba4-152f9aec6541",
-          "name": "Yarn Dev",
-          "cmd": "yarn dev",
+          "_id": "47c22f0c-fcf4-4821-8f31-bbe0be031849",
+          "name": "test2",
+          "cmd": "node src/functions.js",
+          "execDir": "./"
+        },
+        {
+          "_id": "33149840-4f91-4b37-8b6a-3d08caf5f984",
+          "name": "test3",
+          "cmd": "node src/functions.js",
           "execDir": "./"
         }
-      ]
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\ten-hands-test\\server"
     }
   ],
   "commands": []

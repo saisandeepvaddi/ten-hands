@@ -49,11 +49,8 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
     const [isOutputOpen, setOutputOpen] = React.useState(true);
 
     const room = command._id;
-    const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
-    useEffect(() => {
-        console.log("Terminal Created for room: " + room);
-    }, []);
+    const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({

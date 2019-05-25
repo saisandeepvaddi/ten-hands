@@ -21,7 +21,7 @@ const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ com
                 <tbody>
                     {commands.map((command, key) => {
                         return (
-                            <tr key={key}>
+                            <tr key={command._id}>
                                 <td>{command.name}</td>
                                 <td>{command.cmd}</td>
                             </tr>

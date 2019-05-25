@@ -22,28 +22,31 @@ function getJobStdout(state, room: string) {
     );
 }
 
-const CommandOutput: React.FC<ICommandProps> = React.memo(({ room }) => {
-    const [terminal, setTerminal] = useState<JobTerminal | null>(null);
-    const terminalContainerRef = React.createRef<HTMLDivElement>();
+const CommandOutput: React.FC<ICommandProps> = ({ room }) => {
+    const elRef = React.useRef<HTMLDivElement>(null);
+    const terminal = React.useRef<JobTerminal | null>(null);
     const { state } = useJobs();
     useEffect(() => {
-        const terminalElement = terminalContainerRef.current;
-        if (terminalElement !== null) {
-            const t = new JobTerminal(terminalElement);
-            setTerminal(t);
-            // t.openTerminal(terminalElement);
+        if (elRef && elRef.current) {
+            if (terminal.current === null) {
+                terminal.current = new JobTerminal(elRef.current);
+            }
         }
+        return () => {
+            if (terminal.current) {
+                terminal.current.destroy();
+            }
+        };
     }, []);
 
     useEffect(() => {
-        const output = getJobStdout(state, room).stdout;
-        if (terminal) {
-            terminal.updateOutput(output);
+        const output = getJobStdout(state, room).stdout || "";
+        if (terminal.current) {
+            terminal.current.updateOutput(output);
         }
-    }, [terminal, state[room]]);
-    console.log("Updating");
+    }, [room, state]);
 
-    return <TerminalContainer ref={terminalContainerRef} />;
-});
+    return <TerminalContainer ref={elRef} />;
+};
 
 export default CommandOutput;
