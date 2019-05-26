@@ -3,12 +3,14 @@ import throttle from "lodash/throttle";
 import React from "react";
 import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
+import { JobTerminalManager } from "../Command/terminal";
 import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 
 const ProjectsList = React.memo(() => {
     const [isSocketInitialized, setSocketInitialized] = React.useState(false);
     const { projects, setActiveProject, activeProject } = useProjects();
+    const terminalManager = JobTerminalManager.getInstance();
     const changeActiveProject = React.useCallback(
         projectId => {
             const activeProjectWithId = projects.find(project => project._id === projectId);
@@ -34,14 +36,15 @@ const ProjectsList = React.memo(() => {
 
     const socket = JobSocket.getSocket();
 
-    const updateJob = throttle((room, stdout, isRunning) => {
-        dispatch({
-            room,
-            type: ACTION_TYPES.UPDATE_JOB,
-            stdout,
-            isRunning,
-        });
-    }, 200);
+    const updateJob = (room, stdout, isRunning) => {
+        // dispatch({
+        //     room,
+        //     type: ACTION_TYPES.UPDATE_JOB,
+        //     stdout,
+        //     isRunning,
+        // });
+        terminalManager.updateOutputInRoom(room, stdout);
+    };
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({

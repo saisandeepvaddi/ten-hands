@@ -2,7 +2,8 @@ import { Button, Collapse, H5 } from "@blueprintjs/core";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
-import CommandOutput from "./CommandOutput";
+import CommandOutputXterm from "./CommandOutputXterm";
+import { JobTerminalManager } from "./terminal";
 
 const Container = styled.div`
     display: flex;
@@ -47,9 +48,8 @@ function getJobData(state, room: string) {
 
 const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-
     const room = command._id;
-
+    const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
     const updateJobProcess = (room, jobProcess) => {
@@ -65,6 +65,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
             type: ACTION_TYPES.CLEAR_OUTPUT,
             room,
         });
+        terminalManager.clearTerminalInRoom(room);
     };
 
     const startJob = () => {
@@ -124,7 +125,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                 </CommandOutputButtonsContainer>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-                <CommandOutput room={room} output={getJobData(jobState, room).stdout || "Process is not running"} />
+                <CommandOutputXterm room={room} />
             </Collapse>
         </Container>
     );

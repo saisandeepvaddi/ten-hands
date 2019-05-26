@@ -1,7 +1,6 @@
 import localforage from "localforage";
 import throttle from "lodash/throttle";
 import React from "react";
-import useDeepCompareEffect from "use-deep-compare-effect";
 
 localforage.config({
     name: "ten-hands",
@@ -43,7 +42,6 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
         case ACTION_TYPES.UPDATE_JOB: {
             const { room, stdout, isRunning } = action;
             const newStdout = state[room] ? stdout : "";
-            console.log("newStdout:", newStdout);
             return {
                 ...state,
                 [room]: {
@@ -120,9 +118,7 @@ function JobsProvider(props: IJobsProviderProps) {
         };
         restoreData();
     }, []);
-    // useDeepCompareEffect(() => {
-    //     // updateData(state);
-    // }, [state]);
+
     const value = React.useMemo(() => {
         return {
             state,
