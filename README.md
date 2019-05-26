@@ -17,7 +17,7 @@ You can save any tasks organized into projects and run them whenever you want wi
 # How to build yourself ?
 Both, regular browser web app and electron version can be built.
 
-> NOTE Desktop app and web app have differences in how projects are added due to limitations in getting file path when file uploaded from browser compared to electron app.
+> NOTE: Desktop app and web app have differences in how projects are added due to limitations in getting file path when file uploaded from browser compared to electron app.
 > But, a helper CLI tool is available which can be used to add scrips/commands just like typing them into terminal.
 
 > Currently, package.json can automatically uploaded from Desktop App. For now, use CLI for adding other kind of projects. Recognizing multiple framework config files in roadmap.
