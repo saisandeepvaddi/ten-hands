@@ -36,7 +36,7 @@ You'll see an app in dist folder.
 3. `cd ./app`. Uncomment line 26 ```// startServer()```. Desktop app calls this one automatically to start server.
 4. `cd ./app && yarn build`
 5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
-6. Use UI build in step 2 with a static server or directly.
+6. Use UI with a static server or directly.
 
 ## CLI
 
@@ -47,6 +47,9 @@ You'll see an app in dist folder.
 ## Some gotchas
 
 1. If you feel switching project terminals stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminal. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) for now and build using `node build.js`.
+
+2. Currently PORT is set to 1010. Will add a config file soon.
+
 
 # Contributions
 
