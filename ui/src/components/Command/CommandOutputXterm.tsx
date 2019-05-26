@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-// import { useTheme } from "../shared/Themes";
+import { useTheme } from "../shared/Themes";
 import { JobTerminal, JobTerminalManager } from "./terminal";
 
 interface ICommandProps {
@@ -17,23 +17,23 @@ const TerminalContainer = styled.div`
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
-    // const { theme } = useTheme();
+    const { theme } = useTheme();
 
     useEffect(() => {
         if (elRef && elRef.current) {
             if (terminal.current === null) {
                 terminal.current = JobTerminalManager.getInstance().createJobTerminal(room);
                 terminal.current.attachTo(elRef.current);
-                // terminal.current.setTheme(theme);
+                terminal.current.setTheme(theme);
             }
         }
     }, []);
 
-    // useEffect(() => {
-    //     if (terminal && terminal.current) {
-    //         terminal.current.setTheme(theme);
-    //     }
-    // }, [theme]);
+    useEffect(() => {
+        if (terminal && terminal.current) {
+            terminal.current.setTheme(theme);
+        }
+    }, [theme]);
 
     return <TerminalContainer ref={elRef} />;
 });

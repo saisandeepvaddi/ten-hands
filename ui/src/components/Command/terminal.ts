@@ -1,6 +1,6 @@
 import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
-// import { fit } from "xterm/lib/addons/fit/fit";
+import { fit } from "xterm/lib/addons/fit/fit";
 
 class JobTerminal {
     public _id: string;
@@ -11,7 +11,7 @@ class JobTerminal {
         background: "#202B33",
     };
     private lightTheme: ITheme = {
-        background: "#BFCCD6",
+        background: "#F5F8FA",
         foreground: "#10161A",
     };
 
@@ -25,6 +25,7 @@ class JobTerminal {
 
     public attachTo(container: HTMLDivElement) {
         this.terminal.open(container);
+        fit(this.terminal);
     }
 
     public setTheme(theme: string) {

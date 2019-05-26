@@ -28,43 +28,40 @@
       "path": "D:\\Programming\\ten-hands-test\\server"
     },
     {
-      "_id": "209002f1-9558-476e-a62e-6542cf4d5581",
-      "name": "gatekeeper-hub",
+      "_id": "63a9da89-eaf6-4d7a-9113-563fef5052a1",
+      "name": "test-project",
       "type": "nodejs",
       "commands": [
         {
-          "_id": "b52d0a32-ff24-4622-85aa-5d812f022892",
-          "name": "browser-sync",
-          "cmd": "browser-sync start --watch --files \"./**/*.*\" --startPath \"http://localhost:5729\"",
+          "_id": "1fba3021-0a66-4c3e-a6f3-363984600f11",
+          "name": "one",
+          "cmd": "node test.js",
           "execDir": "./"
         },
         {
-          "_id": "3ed4d360-af4c-4299-ae6f-7cfccc2a2ea4",
-          "name": "lint",
-          "cmd": "eslint wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Complete...' ",
-          "execDir": "./"
-        },
-        {
-          "_id": "6fed7d2b-aa6e-4c03-92a3-1f7a70176d13",
-          "name": "lint:fix",
-          "cmd": "eslint --fix wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Fixing Complete...' ",
-          "execDir": "./"
-        },
-        {
-          "_id": "afc7ce88-b7d4-4fe2-9850-6480222a191a",
-          "name": "dev",
-          "cmd": "./node_modules/.bin/webpack --config webpack.dev.js --progress",
-          "execDir": "./"
-        },
-        {
-          "_id": "c88328c2-5538-4e63-af0d-5e7979f118fe",
-          "name": "prod",
-          "cmd": "./node_modules/.bin/webpack --config webpack.prod.js --progress",
+          "_id": "00e45d96-51d2-4743-82c2-22bdefd4337e",
+          "name": "two",
+          "cmd": "node test.js",
           "execDir": "./"
         }
       ],
       "configFile": "package.json",
-      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
+      "path": "D:\\Programming\\test-project"
+    },
+    {
+      "_id": "ae183c56-9ad0-489b-b27b-e4a932bf28d6",
+      "name": "ten-hands",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "8d6750a7-28d1-4273-aea9-282b7550a790",
+          "name": "build:installer",
+          "cmd": "node build.js",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Programming\\ten-hands"
     }
   ],
   "commands": []
