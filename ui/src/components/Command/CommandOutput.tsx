@@ -2,16 +2,20 @@ import { Pre } from "@blueprintjs/core";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
+import { useTheme } from "../shared/Themes";
 import JobTerminal from "./terminal";
 
 interface ICommandProps {
     room: string;
+    output: string;
 }
 
 const TerminalContainer = styled.div`
     flex: 1;
-    max-height: 250;
-    overflow: auto;
+    max-width: 100%;
+    /* overflow: auto; */
+    padding: 10px;
+    white-space: pre-wrap;
 `;
 
 function getJobStdout(state, room: string) {
@@ -22,14 +26,16 @@ function getJobStdout(state, room: string) {
     );
 }
 
-const CommandOutput: React.FC<ICommandProps> = ({ room }) => {
+const CommandOutput: React.FC<ICommandProps> = React.memo(({ room, output }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
-    const { state } = useJobs();
+    const { theme } = useTheme();
+
     useEffect(() => {
         if (elRef && elRef.current) {
             if (terminal.current === null) {
                 terminal.current = new JobTerminal(elRef.current);
+                terminal.current.setTheme(theme);
             }
         }
         return () => {
@@ -40,13 +46,18 @@ const CommandOutput: React.FC<ICommandProps> = ({ room }) => {
     }, []);
 
     useEffect(() => {
-        const output = getJobStdout(state, room).stdout || "";
+        if (terminal && terminal.current) {
+            terminal.current.setTheme(theme);
+        }
+    }, [theme]);
+
+    useEffect(() => {
         if (terminal.current) {
             terminal.current.updateOutput(output);
         }
-    }, [room, state]);
+    }, [output]);
 
     return <TerminalContainer ref={elRef} />;
-};
+});
 
 export default CommandOutput;

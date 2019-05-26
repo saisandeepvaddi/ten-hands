@@ -18,6 +18,10 @@ function createWindow() {
     }
   });
 
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+
   const uiUrl = isDev
     ? "http://localhost:3010"
     : `file://${path.join(__dirname, "../ui/index.html")}`;

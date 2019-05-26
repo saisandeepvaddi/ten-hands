@@ -124,7 +124,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                 </CommandOutputButtonsContainer>
             </CommandHeader>
             <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-                <CommandOutput room={room} />
+                <CommandOutput room={room} output={getJobData(jobState, room).stdout || "Process is not running"} />
             </Collapse>
         </Container>
     );

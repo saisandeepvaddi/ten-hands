@@ -41,7 +41,7 @@ const ProjectsList = React.memo(() => {
             stdout,
             isRunning,
         });
-    }, 0);
+    }, 200);
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
