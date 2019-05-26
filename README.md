@@ -13,6 +13,8 @@ You can save any tasks organized into projects and run them whenever you want wi
 # Downloads
  
  Official Builds coming soon....
+ 
+ (Need help of macOS user to build since I do not have access to a Mac.)
 
 # How to build yourself ?
 Both, regular browser web app and electron version can be built.
