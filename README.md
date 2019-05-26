@@ -34,6 +34,10 @@ You'll see an app in dist folder.
 2. `yarn build`
 3. `npm link` (Here use npm instead of yarn. For some reason yarn link did not work for me)
 
+## Some gotchas
+
+1. If you feel switching project terminals stuck, that can be due to applying theme on terminals. I'll add a setting that toggles theme on terminal. Or you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) for now and build.
+
 # Contributions
 
 This project started as educational for myself to get into react hooks, socket, typescript and other stuff. So expect some wierdness around the code.
