@@ -1,6 +1,7 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import throttle from "lodash/throttle";
 import React from "react";
+// tslint:disable-next-line: no-submodule-imports
 import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
 import { JobTerminalManager } from "../Command/terminal";

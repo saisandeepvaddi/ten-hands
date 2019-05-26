@@ -1,5 +1,6 @@
 import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
+// import { fit } from "xterm/lib/addons/fit/fit";
 
 class JobTerminal {
     public _id: string;
