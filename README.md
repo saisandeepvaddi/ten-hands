@@ -1,12 +1,11 @@
 # ten-hands
 
-One place to organize and run your tasks
-
-# What is this ?
 |Dark|Light|
 |:--:|:--:|
  |<img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG">|
 
+
+# What is this ?
 
 Do you keep opening large number of terminals to run your scripts/commands or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your scripts in one place by projects.
 You can save any command(s) organized into projects and run them whenever you want with a click of button.
