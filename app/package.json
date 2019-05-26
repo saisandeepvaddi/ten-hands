@@ -1,8 +1,9 @@
 {
-  "name": "@ten-hands/app",
+  "name": "ten-hands-app",
   "description": "Project script runner",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "author": {
     "name": "Sai Sandeep Vaddi",
     "email": "saisandeepvaddi@gmail.com",
@@ -17,16 +18,27 @@
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installer": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
+    "build:linux": "./node_modules/.bin/electron-builder --linux",
     "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
   },
   "build": {
     "appId": "com.saisandeepvaddi.tenhands",
     "productName": "Ten Hands",
-    "compression": "maximum",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
     "files": [
       "build/**/*",
       "package.json"
-    ]
+    ],
+    "linux": {
+      "target": [
+        "deb",
+        "snap"
+      ],
+      "category": "Utility"
+    }
   },
   "dependencies": {
     "body-parser": "^1.19.0",

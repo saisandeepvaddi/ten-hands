@@ -1,7 +1,8 @@
 {
-  "name": "@ten-hands/cli",
+  "name": "ten-hands-cli",
   "version": "1.0.0",
   "description": "CLI for ten-hands app",
+  "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
