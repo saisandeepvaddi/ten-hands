@@ -192,7 +192,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             <NewProjectCommands commands={props.values.commands} />
                         </FormGroup>
                         <FormGroup>
-                            <Button intent="primary" text="Save" type="submit" loading={props.isSubmitting} />
+                            <Button
+                                intent="primary"
+                                text="Save Project"
+                                type="submit"
+                                loading={props.isSubmitting}
+                                large={true}
+                            />
                         </FormGroup>
                     </form>
                 )}

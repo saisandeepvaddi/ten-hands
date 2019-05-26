@@ -7,6 +7,7 @@ interface IProjectContextValue {
     setActiveProject: (activeProject: IProject) => void;
     setProjects: any;
     updateProjects: () => void;
+    loadingProjects: boolean;
 }
 
 interface IProjectsProviderProps {
@@ -27,8 +28,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState([]);
+    const [loadingProjects, setLoadingProjects] = React.useState(true);
     const updateProjects = React.useCallback(async () => {
         try {
+            setLoadingProjects(true);
             const response = await Axios.get("http://localhost:1010/projects");
             const receivedProjects = response.data;
             if (receivedProjects.length > 0) {
@@ -38,6 +41,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                 setProjects([]);
                 setActiveProject(initialProject);
             }
+            setLoadingProjects(false);
         } catch (error) {
             console.error(error);
         }
@@ -56,8 +60,9 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             setActiveProject,
             setProjects,
             updateProjects,
+            loadingProjects,
         };
-    }, [projects, activeProject, setActiveProject, setProjects, updateProjects]);
+    }, [projects, activeProject, setActiveProject, setProjects, updateProjects, loadingProjects]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }

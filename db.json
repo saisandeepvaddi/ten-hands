@@ -1,84 +1,24 @@
 {
   "projects": [
     {
-      "_id": "08436996-a1c1-4973-9f9d-3d7944b73c64",
-      "name": "gatekeeper-hub",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "d76d16a0-aa3f-43ff-a084-e39380b008e7",
-          "name": "browser-sync",
-          "cmd": "browser-sync start --watch --files \"./**/*.*\" --startPath \"http://localhost:5729\"",
-          "execDir": "./"
-        },
-        {
-          "_id": "7426779b-0cea-42d8-8b8c-7d4dfa785f0e",
-          "name": "lint",
-          "cmd": "eslint wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Complete...' ",
-          "execDir": "./"
-        },
-        {
-          "_id": "412f0657-8316-4698-9bcf-a294219ecd21",
-          "name": "lint:fix",
-          "cmd": "eslint --fix wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Fixing Complete...' ",
-          "execDir": "./"
-        },
-        {
-          "_id": "31612e6c-60ce-4f82-b5b9-4dec0adda88e",
-          "name": "dev",
-          "cmd": "./node_modules/.bin/webpack --config webpack.dev.js --progress",
-          "execDir": "./"
-        },
-        {
-          "_id": "7f255338-5747-4f29-9dea-0b36f4b9e5a7",
-          "name": "prod",
-          "cmd": "./node_modules/.bin/webpack --config webpack.prod.js --progress",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
-    },
-    {
-      "_id": "f7cccba6-5b3d-4bbe-b427-3c56f3b76ba3",
-      "name": "test-project",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "4e469fae-9eb0-42a1-8f64-30f2b11858c9",
-          "name": "one",
-          "cmd": "node test.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "5bd63832-9772-46a7-a89a-44c31c335ff8",
-          "name": "two",
-          "cmd": "node test.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\test-project"
-    },
-    {
-      "_id": "4fc56318-ec52-40ff-ae7e-c82999fc40fb",
+      "_id": "33afe4a0-478e-4af2-b836-c14b76c2e683",
       "name": "server",
       "type": "nodejs",
       "commands": [
         {
-          "_id": "839e355b-eda8-46c4-920b-44e70bf6f1a9",
+          "_id": "43a1d8cd-ceb4-4ddd-9875-a7074f322c1d",
           "name": "test1",
           "cmd": "node src/functions.js",
           "execDir": "./"
         },
         {
-          "_id": "47c22f0c-fcf4-4821-8f31-bbe0be031849",
+          "_id": "7908f855-8090-4720-bdc1-2ec7a8446f33",
           "name": "test2",
           "cmd": "node src/functions.js",
           "execDir": "./"
         },
         {
-          "_id": "33149840-4f91-4b37-8b6a-3d08caf5f984",
+          "_id": "4a043745-90c5-46f0-b6e4-911f938f578e",
           "name": "test3",
           "cmd": "node src/functions.js",
           "execDir": "./"
@@ -86,6 +26,45 @@
       ],
       "configFile": "package.json",
       "path": "D:\\Programming\\ten-hands-test\\server"
+    },
+    {
+      "_id": "209002f1-9558-476e-a62e-6542cf4d5581",
+      "name": "gatekeeper-hub",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "b52d0a32-ff24-4622-85aa-5d812f022892",
+          "name": "browser-sync",
+          "cmd": "browser-sync start --watch --files \"./**/*.*\" --startPath \"http://localhost:5729\"",
+          "execDir": "./"
+        },
+        {
+          "_id": "3ed4d360-af4c-4299-ae6f-7cfccc2a2ea4",
+          "name": "lint",
+          "cmd": "eslint wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Complete...' ",
+          "execDir": "./"
+        },
+        {
+          "_id": "6fed7d2b-aa6e-4c03-92a3-1f7a70176d13",
+          "name": "lint:fix",
+          "cmd": "eslint --fix wwwroot/Server-Scripts-Src/**/*.js && echo 'Lint Fixing Complete...' ",
+          "execDir": "./"
+        },
+        {
+          "_id": "afc7ce88-b7d4-4fe2-9850-6480222a191a",
+          "name": "dev",
+          "cmd": "./node_modules/.bin/webpack --config webpack.dev.js --progress",
+          "execDir": "./"
+        },
+        {
+          "_id": "c88328c2-5538-4e63-af0d-5e7979f118fe",
+          "name": "prod",
+          "cmd": "./node_modules/.bin/webpack --config webpack.prod.js --progress",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
     }
   ],
   "commands": []

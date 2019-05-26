@@ -1,4 +1,4 @@
-import { Classes, Colors } from "@blueprintjs/core";
+import { Classes, Colors, Spinner } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 import CommandsArea from "../CommandsArea";
@@ -26,8 +26,15 @@ const EmptyContainer = styled(Container)`
 
 const Main = React.memo(() => {
     const { theme } = useTheme();
-    const { activeProject } = useProjects();
+    const { activeProject, loadingProjects } = useProjects();
 
+    if (loadingProjects) {
+        return (
+            <EmptyContainer theme={theme} className="main-container">
+                <Spinner />
+            </EmptyContainer>
+        );
+    }
     if (activeProject._id === "") {
         return (
             <EmptyContainer theme={theme} className="main-container">

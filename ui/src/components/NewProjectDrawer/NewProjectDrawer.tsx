@@ -6,7 +6,7 @@ import NewProjectForm from "./NewProjectForm";
 
 const DrawerContainer = styled.div`
     height: 100%;
-    padding: 2rem;
+    padding: 2.5em;
 `;
 
 interface INewDrawerProps {

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 // This is a project parser function which takes data of FileReader.
 // These functions can be added by users to parse config files of framework of their choice.
 const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
@@ -39,6 +41,7 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
         project.commands = Object.entries(packageJsonData.scripts).map(script => {
             const [name, cmd] = script;
             return {
+                _id: uuidv4(),
                 name,
                 cmd: cmd.toString(),
                 execDir: "./",

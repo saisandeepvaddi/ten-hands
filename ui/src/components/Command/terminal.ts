@@ -63,14 +63,9 @@ class JobTerminalManager {
 
     public createJobTerminal(roomId: string): JobTerminal {
         let terminal = this.getTerminalForRoom(roomId);
-        console.log("terminal:", terminal);
         if (!terminal) {
-            console.log(`Creating new for : ${roomId}`);
-
             terminal = new JobTerminal(roomId);
             this._terminals[roomId] = terminal;
-        } else {
-            console.log(`Already exists for: ${roomId}`);
         }
         return terminal;
     }
