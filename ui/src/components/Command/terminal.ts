@@ -25,7 +25,7 @@ class JobTerminal {
 
     public attachTo(container: HTMLDivElement) {
         this.terminal.open(container);
-        fit(this.terminal);
+        // fit(this.terminal);
     }
 
     public setTheme(theme: string) {
