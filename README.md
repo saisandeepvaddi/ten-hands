@@ -46,14 +46,14 @@ You'll see an app in dist folder.
 
 ## Some gotchas
 
-1. If you feel switching project terminals stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminal. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) for now and build using `node build.js`.
+1. If you feel switching project terminals stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminal. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build using `node build.js`.
 
 2. Currently PORT is set to 1010. Will add a config file soon.
 
 
 # Contributions
 
-This project started as educational for myself to get into react hooks, socket, typescript and other stuff. So expect some wierdness around the code.
+This project started as educational for myself to get into react hooks, sockets, typescript and other stuff. So expect some weirdness around the code.
 Please create issue/pr for any kind of improvements regardless of how small.
 
 # License
