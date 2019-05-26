@@ -7,28 +7,38 @@
 
 # What is this ?
 
-Do you keep opening large number of terminals to run your scripts/commands or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your scripts in one place by projects.
-You can save any command(s) organized into projects and run them whenever you want with a click of button.
+Do you keep opening large number of terminals to run your scripts/commands/tasks or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your tasks in one place.
+You can save any tasks organized into projects and run them whenever you want with a click of button.
 
 # Downloads
+ 
+ Official Builds coming soon....
 
-Official Builds coming soon....
-
-Both, regular browser web app and electron version can be used.
+# How to build yourself ?
+Both, regular browser web app and electron version can be built.
 
 > NOTE Desktop app and web app have differences in how projects are added due to limitations in getting file path when file uploaded from browser compared to electron app.
 > But, a helper CLI tool is available which can be used to add scrips/commands just like typing them into terminal.
 
 > Currently, package.json can automatically uploaded from Desktop App. For now, use CLI for adding other kind of projects. Recognizing multiple framework config files in roadmap.
 
-For now, to create an electron build which has best support.
+For now, please use electron app which has best support.
 
+## Desktop (Recommended)
 1. Install dependencies (Use yarn because I used workspaces)
 2. Run `node build.js`
 
 You'll see an app in dist folder.
 
-## Using CLI
+## Web App (Not straightforward/discouraged currently)
+1. Install dependencies (Use yarn)
+2. `cd ./ui && yarn build:browser` - build ui for browser
+3. `cd ./app`. Uncomment line 26 ```// startServer()```. Desktop app calls this one automatically to start server.
+4. `cd ./app && yarn build`
+5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
+6. Use UI build in step 2 with a static server or directly.
+
+## CLI
 
 1. `cd ./cli`
 2. `yarn build`
@@ -36,7 +46,7 @@ You'll see an app in dist folder.
 
 ## Some gotchas
 
-1. If you feel switching project terminals stuck, that can be due to applying theme on terminals. I'll add a setting that toggles theme on terminal. Or you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) for now and build.
+1. If you feel switching project terminals stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminal. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) for now and build using `node build.js`.
 
 # Contributions
 
