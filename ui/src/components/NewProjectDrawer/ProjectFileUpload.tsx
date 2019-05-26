@@ -1,5 +1,5 @@
-import { Button, Card, H4, H6 } from "@blueprintjs/core";
-import React, { useEffect, useRef } from "react";
+import { Button } from "@blueprintjs/core";
+import React from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
 

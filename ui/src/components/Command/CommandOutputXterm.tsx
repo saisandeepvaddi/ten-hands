@@ -1,8 +1,6 @@
-import { Pre } from "@blueprintjs/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useJobs } from "../shared/Jobs";
-import { useTheme } from "../shared/Themes";
+// import { useTheme } from "../shared/Themes";
 import { JobTerminal, JobTerminalManager } from "./terminal";
 
 interface ICommandProps {
@@ -16,18 +14,10 @@ const TerminalContainer = styled.div`
     white-space: pre-wrap;
 `;
 
-function getJobStdout(state, room: string) {
-    return (
-        state[room] || {
-            stdout: "",
-        }
-    );
-}
-
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
-    const { theme } = useTheme();
+    // const { theme } = useTheme();
 
     useEffect(() => {
         if (elRef && elRef.current) {

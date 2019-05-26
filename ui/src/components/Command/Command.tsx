@@ -1,5 +1,5 @@
 import { Button, Collapse, H5 } from "@blueprintjs/core";
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
 import CommandOutputXterm from "./CommandOutputXterm";
