@@ -19,8 +19,6 @@ You can save any tasks organized into projects and run them whenever you want wi
 
 Official Builds coming soon....
 
-(Need help of macOS user to build as I do not have access to a Mac.)
-
 # How to build yourself?
 
 For now, please use electron app which has best support.
