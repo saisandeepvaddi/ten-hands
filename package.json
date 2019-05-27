@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build:desktop": "./node_modules/.bin/gulp buildDesktop",
+    "build:desktop-azure": "./node_modules/.bin/gulp buildDesktopAzure",
     "build:cli": "./node_modules/.bin/gulp buildCLI"
   },
   "tenHands": {

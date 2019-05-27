@@ -8,4 +8,4 @@ jobs:
       vmImage: "vs2017-win2016"
     steps:
       - script: yarn install
-      - script: yarn build:desktop
+      - script: yarn build:desktop-azure

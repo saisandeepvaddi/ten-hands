@@ -108,6 +108,14 @@ exports.buildDesktop = series(
   cleanAppDist
 );
 
+exports.buildDesktopAzure = series(
+  parallel(cleanAppBuild, cleanAppDist, cleanDesktopFinalDist),
+  parallel(buildUIForElectron, buildServerForElectron),
+  moveUIBuilds,
+  buildDesktopAppInstallers,
+  moveDesktopBuildToFinalDist
+);
+
 exports.buildCLI = series(
   parallel(cleanCLIBuild, cleanCLIFinalDist),
   buildCLI,
