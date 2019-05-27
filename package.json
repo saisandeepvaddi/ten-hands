@@ -4,7 +4,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "build:installer": "node build.js"
+    "build:desktop": "./node_modules/.bin/gulp buildDesktop",
+    "build:cli": "./node_modules/.bin/gulp buildCLI"
   },
   "tenHands": {
     "path": "D:\\Programming\\ten-hands"
@@ -27,5 +28,10 @@
   },
   "readme": "ERROR: No README data found!",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands#readme",
-  "_id": "ten-hands@1.0.0"
+  "_id": "ten-hands@1.0.0",
+  "devDependencies": {
+    "del": "^4.1.1",
+    "gulp": "^4.0.2",
+    "gulp-execa": "^0.5.5"
+  }
 }
