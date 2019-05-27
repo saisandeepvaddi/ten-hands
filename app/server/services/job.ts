@@ -3,6 +3,7 @@ import execa from "execa";
 import pKill from "tree-kill";
 import io from "socket.io";
 import path from "path";
+import { exec } from "child_process";
 
 class Job {
   static socket: any;
@@ -18,9 +19,16 @@ class Job {
       const execPath = path.normalize(projectPath);
 
       const room = this.room;
-      const n = execa(job, {
-        cwd: execPath || process.cwd()
+
+      // const n = execa(job, {
+      //   cwd: execPath || process.cwd(),
+      // });
+
+      const n = exec(job, {
+        cwd: execPath || process.cwd(),
+        maxBuffer: 100 * 1024 * 1024
       });
+
       Job.socket.emit(`job_started`, { room, data: n });
       n.stdout.on("data", chunk => {
         Job.socket.emit(`job_output`, { room, data: chunk.toString() });
