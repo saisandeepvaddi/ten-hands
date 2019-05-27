@@ -1,62 +1,60 @@
 # ten-hands
 
-|Dark|Light|
-|:--:|:--:|
- |<img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG">|
+|                  Dark                  |                  Light                  |
+| :------------------------------------: | :-------------------------------------: |
+| <img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG"> |
 
-
-# What is this ?
+# What is this?
 
 Do you keep opening large number of terminals to run your scripts/commands/tasks or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your tasks in one place.
 You can save any tasks organized into projects and run them whenever you want with a click of button.
 
 # Downloads
- 
- Official Builds coming soon....
- 
- (Need help of macOS user to build since I do not have access to a Mac.)
 
-# How to build yourself ?
-Both, regular browser web app and electron version can be built.
+Official Builds coming soon....
 
-> NOTE: Desktop app and web app have differences in how projects are added due to limitations in getting file path when file uploaded from browser compared to electron app.
-> But, a helper CLI tool is available which can be used to add scrips/commands just like typing them into terminal.
+(Need help of macOS user to build as I do not have access to a Mac.)
 
-> Currently, package.json can automatically uploaded from Desktop App. For now, use CLI for adding other kind of projects. Recognizing multiple framework config files in roadmap.
+# How to build yourself?
 
 For now, please use electron app which has best support.
 
-## Desktop (Recommended)
-1. Install dependencies (Use yarn because I used workspaces)
-2. Run `node build.js`
+### Steps to build:
+
+1. Install dependencies (Use yarn because I used workspaces).
+2. Currently, build scripts available for Desktop App and CLI. Web App build will be added soon.
+   - To build Desktop App - `yarn build:desktop`
+   - To build CLI App - `yarn build:cli`
+3. Releases will be available in `dist` folder.
 
 You'll see an app in dist folder.
 
-## Web App (Not straightforward/discouraged currently)
+#### Web App (Not straightforward/discouraged currently)
+
 1. Install dependencies (Use yarn)
 2. `cd ./ui && yarn build:browser` - build ui for browser
-3. `cd ./app`. Uncomment line 26 ```// startServer()```. Desktop app calls this one automatically to start server.
+3. `cd ./app`. Uncomment line 26 `// startServer()`. Desktop app calls this one automatically to start server.
 4. `cd ./app && yarn build`
 5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
 6. Use UI with a static server or directly.
 
-## CLI
+#### CLI
 
-1. `cd ./cli`
-2. `yarn build`
-3. `npm link` (Here use npm instead of yarn. For some reason yarn link did not work for me)
+1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me)
+2. Can be run as `ten-hands`.
 
 ## Some gotchas
 
-1. If you feel switching project terminals stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminal. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build using `node build.js`.
+This project is in experimental stage, so there are some limitations exist. There are some of them. Expect them to be resolved soon.
 
-2. Currently PORT is set to 1010. Will add a config file soon.
-
+1. Currently, only package.json can be automatically uploaded from Desktop App. Use CLI for adding other kind of projects. Recognizing multiple framework config files in roadmap.
+2. On UI, If you feel switching project terminals slow and stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminals. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build app again.
+3. Currently PORT is set to 1010. Will add a config file soon.
 
 # Contributions
 
-This project started as educational for myself to get into react hooks, sockets, typescript and other stuff. So expect some weirdness around the code.
-Please create issue/pr for any kind of improvements regardless of how small.
+This project started as educational for myself to get my hands dirty with react hooks, sockets, typescript and other stuff. So expect some weirdness around the code.
+Please create issue/pr for any kind of improvements/suggestions regardless of how small it is.
 
 # License
 
