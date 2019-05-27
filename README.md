@@ -1,13 +1,19 @@
 # ten-hands
 
-|                  Dark                  |                  Light                  |
-| :------------------------------------: | :-------------------------------------: |
-| <img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG"> |
+| Module           | Build Status                                                                                                                                                                                                                                  |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Desktop: Windows | [![Build Status](<https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/saisandeepvaddi.ten-hands%20(1)?branchName=master>)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=2&branchName=master) |
 
 # What is this?
 
 Do you keep opening large number of terminals to run your scripts/commands/tasks or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your tasks in one place.
 You can save any tasks organized into projects and run them whenever you want with a click of button.
+
+# Sample UI
+
+|                  Dark                  |                  Light                  |
+| :------------------------------------: | :-------------------------------------: |
+| <img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG"> |
 
 # Downloads
 
