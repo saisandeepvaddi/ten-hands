@@ -2,7 +2,7 @@
 
 | Module           | Build Status                                                                                                                                                                                                                                  |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Desktop: Windows | [![Build Status](<https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/saisandeepvaddi.ten-hands%20(1)?branchName=master>)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=2&branchName=master) |
+| Desktop: Windows | [![Build Status](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/saisandeepvaddi.ten-hands%20(2)?branchName=master)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=3&branchName=master) |
 
 # What is this?
 
