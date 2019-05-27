@@ -2,6 +2,7 @@ const { series, src, dest, parallel } = require("gulp");
 const { task, exec, stream } = require("gulp-execa");
 const del = require("del");
 const path = require("path");
+const through2 = require("through2");
 
 /* BUILDING TASKS */
 
@@ -59,7 +60,34 @@ const moveDesktopBuildToFinalDist = async () => {
 };
 
 const moveCLIBuildToFinalDist = async () => {
-  return src("./cli/build/**/*").pipe(dest("./dist/cli"));
+  return src(["./cli/build/**/*"]).pipe(dest("./dist/cli"));
+};
+
+/* Transformations */
+
+const updateCLIPackageJson = async () => {
+  return src("./cli/package.json")
+    .pipe(
+      through2.obj(function(file, _, cb) {
+        if (file.isBuffer()) {
+          const currentPackageJson = JSON.parse(file.contents.toString());
+
+          const newPackageJson = Object.assign(currentPackageJson, {
+            main: "index.js",
+            scripts: {
+              start: "node index.js"
+            },
+            bin: {
+              "ten-hands": "index.js"
+            }
+          });
+
+          file.contents = Buffer.from(JSON.stringify(newPackageJson));
+        }
+        cb(null, file);
+      })
+    )
+    .pipe(dest("./dist/cli"));
 };
 
 const delay = time => {
@@ -83,5 +111,6 @@ exports.buildDesktop = series(
 exports.buildCLI = series(
   parallel(cleanCLIBuild, cleanCLIFinalDist),
   buildCLI,
-  moveCLIBuildToFinalDist
+  moveCLIBuildToFinalDist,
+  updateCLIPackageJson
 );
