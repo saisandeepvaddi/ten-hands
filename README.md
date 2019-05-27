@@ -31,7 +31,10 @@ For now, please use electron app which has best support.
    - To build CLI App - `yarn build:cli`
 3. Releases will be available in `dist` folder.
 
-You'll see an app in dist folder.
+#### CLI
+
+1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me)
+2. Can be run as `ten-hands`.
 
 #### Web App (Not straightforward/discouraged currently)
 
@@ -42,16 +45,11 @@ You'll see an app in dist folder.
 5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
 6. Use UI with a static server or directly.
 
-#### CLI
-
-1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me)
-2. Can be run as `ten-hands`.
-
 ## Some gotchas
 
-This project is in experimental stage, so there are some limitations exist. There are some of them. Expect them to be resolved soon.
+This project is in experimental stage, so there are some limitations to use the app. Expect them to be resolved soon.
 
-1. Currently, only package.json can be automatically uploaded from Desktop App. Use CLI for adding other kind of projects. Recognizing multiple framework config files in roadmap.
+1. Currently, only package.json can be automatically uploaded from Desktop App. Use CLI for adding other kind of projects. Recognizing multiple other framework config files is in the roadmap.
 2. On UI, If you feel switching project terminals slow and stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminals. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build app again.
 3. Currently PORT is set to 1010. Will add a config file soon.
 
