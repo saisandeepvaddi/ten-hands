@@ -104,7 +104,7 @@ exports.buildDesktop = series(
   moveUIBuilds,
   buildDesktopAppInstallers,
   moveDesktopBuildToFinalDist,
-  delay(2000),
+  delay(5000),
   cleanAppDist
 );
 
