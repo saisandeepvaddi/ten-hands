@@ -1,6 +1,5 @@
 trigger:
   - master
-  - pipeline-config
 
 jobs:
   - job: Windows
