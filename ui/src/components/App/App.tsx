@@ -8,6 +8,7 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 /* tslint:enable */
 
+import { ConfigProvider } from "../shared/Config";
 import { JobsProvider } from "../shared/Jobs";
 import { ProjectsProvider } from "../shared/Projects";
 import "./App.css";
@@ -15,13 +16,15 @@ import AppLayout from "./AppLayout";
 
 const App = () => {
     return (
-        <ThemeProvider>
-            <ProjectsProvider>
-                <JobsProvider>
-                    <AppLayout />
-                </JobsProvider>
-            </ProjectsProvider>
-        </ThemeProvider>
+        <ConfigProvider>
+            <ThemeProvider>
+                <ProjectsProvider>
+                    <JobsProvider>
+                        <AppLayout />
+                    </JobsProvider>
+                </ProjectsProvider>
+            </ThemeProvider>
+        </ConfigProvider>
     );
 };
 

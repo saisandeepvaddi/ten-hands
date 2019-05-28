@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React from "react";
+import { useConfig } from "./Config";
 
 interface IProjectContextValue {
     projects: IProject[];
@@ -26,13 +27,14 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         commands: [],
     };
 
+    const { config } = useConfig();
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
     const updateProjects = React.useCallback(async () => {
         try {
             setLoadingProjects(true);
-            const response = await Axios.get("http://localhost:1010/projects");
+            const response = await Axios.get(`http://localhost:${config.port}/projects`);
             const receivedProjects = response.data;
             if (receivedProjects.length > 0) {
                 setProjects(receivedProjects);

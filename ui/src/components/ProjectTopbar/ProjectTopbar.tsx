@@ -1,6 +1,7 @@
 import { Alert, Alignment, Button, Menu, MenuDivider, MenuItem, Navbar, Popover } from "@blueprintjs/core";
 import Axios from "axios";
 import React from "react";
+import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 
@@ -11,13 +12,14 @@ interface IProjectTopbarProps {
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
     const { theme } = useTheme();
+    const { config } = useConfig();
     const { updateProjects } = useProjects();
     const deleteProject = React.useCallback(
         async shouldDelete => {
             try {
                 if (shouldDelete) {
                     console.info(`Deleting project: `, activeProject);
-                    await Axios.delete(`http://localhost:1010/projects/${activeProject._id}`);
+                    await Axios.delete(`http://localhost:${config.port}/projects/${activeProject._id}`);
                     await updateProjects();
                     setDeleteAlertOpen(false);
                 }
