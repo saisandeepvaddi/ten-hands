@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
+import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -29,6 +30,7 @@ interface INewProjectFormProps {
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
     const { updateProjects, setActiveProject } = useProjects();
+    const { config } = useConfig();
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
@@ -104,9 +106,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
             try {
                 actions.setSubmitting(true);
                 const responseData: AxiosResponse = await Axios({
-                    timeout: 2000,
+                    timeout: 5000,
                     method: "post",
-                    baseURL: `http://localhost:1010`,
+                    baseURL: `http://localhost:${config.port}`,
                     url: "projects",
                     data: values,
                 });

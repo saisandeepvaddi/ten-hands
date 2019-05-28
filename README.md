@@ -2,7 +2,7 @@
 
 | Module           | Build Status                                                                                                                                                                                                                                  |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Desktop: Windows | [![Build Status](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/saisandeepvaddi.ten-hands%20(2)?branchName=master)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=3&branchName=master) |
+| Desktop: Windows | [![Build Status](<https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/saisandeepvaddi.ten-hands%20(2)?branchName=master>)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=3&branchName=master) |
 
 # What is this?
 
@@ -45,13 +45,18 @@ For now, please use electron app which has best support.
 5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
 6. Use UI with a static server or directly.
 
+### Configuration
+
+A `config.json` is supported which is placed at `~/.ten-hands/` path.
+
+> Currently, only `port` option can be changed. Default port is `1010`.
+
 ## Some gotchas
 
 This project is in experimental stage, so there are some limitations to use the app. Expect them to be resolved soon.
 
 1. Currently, only package.json can be automatically uploaded from Desktop App. Use CLI for adding other kind of projects. Recognizing multiple other framework config files is in the roadmap.
 2. On UI, If you feel switching project terminals slow and stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminals. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build app again.
-3. Currently PORT is set to 1010. Will add a config file soon.
 
 # Contributions
 

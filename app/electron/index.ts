@@ -41,6 +41,10 @@ async function startElectronApp() {
       console.log(msg);
     });
 
+    ipcMain.on(`get-config`, e => {
+      e.returnValue = require("../shared/config").default;
+    });
+
     app.on("window-all-closed", () => {
       if (process.platform !== "darwin") {
         app.quit();

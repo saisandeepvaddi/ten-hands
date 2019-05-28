@@ -3,11 +3,14 @@ import app from "./app";
 
 import socketIO from "socket.io";
 import { JobManager } from "./services/job";
+import config from "../shared/config";
 
 export async function startServer() {
   return new Promise(async (res, rej) => {
     try {
-      const port = process.env.PORT || 1010;
+      console.log(config);
+
+      const port = config.port || process.env.PORT || 1010;
 
       const server = createServer(app);
 
