@@ -4,6 +4,24 @@ const del = require("del");
 const path = require("path");
 const through2 = require("through2");
 
+/* DEV START TASKS */
+
+const startUIForElectron = task("yarn start:electron", {
+  cwd: path.join(__dirname, "ui")
+});
+
+const startBuildWatchForApp = task("yarn build:watch", {
+  cwd: path.join(__dirname, "app")
+});
+
+const startBuildWatchForCLI = task("yarn build:watch", {
+  cwd: path.join(__dirname, "cli")
+});
+
+const startAppsForDev = task("yarn dev", {
+  cwd: path.join(__dirname, "app")
+});
+
 /* BUILDING TASKS */
 
 const buildUIForBrowser = task("yarn build:browser", {
@@ -91,13 +109,24 @@ const updateCLIPackageJson = async () => {
 };
 
 const delay = time => {
-  return async () => {
+  return async function wait() {
     return new Promise(resolve => {
       setTimeout(resolve, time);
     });
   };
 };
 
+/* DEV MODE TASKS */
+
+// Keep startAppsForDev in parallel. react-scripts/rescripts start is stopping next tasks if put in series
+// Just refresh (Ctrl + R) once to get fresh content once app starts in dev mode
+exports.startDesktop = series(
+  parallel(startUIForElectron, startBuildWatchForApp, startAppsForDev)
+);
+
+exports.startCLI = series(startBuildWatchForCLI);
+
+/* BUILD TASKS */
 exports.buildDesktop = series(
   parallel(cleanAppBuild, cleanAppDist, cleanDesktopFinalDist),
   parallel(buildUIForElectron, buildServerForElectron),
