@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { isRunningInElectron } from "../../utils/electron";
 
 // This is a project parser function which takes data of FileReader.
 // These functions can be added by users to parse config files of framework of their choice.
@@ -15,6 +16,8 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
         if (!file.data) {
             return null;
         }
+
+        let shouldRunWithYarn = false;
 
         project.configFile = file.name;
 
@@ -36,14 +39,33 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
             project.path = "";
         }
 
+        if (isRunningInElectron()) {
+            try {
+                const fs = require("fs");
+                const path = require("path");
+                if (fs.existsSync(path.join(file.path, "yarn.lock"))) {
+                    console.log("yarn.lock exists at file path. Using yarn to run scripts.");
+                    // yarn.lock exists
+                    shouldRunWithYarn = true;
+                } else {
+                    console.log("yarn.lock doesn't exist at file path. Using npm to run scripts.");
+                    shouldRunWithYarn = false;
+                }
+            } catch (err) {
+                console.error(err);
+                shouldRunWithYarn = false;
+            }
+        }
+
         project.name = packageJsonData.name;
         project.type = "nodejs";
-        project.commands = Object.entries(packageJsonData.scripts).map(script => {
-            const [name, cmd] = script;
+        project.commands = Object.keys(packageJsonData.scripts).map(name => {
+            // Instead of running actual command, run yarn cmd or npm run cmd.
+            // Reason, getting '.' is not recognized errors might happen if cmd is ran directly
             return {
                 _id: uuidv4(),
                 name,
-                cmd: cmd.toString(),
+                cmd: shouldRunWithYarn ? `yarn ${name}` : `npm run ${name}`,
                 execDir: "./",
             };
         });

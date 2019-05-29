@@ -18,32 +18,21 @@ You can save any tasks organized into projects and run them whenever you want wi
 # Downloads
 
 Official Builds coming soon....
+For now, check the `Steps to build` section below to build yourself.
 
-# How to build yourself?
-
-For now, please use electron app which has best support.
-
-### Steps to build:
+### Steps to build
 
 1. Install dependencies (Use yarn because I used workspaces).
-2. Currently, build scripts available for Desktop App and CLI. Web App build will be added soon.
+   - `yarn install`. Only in parent folder. Do not have to install inside any directories.
+2. Currently, build scripts available for Desktop App and CLI.
    - To build Desktop App - `yarn build:desktop`
    - To build CLI App - `yarn build:cli`
 3. Releases will be available in `dist` folder.
 
 #### CLI
 
-1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me)
-2. Can be run as `ten-hands`.
-
-#### Web App (Not straightforward/discouraged currently)
-
-1. Install dependencies (Use yarn)
-2. `cd ./ui && yarn build:browser` - build ui for browser
-3. `cd ./app`. Uncomment line 26 `// startServer()`. Desktop app calls this one automatically to start server.
-4. `cd ./app && yarn build`
-5. Build will be in `./app/build` folder. Start Server using `node ./app/build/server/index.js`.
-6. Use UI with a static server or directly.
+1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me). (I will publish to npm soon).
+2. Run as `ten-hands`.
 
 ### Configuration
 

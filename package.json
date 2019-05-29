@@ -15,7 +15,8 @@
   },
   "workspaces": [
     "app",
-    "ui"
+    "ui",
+    "cli"
   ],
   "repository": {
     "type": "git",

@@ -24,7 +24,7 @@
   "build": {
     "appId": "com.saisandeepvaddi.tenhands",
     "productName": "Ten Hands",
-    "copyright": "Copyright © 2019 ${author}",
+    "copyright": "Copyright © 2019 Sai Sandeep Vaddi",
     "mac": {
       "category": "public.app-category.utilities"
     },

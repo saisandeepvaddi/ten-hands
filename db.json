@@ -143,6 +143,45 @@
       ],
       "configFile": "package.json",
       "path": "D:\\Programming\\ten-hands\\ui"
+    },
+    {
+      "_id": "ee0587c5-016f-4965-8c0b-5cf710170176",
+      "name": "gatekeeper-hub",
+      "type": "nodejs",
+      "commands": [
+        {
+          "_id": "d8f9e885-2cf5-43bc-8391-875dd1e13585",
+          "name": "browser-sync",
+          "cmd": "yarn browser-sync",
+          "execDir": "./"
+        },
+        {
+          "_id": "01792a72-d1b7-4da2-baad-d5123bd344b0",
+          "name": "lint",
+          "cmd": "yarn lint",
+          "execDir": "./"
+        },
+        {
+          "_id": "c5e3db06-eb53-4b65-90c0-ea9986854d25",
+          "name": "lint:fix",
+          "cmd": "yarn lint:fix",
+          "execDir": "./"
+        },
+        {
+          "_id": "24dbb491-1c59-4a4a-ad9d-e297ad50bad7",
+          "name": "dev",
+          "cmd": "yarn dev",
+          "execDir": "./"
+        },
+        {
+          "_id": "4417088e-e644-4475-bbbc-106fbef4c6d8",
+          "name": "prod",
+          "cmd": "yarn prod",
+          "execDir": "./"
+        }
+      ],
+      "configFile": "package.json",
+      "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web"
     }
   ],
   "commands": []
