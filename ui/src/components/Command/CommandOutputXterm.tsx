@@ -34,7 +34,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         // So had to do it later with 0 time.
         const setThemeLater = () => {
             themeTimeout = setTimeout(() => {
-                if (terminal.current) {
+                if (terminal && terminal.current) {
                     terminal.current.setTheme(theme);
                 }
             }, 0);
