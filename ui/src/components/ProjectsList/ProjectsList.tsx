@@ -38,12 +38,6 @@ const ProjectsList = React.memo(() => {
     const socket = JobSocket.getSocket();
 
     const updateJob = (room, stdout, isRunning) => {
-        // dispatch({
-        //     room,
-        //     type: ACTION_TYPES.UPDATE_JOB,
-        //     stdout,
-        //     isRunning,
-        // });
         terminalManager.updateOutputInRoom(room, stdout);
     };
 

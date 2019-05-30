@@ -1,18 +1,18 @@
 import low, { AdapterSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import { v4 as uuidv4 } from "uuid";
+import { CONFIG_FILES } from "../../shared/config";
 
 class Database {
   private static _instance: Database;
   private db = null;
   // Create Singleton by private constructor
   private constructor() {
-    const adapter: AdapterSync = new FileSync("../db.json");
+    const adapter: AdapterSync = new FileSync(CONFIG_FILES.dbFile);
     this.db = low(adapter);
     this.db
       .defaults({
-        projects: [],
-        commands: [] // Different from commands in side a project
+        projects: []
       })
       .write();
   }
@@ -67,12 +67,24 @@ class Database {
   }
 
   public addCommandToProject(projectId: string, command: IProjectCommand) {
-    const project = this.db
+    this.db
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
       .push({ _id: uuidv4(), ...command })
       .write();
+    const project = this.getProject(projectId);
+    return project;
+  }
+
+  public removeCommandFromProject(projectId: string, commandId: string) {
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .get("commands")
+      .remove({ _id: commandId })
+      .write();
+    const project = this.getProject(projectId);
     return project;
   }
 

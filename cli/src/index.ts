@@ -60,7 +60,7 @@ const createProject = answers => {
     return {
       name: command.name,
       cmd: command.cmd,
-      execDir: "./"
+      execDir: ""
     };
   });
 
