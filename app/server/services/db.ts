@@ -77,6 +77,17 @@ class Database {
     return project;
   }
 
+  public removeCommandFromProject(projectId: string, commandId: string) {
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .get("commands")
+      .remove({ _id: commandId })
+      .write();
+    const project = this.getProject(projectId);
+    return project;
+  }
+
   public getProjectCommand(projectId: string, commandId: string) {
     const command = this.db
       .get("projects")

@@ -8,3 +8,10 @@ export function addCommand(req: Request, res: Response) {
   const project = db.addCommandToProject(projectId, command);
   return res.status(200).send(project);
 }
+
+export function removeCommand(req: Request, res: Response) {
+  const { projectId, commandId } = req.params;
+
+  const project = db.removeCommandFromProject(projectId, commandId);
+  return res.status(200).send(project);
+}

@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router({ mergeParams: true });
 
-import { addCommand } from "../controllers/commands";
+import { addCommand, removeCommand } from "../controllers/commands";
 
 /* 
 Self Note: Use this to do REST Testing in REST Client extension in VSCode
@@ -20,6 +20,8 @@ Content-Type: application/json
 
 router.post("/", addCommand);
 
+router.delete("/:commandId", removeCommand);
+
 /*
 Self Note: Use this to do REST Testing in REST Client extension in VSCode
 
@@ -35,6 +37,6 @@ Content-Type: application/json
 
  */
 
-router.post("/:commandId", addCommand);
+// router.post("/:commandId", addCommand);
 
 export default router;
