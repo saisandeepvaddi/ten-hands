@@ -6,7 +6,5 @@ export function addCommand(req: Request, res: Response) {
   const command = req.body;
 
   const project = db.addCommandToProject(projectId, command);
-  return res.status(200).send({
-    data: project
-  });
+  return res.status(200).send(project);
 }

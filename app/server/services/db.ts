@@ -67,12 +67,13 @@ class Database {
   }
 
   public addCommandToProject(projectId: string, command: IProjectCommand) {
-    const project = this.db
+    this.db
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
       .push({ _id: uuidv4(), ...command })
       .write();
+    const project = this.getProject(projectId);
     return project;
   }
 

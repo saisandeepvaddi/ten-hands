@@ -1,18 +1,15 @@
-import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
+import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
-import { isRunningInElectron } from "../../utils/electron";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 
-const initialProject: IProject = {
+const initialCommand: IProjectCommand = {
     name: "",
-    type: "none",
-    commands: [],
-    configFile: "",
-    path: "",
+    execDir: "",
+    cmd: "",
 };
 
 const Container = styled.div`
@@ -40,11 +37,12 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                     timeout: 5000,
                     method: "post",
                     baseURL: `http://localhost:${config.port}`,
-                    url: "projects",
+                    url: `projects/${activeProject._id}/commands`,
                     data: values,
                 });
                 actions.setSubmitting(false);
                 const updatedProject = responseData.data;
+                console.log("updatedProject:", updatedProject);
                 await updateProjects();
                 setDrawerOpen(false);
                 setActiveProject(updatedProject);
@@ -59,7 +57,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     return (
         <Container>
             <Formik
-                initialValues={initialProject}
+                initialValues={initialCommand}
                 onSubmit={handleSubmit}
                 render={props => (
                     <form onSubmit={props.handleSubmit}>
@@ -75,12 +73,12 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         </FormGroup>
                         <FormGroup
                             label="Path"
-                            labelFor="path"
+                            labelFor="execDir"
                             helperText="Will take the project's path if left empty."
                         >
                             <InputGroup
-                                placeholder="E.g., D:\MyProjects\MyAwesomeProject (Whichever path style your OS uses)"
-                                id="path"
+                                placeholder="E.g., Full path where to execute command."
+                                id="execDir"
                                 type="text"
                                 onChange={props.handleChange}
                                 value={props.values.path}
@@ -93,10 +91,11 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         >
                             <InputGroup
                                 required={true}
-                                id="path"
+                                id="cmd"
                                 type="text"
+                                placeholder="Actual Command. e.g., yarn test"
                                 onChange={props.handleChange}
-                                value={props.values.path}
+                                value={props.values.cmd}
                             />
                         </FormGroup>
 
