@@ -1,33 +1,6 @@
 {
   "projects": [
     {
-      "_id": "33afe4a0-478e-4af2-b836-c14b76c2e683",
-      "name": "server",
-      "type": "nodejs",
-      "commands": [
-        {
-          "_id": "43a1d8cd-ceb4-4ddd-9875-a7074f322c1d",
-          "name": "test1",
-          "cmd": "node src/functions.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "7908f855-8090-4720-bdc1-2ec7a8446f33",
-          "name": "test2",
-          "cmd": "node src/functions.js",
-          "execDir": "./"
-        },
-        {
-          "_id": "4a043745-90c5-46f0-b6e4-911f938f578e",
-          "name": "test3",
-          "cmd": "node src/functions.js",
-          "execDir": "./"
-        }
-      ],
-      "configFile": "package.json",
-      "path": "D:\\Programming\\ten-hands-test\\server"
-    },
-    {
       "_id": "63a9da89-eaf6-4d7a-9113-563fef5052a1",
       "name": "test-project",
       "type": "nodejs",

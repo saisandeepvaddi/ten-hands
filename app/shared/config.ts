@@ -5,8 +5,9 @@ import { homedir } from "os";
 
 const tenHandsDir = path.join(homedir(), ".ten-hands");
 
-const CONFIG_FILES = {
-  configFile: path.join(tenHandsDir, "config.json")
+export const CONFIG_FILES = {
+  configFile: path.join(tenHandsDir, "config.json"),
+  dbFile: path.join(tenHandsDir, "db.json")
 };
 
 mkdirp.sync(tenHandsDir);

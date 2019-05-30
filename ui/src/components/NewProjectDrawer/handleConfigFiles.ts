@@ -66,7 +66,7 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
                 _id: uuidv4(),
                 name,
                 cmd: shouldRunWithYarn ? `yarn ${name}` : `npm run ${name}`,
-                execDir: "./",
+                execDir: "",
             };
         });
         return project;

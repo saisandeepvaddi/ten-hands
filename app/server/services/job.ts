@@ -15,9 +15,12 @@ class Job {
   public start(command, projectPath) {
     try {
       const job = command.cmd;
-      // const execDir = command.execDir;
-      const execPath = path.normalize(projectPath);
+      const execPath =
+        command.execDir.length > 0
+          ? path.normalize(command.execDir)
+          : path.normalize(projectPath);
 
+      console.log("execPath:", execPath);
       const room = this.room;
 
       // const n = execa(job, {
