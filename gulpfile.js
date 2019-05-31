@@ -135,7 +135,7 @@ exports.buildDesktop = series(
   parallel(cleanAppBuild, cleanAppDist, cleanDesktopFinalDist),
   parallel(buildUIForElectron, buildServerForElectron),
   moveUIBuilds,
-  // moveAppIconToBuild, // Will enable once I find a good Icon.
+  moveAppIconToBuild, // Will enable once I find a good Icon.
   buildDesktopAppInstallers,
   moveDesktopBuildToFinalDist,
   delay(5000),
