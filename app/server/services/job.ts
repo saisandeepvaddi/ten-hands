@@ -40,14 +40,14 @@ class Job {
       n.on("close", (code, signal) => {
         Job.socket.emit(`job_close`, {
           room,
-          data: `Exited with code ${code} by signal ${signal}`
+          data: `Process closed with code ${code} by signal ${signal}`
         });
       });
 
       n.on("exit", (code, signal) => {
         Job.socket.emit(`job_exit`, {
           room,
-          data: `Exited with code ${code} by signal ${signal}`
+          data: `Process exited with code ${code} by signal ${signal}`
         });
       });
     } catch (error) {
@@ -65,7 +65,7 @@ export class JobManager {
   private killJob(room, pid) {
     console.log(`Killing process: ${pid}`);
     pKill(pid);
-    this.io.to(room).emit(`job_killed`, {
+    this.socket.emit(`job_killed`, {
       room,
       data: pid
     });

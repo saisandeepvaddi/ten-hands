@@ -1,6 +1,9 @@
 import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
 
+// tslint:disable-next-line: no-submodule-imports
+import "xterm/dist/xterm.css";
+
 class JobTerminal {
     public _id: string;
     public isOpened: boolean = false;
@@ -87,7 +90,6 @@ class JobTerminal {
         lines.forEach(line => {
             if (line) {
                 this.terminal.write(line);
-                console.log("line:", line);
                 this.terminal.writeln("");
             }
         });

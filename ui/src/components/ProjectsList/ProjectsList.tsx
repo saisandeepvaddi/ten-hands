@@ -1,13 +1,17 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
 import throttle from "lodash/throttle";
 import React from "react";
-// tslint:disable-next-line: no-submodule-imports
-import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
 
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
+
+import chalk from "chalk";
+
+// see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
+const options: any = { enabled: true, level: 3 };
+const forcedChalk = new chalk.constructor(options);
 
 const ProjectsList = React.memo(() => {
     const [isSocketInitialized, setSocketInitialized] = React.useState(false);
@@ -70,7 +74,7 @@ const ProjectsList = React.memo(() => {
             socket.on(`job_close`, message => {
                 const room = message.room;
                 console.info(`Process close in room: ${room}`);
-                updateJob(room, message.data, false);
+                updateJob(room, forcedChalk.bold(message.data), false);
                 updateJobProcess(room, {
                     pid: -1,
                 });
@@ -86,7 +90,7 @@ const ProjectsList = React.memo(() => {
                 const room = message.room;
 
                 console.info(`Process exit in room: ${room}`);
-                updateJob(room, message.data, false);
+                updateJob(room, forcedChalk.bold(message.data), false);
                 updateJobProcess(room, {
                     pid: -1,
                 });
@@ -96,7 +100,8 @@ const ProjectsList = React.memo(() => {
                 const room = message.room;
 
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
-                updateJob(room, "process with id " + message.data + " killed by user.", false);
+
+                updateJob(room, forcedChalk.bold.yellow(`process with id ${message.data} killed by user.`), false);
                 updateJobProcess(room, {
                     pid: -1,
                 });

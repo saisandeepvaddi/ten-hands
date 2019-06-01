@@ -26,8 +26,6 @@ const initializeRoomSocketState = state => {
 const updateData = throttle(async data => {
     try {
         if (Object.keys(data).length > 0) {
-            console.log(`Writing to storage`);
-
             await localforage.setItem("state", data);
         }
     } catch (error) {
