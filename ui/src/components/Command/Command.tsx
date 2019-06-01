@@ -149,13 +149,25 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                     <span>{command.cmd}</span>
 
                     <CommandOutputButtonsContainer>
-                        <Button onClick={() => clearJobOutput(room)} icon="eraser" minimal={true} />
+                        <Button
+                            onClick={() => clearJobOutput(room)}
+                            icon="eraser"
+                            minimal={true}
+                            title="Clear Output"
+                        />
                         <Button
                             onClick={() => setOutputOpen(!isOutputOpen)}
                             icon={isOutputOpen ? "eye-off" : "eye-open"}
                             minimal={true}
+                            title={isOutputOpen ? "Hide Output" : "Show Output"}
                         />
-                        <Button onClick={() => setDeleteAlertOpen(true)} icon="trash" minimal={true} intent="danger" />
+                        <Button
+                            onClick={() => setDeleteAlertOpen(true)}
+                            icon="trash"
+                            minimal={true}
+                            intent="danger"
+                            title="Delete Task"
+                        />
                     </CommandOutputButtonsContainer>
                 </CommandHeader>
                 <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>

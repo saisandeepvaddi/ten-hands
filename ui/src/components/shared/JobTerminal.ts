@@ -12,10 +12,48 @@ class JobTerminal {
     private darkTheme: ITheme = {
         background: "#202B33",
         foreground: "#F5F8FA",
+        // black: "#182026",
+        // blue: "#137CBD",
+        // brightBlack: "#10161A",
+        // brightBlue: "#0E5A8A",
+        // brightCyan: "#97F3EB",
+        // brightGreen: "#0A6640",
+        // brightMagenta: "#FF66A1",
+        // brightRed: "#DB3737",
+        // brightWhite: "#FFFFFF",
+        // brightYellow: "#FFC940",
+        // cursor: "",
+        // cursorAccent: "",
+        // cyan: "#78D5CC",
+        // green: "#0F9960",
+        // magenta: "#A82255",
+        // red: "#A82A2A",
+        // selection: "#A7B6C2",
+        // white: "#E1E8ED",
+        // yellow: "#D99E0B",
     };
     private lightTheme: ITheme = {
         background: "#F5F8FA",
         foreground: "#10161A",
+        // black: "#182026",
+        // blue: "#137CBD",
+        // brightBlack: "#10161A",
+        // brightBlue: "#0E5A8A",
+        // brightCyan: "#97F3EB",
+        // brightGreen: "#0A6640",
+        // brightMagenta: "#FF66A1",
+        // brightRed: "#DB3737",
+        // brightWhite: "#FFFFFF",
+        // brightYellow: "#FFC940",
+        // cursor: "",
+        // cursorAccent: "",
+        // cyan: "#78D5CC",
+        // green: "#0F9960",
+        // magenta: "#A82255",
+        // red: "#A82A2A",
+        // selection: "#A7B6C2",
+        // white: "#E1E8ED",
+        // yellow: "#D99E0B",
     };
 
     private _container: HTMLDivElement = document.createElement("div");
@@ -49,6 +87,7 @@ class JobTerminal {
         lines.forEach(line => {
             if (line) {
                 this.terminal.write(line);
+                console.log("line:", line);
                 this.terminal.writeln("");
             }
         });
