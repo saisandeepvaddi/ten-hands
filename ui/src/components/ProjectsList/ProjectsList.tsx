@@ -4,7 +4,8 @@ import React from "react";
 // tslint:disable-next-line: no-submodule-imports
 import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
-import { JobTerminalManager } from "../Command/terminal";
+
+import JobTerminalManager from "../shared/JobTerminalManager";
 import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 

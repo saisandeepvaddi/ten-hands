@@ -7,7 +7,7 @@ import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 import CommandOutputXterm from "./CommandOutputXterm";
-import { JobTerminalManager } from "./terminal";
+import JobTerminalManager from "../shared/JobTerminalManager";
 
 const Container = styled.div`
     display: flex;

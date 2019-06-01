@@ -17,8 +17,8 @@ class Job {
       const job = command.cmd;
       const execPath =
         command.execDir.length > 0
-          ? path.normalize(command.execDir)
-          : path.normalize(projectPath);
+          ? path.resolve(command.execDir)
+          : path.resolve(projectPath);
 
       console.log("execPath:", execPath);
       const room = this.room;
@@ -34,11 +34,11 @@ class Job {
 
       Job.socket.emit(`job_started`, { room, data: n });
       n.stdout.on("data", chunk => {
-        Job.socket.emit(`job_output`, { room, data: chunk.toString() });
+        Job.socket.emit(`job_output`, { room, data: chunk });
       });
 
       n.stderr.on("data", chunk => {
-        Job.socket.emit(`job_error`, { room, data: chunk.toString() });
+        Job.socket.emit(`job_error`, { room, data: chunk });
       });
 
       n.on("close", (code, signal) => {
