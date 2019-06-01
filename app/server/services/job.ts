@@ -17,15 +17,11 @@ class Job {
       const job = command.cmd;
       const execPath =
         command.execDir.length > 0
-          ? path.normalize(command.execDir)
-          : path.normalize(projectPath);
+          ? path.resolve(command.execDir)
+          : path.resolve(projectPath);
 
       console.log("execPath:", execPath);
       const room = this.room;
-
-      // const n = execa(job, {
-      //   cwd: execPath || process.cwd(),
-      // });
 
       const n = exec(job, {
         cwd: execPath || process.cwd(),
@@ -34,24 +30,24 @@ class Job {
 
       Job.socket.emit(`job_started`, { room, data: n });
       n.stdout.on("data", chunk => {
-        Job.socket.emit(`job_output`, { room, data: chunk.toString() });
+        Job.socket.emit(`job_output`, { room, data: chunk });
       });
 
       n.stderr.on("data", chunk => {
-        Job.socket.emit(`job_error`, { room, data: chunk.toString() });
+        Job.socket.emit(`job_error`, { room, data: chunk });
       });
 
       n.on("close", (code, signal) => {
         Job.socket.emit(`job_close`, {
           room,
-          data: `Exited with code ${code} by signal ${signal}`
+          data: `Process closed with code ${code} by signal ${signal}`
         });
       });
 
       n.on("exit", (code, signal) => {
         Job.socket.emit(`job_exit`, {
           room,
-          data: `Exited with code ${code} by signal ${signal}`
+          data: `Process exited with code ${code} by signal ${signal}`
         });
       });
     } catch (error) {
@@ -69,7 +65,7 @@ export class JobManager {
   private killJob(room, pid) {
     console.log(`Killing process: ${pid}`);
     pKill(pid);
-    this.io.to(room).emit(`job_killed`, {
+    this.socket.emit(`job_killed`, {
       room,
       data: pid
     });
