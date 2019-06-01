@@ -4,10 +4,10 @@ import React from "react";
 import styled from "styled-components";
 import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
+import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 import CommandOutputXterm from "./CommandOutputXterm";
-import JobTerminalManager from "../shared/JobTerminalManager";
 
 const Container = styled.div`
     display: flex;
@@ -30,7 +30,7 @@ const CommandTitleActions = styled.div`
 
 const CommandOutputButtonsContainer = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 15%;
 `;
 
@@ -150,9 +150,11 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
 
                     <CommandOutputButtonsContainer>
                         <Button onClick={() => clearJobOutput(room)} icon="eraser" minimal={true} />
-                        <Button onClick={() => setOutputOpen(!isOutputOpen)}>
-                            {isOutputOpen ? "Hide" : "Show"} Output
-                        </Button>
+                        <Button
+                            onClick={() => setOutputOpen(!isOutputOpen)}
+                            icon={isOutputOpen ? "eye-off" : "eye-open"}
+                            minimal={true}
+                        />
                         <Button onClick={() => setDeleteAlertOpen(true)} icon="trash" minimal={true} intent="danger" />
                     </CommandOutputButtonsContainer>
                 </CommandHeader>

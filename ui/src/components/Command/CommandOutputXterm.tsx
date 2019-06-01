@@ -1,3 +1,5 @@
+import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import debounce from "lodash/debounce";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import JobTerminal from "../shared/JobTerminal";
@@ -46,7 +48,30 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         };
     }, [theme]);
 
-    return <TerminalContainer ref={elRef} />;
+    const handleResize = React.useCallback(
+        debounce((entries: IResizeEntry[]) => {
+            let resizeTimeout: any = null;
+            const resizeLater = () => {
+                resizeTimeout = setTimeout(() => {
+                    if (terminal && terminal.current && entries.length > 0) {
+                        const width: number = entries[0].contentRect.width;
+                        terminal.current.resizeTerminal(width);
+                    }
+                }, 0);
+            };
+            resizeLater();
+            return () => {
+                clearTimeout(resizeTimeout);
+            };
+        }, 500),
+        [terminal],
+    );
+
+    return (
+        <ResizeSensor onResize={handleResize}>
+            <TerminalContainer ref={elRef} />
+        </ResizeSensor>
+    );
 });
 
 export default CommandOutputXterm;

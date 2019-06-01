@@ -5,8 +5,8 @@ import React from "react";
 import "xterm/dist/xterm.css";
 import JobSocket from "../../utils/socket";
 
-import JobTerminalManager from "../shared/JobTerminalManager";
 import { useJobs } from "../shared/Jobs";
+import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 
 const ProjectsList = React.memo(() => {

@@ -23,10 +23,6 @@ class Job {
       console.log("execPath:", execPath);
       const room = this.room;
 
-      // const n = execa(job, {
-      //   cwd: execPath || process.cwd(),
-      // });
-
       const n = exec(job, {
         cwd: execPath || process.cwd(),
         maxBuffer: 100 * 1024 * 1024
