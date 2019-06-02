@@ -51,7 +51,7 @@
     "typescript": "^3.4.5",
     "use-deep-compare-effect": "^1.2.0",
     "uuid": "^3.3.2",
-    "xterm": "^3.14.1"
+    "xterm": "3.13.2"
   },
   "devDependencies": {
     "@blueprintjs/tslint-config": "^1.8.0",
