@@ -101,7 +101,7 @@ function JobsProvider(props: IJobsProviderProps) {
     React.useEffect(() => {
         const restoreData = async () => {
             try {
-                const storedState = await localforage.getItem("state");
+                const storedState: any = await localforage.getItem("state");
                 if (storedState) {
                     dispatch({
                         type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,

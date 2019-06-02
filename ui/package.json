@@ -39,7 +39,6 @@
     "react-split-pane": "^0.1.87",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
-    "typescript": "^3.4.5",
     "uuid": "^3.3.2",
     "xterm": "3.13.2"
   },
@@ -53,6 +52,7 @@
     "jest-dom": "^3.2.2",
     "react-testing-library": "^7.0.0",
     "tslint": "^5.16.0",
-    "tslint-react-hooks": "^2.1.0"
+    "tslint-react-hooks": "^2.1.0",
+    "typescript": "^3.4.5"
   }
 }

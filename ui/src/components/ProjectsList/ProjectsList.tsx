@@ -3,11 +3,18 @@ import throttle from "lodash/throttle";
 import React from "react";
 import JobSocket from "../../utils/socket";
 
+import styled from "styled-components";
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 
 import chalk from "chalk";
+
+const Container = styled.div`
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+`;
 
 // see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
 const options: any = { enabled: true, level: 3 };
@@ -113,20 +120,22 @@ const ProjectsList = React.memo(() => {
     }, [projects, isSocketInitialized]); // NEED TO THINK IF I SHOULD ADD OTHER DEPENDENCIES AS PER LINT WARNINGS. DON'T REINITIALIZE SOCKET ON CHANGE. WILL MESS UP
 
     return (
-        <Tabs
-            vertical={true}
-            className={`w-100`}
-            large={true}
-            onChange={changeActiveProject}
-            defaultSelectedTabId={projects[0]._id}
-            selectedTabId={activeProject._id || projects[0]._id}
-        >
-            {/* <InputGroup className={Classes.FILL} type="text" placeholder="Search..." /> */}
-            <Divider />
-            {projects.map(project => (
-                <Tab key={project._id} id={project._id} title={project.name} />
-            ))}
-        </Tabs>
+        <Container>
+            <Tabs
+                vertical={true}
+                className={`w-100`}
+                large={true}
+                onChange={changeActiveProject}
+                defaultSelectedTabId={projects[0]._id}
+                selectedTabId={activeProject._id || projects[0]._id}
+            >
+                {/* <InputGroup className={Classes.FILL} type="text" placeholder="Search..." /> */}
+                <Divider />
+                {projects.map(project => (
+                    <Tab key={project._id} id={project._id} title={project.name} />
+                ))}
+            </Tabs>
+        </Container>
     );
 });
 
