@@ -78,26 +78,27 @@ const ProjectsList = React.memo(() => {
                 updateJob(room, message.data, true);
             });
 
-            socket.on(`job_close`, message => {
-                const room = message.room;
-                console.info(`Process close in room: ${room}`);
-                updateJob(room, forcedChalk.bold(message.data), false);
-                updateJobProcess(room, {
-                    pid: -1,
-                });
-            });
-
             socket.on(`job_error`, message => {
                 const room = message.room;
                 console.info(`Process error in room: ${room}`);
                 updateJob(room, message.data, true);
+            });
+            socket.on(`job_close`, message => {
+                const room = message.room;
+                console.info(`Process close in room: ${room}`);
+                // Add extra empty line. Otherwise, the terminal clear will retain last line.
+                updateJob(room, forcedChalk.bold(message.data + "\n"), false);
+                updateJobProcess(room, {
+                    pid: -1,
+                });
             });
 
             socket.on(`job_exit`, message => {
                 const room = message.room;
 
                 console.info(`Process exit in room: ${room}`);
-                updateJob(room, forcedChalk.bold(message.data), false);
+                // Add extra empty line. Otherwise, the terminal clear will retain last line.
+                updateJob(room, forcedChalk.bold(message.data + "\n"), false);
                 updateJobProcess(room, {
                     pid: -1,
                 });
@@ -108,7 +109,7 @@ const ProjectsList = React.memo(() => {
 
                 console.info(`Process killed in room: ${room}; killed process id: ${message.data}`);
 
-                updateJob(room, forcedChalk.bold.yellow(`process with id ${message.data} killed by user.`), false);
+                updateJob(room, forcedChalk.bold.redBright(`process with id ${message.data} killed by user.\n`), false);
                 updateJobProcess(room, {
                     pid: -1,
                 });
