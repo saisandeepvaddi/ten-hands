@@ -7,6 +7,10 @@ import NewCommandDrawer from "../NewCommandDrawer";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
+
+// Have to use require because it's type-definition doesn't have function that allows path
+// Do not want to update node_module's file.
+// tslint:disable-next-line: no-var-requires
 const getRepoInfo = require("git-repo-info");
 
 interface IProjectTopbarProps {
