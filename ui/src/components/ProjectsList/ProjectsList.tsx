@@ -1,5 +1,4 @@
 import { Divider, Tab, Tabs } from "@blueprintjs/core";
-import throttle from "lodash/throttle";
 import React from "react";
 import JobSocket from "../../utils/socket";
 

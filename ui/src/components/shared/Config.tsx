@@ -1,8 +1,7 @@
-import { Classes } from "@blueprintjs/core";
 import React from "react";
 
 import { isRunningInElectron } from "../../utils/electron";
-import { getItem, setItem } from "../../utils/storage";
+import { getItem } from "../../utils/storage";
 
 interface IConfig {
     port: string | number;
