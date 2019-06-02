@@ -13,8 +13,7 @@ export const CONFIG_FILES = {
 mkdirp.sync(tenHandsDir);
 
 const defaultConfig: IConfig = {
-  port: 1010,
-  launchAtStartup: false
+  port: 1010
 };
 
 if (!fs.existsSync(CONFIG_FILES.configFile)) {

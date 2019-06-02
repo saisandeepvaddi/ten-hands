@@ -4,7 +4,6 @@ const app = electron.app;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
-const AutoLaunch = require("auto-launch");
 
 import { startServer } from "../server";
 
@@ -42,25 +41,6 @@ async function startApplication() {
     await startServer();
 
     app.on("ready", () => {
-      if (config.launchAtStartup) {
-        const autoLauncher = new AutoLaunch({
-          name: "Ten Hands"
-        });
-
-        autoLauncher
-          .isEnabled()
-          .then(isEnabled => {
-            if (isEnabled) {
-              return;
-            }
-
-            autoLauncher.enable();
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-
       createWindow();
     });
 
