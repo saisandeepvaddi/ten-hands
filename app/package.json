@@ -44,14 +44,11 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.1.0",
-    "execa": "^1.0.0",
     "express": "^4.16.4",
-    "fs-extra": "^8.0.1",
     "lowdb": "^1.0.0",
     "mkdirp": "^0.5.1",
     "socket.io": "^2.2.0",
     "tree-kill": "^1.2.1",
-    "typescript": "^3.4.5",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -63,12 +60,11 @@
     "@types/socket.io": "^2.1.2",
     "electron": "^5.0.1",
     "electron-builder": "^20.40.2",
-    "electron-debug": "^3.0.0",
     "electron-react-devtools": "^0.5.3",
-    "electron-reloader": "^0.2.0",
     "nodemon": "^1.18.11",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
-    "ts-node": "^8.1.0"
+    "ts-node": "^8.1.0",
+    "typescript": "^3.5.1"
   }
 }

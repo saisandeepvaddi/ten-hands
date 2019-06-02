@@ -34,7 +34,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     useEffect(() => {
         let themeTimeout: any = null;
         // Setting theme is taking a LOOOOOOOOOONG time.
-        // So had to do it later with 0 time.
+        // So had to do it later in a different call stack.
         const setThemeLater = () => {
             themeTimeout = setTimeout(() => {
                 if (terminal && terminal.current) {
