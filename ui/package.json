@@ -9,14 +9,7 @@
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
-    "test": "rescripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "electron-start": "tsc",
-    "electron-only": "./node_modules/.bin/electron .",
-    "electron-pack": "build -w",
-    "electron-dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && .\\node_modules\\.bin\\electron ./electron/index.js \""
+    "test": "rescripts test"
   },
   "author": {
     "name": "Sai Sandeep Vaddi",
@@ -36,9 +29,7 @@
     "@blueprintjs/core": "^3.15.1",
     "axios": "^0.19.0",
     "chalk": "^2.4.2",
-    "escape-goat": "^2.0.0",
     "formik": "^1.5.4",
-    "immer": "^3.1.2",
     "localforage": "^1.7.3",
     "lodash": "^4.17.11",
     "react": "^16.8.6",
@@ -49,7 +40,6 @@
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
     "typescript": "^3.4.5",
-    "use-deep-compare-effect": "^1.2.0",
     "uuid": "^3.3.2",
     "xterm": "3.13.2"
   },
@@ -60,11 +50,9 @@
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
     "@types/styled-components": "^4.1.15",
-    "concurrently": "^4.1.0",
     "jest-dom": "^3.2.2",
     "react-testing-library": "^7.0.0",
     "tslint": "^5.16.0",
-    "tslint-react-hooks": "^2.1.0",
-    "wait-on": "^3.2.0"
+    "tslint-react-hooks": "^2.1.0"
   }
 }
