@@ -52,7 +52,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
         if (isRunningInElectron()) {
             const projectPath = activeProject.path;
             const gitInfo = getRepoInfo(projectPath);
-            console.log("gitInfo:", gitInfo);
             return gitInfo.branch || "";
         } else {
             return "";

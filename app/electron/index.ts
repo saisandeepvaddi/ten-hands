@@ -4,6 +4,7 @@ const app = electron.app;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
+const AutoLaunch = require("auto-launch");
 
 import { startServer } from "../server";
 
@@ -35,12 +36,32 @@ function createWindow() {
 
 async function startApplication() {
   try {
+    const config: IConfig = require("../shared/config").default;
+    console.log("config:", config);
+
     await startServer();
 
-    app.on("ready", createWindow);
+    app.on("ready", () => {
+      if (config.launchAtStartup) {
+        const autoLauncher = new AutoLaunch({
+          name: "Ten Hands"
+        });
 
-    ipcMain.on(`config-file-drop`, (e, msg) => {
-      console.log(msg);
+        autoLauncher
+          .isEnabled()
+          .then(isEnabled => {
+            if (isEnabled) {
+              return;
+            }
+
+            autoLauncher.enable();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+
+      createWindow();
     });
 
     ipcMain.on(`get-config`, e => {

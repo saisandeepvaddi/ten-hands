@@ -12,12 +12,16 @@ export const CONFIG_FILES = {
 
 mkdirp.sync(tenHandsDir);
 
-const defaultConfig = {
-  port: 1010
+const defaultConfig: IConfig = {
+  port: 1010,
+  launchAtStartup: false
 };
 
 if (!fs.existsSync(CONFIG_FILES.configFile)) {
-  fs.writeFileSync(CONFIG_FILES.configFile, "{}");
+  fs.writeFileSync(
+    CONFIG_FILES.configFile,
+    JSON.stringify(defaultConfig, null, 2)
+  );
 }
 
 const conf = JSON.parse(fs.readFileSync(CONFIG_FILES.configFile, "utf8"));
