@@ -77,7 +77,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             helperText="Will take the project's path if left empty."
                         >
                             <InputGroup
-                                placeholder="E.g., Full path where to execute command."
+                                placeholder="E.g., Absolute path where to execute the command."
                                 id="execDir"
                                 type="text"
                                 onChange={props.handleChange}

@@ -136,7 +136,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                     <form onSubmit={props.handleSubmit}>
                         <FormGroup
                             labelFor="configFile"
-                            label="Project Config File (Currently supports package.json. You can fill rest of the form manually or use CLI.)"
+                            label="Project Config File (Currently supports package.json. You can create an empty project now.)"
                             helperText="E.g., package.json"
                         >
                             {isRunningInElectron() ? (
@@ -160,17 +160,24 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             labelFor="name"
                             helperText="Will be auto-filled if available in config file."
                         >
-                            <InputGroup id="name" type="text" onChange={props.handleChange} value={props.values.name} />
+                            <InputGroup
+                                id="name"
+                                type="text"
+                                placeholder="My Awesome Project"
+                                onChange={props.handleChange}
+                                value={props.values.name}
+                            />
                         </FormGroup>
                         <FormGroup
                             label="Project Path"
                             labelFor="path"
-                            helperText="Will be auto-filled if using desktop app. Alternatively, Add project with CLI or add tenHands.path in project.json or type full project path here."
+                            helperText="Will be auto-filled if a config file uploaded."
                         >
                             <InputGroup
                                 required={true}
                                 id="path"
                                 type="text"
+                                placeholder="Absolute path to the project directory"
                                 onChange={props.handleChange}
                                 value={props.values.path}
                             />
@@ -178,7 +185,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Type"
                             labelFor="type"
-                            helperText="Will be auto-filled if they can be determined from config file."
+                            helperText="Will be auto-filled if it can be determined from config file."
                         >
                             <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
                                 <option value="">Select Project Type</option>
@@ -189,7 +196,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Commands"
                             labelFor="commands"
-                            helperText="Will be auto-filled if can be determined from config file."
+                            helperText="Will be auto-filled if available in config file. You can add commands later."
                         >
                             <NewProjectCommands commands={props.values.commands} />
                         </FormGroup>
