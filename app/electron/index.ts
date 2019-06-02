@@ -6,6 +6,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
+import { createMenu } from "./menu";
 
 let mainWindow;
 
@@ -42,6 +43,7 @@ async function startApplication() {
 
     app.on("ready", () => {
       createWindow();
+      createMenu();
     });
 
     ipcMain.on(`get-config`, e => {
