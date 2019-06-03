@@ -6,7 +6,7 @@
 
 # What is this?
 
-Do you keep opening large number of terminals to run your scripts/commands/tasks or whatever. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your tasks in one place.
+Do you keep opening large number of terminals to run your scripts/commands/tasks etc,. If you have to do that everyday for same project (Example running scripts from package.json for multiple projects), `Ten-Hands` makes it easier to organize all your tasks in one place.
 You can save any tasks organized into projects and run them whenever you want with a click of button.
 
 # Sample UI
@@ -15,24 +15,13 @@ You can save any tasks organized into projects and run them whenever you want wi
 | :------------------------------------: | :-------------------------------------: |
 | <img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG"> |
 
-# Downloads
-
-Official Builds coming soon....
-For now, check the `Steps to build` section below to build yourself.
-
 ### Steps to build
 
 1. Install dependencies (Use yarn because I used workspaces).
    - `yarn install`. Only in parent folder. Do not have to install inside any directories.
-2. Currently, build scripts available for Desktop App and CLI.
+2. Build.
    - To build Desktop App - `yarn build:desktop`
-   - To build CLI App - `yarn build:cli`
 3. Releases will be available in `dist` folder.
-
-#### CLI
-
-1. Use `npm link` to use cli app. (Here use npm instead of yarn. For some reason yarn link did not work for me). (I will publish to npm soon).
-2. Run as `ten-hands`.
 
 ### Configuration
 
@@ -44,8 +33,10 @@ A `config.json` is supported which is placed at `~/.ten-hands/` path.
 
 This project is in experimental stage, so there are some limitations to use the app. Expect them to be resolved soon.
 
-1. Currently, only package.json can be automatically uploaded from Desktop App. Use CLI for adding other kind of projects. Recognizing multiple other framework config files is in the roadmap.
-2. On UI, If you feel switching project terminals slow and stuck, that can be due to using theme on terminals by default. I'll add a setting that toggles theme on terminals. For now, you can comment inside `setTheme()` function in [terminal.ts](/ui/src/components/Command/terminal.ts) and build app again.
+1. Currently, only package.json can be automatically uploaded.
+2. But, you can add any type of commands to existing projects.
+3. You can even create project without uploading any config files and then add custom commands. This is useful when your project doesn't have `package.json`.
+4. Recognizing multiple frameworks' tasks is in roadmap.
 
 # Contributions
 

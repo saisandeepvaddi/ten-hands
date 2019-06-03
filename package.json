@@ -30,9 +30,7 @@
   "bugs": {
     "url": "https://github.com/saisandeepvaddi/ten-hands/issues"
   },
-  "readme": "ERROR: No README data found!",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands#readme",
-  "_id": "ten-hands@1.0.0",
   "devDependencies": {
     "del": "^4.1.1",
     "gulp": "^4.0.2",

@@ -18,7 +18,6 @@
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
-    "build:linux": "./node_modules/.bin/electron-builder --linux",
     "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
   },
   "repository": {
