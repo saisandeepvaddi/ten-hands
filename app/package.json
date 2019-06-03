@@ -41,10 +41,7 @@
         "snap"
       ],
       "category": "Utility"
-    },
-    "publish": [
-      "github"
-    ]
+    }
   },
   "dependencies": {
     "body-parser": "^1.19.0",
