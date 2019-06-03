@@ -19,8 +19,7 @@
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
     "build:linux": "./node_modules/.bin/electron-builder --linux",
-    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js",
-    "publish": "build -p always"
+    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
   },
   "repository": {
     "type": "git",
@@ -43,10 +42,7 @@
         "snap"
       ],
       "category": "Utility"
-    },
-    "publish": [
-      "github"
-    ]
+    }
   },
   "dependencies": {
     "body-parser": "^1.19.0",
