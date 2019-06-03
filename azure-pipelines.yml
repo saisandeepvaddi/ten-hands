@@ -14,42 +14,42 @@ jobs:
           versionSpec: $(node_version)
       - script: yarn install
       - script: yarn build:desktop-azure
-      - task: CopyFiles@1
+      - task: DownloadBuildArtifacts@0
         inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
-          Contents: |
-            **.*.exe
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          buildType: 'current'
+          itemPattern: '**/*.exe'
+          downloadPath: '$(System.ArtifactsDirectory)' 
+      
 
-  - job: macOS
-    pool:
-      vmImage: "macOS-10.14"
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(node_version)
-      - script: yarn install
-      - script: yarn build:desktop-azure
-      - task: CopyFiles@1
-        inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
-          Contents: |
-            **.*.dmg
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  # - job: macOS
+  #   pool:
+  #     vmImage: "macOS-10.14"
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: $(node_version)
+  #     - script: yarn install
+  #     - script: yarn build:desktop-azure
+  #     - task: CopyFiles@1
+  #       inputs:
+  #         SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+  #         Contents: |
+  #           **.*.dmg
+  #         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  - job: Linux
-    pool:
-      vmImage: "ubuntu-16.04"
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(node_version)
-      - script: yarn install
-      - script: yarn build:desktop-azure
-      - task: CopyFiles@1
-        inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
-          Contents: |
-            **.*.deb
-            **.*.snap
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  # - job: Linux
+  #   pool:
+  #     vmImage: "ubuntu-16.04"
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: $(node_version)
+  #     - script: yarn install
+  #     - script: yarn build:desktop-azure
+  #     - task: CopyFiles@1
+  #       inputs:
+  #         SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+  #         Contents: |
+  #           **.*.deb
+  #           **.*.snap
+  #         TargetFolder: '$(Build.ArtifactStagingDirectory)'
