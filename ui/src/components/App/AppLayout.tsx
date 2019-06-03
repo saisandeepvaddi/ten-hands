@@ -1,9 +1,7 @@
-import Axios from "axios";
 import React, { useEffect } from "react";
 import SplitPane from "react-split-pane";
 import io from "socket.io-client";
 import styled from "styled-components";
-import { isRunningInElectron } from "../../utils/electron";
 import JobSocket from "../../utils/socket";
 import Main from "../Main/Main";
 import { useConfig } from "../shared/Config";

@@ -6,13 +6,16 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
+import { createMenu } from "./menu";
 
 let mainWindow;
 
+const singleInstanceLock = app.requestSingleInstanceLock();
+
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
+    width: 1366,
+    height: 768,
     webPreferences: {
       nodeIntegration: true
     }
@@ -31,18 +34,35 @@ function createWindow() {
   return mainWindow;
 }
 
-async function startElectronApp() {
+async function startApplication() {
   try {
+    const config: IConfig = require("../shared/config").default;
+    console.log("config:", config);
+
     await startServer();
 
-    app.on("ready", createWindow);
-
-    ipcMain.on(`config-file-drop`, (e, msg) => {
-      console.log(msg);
+    app.on("ready", () => {
+      createWindow();
+      createMenu();
     });
 
     ipcMain.on(`get-config`, e => {
       e.returnValue = require("../shared/config").default;
+    });
+
+    app.on("second-instance", (event, commandLine, workingDirectory) => {
+      console.log("Requesting second instance. Deny it");
+
+      // Someone tried to run a second instance, we should focus our window.
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+          mainWindow.restore();
+        }
+        if (!mainWindow.isVisible()) {
+          mainWindow.show();
+        }
+        mainWindow.focus();
+      }
     });
 
     app.on("window-all-closed", () => {
@@ -61,4 +81,11 @@ async function startElectronApp() {
   }
 }
 
-startElectronApp();
+/* Makes app a single instance application */
+if (!singleInstanceLock) {
+  app.quit();
+} else {
+  console.log("starting app");
+
+  startApplication();
+}

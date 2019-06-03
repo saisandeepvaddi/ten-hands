@@ -81,8 +81,8 @@ const moveCLIBuildToFinalDist = async () => {
   return src(["./cli/build/**/*"]).pipe(dest("./dist/cli"));
 };
 
-const moveAppIconToBuild = async () => {
-  return src("./app/images/icon.png").pipe(dest("./app/build"));
+const moveAppIconsToBuild = async () => {
+  return src("./app/images/**/*").pipe(dest("./app/build"));
 };
 
 /* Transformations */
@@ -135,7 +135,7 @@ exports.buildDesktop = series(
   parallel(cleanAppBuild, cleanAppDist, cleanDesktopFinalDist),
   parallel(buildUIForElectron, buildServerForElectron),
   moveUIBuilds,
-  moveAppIconToBuild, // Will enable once I find a good Icon.
+  moveAppIconsToBuild,
   buildDesktopAppInstallers,
   moveDesktopBuildToFinalDist,
   delay(5000),
@@ -146,7 +146,7 @@ exports.buildDesktopAzure = series(
   parallel(cleanAppBuild, cleanAppDist, cleanDesktopFinalDist),
   parallel(buildUIForElectron, buildServerForElectron),
   moveUIBuilds,
-  // moveAppIconToBuild,
+  moveAppIconsToBuild,
   buildDesktopAppInstallers,
   moveDesktopBuildToFinalDist
 );

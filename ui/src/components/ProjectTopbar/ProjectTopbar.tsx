@@ -1,14 +1,29 @@
-import { Alert, Alignment, Button, Menu, MenuDivider, MenuItem, Navbar, Popover } from "@blueprintjs/core";
+import { Alert, Alignment, Button, Icon, Menu, MenuDivider, MenuItem, Navbar, Popover } from "@blueprintjs/core";
 import Axios from "axios";
 import React from "react";
+import styled from "styled-components";
+import { isRunningInElectron } from "../../utils/electron";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 
+// Have to use require because it's type-definition doesn't have function that allows path
+// Do not want to update node_module's file.
+// tslint:disable-next-line: no-var-requires
+const getRepoInfo = require("git-repo-info");
+
 interface IProjectTopbarProps {
     activeProject: IProject;
 }
+
+const GitBranchContainer = styled.div`
+    display: flex;
+    align-items: center;
+    & > .git-branch-name {
+        padding-left: 5px;
+    }
+`;
 
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
@@ -32,12 +47,29 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
         },
         [activeProject, updateProjects],
     );
+
+    const getGitBranch = React.useCallback(() => {
+        if (isRunningInElectron()) {
+            const projectPath = activeProject.path;
+            const gitInfo = getRepoInfo(projectPath);
+            return gitInfo.branch || "";
+        } else {
+            return "";
+        }
+    }, [activeProject]);
     return (
         <>
             <Navbar>
                 <Navbar.Group>
                     <Navbar.Heading data-testid="active-project-name">{activeProject.name}</Navbar.Heading>
-                    <Navbar.Divider />
+                    <Navbar.Heading data-testid="active-project-git-branch">
+                        {getGitBranch() ? (
+                            <GitBranchContainer>
+                                <Navbar.Divider style={{ paddingRight: 10 }} /> <Icon icon="git-branch" />
+                                {<span className="git-branch-name">{getGitBranch()}</span>}
+                            </GitBranchContainer>
+                        ) : null}
+                    </Navbar.Heading>
                 </Navbar.Group>
                 <Navbar.Group align={Alignment.RIGHT}>
                     <Button

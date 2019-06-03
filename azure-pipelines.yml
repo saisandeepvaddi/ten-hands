@@ -8,3 +8,17 @@ jobs:
     steps:
       - script: yarn install
       - script: yarn build:desktop-azure
+
+  - job: macOS
+    pool:
+      vmImage: "macOS-10.14"
+    steps:
+      - script: yarn install
+      - script: yarn build:desktop-azure
+
+  - job: Linux
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - script: yarn install
+      - script: yarn build:desktop-azure

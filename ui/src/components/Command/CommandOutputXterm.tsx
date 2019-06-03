@@ -63,7 +63,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
             return () => {
                 clearTimeout(resizeTimeout);
             };
-        }, 500),
+        }, 50),
         [terminal],
     );
 
