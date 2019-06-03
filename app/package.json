@@ -18,8 +18,7 @@
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
-    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js",
-    "publish": "build -p never"
+    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
   },
   "repository": {
     "type": "git",
@@ -44,7 +43,7 @@
       "category": "Utility"
     },
     "publish": [
-      "never"
+      "github"
     ]
   },
   "dependencies": {
