@@ -12,6 +12,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: $(node_version)
+      - script: set GH_TOKEN=$(Build.GH_TOKEN)
       - script: yarn install
       - script: yarn build:desktop-azure
       - task: DownloadPipelineArtifact@1
@@ -26,6 +27,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: $(node_version)
+      - script: export GH_TOKEN=$(Build.GH_TOKEN)
       - script: yarn install
       - script: yarn build:desktop-azure
       - task: DownloadPipelineArtifact@1
@@ -40,6 +42,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: $(node_version)
+      - script: export GH_TOKEN=$(Build.GH_TOKEN)
       - script: yarn install
       - script: yarn build:desktop-azure
       - task: DownloadPipelineArtifact@1
