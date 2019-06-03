@@ -2,7 +2,7 @@ variables:
   node_version: "10.x"
 
 trigger:
-  - azure-pipelines
+  - master
 
 jobs:
   - job: Windows
