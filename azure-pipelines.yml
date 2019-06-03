@@ -17,7 +17,7 @@ jobs:
       - task: DownloadPipelineArtifact@1
         inputs:
           buildType: 'current'
-          targetPath: '$(System.ArtifactsDirectory)'
+          targetPath: '/dist'
 
   - job: macOS
     pool:
@@ -31,7 +31,7 @@ jobs:
       - task: DownloadPipelineArtifact@1
         inputs:
           buildType: 'current'
-          targetPath: '$(System.ArtifactsDirectory)'
+          targetPath: '/dist'
 
   - job: Linux
     pool:
@@ -45,4 +45,4 @@ jobs:
       - task: DownloadPipelineArtifact@1
         inputs:
           buildType: 'current'
-          targetPath: '$(System.ArtifactsDirectory)'
+          targetPath: '/dist'
