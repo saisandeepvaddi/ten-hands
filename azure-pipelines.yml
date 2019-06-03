@@ -16,7 +16,7 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: '/dist/desktop'
+          pathtoPublish: 'dist/desktop'
           artifactName: 'ten-hands-windows'
 
   - job: macOS
@@ -30,7 +30,7 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: '/dist/desktop'
+          pathtoPublish: 'dist/desktop'
           artifactName: 'ten-hands-mac'
 
   - job: Linux
@@ -44,5 +44,5 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: '/dist/desktop'
+          pathtoPublish: 'dist/desktop'
           artifactName: 'ten-hands-linux'
