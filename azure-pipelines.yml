@@ -1,3 +1,6 @@
+variables:
+  node_version: "10.x"
+
 trigger:
   - master
 
@@ -6,5 +9,13 @@ jobs:
     pool:
       vmImage: "vs2017-win2016"
     steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: $(node_version)
+      - script: set GH_TOKEN=$(Build.GH_TOKEN)
       - script: yarn install
       - script: yarn build:desktop-azure
+      - task: DownloadPipelineArtifact@1
+        inputs:
+          buildType: 'current'
+          targetPath: '/dist'
