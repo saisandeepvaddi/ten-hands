@@ -9,11 +9,11 @@ import {
   deleteProject
 } from "../controllers/projects";
 
-// GET http://localhost:1010/projects
+// GET http://localhost:5010/projects
 router.get("/", getAllProjects);
 
 /* 
-POST http://localhost:1010/projects
+POST http://localhost:5010/projects
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ router.post("/", addProject);
 
 /* 
 
-DELETE http://localhost:1010/projects/3aa49e37-b58c-443d-a87c-5b35cd8b4345
+DELETE http://localhost:5010/projects/3aa49e37-b58c-443d-a87c-5b35cd8b4345
 
 */
 router.delete("/:projectId", deleteProject);

@@ -8,7 +8,7 @@ import config from "../shared/config";
 export async function startServer() {
   return new Promise(async (res, rej) => {
     try {
-      const port = config.port || process.env.PORT || 1010;
+      const port = config.port || process.env.PORT || 5010;
 
       const server = createServer(app);
 

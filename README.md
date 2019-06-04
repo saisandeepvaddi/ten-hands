@@ -27,7 +27,7 @@ You can save any tasks organized into projects and run them whenever you want wi
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
 
-> Currently, only `port` option can be changed. Default port is `1010`.
+> Currently, only `port` option can be changed. Default port is `5010`.
 
 ## Some gotchas
 
