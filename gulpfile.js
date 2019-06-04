@@ -22,6 +22,11 @@ const startAppsForDev = task("yarn dev", {
   cwd: path.join(__dirname, "app")
 });
 
+exports.startUIForElectron = startUIForElectron;
+exports.startBuildWatchForApp = startBuildWatchForApp;
+exports.startAppsForDev = startAppsForDev;
+
+
 /* BUILDING TASKS */
 
 const buildUIForBrowser = task("yarn build:browser", {

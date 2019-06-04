@@ -30,7 +30,7 @@ function ConfigProvider(props: IConfigProviderProps) {
                 }
             } else {
                 return {
-                    port: getItem("port") || 1010,
+                    port: getItem("port") || 5010,
                 };
             }
         } catch (error) {

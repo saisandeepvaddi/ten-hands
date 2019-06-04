@@ -19,7 +19,7 @@ function ab2str(buf) {
 
 $(document).ready(function() {
   $("#start").on("click", e => {
-    const socket = io.connect("http://localhost:1010");
+    const socket = io.connect("http://localhost:5010");
 
     socket.emit("start", { command: "node ./src/functions.js" });
     // socket.emit("start", { command: "echo sai" });

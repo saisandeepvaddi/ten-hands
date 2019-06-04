@@ -17,7 +17,7 @@
     "start": "concurrently \"yarn build:watch\" && \"yarn electron-only\"",
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
-    "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --publish never",
+    "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder",
     "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
   },
   "repository": {
@@ -37,8 +37,7 @@
     ],
     "linux": {
       "target": [
-        "deb",
-        "snap"
+        "deb"
       ],
       "category": "Utility"
     }
