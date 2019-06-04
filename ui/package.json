@@ -5,7 +5,7 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start:electron": "export PORT=3010 && rescripts start",
+    "start:electron": "cross-env PORT=3010 rescripts start",
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
@@ -50,6 +50,7 @@
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
     "@types/styled-components": "^4.1.15",
+    "cross-env": "^5.2.0",
     "jest-dom": "^3.2.2",
     "react-testing-library": "^7.0.0",
     "tslint": "^5.16.0",
