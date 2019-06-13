@@ -3,8 +3,6 @@ import { render, cleanup } from "../../test-utils";
 import AppLayout from "./AppLayout";
 import { ConfigProvider } from "../shared/Config";
 
-afterEach(cleanup);
-
 describe("AppLayout Component", () => {
   it("renders without crashing", () => {
     const { container } = render(<AppLayout />);

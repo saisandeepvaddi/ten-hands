@@ -2,7 +2,6 @@ import React from "react";
 import { render, fireEvent } from "../../test-utils";
 import Topbar from "./Topbar";
 import App from "../App";
-import { cleanup } from "@testing-library/react";
 
 describe("Topbar Component", () => {
   test("renders without crashing", () => {

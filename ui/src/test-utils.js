@@ -5,7 +5,7 @@ import { JobsProvider } from "./components/shared/Jobs";
 import { ProjectsProvider } from "./components/shared/Projects";
 import { ThemeProvider } from "./components/shared/Themes";
 
-const AllTheProviders = ({ children }) => {
+export const AllTheProviders = ({ children }) => {
   return (
     <ConfigProvider>
       <ThemeProvider>

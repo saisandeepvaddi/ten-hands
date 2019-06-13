@@ -47,6 +47,7 @@
     "@blueprintjs/tslint-config": "^1.8.0",
     "@rescripts/cli": "^0.0.10",
     "@rescripts/rescript-env": "^0.0.10",
+    "@testing-library/dom": "^5.2.0",
     "@testing-library/react": "^8.0.1",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
