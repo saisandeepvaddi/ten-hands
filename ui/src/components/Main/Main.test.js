@@ -1,32 +1,36 @@
 import React from "react";
 import { render, fireEvent } from "../../test-utils";
-import ProjectsList from "./ProjectsList";
+import Main from "./Main";
 import { ProjectsProvider, ProjectContext } from "../shared/Projects";
 import { ThemeProvider } from "../shared/Themes";
 import { ConfigProvider } from "../shared/Config";
 import { JobsProvider } from "../shared/Jobs";
+import { wait } from "@testing-library/react";
 
 test("renders without crashing", () => {
-  const { container } = render(<ProjectsList />);
+  const { container } = render(<Main />);
   expect(container).not.toBeNull();
 });
 
-function setupTestProjectsList() {
+function setupMain(options = {}) {
   const projects = [
     {
       _id: "1",
       name: "demo-project-1",
+      path: "D:\\Test",
       commands: [
         {
           _id: "11",
           name: "demo-cmd",
-          cmd: "demo command"
+          cmd: "demo command",
+          execDir: ""
         }
       ]
     },
     {
       _id: "2",
       name: "demo-project-2",
+      path: "D:\\Test",
       commands: [
         {
           _id: "21",
@@ -39,22 +43,27 @@ function setupTestProjectsList() {
 
   const TestProjectsProvider = props => (
     <ProjectContext.Provider
-      value={{ projects, activeProject: projects[0] }}
+      value={{ projects, activeProject: projects[0], ...options }}
       {...props}
     />
   );
 
   const testComponent = render(
     <TestProjectsProvider>
-      <ProjectsList />
+      <Main />
     </TestProjectsProvider>
   );
 
   return testComponent;
 }
 
-test("Should have project", async () => {
-  const { getByText } = setupTestProjectsList();
-
-  expect(getByText(/demo-project-1/i)).not.toBeNull();
+test("Shows spinner if loading", async () => {
+  const { container, debug } = setupMain({ loadingProjects: true });
+  expect(container.querySelectorAll(".bp3-spinner")).toHaveLength(1);
 });
+
+// test("Should have selected project", async () => {
+//   const { debug, findByText } = setupMain({ loadingProjects: false });
+//   debug();
+//   expect(await findByText(/demo-project-1/i)).not.toBeNull();
+// });
