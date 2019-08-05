@@ -54,7 +54,7 @@ function setupTestProjectsList() {
 }
 
 test("Should have project", async () => {
-  const { getByText } = setupTestProjectsList();
+  const { getByText } = render(<ProjectsList />);
 
   expect(getByText(/demo-project-1/i)).not.toBeNull();
 });

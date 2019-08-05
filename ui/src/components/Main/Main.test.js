@@ -58,7 +58,7 @@ function setupMain(options = {}) {
 }
 
 test("Shows spinner if loading", async () => {
-  const { container, debug } = setupMain({ loadingProjects: true });
+  const { container, debug } = render(<Main />);
   expect(container.querySelectorAll(".bp3-spinner")).toHaveLength(1);
 });
 
