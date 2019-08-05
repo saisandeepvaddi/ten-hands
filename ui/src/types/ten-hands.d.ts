@@ -4,6 +4,7 @@ interface IMyTheme {
 }
 
 interface IProjectCommand {
+    _id: string;
     [name: string]: string;
 }
 

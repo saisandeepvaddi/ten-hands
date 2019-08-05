@@ -97,6 +97,16 @@ class Database {
       .value();
     return command;
   }
+
+  public reorderProjectCommands(projectId: string, commands: IProjectCommand[]) {
+    this.db.get("projects")
+    .find({_id: projectId})
+    .set("commands", commands)
+    .write();
+    const project = this.getProject(projectId);
+    return project;
+  }
+
 }
 
 export default Database.getInstance();
