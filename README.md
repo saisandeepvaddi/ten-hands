@@ -31,6 +31,10 @@ Downloads are available in `releases` section.
 
 4. Installers will be available in `dist` folder.
 
+## Note 
+
+I am making updates in `v2.0.0` branch. Check Projects tab to see what I'm working on. You can pull and build that branch to get latest updates (with a risk of getting unstable build).
+
 # Configuration
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
