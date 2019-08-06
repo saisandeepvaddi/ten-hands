@@ -66,6 +66,7 @@ const openAppMenu = e => {
 const DesktopMenu = () => {
     const { theme, setTheme } = useTheme();
     const [maximizeIcon, setMaximizeIcon] = React.useState<TMinMaxIconType>(startingIcon);
+    const [isCloseButtonMinimal, setIsCloseButtonMinimal] = React.useState<boolean>(true);
 
     return (
         <MenuContainer theme={theme}>
@@ -122,8 +123,11 @@ const DesktopMenu = () => {
                     <Icon icon={maximizeIcon} iconSize={10} className="all-center" />
                 </Button>
                 <Button
-                    minimal={true}
+                    minimal={isCloseButtonMinimal}
                     className="close-button"
+                    intent={!isCloseButtonMinimal ? "danger" : "none"}
+                    onMouseOver={() => setIsCloseButtonMinimal(false)}
+                    onMouseOut={() => setIsCloseButtonMinimal(true)}
                     onClick={() => {
                         const response = remote.dialog.showMessageBox({
                             type: "info",
