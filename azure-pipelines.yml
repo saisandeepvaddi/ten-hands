@@ -2,7 +2,7 @@ variables:
   node_version: "10.x"
 
 trigger:
-  - master
+  - releases
 
 jobs:
   - job: Windows
@@ -16,8 +16,8 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: 'dist/desktop'
-          artifactName: 'ten-hands-windows'
+          pathtoPublish: "dist/desktop"
+          artifactName: "ten-hands-windows"
 
   - job: macOS
     pool:
@@ -30,8 +30,8 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: 'dist/desktop'
-          artifactName: 'ten-hands-mac'
+          pathtoPublish: "dist/desktop"
+          artifactName: "ten-hands-mac"
 
   - job: Linux
     pool:
@@ -44,5 +44,5 @@ jobs:
       - script: yarn build:desktop-azure
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: 'dist/desktop'
-          artifactName: 'ten-hands-linux'
+          pathtoPublish: "dist/desktop"
+          artifactName: "ten-hands-linux"
