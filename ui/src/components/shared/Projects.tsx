@@ -29,25 +29,41 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
     const { config } = useConfig();
     const [activeProject, setActiveProject] = React.useState(initialProject);
-    const [projects, setProjects] = React.useState([]);
+    const [projects, setProjects] = React.useState<IProject[]>([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
-    const updateProjects = React.useCallback(async () => {
-        try {
-            setLoadingProjects(true);
-            const response = await Axios.get(`http://localhost:${config.port}/projects`);
-            const receivedProjects = response.data;
-            if (receivedProjects.length > 0) {
-                setProjects(receivedProjects);
-                setActiveProject(receivedProjects[0]);
-            } else {
-                setProjects([]);
-                setActiveProject(initialProject);
+    const updateProjects = React.useCallback(() => {
+        const reloadProjects = async () => {
+            try {
+                setLoadingProjects(true);
+                const response = await Axios.get(`http://localhost:${config.port}/projects`);
+                const receivedProjects: IProject[] = response.data;
+                if (receivedProjects.length > 0) {
+                    setProjects(receivedProjects);
+                    if (activeProject._id === "") {
+                        setActiveProject(receivedProjects[0]);
+                    } else {
+                        // Commands order might be changed.
+                        const newActiveProject = receivedProjects.find(project => project._id === activeProject._id);
+
+                        // If the project was deleted
+                        if (newActiveProject) {
+                            setActiveProject(newActiveProject);
+                        } else {
+                            setActiveProject(receivedProjects[0]);
+                        }
+                    }
+                } else {
+                    setProjects([]);
+                }
+
+                setLoadingProjects(false);
+            } catch (error) {
+                console.error(error);
             }
-            setLoadingProjects(false);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [initialProject]);
+        };
+        reloadProjects();
+    }, [projects, activeProject]);
+
     React.useEffect(() => {
         async function updateNewProjects() {
             await updateProjects();

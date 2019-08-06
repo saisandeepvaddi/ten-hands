@@ -7,6 +7,7 @@ import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 
 const initialCommand: IProjectCommand = {
+    _id: "",
     name: "",
     execDir: "",
     cmd: "",

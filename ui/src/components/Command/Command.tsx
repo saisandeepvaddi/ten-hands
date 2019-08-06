@@ -128,7 +128,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
             <Container>
                 <CommandHeader>
                     <CommandTitleActions>
-                        <H5>{command.name}</H5>
+                        <H5 data-testid="command-name">{command.name}</H5>
                         <Button
                             data-testid="job-start"
                             icon="play"
@@ -146,7 +146,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                             onClick={stopJob}
                         />
                     </CommandTitleActions>
-                    <span>{command.cmd}</span>
+                    <span data-testid="command-cmd">{command.cmd}</span>
 
                     <CommandOutputButtonsContainer>
                         <Button

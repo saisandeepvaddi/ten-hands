@@ -30,11 +30,11 @@ const AppLayout = React.memo(() => {
 
     return (
         <div className={theme}>
-            <Topbar />
+            <Topbar data-testid="topbar" />
             <SplitContainer>
-                <SplitPane split="vertical" defaultSize={350} maxSize={500}>
-                    <Sidebar />
-                    <Main />
+                <SplitPane data-testid="splitPane" split="vertical" defaultSize={350} maxSize={500}>
+                    <Sidebar data-testid="sidebar" />
+                    <Main data-testid="main" />
                 </SplitPane>
             </SplitContainer>
         </div>

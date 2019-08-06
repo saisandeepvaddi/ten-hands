@@ -40,6 +40,10 @@ DELETE http://localhost:5010/projects/3aa49e37-b58c-443d-a87c-5b35cd8b4345
 */
 router.delete("/:projectId", deleteProject);
 
+/* Route to reorder commands in project
+ It takes and replaces the commands
+*/
+
 // Routes for commands
 router.use("/:projectId/commands", commandRoutes);
 

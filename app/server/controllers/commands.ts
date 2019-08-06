@@ -15,3 +15,10 @@ export function removeCommand(req: Request, res: Response) {
   const project = db.removeCommandFromProject(projectId, commandId);
   return res.status(200).send(project);
 }
+
+export function reorderCommands(req: Request, res: Response) {
+  const { projectId } = req.params;
+  const { commands } = req.body;
+  const project = db.reorderProjectCommands(projectId, commands);
+  return res.status(200).send(project);
+}

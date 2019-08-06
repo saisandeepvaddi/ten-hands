@@ -1,4 +1,15 @@
-import { Alert, Alignment, Button, Icon, Menu, MenuDivider, MenuItem, Navbar, Popover } from "@blueprintjs/core";
+import {
+    Alert,
+    Alignment,
+    Button,
+    Dialog,
+    Icon,
+    Menu,
+    MenuDivider,
+    MenuItem,
+    Navbar,
+    Popover,
+} from "@blueprintjs/core";
 import Axios from "axios";
 import React from "react";
 import styled from "styled-components";
@@ -7,6 +18,8 @@ import NewCommandDrawer from "../NewCommandDrawer";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
+import CommandOrderListContainer from "./CommandOrderListContainer";
+import CommandsOrderList from "./CommandsOrderList";
 
 // Have to use require because it's type-definition doesn't have function that allows path
 // Do not want to update node_module's file.
@@ -27,6 +40,7 @@ const GitBranchContainer = styled.div`
 
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
+    const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<boolean>(false);
     const { theme } = useTheme();
     const { config } = useConfig();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
@@ -47,6 +61,11 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
         },
         [activeProject, updateProjects],
     );
+
+    const handleChangeOrderModalClose = () => {
+        setCommandsOrderModalOpen(false);
+        updateProjects();
+    };
 
     const getGitBranch = React.useCallback(() => {
         if (isRunningInElectron()) {
@@ -97,8 +116,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                     <Popover position="left-top">
                         <Button icon="cog" minimal={true} />
                         <Menu key="menu">
-                            {/* <MenuDivider title="Layout" />
-                        <MenuItem icon="list" text="Fixed Height output" /> */}
+                            <MenuDivider title="Layout" />
+                            <MenuItem
+                                icon="sort"
+                                text="Change Commands order"
+                                onClick={() => setCommandsOrderModalOpen(true)}
+                            />
                             <MenuDivider title="Danger" />
                             <MenuItem
                                 icon="trash"
@@ -108,6 +131,15 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                             />
                         </Menu>
                     </Popover>
+                    <Dialog
+                        title="Change Commands Order"
+                        icon={"numbered-list"}
+                        className={theme}
+                        isOpen={commandsOrderModalOpen}
+                        onClose={handleChangeOrderModalClose}
+                    >
+                        <CommandOrderListContainer activeProject={activeProject} />
+                    </Dialog>
                 </Navbar.Group>
             </Navbar>
             <NewCommandDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
