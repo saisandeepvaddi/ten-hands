@@ -6,7 +6,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
-import { createMenu } from "./menu";
+import { createMenu, menuTemplate, getMenu } from "./menu";
 
 let mainWindow;
 
@@ -44,7 +44,7 @@ async function startApplication() {
 
     app.on("ready", () => {
       createWindow();
-      createMenu();
+      // createMenu();
     });
 
     ipcMain.on(`get-config`, e => {
@@ -75,6 +75,13 @@ async function startApplication() {
     app.on("activate", () => {
       if (mainWindow === null) {
         createWindow();
+      }
+    });
+
+    ipcMain.on(`display-app-menu`, (e, args) => {
+      const appMenu = getMenu();
+      if (mainWindow) {
+        appMenu.popup(mainWindow, args.x, args.y);
       }
     });
   } catch (error) {

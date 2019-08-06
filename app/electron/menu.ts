@@ -58,11 +58,13 @@ const winMenu = [
   ...commonMenu
 ];
 
-console.log("isMac:", isMac);
-const template = isMac ? macMenu : winMenu;
-console.log("template:", template);
+export const menuTemplate = isMac ? macMenu : winMenu;
 
 export const createMenu = () => {
-  const appMenu = Menu.buildFromTemplate(template);
+  const appMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(appMenu);
+};
+
+export const getMenu = () => {
+  return Menu.buildFromTemplate(menuTemplate);
 };
