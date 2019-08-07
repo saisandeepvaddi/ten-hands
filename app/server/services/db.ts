@@ -56,7 +56,6 @@ class Database {
       return projectsMap[projectId];
     });
 
-    console.log("orderedProjects:", orderedProjects);
     return orderedProjects;
   }
 
