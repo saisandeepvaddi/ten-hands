@@ -12,6 +12,7 @@ class Database {
     this.db = low(adapter);
     this.db
       .defaults({
+        projectsOrder: [],
         projects: []
       })
       .write();
@@ -22,9 +23,41 @@ class Database {
     return this._instance || (this._instance = new this());
   }
 
+  public reorderProjects(projectIds: string[]) {}
+
   public getProjects(): IProject[] {
-    const projects = this.db.get("projects").value();
-    return projects;
+    const projects: IProject[] = this.db.get("projects").value() || [];
+    let projectsOrder = this.db.get("projectsOrder").value() || [];
+
+    if (projects.length === 0) {
+      return projects;
+    }
+
+    // In case, ten-hands is updated, there will not be correct projectsOrder[] in db.json
+    if (
+      projectsOrder.length === 0 ||
+      projectsOrder.length !== projects.length
+    ) {
+      const defaultOrder: string[] = projects.map(project => project._id);
+
+      // update order array for now while returning in default order
+      this.reorderProjects(defaultOrder);
+      return projects;
+    }
+
+    // To get project in order
+    let projectsMap = {};
+
+    projects.map(project => {
+      projectsMap[project._id] = project;
+    });
+
+    const orderedProjects = projectsOrder.map((projectId: string) => {
+      return projectsMap[projectId];
+    });
+
+    console.log("orderedProjects:", orderedProjects);
+    return orderedProjects;
   }
 
   public addProject(project: IProject) {
