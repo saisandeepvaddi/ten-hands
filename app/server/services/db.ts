@@ -22,7 +22,7 @@ class Database {
     return this._instance || (this._instance = new this());
   }
 
-  public get projects(): IProject[] {
+  public getProjects(): IProject[] {
     const projects = this.db.get("projects").value();
     return projects;
   }
@@ -71,7 +71,7 @@ class Database {
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
-      .push({ _id: uuidv4(), ...command })
+      .push({ ...command })
       .write();
     const project = this.getProject(projectId);
     return project;
@@ -98,15 +98,18 @@ class Database {
     return command;
   }
 
-  public reorderProjectCommands(projectId: string, commands: IProjectCommand[]) {
-    this.db.get("projects")
-    .find({_id: projectId})
-    .set("commands", commands)
-    .write();
+  public reorderProjectCommands(
+    projectId: string,
+    commands: IProjectCommand[]
+  ) {
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .set("commands", commands)
+      .write();
     const project = this.getProject(projectId);
     return project;
   }
-
 }
 
 export default Database.getInstance();

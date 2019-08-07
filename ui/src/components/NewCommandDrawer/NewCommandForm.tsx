@@ -3,6 +3,7 @@ import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
 import React, { useCallback } from "react";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 
@@ -27,30 +28,34 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     console.log("activeProject:", activeProject);
     const { config } = useConfig();
 
-    // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = useCallback(
-        async (values, actions) => {
-            console.log("values:", values);
-            // console.info("values:", values);
-            try {
-                actions.setSubmitting(true);
-                const responseData: AxiosResponse = await Axios({
-                    timeout: 5000,
-                    method: "post",
-                    baseURL: `http://localhost:${config.port}`,
-                    url: `projects/${activeProject._id}/commands`,
-                    data: values,
-                });
-                actions.setSubmitting(false);
-                const updatedProject = responseData.data;
-                console.log("updatedProject:", updatedProject);
-                await updateProjects();
-                setDrawerOpen(false);
-                setActiveProject(updatedProject);
-            } catch (error) {
-                console.error(error);
-                actions.setSubmitting(false);
-            }
+        (values, actions) => {
+            const saveCommand = async (newCommand: IProjectCommand): Promise<any> => {
+                try {
+                    actions.setSubmitting(true);
+                    const responseData: AxiosResponse = await Axios({
+                        timeout: 5000,
+                        method: "post",
+                        baseURL: `http://localhost:${config.port}`,
+                        url: `projects/${activeProject._id}/commands`,
+                        data: newCommand,
+                    });
+                    actions.setSubmitting(false);
+                    const updatedProject = responseData.data;
+                    console.log("updatedProject:", updatedProject);
+                    await updateProjects();
+                    setDrawerOpen(false);
+                    setActiveProject(updatedProject);
+                } catch (error) {
+                    console.error(error);
+                    actions.setSubmitting(false);
+                }
+            };
+            const newCommand = {
+                ...values,
+                _id: uuidv4(),
+            };
+            saveCommand(newCommand);
         },
         [setActiveProject, setDrawerOpen, updateProjects],
     );
