@@ -11,11 +11,6 @@ import Sidebar from "../Sidebar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 
-const SplitContainer = styled.div`
-    min-height: calc(100vh - 50px);
-    padding-top: 50px;
-`;
-
 const AppLayout = React.memo(() => {
     const { config } = useConfig();
     const topbarHeight = isRunningInElectron() ? "30px" : "50px";
@@ -30,8 +25,6 @@ const AppLayout = React.memo(() => {
     }, []);
 
     const { theme } = useTheme();
-
-    console.log(topbarHeight);
 
     return (
         <>

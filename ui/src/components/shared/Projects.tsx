@@ -36,6 +36,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             try {
                 setLoadingProjects(true);
                 const response = await Axios.get(`http://localhost:${config.port}/projects`);
+                console.log("response:", response);
                 const receivedProjects: IProject[] = response.data;
                 if (receivedProjects.length > 0) {
                     setProjects(receivedProjects);
