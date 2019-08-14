@@ -178,6 +178,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                         <Item
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
                                             onClick={() => changeActiveProject(project._id, index)}
                                             theme={theme}
                                             style={{
@@ -192,7 +193,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                         >
                                             {project.name}
                                             <div className="drag-handle-container">
-                                                <Icon icon="drag-handle-horizontal" {...provided.dragHandleProps} />
+                                                <Icon icon="drag-handle-horizontal" />
                                             </div>
                                         </Item>
                                     )}
