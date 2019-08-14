@@ -16,3 +16,9 @@ export function deleteProject(req: Request, res: Response) {
   const project = db.deleteProject(projectId);
   return res.status(200).send(project);
 }
+
+export function reorderProjects(req: Request, res: Response) {
+  const { projectIds } = req.body;
+  const reorderProjectIds = db.reorderProjects(projectIds);
+  return res.status(200).send(reorderProjectIds);
+}

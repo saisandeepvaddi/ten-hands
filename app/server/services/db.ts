@@ -23,7 +23,10 @@ class Database {
     return this._instance || (this._instance = new this());
   }
 
-  public reorderProjects(projectIds: string[]) {}
+  public reorderProjects(projectIds: string[]) {
+    this.db.set("projectsOrder", projectIds).write();
+    return projectIds;
+  }
 
   public getProjects(): IProject[] {
     const projects: IProject[] = this.db.get("projects").value() || [];

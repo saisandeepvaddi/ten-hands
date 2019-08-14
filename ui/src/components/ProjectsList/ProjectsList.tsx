@@ -8,6 +8,7 @@ import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 
 import chalk from "chalk";
+import ProjectsListContainer from "./ProjectsListContainer";
 
 const Container = styled.div`
     height: 100%;
@@ -121,7 +122,8 @@ const ProjectsList = React.memo(() => {
 
     return (
         <Container>
-            <Tabs
+            <ProjectsListContainer />
+            {/* <Tabs
                 vertical={true}
                 className={`w-100`}
                 large={true}
@@ -129,12 +131,11 @@ const ProjectsList = React.memo(() => {
                 defaultSelectedTabId={projects[0]._id}
                 selectedTabId={activeProject._id || projects[0]._id}
             >
-                {/* <InputGroup className={Classes.FILL} type="text" placeholder="Search..." /> */}
                 <Divider />
                 {projects.map(project => (
                     <Tab key={project._id} id={project._id} title={project.name} />
                 ))}
-            </Tabs>
+            </Tabs> */}
         </Container>
     );
 });
