@@ -49,6 +49,10 @@ const MenuContainer = styled.div`
                 cursor: pointer;
             }
         }
+        .window-button {
+            border-radius: 0;
+            width: 3.2em;
+        }
     }
 `;
 
@@ -95,7 +99,7 @@ const DesktopMenu = () => {
             <span className="window-effects-container">
                 <Button
                     minimal={true}
-                    className="minimize-button"
+                    className="window-button minimize-button"
                     onClick={() => {
                         currentWindow.isMinimizable() && currentWindow.minimize();
                     }}
@@ -104,7 +108,7 @@ const DesktopMenu = () => {
                 </Button>
                 <Button
                     minimal={true}
-                    className="min-max-button"
+                    className="window-button min-max-button"
                     style={{
                         display: "flex",
                         justifyContent: "center",
@@ -124,7 +128,7 @@ const DesktopMenu = () => {
                 </Button>
                 <Button
                     minimal={isCloseButtonMinimal}
-                    className="close-button"
+                    className="window-button close-button"
                     intent={!isCloseButtonMinimal ? "danger" : "none"}
                     onMouseOver={() => setIsCloseButtonMinimal(false)}
                     onMouseOut={() => setIsCloseButtonMinimal(true)}
