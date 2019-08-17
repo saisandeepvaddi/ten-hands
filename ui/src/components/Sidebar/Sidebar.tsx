@@ -24,6 +24,7 @@ const Sidebar = React.memo(() => {
     return (
         <Container theme={theme}>
             <Button
+                data-testid="new-project-button"
                 icon="add"
                 intent="success"
                 text="New Project"
