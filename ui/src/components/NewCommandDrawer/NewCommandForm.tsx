@@ -107,6 +107,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
                         <FormGroup>
                             <Button
+                                data-testid="save-command-button"
                                 intent="primary"
                                 text="Save Command"
                                 type="submit"
