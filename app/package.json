@@ -15,6 +15,7 @@
     "build": "tsc",
     "build:watch": "tsc -w",
     "start": "concurrently \"yarn build:watch\" && \"yarn electron-only\"",
+    "start:server": "cross-env PORT=5010 node ./build/server/start",
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --publish never",

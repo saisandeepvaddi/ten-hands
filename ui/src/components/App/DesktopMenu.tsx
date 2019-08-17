@@ -1,7 +1,7 @@
 import { Button, Classes, Icon } from "@blueprintjs/core";
-import { ipcRenderer, remote } from "electron";
 import React from "react";
 import styled from "styled-components";
+import { isRunningInElectron } from "../../utils/electron";
 import { useTheme } from "../shared/Themes";
 
 const MenuContainer = styled.div`
@@ -57,17 +57,20 @@ const MenuContainer = styled.div`
 `;
 
 type TMinMaxIconType = "duplicate" | "square";
-const currentWindow = remote.getCurrentWindow();
-const startingIcon: TMinMaxIconType = currentWindow.isMaximized() ? "duplicate" : "square";
-
-const openAppMenu = e => {
-    ipcRenderer.send(`display-app-menu`, {
-        x: e.x,
-        y: e.y,
-    });
-};
 
 const DesktopMenu = () => {
+    // Importing electron here so that code doesn't give compilation error when running in browser
+    const { remote, ipcRenderer } = require("electron");
+    const currentWindow = remote.getCurrentWindow();
+    const startingIcon: TMinMaxIconType = currentWindow.isMaximized() ? "duplicate" : "square";
+
+    const openAppMenu = e => {
+        ipcRenderer.send(`display-app-menu`, {
+            x: e.x,
+            y: e.y,
+        });
+    };
+
     const { theme, setTheme } = useTheme();
     const [maximizeIcon, setMaximizeIcon] = React.useState<TMinMaxIconType>(startingIcon);
     const [isCloseButtonMinimal, setIsCloseButtonMinimal] = React.useState<boolean>(true);

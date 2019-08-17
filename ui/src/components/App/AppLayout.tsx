@@ -14,6 +14,7 @@ import DesktopMenu from "./DesktopMenu";
 const AppLayout = React.memo(() => {
     const { config } = useConfig();
     const topbarHeight = isRunningInElectron() ? "30px" : "50px";
+    console.log(isRunningInElectron());
     useEffect(() => {
         try {
             const socket = io(`http://localhost:${config.port}`);
