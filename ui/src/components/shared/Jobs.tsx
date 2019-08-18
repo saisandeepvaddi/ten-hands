@@ -86,6 +86,7 @@ export const jobsReducer = (state = initialState, action: IJobAction): object =>
 interface IJobsContextValue {
     state: object;
     dispatch: React.Dispatch<IJobAction>;
+    runningTasks: object;
 }
 
 interface IJobsProviderProps {
@@ -97,6 +98,24 @@ export const JobsContext = React.createContext<IJobsContextValue | undefined>(un
 
 function JobsProvider(props: IJobsProviderProps) {
     const [state, dispatch] = React.useReducer(jobsReducer, initialState);
+    const [runningTasks, setRunningTasks] = React.useState<any>({});
+
+    React.useEffect(() => {
+        const keys = Object.keys(state);
+
+        if (!keys || keys.length === 0) {
+            setRunningTasks({});
+            return;
+        }
+
+        const newTaskStatus = {};
+
+        keys.forEach(key => {
+            newTaskStatus[key] = (state[key] && state[key].isRunning) || false;
+        });
+
+        setRunningTasks(newTaskStatus);
+    }, [state]);
 
     React.useEffect(() => {
         const restoreData = async () => {
@@ -121,8 +140,9 @@ function JobsProvider(props: IJobsProviderProps) {
         return {
             state,
             dispatch,
+            runningTasks,
         };
-    }, [state, dispatch]);
+    }, [state, dispatch, runningTasks]);
     return <JobsContext.Provider value={value} {...props} />;
 }
 

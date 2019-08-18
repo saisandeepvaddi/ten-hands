@@ -1,4 +1,4 @@
-import { Classes, Icon } from "@blueprintjs/core";
+import { Classes, Icon, Tag, Tooltip } from "@blueprintjs/core";
 import Axios from "axios";
 import React from "react";
 import {
@@ -11,65 +11,41 @@ import {
     DroppableStateSnapshot,
     DropResult,
 } from "react-beautiful-dnd";
-import styled from "styled-components";
 import { useConfig } from "../shared/Config";
+import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
-
-const Container = styled.div`
-    margin-top: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
-`;
-
-const Item = styled.div`
-    padding: 0 10px;
-    width: 100%;
-    display: flex;
-    border-radius: 3px;
-    user-select: none;
-    line-height: 40px;
-    font-size: 14px;
-    max-width: 100%;
-    overflor: hidden;
-    justify-content: space-between;
-    align-items: center;
-    .drag-handle-container {
-        display: none;
-    }
-    &:hover {
-        cursor: pointer;
-        .drag-handle-container {
-            display: block;
-        }
-        color: ${props => (props.theme === Classes.DARK ? "#48aff0" : "#106ba3")} !important;
-    }
-`;
-
-const TabSwitchAnimator = styled.div`
-    position: absolute;
-    transition: height, transform, width, -webkit-transform;
-    transition-duration: 0.2s;
-    transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
-    height: 40px;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background: rgba(19, 124, 189, 0.2);
-`;
+import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
+import { Container, Item, TabSwitchAnimator } from "./styles";
 
 interface IProjectsListContainerProps {}
 
+const getRunningTasksCountForProjects = (projects: IProject[], runningTasks: any) => {
+    const taskCount = {};
+
+    projects.forEach((project: IProject) => {
+        const { commands, _id } = project;
+        let runningCount: number = 0;
+        commands.forEach((command: IProjectCommand) => {
+            const { _id } = command;
+            if (runningTasks[_id]) {
+                runningCount++;
+            }
+        });
+        taskCount[_id!] = runningCount;
+    });
+
+    return taskCount;
+};
+
 const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     const { projects: tempProjects, setActiveProject, activeProject } = useProjects();
+    const { runningTasks } = useJobs();
     const { theme } = useTheme();
     const [selectedItemIndex, setSelectedItemIndex] = React.useState<number>(0);
     const [projects, setProjects] = React.useState<any>([]);
     const [activeProjectIndexBeforeDrag, setActiveProjectIndexBeforeDrag] = React.useState<number>(0);
+    const [projectRunningTaskCount, setProjectRunningTaskCount] = React.useState<any>({});
     const { config } = useConfig();
 
     React.useEffect(() => {
@@ -79,6 +55,16 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
         setProjects(tempProjects);
     }, [tempProjects]);
+
+    React.useEffect(() => {
+        if (!projects) {
+            return;
+        }
+
+        const taskCountMap = getRunningTasksCountForProjects(projects, runningTasks);
+
+        setProjectRunningTaskCount(taskCountMap);
+    }, [runningTasks, projects]);
 
     const changeActiveProject = React.useCallback(
         (projectId, index: number) => {
@@ -172,8 +158,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                     transform: `translateY(${selectedItemIndex * 40}px)`,
                                 }}
                             />
-                            {projects.map((project, index) => (
-                                <Draggable draggableId={project._id} index={index} key={project._id}>
+                            {projects.map((project: IProject, index: number) => (
+                                <Draggable draggableId={project._id!} index={index} key={project._id}>
                                     {(provided: DraggableProvided) => (
                                         <Item
                                             ref={provided.innerRef}
@@ -192,6 +178,9 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                             }}
                                         >
                                             {project.name}
+                                            <div className="running-tasks-count" style={{ marginLeft: "auto" }}>
+                                                <ProjectRunningTasksTag count={projectRunningTaskCount[project._id!]} />
+                                            </div>
                                             <div className="drag-handle-container">
                                                 <Icon icon="drag-handle-horizontal" />
                                             </div>
