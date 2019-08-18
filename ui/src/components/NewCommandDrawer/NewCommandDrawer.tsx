@@ -18,7 +18,7 @@ const NewCommandDrawer: React.FC<INewDrawerProps> = React.memo(({ isDrawerOpen, 
     const { theme } = useTheme();
 
     return (
-        <Drawer className={theme} isOpen={isDrawerOpen} title="Add Command" onClose={() => setDrawerOpen(false)}>
+        <Drawer className={theme} isOpen={isDrawerOpen} title="Add Task" onClose={() => setDrawerOpen(false)}>
             <DrawerContainer>
                 <NewCommandForm setDrawerOpen={setDrawerOpen} />
             </DrawerContainer>

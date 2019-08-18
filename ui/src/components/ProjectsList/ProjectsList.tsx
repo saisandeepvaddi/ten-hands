@@ -123,19 +123,6 @@ const ProjectsList = React.memo(() => {
     return (
         <Container>
             <ProjectsListContainer />
-            {/* <Tabs
-                vertical={true}
-                className={`w-100`}
-                large={true}
-                onChange={changeActiveProject}
-                defaultSelectedTabId={projects[0]._id}
-                selectedTabId={activeProject._id || projects[0]._id}
-            >
-                <Divider />
-                {projects.map(project => (
-                    <Tab key={project._id} id={project._id} title={project.name} />
-                ))}
-            </Tabs> */}
         </Container>
     );
 });

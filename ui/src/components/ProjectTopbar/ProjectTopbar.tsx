@@ -95,7 +95,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         onClick={() => setDrawerOpen(true)}
                         icon="add"
                         intent="success"
-                        text="New Command"
+                        text="New Task"
                         minimal={true}
                     />
                     <Navbar.Divider />
@@ -119,7 +119,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                             <MenuDivider title="Layout" />
                             <MenuItem
                                 icon="sort"
-                                text="Change Commands order"
+                                text="Change Tasks order"
                                 onClick={() => setCommandsOrderModalOpen(true)}
                             />
                             <MenuDivider title="Danger" />
@@ -132,7 +132,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         </Menu>
                     </Popover>
                     <Dialog
-                        title="Change Commands Order"
+                        title="Change Tasks Order"
                         icon={"numbered-list"}
                         className={theme}
                         isOpen={commandsOrderModalOpen}

@@ -9,7 +9,8 @@
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
-    "test": "rescripts test"
+    "test": "rescripts test",
+    "cypress:open": "./node_modules/.bin/cypress open"
   },
   "author": {
     "name": "Sai Sandeep Vaddi",
@@ -48,6 +49,7 @@
     "@blueprintjs/tslint-config": "^1.8.0",
     "@rescripts/cli": "^0.0.10",
     "@rescripts/rescript-env": "^0.0.10",
+    "@testing-library/cypress": "^4.1.1",
     "@testing-library/dom": "^5.2.0",
     "@testing-library/react": "^8.0.7",
     "@types/react": "^16.8.17",
@@ -55,6 +57,8 @@
     "@types/react-dom": "^16.8.4",
     "@types/styled-components": "^4.1.15",
     "cross-env": "^5.2.0",
+    "cypress": "^3.4.1",
+    "eslint-plugin-cypress": "^2.6.1",
     "jest-dom": "^3.2.2",
     "tslint": "^5.16.0",
     "tslint-react-hooks": "^2.1.0",

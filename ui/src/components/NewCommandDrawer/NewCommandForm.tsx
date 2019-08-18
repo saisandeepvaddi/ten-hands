@@ -67,7 +67,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 onSubmit={handleSubmit}
                 render={props => (
                     <form onSubmit={props.handleSubmit}>
-                        <FormGroup label="Name" labelFor="name" helperText="A short name for your command.">
+                        <FormGroup label="Name" labelFor="name" helperText="A short name for your task.">
                             <InputGroup
                                 required={true}
                                 placeholder="E.g., Start DB"
@@ -83,23 +83,19 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             helperText="Will take the project's path if left empty."
                         >
                             <InputGroup
-                                placeholder="E.g., Absolute path where to execute the command."
+                                placeholder="E.g., Absolute path where to execute the task."
                                 id="execDir"
                                 type="text"
                                 onChange={props.handleChange}
                                 value={props.values.path}
                             />
                         </FormGroup>
-                        <FormGroup
-                            label="Command"
-                            labelFor="cmd"
-                            helperText="Will take the project path if left empty."
-                        >
+                        <FormGroup label="Task" labelFor="cmd" helperText="Will take the project path if left empty.">
                             <InputGroup
                                 required={true}
                                 id="cmd"
                                 type="text"
-                                placeholder="Actual Command. e.g., yarn test"
+                                placeholder="Actual Task. e.g., yarn test"
                                 onChange={props.handleChange}
                                 value={props.values.cmd}
                             />
@@ -107,8 +103,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
                         <FormGroup>
                             <Button
+                                data-testid="save-task-button"
                                 intent="primary"
-                                text="Save Command"
+                                text="Save Task"
                                 type="submit"
                                 loading={props.isSubmitting}
                                 large={true}
