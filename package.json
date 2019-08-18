@@ -8,6 +8,7 @@
     "build:desktop-azure": "./node_modules/.bin/gulp buildDesktopAzure",
     "build:cli": "./node_modules/.bin/gulp buildCLI",
     "start:desktop": "./node_modules/.bin/gulp startDesktop",
+    "start:browser": "./node_modules/.bin/gulp startBrowser",
     "start:cli": "./node_modules/.bin/gulp startCLI"
   },
   "tenHands": {
