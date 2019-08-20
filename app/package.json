@@ -19,7 +19,8 @@
     "dev": "./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --publish never",
-    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js"
+    "electron-only": "./node_modules/.bin/electron ./build/electron/index.js",
+    "test:server": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -57,7 +58,7 @@
   "devDependencies": {
     "@types/electron": "^1.6.10",
     "@types/express": "^4.16.1",
-    "@types/jest": "^24.0.12",
+    "@types/jest": "^24.0.18",
     "@types/lowdb": "^1.0.7",
     "@types/node": "^11.13.8",
     "@types/socket.io": "^2.1.2",

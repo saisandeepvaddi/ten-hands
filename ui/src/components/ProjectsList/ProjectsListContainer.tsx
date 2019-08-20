@@ -109,10 +109,9 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
         // Save Index of active project before.
         // So that, we can move animated blue background only if active project changed position.
         const newProjects = [...projects];
-        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id);
-        if (activeProjectIndex) {
-            setActiveProjectIndexBeforeDrag(activeProjectIndex);
-        }
+        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id) || 0;
+
+        setActiveProjectIndexBeforeDrag(activeProjectIndex);
     };
 
     const onDragEnd = (result: DropResult) => {
@@ -143,7 +142,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
         }
     };
 
-    if (projects.length === 0) {
+    if (!projects || projects.length === 0) {
         return <div />;
     }
 
@@ -158,36 +157,40 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                     transform: `translateY(${selectedItemIndex * 40}px)`,
                                 }}
                             />
-                            {projects.map((project: IProject, index: number) => (
-                                <Draggable draggableId={project._id!} index={index} key={project._id}>
-                                    {(provided: DraggableProvided) => (
-                                        <Item
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            onClick={() => changeActiveProject(project._id, index)}
-                                            theme={theme}
-                                            style={{
-                                                ...provided.draggableProps.style,
-                                                color:
-                                                    activeProject._id === project._id
-                                                        ? theme === Classes.DARK
-                                                            ? "#48aff0"
-                                                            : "#106ba3"
-                                                        : "inherit",
-                                            }}
-                                        >
-                                            {project.name}
-                                            <div className="running-tasks-count" style={{ marginLeft: "auto" }}>
-                                                <ProjectRunningTasksTag count={projectRunningTaskCount[project._id!]} />
-                                            </div>
-                                            <div className="drag-handle-container">
-                                                <Icon icon="drag-handle-horizontal" />
-                                            </div>
-                                        </Item>
-                                    )}
-                                </Draggable>
-                            ))}
+                            {projects.map((project: IProject, index: number) => {
+                                return (
+                                    <Draggable draggableId={project._id!} index={index} key={project._id}>
+                                        {(provided: DraggableProvided) => (
+                                            <Item
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                onClick={() => changeActiveProject(project._id, index)}
+                                                theme={theme}
+                                                style={{
+                                                    ...provided.draggableProps.style,
+                                                    color:
+                                                        activeProject._id === project._id
+                                                            ? theme === Classes.DARK
+                                                                ? "#48aff0"
+                                                                : "#106ba3"
+                                                            : "inherit",
+                                                }}
+                                            >
+                                                {project.name}
+                                                <div className="running-tasks-count" style={{ marginLeft: "auto" }}>
+                                                    <ProjectRunningTasksTag
+                                                        count={projectRunningTaskCount[project._id!]}
+                                                    />
+                                                </div>
+                                                <div className="drag-handle-container">
+                                                    <Icon icon="drag-handle-horizontal" />
+                                                </div>
+                                            </Item>
+                                        )}
+                                    </Draggable>
+                                );
+                            })}
                             {provided.placeholder}
                         </Container>
                     )}

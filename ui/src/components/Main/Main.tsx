@@ -26,7 +26,7 @@ const EmptyContainer = styled(Container)`
 
 const Main = React.memo(() => {
     const { theme } = useTheme();
-    const { activeProject, loadingProjects } = useProjects();
+    const { activeProject, loadingProjects, projects } = useProjects();
 
     if (loadingProjects) {
         return (
@@ -35,7 +35,7 @@ const Main = React.memo(() => {
             </EmptyContainer>
         );
     }
-    if (activeProject._id === "") {
+    if (!projects || projects.length === 0) {
         return (
             <EmptyContainer theme={theme} className="main-container">
                 Add a project using <span>New Project</span> button
