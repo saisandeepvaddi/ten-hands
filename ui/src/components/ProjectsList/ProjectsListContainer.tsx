@@ -109,10 +109,9 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
         // Save Index of active project before.
         // So that, we can move animated blue background only if active project changed position.
         const newProjects = [...projects];
-        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id);
-        if (activeProjectIndex) {
-            setActiveProjectIndexBeforeDrag(activeProjectIndex);
-        }
+        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id) || 0;
+
+        setActiveProjectIndexBeforeDrag(activeProjectIndex);
     };
 
     const onDragEnd = (result: DropResult) => {
