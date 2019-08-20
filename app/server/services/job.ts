@@ -2,6 +2,13 @@ import pKill from "tree-kill";
 import path from "path";
 import { exec } from "child_process";
 
+/**
+ * Task service class.
+ * This is the class where child_processes of tasks are created.
+ * This class returns responses to subscribed socket events.
+ *
+ * @class Job
+ */
 class Job {
   static socket: any;
   private room: any;
@@ -9,6 +16,14 @@ class Job {
     this.room = room;
   }
 
+  /**
+   * Starts a task.
+   * Emits events to socket client when child_process for the task updates.
+   *
+   * @param {*} command
+   * @param {*} projectPath
+   * @memberof Job
+   */
   public start(command, projectPath) {
     try {
       const job = command.cmd;
@@ -53,12 +68,26 @@ class Job {
   }
 }
 
+/**
+ * A manager class to manage multiple Job objects
+ *
+ * @export
+ * @class JobManager
+ */
 export class JobManager {
   public static _instance: JobManager;
   io: any;
   socket: any;
   private constructor() {}
 
+  /**
+   * Kills a running task when user clicks on stop button on UI.
+   *
+   * @private
+   * @param {*} room Room Id of the task. (This is actually the id of task)
+   * @param {*} pid Process Id of the task. (Created by OS)
+   * @memberof JobManager
+   */
   private killJob(room, pid) {
     console.log(`Killing process: ${pid}`);
     pKill(pid);
@@ -68,6 +97,14 @@ export class JobManager {
     });
   }
 
+  /**
+   * Triggers a new object for a task.
+   * Activates when play button is clicked on UI.
+   * Responds to subscribe socket event.
+   *
+   * @private
+   * @memberof JobManager
+   */
   private bindEvents() {
     this.socket.on(
       "subscribe",
@@ -91,6 +128,12 @@ export class JobManager {
     });
   }
 
+  /**
+   * Creates Socket.IO socket on server side.
+   *
+   * @param {*} io Socket.IO server side socket object. Check Socket.IO documentation for details.
+   * @memberof JobManager
+   */
   public bindIO(io: any) {
     if (!this.io) {
       this.io = io;
@@ -105,6 +148,14 @@ export class JobManager {
       this.bindEvents();
     });
   }
+
+  /**
+   * Returns a singleton object of class.
+   *
+   * @static
+   * @returns
+   * @memberof JobManager
+   */
   public static getInstance() {
     return this._instance || new this();
   }
