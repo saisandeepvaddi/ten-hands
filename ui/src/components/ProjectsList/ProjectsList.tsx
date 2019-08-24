@@ -163,12 +163,9 @@ const ProjectsList = React.memo(() => {
         <Container ref={dragContainer}>
             <ProjectsListContainer />
             <div
+                className="w-100 d-flex justify-center align-center p-absolute"
                 style={{
-                    position: "absolute",
-                    bottom: 20,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    bottom: 20
                 }}
             >
                 <span>
