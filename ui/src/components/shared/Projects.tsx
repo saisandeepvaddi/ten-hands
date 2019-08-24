@@ -9,6 +9,7 @@ interface IProjectContextValue {
     setProjects: any;
     updateProjects: () => void;
     deleteTask: (projectId: string, taskId: string) => Promise<any>;
+    addProject: (data: any) => Promise<any>;
     loadingProjects: boolean;
 }
 
@@ -86,6 +87,28 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         }
     };
 
+    const addProject = async (projectData: any) => {
+        const responseData: AxiosResponse = await Axios({
+            method: "post",
+            baseURL: `http://localhost:${config.port}`,
+            url: "projects",
+            data: projectData,
+        });
+
+        // Take data from backend so we know it's committed to database.
+        const newProject = responseData.data;
+        console.log("newProject:", newProject);
+
+        if (!newProject) {
+            throw new Error("Failed to add project. Something wrong with server.");
+        }
+
+        const updatedProjects = [...projects, newProject];
+        console.log("updatedProjects:", updatedProjects);
+        setProjects(updatedProjects);
+        setActiveProject(newProject);
+    };
+
     React.useEffect(() => {
         async function updateNewProjects() {
             await updateProjects();
@@ -102,8 +125,18 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             updateProjects,
             loadingProjects,
             deleteTask,
+            addProject,
         };
-    }, [projects, activeProject, setActiveProject, setProjects, updateProjects, loadingProjects, deleteTask]);
+    }, [
+        projects,
+        activeProject,
+        setActiveProject,
+        setProjects,
+        updateProjects,
+        loadingProjects,
+        deleteTask,
+        addProject,
+    ]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }

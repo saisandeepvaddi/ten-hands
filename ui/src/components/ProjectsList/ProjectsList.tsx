@@ -29,20 +29,16 @@ const ProjectsList = React.memo(() => {
     const { config } = useConfig();
 
     const [isSocketInitialized, setSocketInitialized] = React.useState(false);
-    const { projects, setActiveProject, activeProject, updateProjects } = useProjects();
+    const { projects, setActiveProject, activeProject, updateProjects, addProject } = useProjects();
     const dragContainer = useRef<HTMLDivElement>(null);
 
     const handleProjectFileUpload = async file => {
-        const responseData: AxiosResponse = await Axios({
-            timeout: 5000,
-            method: "post",
-            baseURL: `http://localhost:${config.port}`,
-            url: "projects",
-            data: file,
-        });
-        const updatedProject = responseData.data;
-        await updateProjects();
-        setActiveProject(updatedProject);
+        try {
+            await addProject(file);
+        } catch (error) {
+            console.log("error:", error);
+            console.error("Failed to add project.");
+        }
     };
 
     const handleFileDrop = async dragContainerElement => {
@@ -165,7 +161,7 @@ const ProjectsList = React.memo(() => {
             <div
                 className="w-100 d-flex justify-center align-center p-absolute"
                 style={{
-                    bottom: 20
+                    bottom: 20,
                 }}
             >
                 <span>

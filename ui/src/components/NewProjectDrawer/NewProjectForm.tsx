@@ -29,7 +29,7 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
-    const { updateProjects, setActiveProject } = useProjects();
+    const { updateProjects, setActiveProject, addProject } = useProjects();
     const { config } = useConfig();
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
@@ -99,33 +99,19 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     }, []);
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
-    const handleSubmit = useCallback(
-        async (values, actions) => {
-            console.log("values:", values);
-            // console.info("values:", values);
-            try {
-                actions.setSubmitting(true);
-                const responseData: AxiosResponse = await Axios({
-                    timeout: 5000,
-                    method: "post",
-                    baseURL: `http://localhost:${config.port}`,
-                    url: "projects",
-                    data: values,
-                });
-                actions.setSubmitting(false);
-                const updatedProject = responseData.data;
-                await updateProjects();
-                setDrawerOpen(false);
-                setActiveProject(updatedProject);
-            } catch (error) {
-                console.error(error);
-                actions.setSubmitting(false);
-            }
-        },
-        [setActiveProject, setDrawerOpen, updateProjects],
-    );
-
-    console.log("isRunningInElectron: ", isRunningInElectron());
+    const handleSubmit = async (values, actions) => {
+        console.log("values:", values);
+        // console.info("values:", values);
+        try {
+            actions.setSubmitting(true);
+            await addProject(values);
+            actions.setSubmitting(false);
+            setDrawerOpen(false);
+        } catch (error) {
+            console.error(error);
+            actions.setSubmitting(false);
+        }
+    };
 
     return (
         <Container>
