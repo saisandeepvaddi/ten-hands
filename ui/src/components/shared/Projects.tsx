@@ -10,6 +10,7 @@ interface IProjectContextValue {
     updateProjects: () => void;
     deleteTask: (projectId: string, taskId: string) => Promise<any>;
     addProject: (data: any) => Promise<any>;
+    deleteProject: (projectId: string) => Promise<any>;
     loadingProjects: boolean;
 }
 
@@ -97,16 +98,28 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
         // Take data from backend so we know it's committed to database.
         const newProject = responseData.data;
-        console.log("newProject:", newProject);
 
         if (!newProject) {
             throw new Error("Failed to add project. Something wrong with server.");
         }
 
         const updatedProjects = [...projects, newProject];
-        console.log("updatedProjects:", updatedProjects);
         setProjects(updatedProjects);
         setActiveProject(newProject);
+    };
+
+    const deleteProject = async (projectId: string) => {
+        if (!projectId) {
+            throw new Error("ProjectID not passed to deleteProject");
+        }
+        await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
+        const newProjects = projects.filter((x: IProject) => x._id !== projectId);
+        setProjects(newProjects);
+        if (newProjects && newProjects.length > 0) {
+            setActiveProject(newProjects[0]);
+        } else {
+            setActiveProject(initialProject);
+        }
     };
 
     React.useEffect(() => {
@@ -126,6 +139,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             loadingProjects,
             deleteTask,
             addProject,
+            deleteProject,
         };
     }, [
         projects,
@@ -136,6 +150,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         loadingProjects,
         deleteTask,
         addProject,
+        deleteProject,
     ]);
 
     return <ProjectContext.Provider value={value} {...props} />;

@@ -45,14 +45,13 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
     const { config } = useConfig();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
-    const { updateProjects } = useProjects();
-    const deleteProject = React.useCallback(
+    const { updateProjects, deleteProject } = useProjects();
+
+    const shouldDeleteProject = React.useCallback(
         async shouldDelete => {
             try {
                 if (shouldDelete) {
-                    console.info(`Deleting project: `, activeProject);
-                    await Axios.delete(`http://localhost:${config.port}/projects/${activeProject._id}`);
-                    await updateProjects();
+                    deleteProject(activeProject._id!);
                     setDeleteAlertOpen(false);
                 }
             } catch (error) {
@@ -107,7 +106,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         intent="danger"
                         isOpen={isDeleteAlertOpen}
                         onCancel={() => setDeleteAlertOpen(false)}
-                        onConfirm={() => deleteProject(true)}
+                        onConfirm={() => shouldDeleteProject(true)}
                     >
                         <p>
                             Are you sure you want to delete project <b>{activeProject.name}</b> ?
