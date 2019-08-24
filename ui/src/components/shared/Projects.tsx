@@ -35,6 +35,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState<IProject[]>([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
+
+    React.useEffect(() => {
+        console.log("check projects:", projects);
+    }, [projects]);
+
     const updateProjects = React.useCallback(() => {
         const reloadProjects = async () => {
             try {
@@ -124,7 +129,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             throw new Error("Failed to add project. Something wrong with server.");
         }
 
-        const updatedProjects = [...projects, newProject];
+        const copyOfProjects = projects.slice();
+        console.log("copyOfProjects:", copyOfProjects);
+
+        const updatedProjects = [...copyOfProjects, newProject];
+        console.log("updatedProjects:", updatedProjects);
         setProjects(updatedProjects);
         setActiveProject(newProject);
     };
