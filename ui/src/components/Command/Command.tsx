@@ -58,27 +58,20 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
     const { config } = useConfig();
-    const { updateProjects, activeProject, setActiveProject } = useProjects();
+    const { updateProjects, activeProject, setActiveProject, deleteTask } = useProjects();
 
     const deleteCommand = React.useCallback(
         async shouldDelete => {
             try {
                 if (shouldDelete) {
-                    console.info(`Deleting command: `, command);
-                    const responseData = await Axios.delete(
-                        `http://localhost:${config.port}/projects/${activeProject._id}/commands/${room}`,
-                    );
-                    const updatedProject = responseData.data;
-                    await updateProjects();
+                    await deleteTask(activeProject._id!, room);
                     setDeleteAlertOpen(false);
-
-                    setActiveProject(updatedProject);
                 }
             } catch (error) {
                 console.error(`Error deleting project: `, error);
             }
         },
-        [activeProject, updateProjects, room],
+        [activeProject, room],
     );
 
     const updateJobProcess = (room, jobProcess) => {
