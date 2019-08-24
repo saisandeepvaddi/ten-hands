@@ -22,7 +22,7 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(({ confi
                 const { dialog } = require("electron").remote;
                 dialog.showOpenDialog(
                     {
-                        filters: [{ name: "Config File", extensions: ["json"] }],
+                        filters: [{ name: "package.json", extensions: ["json"] }],
                     },
                     filePaths => {
                         const configFilePath: string | undefined =

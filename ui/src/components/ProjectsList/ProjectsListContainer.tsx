@@ -86,6 +86,25 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
         [projects],
     );
 
+    const updateActiveProjectIndex = () => {
+        // Save Index of active project before.
+        // So that, we can move animated blue background only if active project changed position.
+        const newProjects = [...projects];
+        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id) || 0;
+
+        setActiveProjectIndexBeforeDrag(activeProjectIndex);
+    };
+
+    React.useEffect(() => {
+        const newProjects = [...projects];
+        const newActiveProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id);
+        if (activeProjectIndexBeforeDrag !== newActiveProjectIndex) {
+            setSelectedItemIndex(newActiveProjectIndex);
+        }
+
+        updateActiveProjectIndex();
+    }, [activeProject, projects]);
+
     const saveNewProjectsOrder = React.useCallback(
         (projects: IProject[]) => {
             const save = async (projects: IProject[]) => {
@@ -106,12 +125,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     );
 
     const onDragStart = (result: DragStart) => {
-        // Save Index of active project before.
-        // So that, we can move animated blue background only if active project changed position.
-        const newProjects = [...projects];
-        const activeProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id) || 0;
-
-        setActiveProjectIndexBeforeDrag(activeProjectIndex);
+        updateActiveProjectIndex();
     };
 
     const onDragEnd = (result: DropResult) => {
