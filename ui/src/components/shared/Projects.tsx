@@ -11,6 +11,7 @@ interface IProjectContextValue {
     deleteTask: (projectId: string, taskId: string) => Promise<any>;
     addProject: (data: any) => Promise<any>;
     deleteProject: (projectId: string) => Promise<any>;
+    reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => Promise<any>;
     loadingProjects: boolean;
 }
 
@@ -88,6 +89,26 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         }
     };
 
+    const reorderTasks = async (projectId: string, commands: IProjectCommand[]) => {
+        await Axios.post(`http://localhost:${config.port}/projects/${projectId}/commands/reorder`, {
+            commands,
+        });
+
+        const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+        const projectWithThisTask = projects[currentProjectIndex];
+
+        if (projectWithThisTask) {
+            const updatedProject: IProject = {
+                ...projectWithThisTask,
+                commands,
+            };
+            const _projects = [...projects];
+            _projects.splice(currentProjectIndex, 1, updatedProject);
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+        }
+    };
+
     const addProject = async (projectData: any) => {
         const responseData: AxiosResponse = await Axios({
             method: "post",
@@ -140,6 +161,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             deleteTask,
             addProject,
             deleteProject,
+            reorderTasks,
         };
     }, [
         projects,
@@ -151,6 +173,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         deleteTask,
         addProject,
         deleteProject,
+        reorderTasks,
     ]);
 
     return <ProjectContext.Provider value={value} {...props} />;

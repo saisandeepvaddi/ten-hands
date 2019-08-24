@@ -63,7 +63,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
 
     const handleChangeOrderModalClose = () => {
         setCommandsOrderModalOpen(false);
-        updateProjects();
+        // updateProjects();
     };
 
     const getGitBranch = React.useCallback(() => {
