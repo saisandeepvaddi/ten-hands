@@ -22,12 +22,18 @@ const Container = styled.div`
 const Sidebar = React.memo(() => {
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
-    const { projects, addProject, updateProjects } = useProjects();
+    const { projects, addProjectWithDrop } = useProjects();
+    const _rememberProjectsForDrop = React.useRef<IProject[]>([]);
+
+    React.useEffect(() => {
+        // Drag & Drop did not remember the existing projects.
+        // So save them temporarily and pass them later when project added with drag and drop.
+        _rememberProjectsForDrop.current = [...projects];
+    }, [projects]);
 
     const handleProjectFileUpload = async file => {
         try {
-            await addProject(file);
-            await updateProjects();
+            await addProjectWithDrop(file, _rememberProjectsForDrop.current);
         } catch (error) {
             console.log("error:", error);
             console.error("Failed to add project.");

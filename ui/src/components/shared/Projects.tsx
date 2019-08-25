@@ -10,6 +10,7 @@ interface IProjectContextValue {
     updateProjects: () => void;
     deleteTask: (projectId: string, taskId: string) => Promise<any>;
     addProject: (data: any) => Promise<any>;
+    addProjectWithDrop: (data: any, currentProjects: IProject[]) => Promise<any>;
     deleteProject: (projectId: string) => Promise<any>;
     reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => Promise<any>;
     loadingProjects: boolean;
@@ -114,7 +115,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         }
     };
 
-    const addProject = async (projectData: any) => {
+    const saveProjectInDb = async (projectData: any) => {
         const responseData: AxiosResponse = await Axios({
             method: "post",
             baseURL: `http://localhost:${config.port}`,
@@ -124,16 +125,27 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
         // Take data from backend so we know it's committed to database.
         const newProject = responseData.data;
+        return newProject;
+    };
 
+    const addProject = async (projectData: any) => {
+        const newProject = await saveProjectInDb(projectData);
         if (!newProject) {
             throw new Error("Failed to add project. Something wrong with server.");
         }
 
         const copyOfProjects = projects.slice();
-        console.log("copyOfProjects:", copyOfProjects);
-
         const updatedProjects = [...copyOfProjects, newProject];
-        console.log("updatedProjects:", updatedProjects);
+        setProjects(updatedProjects);
+        setActiveProject(newProject);
+    };
+
+    const addProjectWithDrop = async (projectData: any, currentProjects: IProject[]) => {
+        const newProject = await saveProjectInDb(projectData);
+        if (!newProject) {
+            throw new Error("Failed to add project. Something wrong with server.");
+        }
+        const updatedProjects = [...currentProjects, newProject];
         setProjects(updatedProjects);
         setActiveProject(newProject);
     };
@@ -171,6 +183,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             addProject,
             deleteProject,
             reorderTasks,
+            addProjectWithDrop,
         };
     }, [
         projects,
@@ -183,6 +196,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         addProject,
         deleteProject,
         reorderTasks,
+        addProjectWithDrop,
     ]);
 
     return <ProjectContext.Provider value={value} {...props} />;
