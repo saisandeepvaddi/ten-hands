@@ -1,6 +1,6 @@
 import { Button, Classes, Code, Colors, Icon } from "@blueprintjs/core";
 import React, { useCallback, useEffect, useRef } from "react";
-import { useDropzone } from "react-dropzone";
+// import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 
 import { getFileData } from "../App/dragDropProject";
@@ -19,49 +19,53 @@ const Container = styled.div`
     padding: 1rem;
 `;
 
+const _temp: any = [];
+
 const Sidebar = React.memo(() => {
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
-    const { projects, addProjectWithDrop } = useProjects();
+    const { projects, updateProjects } = useProjects();
     const _rememberProjectsForDrop = React.useRef<IProject[]>([]);
 
-    React.useEffect(() => {
-        // Drag & Drop did not remember the existing projects.
-        // So save them temporarily and pass them later when project added with drag and drop.
-        _rememberProjectsForDrop.current = [...projects];
-    }, [projects]);
+    // React.useEffect(() => {
+    //     // Drag & Drop did not remember the existing projects.
+    //     // So save them temporarily and pass them later when project added with drag and drop.
+    //     // _rememberProjectsForDrop.current = [...projects];
+    //     _temp = [...projects];
+    // }, [projects]);
 
-    const handleProjectFileUpload = async file => {
-        try {
-            await addProjectWithDrop(file, _rememberProjectsForDrop.current);
-        } catch (error) {
-            console.log("error:", error);
-            console.error("Failed to add project.");
-        }
-    };
+    // const handleProjectFileUpload = async file => {
+    //     try {
+    //         await addProject(file);
+    //         await updateProjects();
+    //     } catch (error) {
+    //         console.log("error:", error);
+    //         console.error("Failed to add project.");
+    //     }
+    // };
 
-    const onDrop = useCallback(acceptedFiles => {
-        const upload = async files => {
-            // Do something with the files
-            for (const file of files) {
-                try {
-                    const fileData = await getFileData(file);
-                    await handleProjectFileUpload(fileData);
-                } catch (error) {
-                    console.log("error:", error);
-                }
-            }
-        };
+    // const onDrop = useCallback(acceptedFiles => {
+    //     const upload = async files => {
+    //         // Do something with the files
+    //         for (const file of files) {
+    //             try {
+    //                 const fileData = await getFileData(file);
+    //                 await handleProjectFileUpload(fileData);
+    //             } catch (error) {
+    //                 console.log("error:", error);
+    //             }
+    //         }
+    //     };
 
-        upload(acceptedFiles);
-    }, []);
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        noClick: true,
-    });
+    //     upload(acceptedFiles);
+    // }, []);
+    // const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    //     onDrop,
+    //     noClick: true,
+    // });
 
     return (
-        <Container theme={theme} {...getRootProps()}>
+        <Container theme={theme}>
             <Button
                 data-testid="new-project-button"
                 icon="add"
@@ -71,13 +75,13 @@ const Sidebar = React.memo(() => {
                 style={{ width: "100%" }}
                 onClick={() => setDrawerOpen(true)}
             />
+            {projects.length > 0 && <ProjectsList />}
 
-            <input {...getInputProps()} />
+            {/* <input {...getInputProps()} />
             {isDragActive ? (
                 <div className="h-100 w-100 d-flex justify-center align-center">Drop the files here ...</div>
             ) : (
                 <div className="h-100 w-100">
-                    {projects.length > 0 && <ProjectsList />}
                     <div
                         className="w-100 d-flex justify-center align-center p-absolute"
                         style={{
@@ -90,7 +94,7 @@ const Sidebar = React.memo(() => {
                         </span>
                     </div>
                 </div>
-            )}
+            )} */}
 
             <NewProjectDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </Container>
