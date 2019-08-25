@@ -11,25 +11,20 @@ interface ICommandsOrderListContainerProps {
 
 const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = React.memo(({ activeProject }) => {
     const { config } = useConfig();
-    const { updateProjects } = useProjects();
+    const { reorderTasks } = useProjects();
     const [commands, setCommands] = React.useState(activeProject.commands);
 
-    const saveNewCommandsOrder = React.useCallback(
-        (commands: IProjectCommand[]) => {
-            const save = async (commands: IProjectCommand[]) => {
-                try {
-                    console.info("Saving new commands order");
-                    await Axios.post(`http://localhost:${config.port}/projects/${activeProject._id}/commands/reorder`, {
-                        commands,
-                    });
-                } catch (error) {
-                    console.log("Error Reordering:", error);
-                }
-            };
-            save(commands);
-        },
-        [commands],
-    );
+    const saveNewCommandsOrder = (commands: IProjectCommand[]) => {
+        const save = async (commands: IProjectCommand[]) => {
+            try {
+                console.info("Saving new commands order");
+                reorderTasks(activeProject._id!, commands);
+            } catch (error) {
+                console.log("Error Reordering:", error);
+            }
+        };
+        save(commands);
+    };
 
     if (commands.length === 0) {
         return <div>No commands in the project.</div>;

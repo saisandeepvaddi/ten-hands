@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios, { AxiosResponse } from "axios";
 import React from "react";
 import { useConfig } from "./Config";
 
@@ -8,6 +8,11 @@ interface IProjectContextValue {
     setActiveProject: (activeProject: IProject) => void;
     setProjects: any;
     updateProjects: () => void;
+    deleteTask: (projectId: string, taskId: string) => Promise<any>;
+    addProject: (data: any) => Promise<any>;
+    addProjectWithDrop: (data: any, currentProjects: IProject[]) => Promise<any>;
+    deleteProject: (projectId: string) => Promise<any>;
+    reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => Promise<any>;
     loadingProjects: boolean;
 }
 
@@ -31,6 +36,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState<IProject[]>([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
+
+    React.useEffect(() => {
+        console.log("check projects:", projects);
+    }, [projects]);
+
     const updateProjects = React.useCallback(() => {
         const reloadProjects = async () => {
             try {
@@ -65,12 +75,101 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         reloadProjects();
     }, [projects, activeProject]);
 
+    const deleteTask = async (projectId, taskId) => {
+        await Axios.delete(`http://localhost:${config.port}/projects/${projectId}/commands/${taskId}`);
+
+        const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+        const projectWithThisTask = projects[currentProjectIndex];
+
+        if (projectWithThisTask) {
+            const currentTasks = [...projectWithThisTask.commands];
+            const updatedTasks = currentTasks.filter((x: IProjectCommand) => x._id !== taskId);
+            const updatedProject: IProject = {
+                ...projectWithThisTask,
+                commands: updatedTasks,
+            };
+            const _projects = [...projects];
+            _projects.splice(currentProjectIndex, 1, updatedProject);
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+        }
+    };
+
+    const reorderTasks = async (projectId: string, commands: IProjectCommand[]) => {
+        await Axios.post(`http://localhost:${config.port}/projects/${projectId}/commands/reorder`, {
+            commands,
+        });
+
+        const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+        const projectWithThisTask = projects[currentProjectIndex];
+
+        if (projectWithThisTask) {
+            const updatedProject: IProject = {
+                ...projectWithThisTask,
+                commands,
+            };
+            const _projects = [...projects];
+            _projects.splice(currentProjectIndex, 1, updatedProject);
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+        }
+    };
+
+    const saveProjectInDb = async (projectData: any) => {
+        const responseData: AxiosResponse = await Axios({
+            method: "post",
+            baseURL: `http://localhost:${config.port}`,
+            url: "projects",
+            data: projectData,
+        });
+
+        // Take data from backend so we know it's committed to database.
+        const newProject = responseData.data;
+        return newProject;
+    };
+
+    const addProject = async (projectData: any) => {
+        const newProject = await saveProjectInDb(projectData);
+        if (!newProject) {
+            throw new Error("Failed to add project. Something wrong with server.");
+        }
+
+        const copyOfProjects = projects.slice();
+        const updatedProjects = [...copyOfProjects, newProject];
+        setProjects(updatedProjects);
+        setActiveProject(newProject);
+    };
+
+    const addProjectWithDrop = async (projectData: any, currentProjects: IProject[]) => {
+        const newProject = await saveProjectInDb(projectData);
+        if (!newProject) {
+            throw new Error("Failed to add project. Something wrong with server.");
+        }
+        const updatedProjects = [...currentProjects, newProject];
+        setProjects(updatedProjects);
+        setActiveProject(newProject);
+    };
+
+    const deleteProject = async (projectId: string) => {
+        if (!projectId) {
+            throw new Error("ProjectID not passed to deleteProject");
+        }
+        await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
+        const newProjects = projects.filter((x: IProject) => x._id !== projectId);
+        setProjects(newProjects);
+        if (newProjects && newProjects.length > 0) {
+            setActiveProject(newProjects[0]);
+        } else {
+            setActiveProject(initialProject);
+        }
+    };
+
     React.useEffect(() => {
         async function updateNewProjects() {
             await updateProjects();
         }
         updateNewProjects();
-    }, []); // DO NOT ADD DEPENDENCY. IT WILL RUN INFINITE. NEED TO FIGURE OUT ANOTHER WAY
+    }, []);
 
     const value = React.useMemo(() => {
         return {
@@ -80,8 +179,25 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             setProjects,
             updateProjects,
             loadingProjects,
+            deleteTask,
+            addProject,
+            deleteProject,
+            reorderTasks,
+            addProjectWithDrop,
         };
-    }, [projects, activeProject, setActiveProject, setProjects, updateProjects, loadingProjects]);
+    }, [
+        projects,
+        activeProject,
+        setActiveProject,
+        setProjects,
+        updateProjects,
+        loadingProjects,
+        deleteTask,
+        addProject,
+        deleteProject,
+        reorderTasks,
+        addProjectWithDrop,
+    ]);
 
     return <ProjectContext.Provider value={value} {...props} />;
 }

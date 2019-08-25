@@ -60,6 +60,9 @@ export function reorderCommands(req: Request, res: Response) {
   try {
     const { projectId } = req.params;
     const { commands } = req.body;
+    if (!commands) {
+      throw new Error("No commands sent");
+    }
     const project = db.reorderProjectCommands(projectId, commands);
     return res.status(200).send(project);
   } catch (error) {
