@@ -52,34 +52,20 @@ function getJobData(state, room: string) {
 
 const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
-    const { theme } = useTheme();
+
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
-    const { config } = useConfig();
-    const { updateProjects, activeProject, setActiveProject } = useProjects();
+    const { activeProject, deleteTask } = useProjects();
 
-    const deleteCommand = React.useCallback(
-        async shouldDelete => {
-            try {
-                if (shouldDelete) {
-                    console.info(`Deleting command: `, command);
-                    const responseData = await Axios.delete(
-                        `http://localhost:${config.port}/projects/${activeProject._id}/commands/${room}`,
-                    );
-                    const updatedProject = responseData.data;
-                    await updateProjects();
-                    setDeleteAlertOpen(false);
-
-                    setActiveProject(updatedProject);
-                }
-            } catch (error) {
-                console.error(`Error deleting project: `, error);
-            }
-        },
-        [activeProject, updateProjects, room],
-    );
+    const deleteCommand = async () => {
+        try {
+            await deleteTask(activeProject._id!, room);
+        } catch (error) {
+            console.log("error:", error);
+            console.error("Error deleting task");
+        }
+    };
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
@@ -162,7 +148,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                             title={isOutputOpen ? "Hide Output" : "Show Output"}
                         />
                         <Button
-                            onClick={() => setDeleteAlertOpen(true)}
+                            onClick={deleteCommand}
                             icon="trash"
                             minimal={true}
                             intent="danger"
@@ -174,20 +160,6 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                     <CommandOutputXterm room={room} />
                 </Collapse>
             </Container>
-            <Alert
-                cancelButtonText="Cancel"
-                confirmButtonText="Yes, Delete"
-                className={theme}
-                icon="trash"
-                intent="danger"
-                isOpen={isDeleteAlertOpen}
-                onCancel={() => setDeleteAlertOpen(false)}
-                onConfirm={() => deleteCommand(true)}
-            >
-                <p>
-                    Are you sure you want to delete command <b>{command.name || ""}</b> ?
-                </p>
-            </Alert>
         </>
     );
 });

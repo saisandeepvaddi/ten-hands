@@ -7,11 +7,7 @@ import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 
-import Axios, { AxiosResponse } from "axios";
 import chalk from "chalk";
-import { config } from "localforage";
-import { getFileData } from "../App/dragDropProject";
-import { AppToaster } from "../shared/App";
 import { useConfig } from "../shared/Config";
 import ProjectsListContainer from "./ProjectsListContainer";
 
@@ -26,57 +22,8 @@ const options: any = { enabled: true, level: 3 };
 const forcedChalk = new chalk.constructor(options);
 
 const ProjectsList = React.memo(() => {
-    const { config } = useConfig();
-
     const [isSocketInitialized, setSocketInitialized] = React.useState(false);
-    const { projects, setActiveProject, activeProject, updateProjects } = useProjects();
-    const dragContainer = useRef<HTMLDivElement>(null);
-
-    const handleProjectFileUpload = async file => {
-        const responseData: AxiosResponse = await Axios({
-            timeout: 5000,
-            method: "post",
-            baseURL: `http://localhost:${config.port}`,
-            url: "projects",
-            data: file,
-        });
-        const updatedProject = responseData.data;
-        await updateProjects();
-        setActiveProject(updatedProject);
-    };
-
-    const handleFileDrop = async dragContainerElement => {
-        try {
-            dragContainerElement.addEventListener("dragover", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            });
-
-            dragContainerElement.addEventListener("drop", async e => {
-                e.preventDefault();
-                e.stopPropagation();
-                const files = Array.prototype.slice.call(e.dataTransfer!.files);
-                for (const file of files) {
-                    const fileData = await getFileData(file);
-                    handleProjectFileUpload(fileData);
-                }
-            });
-        } catch (error) {
-            console.error("error:", error);
-            if (error.message) {
-                AppToaster.show({ message: error.message });
-            }
-            // Display error message here.
-        }
-    };
-    useEffect(() => {
-        const dragContainerElement = dragContainer.current;
-        if (!dragContainerElement) {
-            throw new Error("Drag Area not found.");
-        }
-
-        handleFileDrop(dragContainerElement);
-    }, []);
+    const { projects } = useProjects();
 
     const terminalManager = JobTerminalManager.getInstance();
 
@@ -160,18 +107,8 @@ const ProjectsList = React.memo(() => {
     }, [projects, isSocketInitialized]); // NEED TO THINK IF I SHOULD ADD OTHER DEPENDENCIES AS PER LINT WARNINGS. DON'T REINITIALIZE SOCKET ON CHANGE. WILL MESS UP
 
     return (
-        <Container ref={dragContainer}>
+        <Container>
             <ProjectsListContainer />
-            <div
-                className="w-100 d-flex justify-center align-center p-absolute"
-                style={{
-                    bottom: 20
-                }}
-            >
-                <span>
-                    <Icon icon={"lightbulb"} intent="warning" /> Drop <Code>package.json</Code> here to add project.
-                </span>
-            </div>
         </Container>
     );
 });

@@ -37,6 +37,7 @@
     "react": "^16.8.6",
     "react-beautiful-dnd": "^11.0.5",
     "react-dom": "^16.8.6",
+    "react-dropzone": "^10.1.7",
     "react-scripts": "3.0.1",
     "react-split": "^2.0.4",
     "react-split-pane": "^0.1.87",
