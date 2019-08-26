@@ -7,10 +7,11 @@ const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
 import { createMenu, menuTemplate, getMenu } from "./menu";
+import { getConfig } from "../shared/config";
 
 const isWindows = process.platform === "win32";
 
-let mainWindow;
+export let mainWindow;
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 
@@ -52,7 +53,7 @@ async function startApplication() {
     });
 
     ipcMain.on(`get-config`, e => {
-      e.returnValue = require("../shared/config").default;
+      e.returnValue = getConfig();
     });
 
     app.on("second-instance", (event, commandLine, workingDirectory) => {
