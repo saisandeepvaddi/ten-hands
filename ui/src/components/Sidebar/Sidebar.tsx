@@ -71,6 +71,7 @@ const Sidebar = React.memo(() => {
                 icon="add"
                 intent="success"
                 text="New Project"
+                className="truncate"
                 large={true}
                 style={{ width: "100%" }}
                 onClick={() => setDrawerOpen(true)}

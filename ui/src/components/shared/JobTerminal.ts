@@ -43,6 +43,14 @@ class JobTerminal {
         }
     }
 
+    public getTheme() {
+        return this.terminal.getOption("theme");
+    }
+
+    public removeTheme() {
+        this.terminal.setOption("theme", {});
+    }
+
     public resizeTerminal(width: number) {
         this.terminal.resize(Math.floor(width / 10), this.options.rows!);
     }

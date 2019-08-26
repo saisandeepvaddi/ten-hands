@@ -5,9 +5,9 @@
 # What is this?
 
 Do you keep opening terminals to run your scripts/commands/tasks etc,. If you have to do that everyday for same project (Example running scripts from `package.json` for multiple projects), `Ten Hands` makes it easier to organize all your tasks in one place.
-You can organize tasks into projects and run them whenever you want with a click of button.
+You can organize tasks into projects and run them whenever you want with a click of a button.
 
-# Sample UI
+# Sample UI (in v2.0.0)
 
 |                  Dark                  |                  Light                  |
 | :------------------------------------: | :-------------------------------------: |
@@ -15,39 +15,44 @@ You can organize tasks into projects and run them whenever you want with a click
 
 # Downloads
 
-Downloads are available in `releases` section.
+Downloads are available in `releases` section if you just want to download and run.
 
-> **IMPORTANT NOTE**: I couldn't afford signing certificates. So, you'll have to allow the app to run.
+## Note
 
-# Steps to build
+I am making updates in `v2.0.0` branch. Check Projects tab to see what I'm working on. You can pull and build that branch to get latest updates (with a risk of getting unstable build).
 
-1. Install dependencies (Use _yarn_ because I used workspaces).
+# Steps to build (To get latest features)
+
+1. Install nodejs >= 10.6.0.
+
+> Use `v2.0.0` branch instead of `master` for latest features. But, there might be some bugs.
+
+2. Install dependencies (Use [_yarn_](https://yarnpkg.com/en/) because I used workspaces).
 
    - `yarn install`. Only in root folder.
 
-2. To start in development mode - `yarn start:desktop`
+3. To start in development mode - `yarn start:desktop`
 
-3. To build the app - `yarn build:desktop`
+4. To build the app - `yarn build:desktop`
 
-4. Installers will be available in `dist` folder.
-
-## Note 
-
-I am making updates in `v2.0.0` branch. Check Projects tab to see what I'm working on. You can pull and build that branch to get latest updates (with a risk of getting unstable build).
+5. Installers for your platform will be available in `dist` folder.
 
 # Configuration
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
 
-> Currently, only `port` option can be changed. Default port is `5010`.
+> {  
+>  "port": 5010, // number  
+>  "enableTerminalTheme": true // boolean  
+> }
 
 ## Gotchas & Tips
 
 This project is in experimental stage, so there are some limitations to use the app. Expect them to be resolved soon.
 
-1. Currently, tasks can be extracted only from `package.json`. But, If you have other type of project, you can create a project without any such file. Then, add the tasks using `New Command` button inside the project.
+1. Currently, automatic task extraction works only from `package.json`. But, If you have other type of project, you can create a project without any such file. Then, add the tasks using `New Task` button inside the project.
 
-2. Every project when opened, will render terminals for all the tasks in the project which can be costly based on the number of tasks. So, if you do not use a certain command, consider deleting it (not from your project file. Inside `Ten Hands`). This will make project switching faster. Performance will improve in coming versions.
+2. Every project when opened, will render terminals for all the tasks in the project which can be costly based on the number of tasks. So, if you do not use a certain task, consider deleting it (not from your project file. Inside `Ten Hands`). This will make project switching faster. Performance will improve in coming versions.
 
 3. The default port is `5010`. If app doesn't start, try changing the port in `~/.ten-hands/config.json` to any one that is not being used and reopen the app.
 

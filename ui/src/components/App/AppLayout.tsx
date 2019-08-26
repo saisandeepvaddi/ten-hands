@@ -11,6 +11,9 @@ import Sidebar from "../Sidebar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 
+const isWindows = navigator.platform.toLowerCase() === "win32";
+console.log("isWindows:", isWindows);
+
 const AppLayout = React.memo(() => {
     const { config } = useConfig();
     const topbarHeight = isRunningInElectron() ? "30px" : "50px";
@@ -30,7 +33,8 @@ const AppLayout = React.memo(() => {
     return (
         <>
             <div className={theme}>
-                {isRunningInElectron() ? <DesktopMenu /> : <Topbar data-testid="topbar" />}
+                {/* New menubar is only for Windows in this release :( */}
+                {isRunningInElectron() && isWindows ? <DesktopMenu /> : <Topbar data-testid="topbar" />}
                 {/* <Topbar data-testid="topbar" /> */}
                 <div
                     style={{

@@ -2,6 +2,7 @@ import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import debounce from "lodash/debounce";
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useConfig } from "../shared/Config";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/Themes";
@@ -21,6 +22,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
+    const { config } = useConfig();
 
     useEffect(() => {
         if (elRef && elRef.current) {
@@ -31,7 +33,24 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         }
     }, []);
 
-    useEffect(() => {
+    const setTerminalTheme = React.useCallback(() => {
+        if (!config.enableTerminalTheme) {
+            if (terminal && terminal.current) {
+                terminal.current.removeTheme();
+            }
+            return;
+        }
+
+        try {
+            const currentTheme = terminal.current!.getTheme();
+            if (currentTheme !== undefined && JSON.stringify(currentTheme) !== "{}") {
+                console.log("theme: Not setting theme again");
+                return;
+            }
+        } catch (error) {
+            console.log("error:", error);
+        }
+
         let themeTimeout: any = null;
         // Setting theme is taking a LOOOOOOOOOONG time.
         // So had to do it later in a different call stack.
@@ -46,7 +65,11 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         return () => {
             clearTimeout(themeTimeout);
         };
-    }, [theme]);
+    }, [theme, config]);
+
+    useEffect(() => {
+        setTerminalTheme();
+    }, [theme, config]);
 
     const handleResize = React.useCallback(
         debounce((entries: IResizeEntry[]) => {

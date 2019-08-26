@@ -5,6 +5,7 @@ import { getItem } from "../../utils/storage";
 
 interface IConfig {
     port: string | number;
+    enableTerminalTheme: boolean;
 }
 
 interface IConfigContextValue {
@@ -25,18 +26,37 @@ function ConfigProvider(props: IConfigProviderProps) {
             if (isRunningInElectron()) {
                 const { ipcRenderer } = require("electron");
                 const serverConfig = ipcRenderer.sendSync(`get-config`);
+                console.log("serverConfig:", serverConfig);
                 if (serverConfig) {
                     return serverConfig;
                 }
             } else {
                 return {
                     port: getItem("port") || 5010,
+                    enableTerminalTheme: getItem("enableTerminalTheme") || true,
                 };
             }
         } catch (error) {
             console.error(`Error getting config.`);
         }
     });
+
+    React.useEffect(() => {
+        if (!isRunningInElectron()) {
+            return;
+        }
+
+        const { ipcRenderer } = require("electron");
+        ipcRenderer.on(`config-changed`, (e, newConfig) => {
+            console.log("Config file updated:", newConfig);
+            setConfig(newConfig);
+        });
+        return () => {
+            ipcRenderer.removeListener(`config-changed`, () => {
+                console.log(`config-changed listener removed`);
+            });
+        };
+    }, []);
 
     const value = React.useMemo(() => {
         return { config, setConfig };

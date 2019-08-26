@@ -7,8 +7,11 @@ const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
 import { createMenu, menuTemplate, getMenu } from "./menu";
+import { getConfig } from "../shared/config";
 
-let mainWindow;
+const isWindows = process.platform === "win32";
+
+export let mainWindow;
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 
@@ -16,7 +19,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
-    frame: false,
+    frame: isWindows ? false : true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -44,11 +47,13 @@ async function startApplication() {
 
     app.on("ready", () => {
       createWindow();
-      // createMenu();
+      if (!isWindows) {
+        createMenu();
+      }
     });
 
     ipcMain.on(`get-config`, e => {
-      e.returnValue = require("../shared/config").default;
+      e.returnValue = getConfig();
     });
 
     app.on("second-instance", (event, commandLine, workingDirectory) => {
@@ -79,9 +84,11 @@ async function startApplication() {
     });
 
     ipcMain.on(`display-app-menu`, (e, args) => {
-      const appMenu = getMenu();
-      if (mainWindow) {
-        appMenu.popup(mainWindow, args.x, args.y);
+      if (isWindows) {
+        const appMenu = getMenu();
+        if (mainWindow) {
+          appMenu.popup(mainWindow, args.x, args.y);
+        }
       }
     });
   } catch (error) {
