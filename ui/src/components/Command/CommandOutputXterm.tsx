@@ -33,14 +33,24 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         }
     }, []);
 
-    useEffect(() => {
-        console.log("terminal config:", config);
+    const setTerminalTheme = React.useCallback(() => {
         if (!config.enableTerminalTheme) {
             if (terminal && terminal.current) {
                 terminal.current.removeTheme();
             }
             return;
         }
+
+        try {
+            const currentTheme = terminal.current!.getTheme();
+            if (currentTheme !== undefined && JSON.stringify(currentTheme) !== "{}") {
+                console.log("theme: Not setting theme again");
+                return;
+            }
+        } catch (error) {
+            console.log("error:", error);
+        }
+
         let themeTimeout: any = null;
         // Setting theme is taking a LOOOOOOOOOONG time.
         // So had to do it later in a different call stack.
@@ -55,6 +65,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         return () => {
             clearTimeout(themeTimeout);
         };
+    }, [theme, config]);
+
+    useEffect(() => {
+        setTerminalTheme();
     }, [theme, config]);
 
     const handleResize = React.useCallback(

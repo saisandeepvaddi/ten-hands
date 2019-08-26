@@ -43,6 +43,10 @@ class JobTerminal {
         }
     }
 
+    public getTheme() {
+        return this.terminal.getOption("theme");
+    }
+
     public removeTheme() {
         this.terminal.setOption("theme", {});
     }
