@@ -25,12 +25,12 @@ export const Item = styled.div`
   justify-content: space-between;
   align-items: center;
   .drag-handle-container {
-    display: none;
+    visibility: hidden;
   }
   &:hover {
     cursor: pointer;
     .drag-handle-container {
-      display: block;
+      visibility: visible;
     }
     color: ${props =>
       props.theme === Classes.DARK ? "#48aff0" : "#106ba3"} !important;
