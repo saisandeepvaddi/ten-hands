@@ -22,6 +22,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
+    const currentTheme = React.useRef<any>(null);
     const { config } = useConfig();
 
     useEffect(() => {
@@ -42,8 +43,13 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         }
 
         try {
-            const currentTheme = terminal.current!.getTheme();
-            if (currentTheme !== undefined && JSON.stringify(currentTheme) !== "{}") {
+            const hasATheme = terminal.current!.getTheme();
+            if (
+                hasATheme !== undefined &&
+                JSON.stringify(hasATheme) !== "{}" &&
+                theme === currentTheme.current &&
+                currentTheme.current
+            ) {
                 console.log("theme: Not setting theme again");
                 return;
             }
@@ -58,6 +64,9 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
             themeTimeout = setTimeout(() => {
                 if (terminal && terminal.current) {
                     terminal.current.setTheme(theme);
+                    if (currentTheme && currentTheme.current) {
+                        currentTheme.current = theme;
+                    }
                 }
             }, 0);
         };

@@ -11,7 +11,7 @@ You can organize tasks into projects and run them whenever you want with a click
 
 |                  Dark                  |                  Light                  |
 | :------------------------------------: | :-------------------------------------: |
-| <img src="/docs/images/demo_dark.PNG"> | <img src="/docs/images/demo_light.PNG"> |
+| <img src="/docs/images/demo_dark.jpg"> | <img src="/docs/images/demo_light.jpg"> |
 
 # Downloads
 
