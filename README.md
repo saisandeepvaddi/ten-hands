@@ -41,7 +41,10 @@ I am making updates in `v2.0.0` branch. Check Projects tab to see what I'm worki
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
 
-> Currently, only `port` option can be changed. Default port is `5010`.
+> {  
+>  "port": 5010, // number  
+>  "enableTerminalTheme": true // boolean  
+> }
 
 ## Gotchas & Tips
 
