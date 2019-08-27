@@ -3,7 +3,8 @@ import app from "./app";
 
 import socketIO from "socket.io";
 import { JobManager } from "./services/job";
-import config from "../shared/config";
+import { getConfig } from "../shared/config";
+
 
 /**
  * Starts Node server for ten-hands project.
@@ -15,7 +16,7 @@ import config from "../shared/config";
 export async function startServer() {
   return new Promise(async (res, rej) => {
     try {
-      const port = process.env.PORT || config.port || 5010;
+      const port = process.env.PORT || getConfig().port || 5010;
 
       const server = createServer(app);
 
