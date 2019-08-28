@@ -24,7 +24,7 @@ jobs:
     - name: yarn install, build
       run: |
         yarn install
-        yarn build --if-present
+        yarn build:desktop
         
       env:
         CI: true
