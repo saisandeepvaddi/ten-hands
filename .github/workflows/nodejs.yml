@@ -1,8 +1,9 @@
 name: Node CI
 
-pull_request:
-    branches:
-    - releases
+on:
+    pull_request:
+        branches:
+        - releases
 
 jobs:
   build:
