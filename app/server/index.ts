@@ -4,7 +4,7 @@ import app from "./app";
 import socketIO from "socket.io";
 import { JobManager } from "./services/job";
 import { getConfig } from "../shared/config";
-
+import SocketManager from "./services/socket";
 
 /**
  * Starts Node server for ten-hands project.
@@ -20,8 +20,12 @@ export async function startServer() {
 
       const server = createServer(app);
 
-      const io = socketIO(server);
-      JobManager.getInstance().bindIO(io);
+      const socketManager: SocketManager = SocketManager.getInstance();
+      JobManager.getInstance().bindSocketManager(socketManager);
+      // Todo: ConfigManager
+
+      socketManager.attachServer(server);
+
       server.listen(port, () => {
         console.log(`Server running on ${port}`);
         res(true);
