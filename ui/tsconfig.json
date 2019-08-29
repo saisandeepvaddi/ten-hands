@@ -14,12 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types",
-      "node_modules/type-fest/index"
-    ]
+    "jsx": "preserve"
   },
   "include": ["src"]
 }

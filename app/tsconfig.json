@@ -6,8 +6,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "build",
-    "allowJs": true,
-    "typeRoots": ["./node_modules/@types", "./types", "./server/types/"]
+    "allowJs": true
   },
   "include": ["server/**/*", "electron/**/*", "shared/**/*"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"]
