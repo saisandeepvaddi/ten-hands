@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { getFileData } from "../App/dragDropProject";
 import NewProjectDrawer from "../NewProjectDrawer";
 import ProjectsList from "../ProjectsList";
-import { AppToaster } from "../shared/App";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 

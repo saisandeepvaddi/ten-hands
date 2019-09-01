@@ -6,6 +6,7 @@ import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
+import { useSockets } from "../shared/Sockets";
 import { useTheme } from "../shared/Themes";
 import CommandOutputXterm from "./CommandOutputXterm";
 
@@ -52,6 +53,7 @@ function getJobData(state, room: string) {
 
 const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
+    const { subscribeToTaskSocket, unsubscribeFromTaskSocket, isSocketInitialized } = useSockets();
 
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
@@ -85,21 +87,13 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
 
     const startJob = () => {
         clearJobOutput(room);
-        socket.emit("subscribe", {
-            room,
-            command,
-            projectPath,
-        });
+        subscribeToTaskSocket(room, command, projectPath);
     };
 
     const stopJob = () => {
         const process = getJobData(jobState, room).process;
         const { pid } = process;
-
-        socket.emit("unsubscribe", {
-            room: command._id,
-            pid,
-        });
+        unsubscribeFromTaskSocket(room, pid);
         updateJobProcess(room, {
             pid: -1,
         });
@@ -133,7 +127,6 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                         />
                     </CommandTitleActions>
                     <span data-testid="command-cmd">{command.cmd}</span>
-
                     <CommandOutputButtonsContainer>
                         <Button
                             onClick={() => clearJobOutput(room)}
