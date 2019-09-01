@@ -1,4 +1,4 @@
-describe("Tests App top-most ui", () => {
+describe.skip("Tests App top-most ui", () => {
   before(() => {
     cy.visit("/");
   });
@@ -89,7 +89,7 @@ describe("Checks Project", () => {
         cy.getByTestId(/stop-task-button/i, { container: card }).should(
           "not.be.disabled"
         );
-        cy.wait(5000); // By that time dummy task is disabled
+        cy.wait(8000); // By that time dummy task is disabled
         cy.getByTestId(/start-task-button/i, { container: card }).should(
           "not.be.disabled"
         );
@@ -113,12 +113,6 @@ describe("Checks Project", () => {
       })
       .click()
       .wait(1000);
-
-    cy.getByText(/Are you sure you want to delete/gi).should("exist");
-
-    cy.getByText("Yes, Delete")
-      .click()
-      .wait(2000);
 
     cy.queryByText("node dummy-file.js").should("not.exist");
   });

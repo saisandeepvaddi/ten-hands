@@ -9,8 +9,9 @@
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
-    "test": "rescripts test",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "test:not-using-it": "rescripts test",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run": "./node_modules/.bin/cypress run"
   },
   "author": {
     "name": "Sai Sandeep Vaddi",
