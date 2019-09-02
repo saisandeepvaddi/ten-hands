@@ -1,6 +1,7 @@
 import pKill from "tree-kill";
 import path from "path";
 import { exec } from "child_process";
+import SocketManager, { ISocketListener } from "./socket";
 
 /**
  * Task service class.
@@ -10,10 +11,11 @@ import { exec } from "child_process";
  * @class Job
  */
 class Job {
-  static socket: any;
+  socketManager: SocketManager;
   private room: any;
-  constructor(room) {
+  constructor(room: string, socketManager: SocketManager) {
     this.room = room;
+    this.socketManager = socketManager;
   }
 
   /**
@@ -40,24 +42,24 @@ class Job {
         maxBuffer: 100 * 1024 * 1024
       });
 
-      Job.socket.emit(`job_started`, { room, data: n });
+      this.socketManager.emit(`job_started`, { room, data: n });
       n.stdout.on("data", chunk => {
-        Job.socket.emit(`job_output`, { room, data: chunk });
+        this.socketManager.emit(`job_output`, { room, data: chunk });
       });
 
       n.stderr.on("data", chunk => {
-        Job.socket.emit(`job_error`, { room, data: chunk });
+        this.socketManager.emit(`job_error`, { room, data: chunk });
       });
 
       n.on("close", (code, signal) => {
-        Job.socket.emit(`job_close`, {
+        this.socketManager.emit(`job_close`, {
           room,
           data: `Process closed with code ${code} by signal ${signal}`
         });
       });
 
       n.on("exit", (code, signal) => {
-        Job.socket.emit(`job_exit`, {
+        this.socketManager.emit(`job_exit`, {
           room,
           data: `Process exited with code ${code} by signal ${signal}`
         });
@@ -76,9 +78,13 @@ class Job {
  */
 export class JobManager {
   public static _instance: JobManager;
-  io: any;
-  socket: any;
+  socketManager: SocketManager;
   private constructor() {}
+
+  public bindSocketManager(socketManager: SocketManager) {
+    this.socketManager = socketManager;
+    this.subscribeEvents();
+  }
 
   /**
    * Kills a running task when user clicks on stop button on UI.
@@ -91,24 +97,21 @@ export class JobManager {
   private killJob(room, pid) {
     console.log(`Killing process: ${pid}`);
     pKill(pid);
-    this.socket.emit(`job_killed`, {
+    this.socketManager.emit(`job_killed`, {
       room,
       data: pid
     });
   }
 
   /**
-   * Triggers a new object for a task.
-   * Activates when play button is clicked on UI.
-   * Responds to subscribe socket event.
-   *
+   * Subscribes Job events to SocketManager
    * @private
    * @memberof JobManager
    */
-  private bindEvents() {
-    this.socket.on(
-      "subscribe",
-      ({
+  private subscribeEvents() {
+    const jobStartSubscriber: ISocketListener = {
+      event: "subscribe",
+      callback: ({
         command,
         room,
         projectPath
@@ -117,36 +120,19 @@ export class JobManager {
         room: string;
         projectPath: string;
       }) => {
-        const process = new Job(room);
+        const process = new Job(room, this.socketManager);
         process.start(command, projectPath);
       }
-    );
+    };
 
-    this.socket.on("unsubscribe", ({ room, pid }) => {
-      this.killJob(room, pid);
-      // this.socket.leave(room);
-    });
-  }
-
-  /**
-   * Creates Socket.IO socket on server side.
-   *
-   * @param {*} io Socket.IO server side socket object. Check Socket.IO documentation for details.
-   * @memberof JobManager
-   */
-  public bindIO(io: any) {
-    if (!this.io) {
-      this.io = io;
-    }
-    this.io.on("connection", socket => {
-      console.log(`Client connected to socket: `, socket.id);
-      Job.socket = socket;
-      this.socket = socket;
-      this.socket.on("disconnect", function() {
-        console.log("Disconnecting: ", socket.id);
-      });
-      this.bindEvents();
-    });
+    const jobKillSubscriber: ISocketListener = {
+      event: "unsubscribe",
+      callback: ({ room, pid }) => {
+        this.killJob(room, pid);
+      }
+    };
+    this.socketManager.subscribe(jobStartSubscriber);
+    this.socketManager.subscribe(jobKillSubscriber);
   }
 
   /**

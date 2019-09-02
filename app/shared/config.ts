@@ -2,9 +2,6 @@ import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
 import { homedir } from "os";
-import nodeWatch from "node-watch";
-import { isEqual } from "lodash";
-import { mainWindow } from "../electron/index";
 
 const tenHandsDir = path.join(homedir(), ".ten-hands");
 
@@ -18,23 +15,6 @@ mkdirp.sync(tenHandsDir);
 const defaultConfig: IConfig = {
   port: 5010,
   enableTerminalTheme: true
-};
-
-/* If user accidentally updates config file with invalid values, send default */
-const isValidConfig = (config): boolean => {
-  if (
-    typeof config.port !== "number" ||
-    config.port < 0 ||
-    config.port > 65535
-  ) {
-    return false;
-  }
-
-  if (typeof config.enableTerminalTheme !== "boolean") {
-    return false;
-  }
-
-  return true;
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -77,35 +57,3 @@ export const getConfig = () => {
 if (!fs.existsSync(CONFIG_FILES.configFile)) {
   writeConfigToFS(getConfig());
 }
-
-/* For cache purposes. see below nodeWatch */
-let conf = JSON.parse(fs.readFileSync(CONFIG_FILES.configFile, "utf8"));
-
-const sendConfigToUI = config => {
-  if (mainWindow && mainWindow.webContents) {
-    mainWindow.webContents.send("config-changed", config);
-  }
-};
-
-nodeWatch(CONFIG_FILES.configFile, (event, filename) => {
-  try {
-    let newConfig: IConfig = JSON.parse(
-      fs.readFileSync(CONFIG_FILES.configFile, "utf8")
-    );
-
-    if (isEqual(conf, newConfig)) {
-      return;
-    }
-
-    const validConfig = getValidConfig(newConfig);
-    conf = { ...validConfig };
-    sendConfigToUI(validConfig);
-  } catch (error) {
-    sendConfigToUI(getConfig());
-  }
-});
-
-export default {
-  ...defaultConfig,
-  ...conf
-};
