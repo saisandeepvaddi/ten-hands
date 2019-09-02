@@ -1,14 +1,22 @@
-import { Classes, HTMLTable } from "@blueprintjs/core";
+import { Button, Classes, HTMLTable, Icon } from "@blueprintjs/core";
 import React from "react";
 
 interface INewProjectCommandsProps {
     commands: IProjectCommand[];
+    setCommands: (commands: IProjectCommand[]) => any;
 }
 
-const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ commands }) => {
+const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ commands, setCommands }) => {
     if (commands.length === 0) {
         return <div />;
     }
+
+    const removeCommand = (cmd: IProjectCommand) => {
+        const _commands: IProjectCommand[] = [...commands];
+        const updatedCommands: IProjectCommand[] = _commands.filter(command => command._id !== cmd._id);
+        setCommands(updatedCommands);
+    };
+
     return (
         <div>
             <HTMLTable className={Classes.HTML_TABLE}>
@@ -16,14 +24,20 @@ const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ com
                     <tr>
                         <th>Name</th>
                         <th>Command</th>
+                        <th />
                     </tr>
                 </thead>
                 <tbody>
-                    {commands.map((command, key) => {
+                    {commands.map(command => {
                         return (
                             <tr key={command._id}>
                                 <td>{command.name}</td>
                                 <td>{command.cmd}</td>
+                                <td>
+                                    <Button intent={"danger"} minimal={true} onClick={() => removeCommand(command)}>
+                                        <Icon icon="cross" />
+                                    </Button>
+                                </td>
                             </tr>
                         );
                     })}

@@ -198,7 +198,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             labelFor="commands"
                             helperText="Will be auto-filled if available in config file. You can add tasks later."
                         >
-                            <NewProjectCommands commands={props.values.commands} />
+                            <NewProjectCommands
+                                commands={props.values.commands}
+                                setCommands={(commands: IProjectCommand[]) => props.setFieldValue("commands", commands)}
+                            />
                         </FormGroup>
                         <FormGroup>
                             <Button
