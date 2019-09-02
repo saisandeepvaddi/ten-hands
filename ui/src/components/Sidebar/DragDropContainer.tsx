@@ -1,10 +1,11 @@
-import { Classes, Code, Colors, Icon } from "@blueprintjs/core";
+import { Alert, Classes, Code, Colors, Icon } from "@blueprintjs/core";
 import React, { ReactNodeArray, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { getFileData } from "../App/dragDropProject";
 import { useProjects } from "../shared/Projects";
 
 import styled from "styled-components";
+import { hasProjectWithSameName } from "../../utils/projects";
 import { useTheme } from "../shared/Themes";
 
 interface IDragDropContainerProps {
@@ -26,10 +27,18 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
 
     const handleProjectFileUpload = async file => {
         try {
-            console.log("file: ", file);
-            console.log("before projects:", projects);
-
-            await addProject(file);
+            if (hasProjectWithSameName(projects, file.name)) {
+                const answer = window.confirm(
+                    "Project with same name already exists. Do you want to add project anyway?",
+                );
+                if (answer) {
+                    await addProject(file);
+                } else {
+                    console.log("Cancelled by user");
+                }
+            } else {
+                await addProject(file);
+            }
         } catch (error) {
             console.log("error:", error);
             console.error("Failed to add project.");
