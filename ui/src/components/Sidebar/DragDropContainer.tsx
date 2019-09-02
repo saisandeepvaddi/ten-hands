@@ -1,4 +1,4 @@
-import { Alert, Classes, Code, Colors, Icon } from "@blueprintjs/core";
+import { Classes, Code, Colors, Icon } from "@blueprintjs/core";
 import React, { ReactNodeArray, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { getFileData } from "../App/dragDropProject";

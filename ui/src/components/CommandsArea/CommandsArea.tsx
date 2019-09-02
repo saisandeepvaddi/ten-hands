@@ -33,7 +33,7 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject 
     if (commands.length === 0) {
         return (
             <EmptyContainer theme={theme} className="main-container">
-                There are no commands in the project
+                There are no tasks in the project
             </EmptyContainer>
         );
     }
