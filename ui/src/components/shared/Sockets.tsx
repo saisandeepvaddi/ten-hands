@@ -102,7 +102,6 @@ function SocketsProvider(props: ISocketProviderProps) {
 
     const subscribeToTaskSocket = React.useCallback((room, command, projectPath) => {
         try {
-            console.log("_socket && _socket.current:", _socket, _socket.current);
             if (_socket && _socket.current) {
                 _socket.current.emit("subscribe", {
                     room,

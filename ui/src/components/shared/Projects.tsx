@@ -36,10 +36,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const [projects, setProjects] = React.useState<IProject[]>([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
 
-    React.useEffect(() => {
-        console.log("check projects:", projects);
-    }, [projects]);
-
     const updateProjects = React.useCallback(() => {
         const reloadProjects = async () => {
             try {
