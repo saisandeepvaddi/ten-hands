@@ -1,14 +1,12 @@
-import { Classes, Icon, Tag, Tooltip } from "@blueprintjs/core";
+import { Classes, Icon } from "@blueprintjs/core";
 import Axios from "axios";
 import React from "react";
 import {
     DragDropContext,
     Draggable,
     DraggableProvided,
-    DragStart,
     Droppable,
     DroppableProvided,
-    DroppableStateSnapshot,
     DropResult,
 } from "react-beautiful-dnd";
 import { useConfig } from "../shared/Config";
@@ -83,7 +81,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                 });
             }
         },
-        [projects],
+        [projects, setActiveProject],
     );
 
     const updateActiveProjectIndex = () => {
@@ -95,6 +93,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
         setActiveProjectIndexBeforeDrag(activeProjectIndex);
     };
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     React.useEffect(() => {
         const newProjects = [...projects];
         const newActiveProjectIndex: number = newProjects.findIndex(x => x._id === activeProject._id);
@@ -121,10 +120,10 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
             };
             save(projects);
         },
-        [projects],
+        [projects, config],
     );
 
-    const onDragStart = (result: DragStart) => {
+    const onDragStart = () => {
         updateActiveProjectIndex();
     };
 

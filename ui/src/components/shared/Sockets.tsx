@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import React from "react";
 import io from "socket.io-client";
-import JobSocket from "../../utils/socket";
 import { useConfig } from "./Config";
 import { useJobs } from "./Jobs";
 import JobTerminalManager from "./JobTerminalManager";
@@ -44,8 +43,8 @@ function SocketsProvider(props: ISocketProviderProps) {
         });
     };
 
-    // TODO: save initialized sockets to ref or somewhere
-    const initializeSocket = () => {
+    /* eslint-disable react-hooks/exhaustive-deps */
+    const initializeSocket = React.useCallback(() => {
         _socket.current = io(`http://localhost:${config.port}`);
 
         if (isSocketInitialized) {
@@ -99,9 +98,9 @@ function SocketsProvider(props: ISocketProviderProps) {
             });
         });
         setSocketInitialized(true);
-    };
+    }, []);
 
-    const subscribeToTaskSocket = (room, command, projectPath) => {
+    const subscribeToTaskSocket = React.useCallback((room, command, projectPath) => {
         try {
             console.log("_socket && _socket.current:", _socket, _socket.current);
             if (_socket && _socket.current) {
@@ -115,9 +114,9 @@ function SocketsProvider(props: ISocketProviderProps) {
             console.error("subscribeToTaskSocket error:", error);
             throw error;
         }
-    };
+    }, []);
 
-    const unsubscribeFromTaskSocket = (room, pid) => {
+    const unsubscribeFromTaskSocket = React.useCallback((room, pid) => {
         try {
             if (_socket && _socket.current) {
                 _socket.current.emit("unsubscribe", {
@@ -129,7 +128,7 @@ function SocketsProvider(props: ISocketProviderProps) {
             console.error("unsubscribeFromTaskSocket error:", error);
             throw error;
         }
-    };
+    }, []);
 
     const value = React.useMemo(
         () => ({

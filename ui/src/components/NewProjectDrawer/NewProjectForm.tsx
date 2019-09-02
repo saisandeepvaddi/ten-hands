@@ -1,10 +1,8 @@
 import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
-import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
-import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -29,8 +27,7 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
-    const { updateProjects, setActiveProject, addProject } = useProjects();
-    const { config } = useConfig();
+    const { addProject } = useProjects();
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);

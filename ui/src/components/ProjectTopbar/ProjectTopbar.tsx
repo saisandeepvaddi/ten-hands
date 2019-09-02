@@ -10,16 +10,13 @@ import {
     Navbar,
     Popover,
 } from "@blueprintjs/core";
-import Axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
 import NewCommandDrawer from "../NewCommandDrawer";
-import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 import CommandOrderListContainer from "./CommandOrderListContainer";
-import CommandsOrderList from "./CommandsOrderList";
 
 // Have to use require because it's type-definition doesn't have function that allows path
 // Do not want to update node_module's file.
@@ -42,28 +39,23 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<boolean>(false);
     const { theme } = useTheme();
-    const { config } = useConfig();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
-    const { updateProjects, deleteProject } = useProjects();
+    const { deleteProject } = useProjects();
 
-    const shouldDeleteProject = React.useCallback(
-        async shouldDelete => {
-            try {
-                if (shouldDelete) {
-                    deleteProject(activeProject._id!);
-                    setDeleteAlertOpen(false);
-                }
-            } catch (error) {
-                console.error(`Error deleting project: `, error);
+    const shouldDeleteProject = async shouldDelete => {
+        try {
+            if (shouldDelete) {
+                deleteProject(activeProject._id!);
+                setDeleteAlertOpen(false);
             }
-        },
-        [activeProject, updateProjects],
-    );
+        } catch (error) {
+            console.error(`Error deleting project: `, error);
+        }
+    };
 
     const handleChangeOrderModalClose = () => {
         setCommandsOrderModalOpen(false);
-        // updateProjects();
     };
 
     const getGitBranch = React.useCallback(() => {
@@ -75,6 +67,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
             return "";
         }
     }, [activeProject]);
+
     return (
         <>
             <Navbar>

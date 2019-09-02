@@ -1,13 +1,10 @@
-import { Alert, Button, Collapse, H5 } from "@blueprintjs/core";
-import Axios from "axios";
+import { Button, Collapse, H5 } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
 import { useSockets } from "../shared/Sockets";
-import { useTheme } from "../shared/Themes";
 import CommandOutputXterm from "./CommandOutputXterm";
 
 const Container = styled.div`
@@ -51,9 +48,9 @@ function getJobData(state, room: string) {
     return state[room] || "";
 }
 
-const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
+const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const { subscribeToTaskSocket, unsubscribeFromTaskSocket, isSocketInitialized } = useSockets();
+    const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();

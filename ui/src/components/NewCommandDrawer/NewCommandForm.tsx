@@ -25,7 +25,6 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const { updateProjects, setActiveProject, activeProject } = useProjects();
-    console.log("activeProject:", activeProject);
     const { config } = useConfig();
 
     const handleSubmit = useCallback(
@@ -57,7 +56,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
             };
             saveCommand(newCommand);
         },
-        [setActiveProject, setDrawerOpen, updateProjects],
+        [setActiveProject, setDrawerOpen, updateProjects, config, activeProject],
     );
 
     return (

@@ -15,6 +15,7 @@ const AppLayout = React.memo(() => {
     const { isSocketInitialized, initializeSocket } = useSockets();
     const topbarHeight = isRunningInElectron() ? "30px" : "50px";
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
         try {
             initializeSocket();

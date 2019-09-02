@@ -1,3 +1,5 @@
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+
 const electron = require("electron");
 const { BrowserWindow, ipcMain } = electron;
 const app = electron.app;

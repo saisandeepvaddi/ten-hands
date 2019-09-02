@@ -1,6 +1,6 @@
 import { Icon } from "@blueprintjs/core";
 import React from "react";
-import { Draggable, DraggableProps, DraggableProvided } from "react-beautiful-dnd";
+import { Draggable, DraggableProvided } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 interface ICommandsOrderListItemProps {
