@@ -1,7 +1,6 @@
 import { Button, Classes, Icon } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { isRunningInElectron } from "../../utils/electron";
 import { useTheme } from "../shared/Themes";
 
 const MenuContainer = styled.div`

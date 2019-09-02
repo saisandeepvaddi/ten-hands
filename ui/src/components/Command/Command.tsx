@@ -1,12 +1,10 @@
-import { Alert, Button, Collapse, H5 } from "@blueprintjs/core";
-import Axios from "axios";
+import { Button, Collapse, H5 } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
+import { useSockets } from "../shared/Sockets";
 import CommandOutputXterm from "./CommandOutputXterm";
 
 const Container = styled.div`
@@ -50,8 +48,9 @@ function getJobData(state, room: string) {
     return state[room] || "";
 }
 
-const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
+const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
+    const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
@@ -85,21 +84,13 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
 
     const startJob = () => {
         clearJobOutput(room);
-        socket.emit("subscribe", {
-            room,
-            command,
-            projectPath,
-        });
+        subscribeToTaskSocket(room, command, projectPath);
     };
 
     const stopJob = () => {
         const process = getJobData(jobState, room).process;
         const { pid } = process;
-
-        socket.emit("unsubscribe", {
-            room: command._id,
-            pid,
-        });
+        unsubscribeFromTaskSocket(room, pid);
         updateJobProcess(room, {
             pid: -1,
         });
@@ -133,7 +124,6 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                         />
                     </CommandTitleActions>
                     <span data-testid="command-cmd">{command.cmd}</span>
-
                     <CommandOutputButtonsContainer>
                         <Button
                             onClick={() => clearJobOutput(room)}

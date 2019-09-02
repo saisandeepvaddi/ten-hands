@@ -1,10 +1,9 @@
 import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
-import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
-import { useConfig } from "../shared/Config";
+import { hasProjectWithSameName } from "../../utils/projects";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -29,8 +28,7 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
-    const { updateProjects, setActiveProject, addProject } = useProjects();
-    const { config } = useConfig();
+    const { projects, addProject } = useProjects();
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
@@ -104,9 +102,25 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         // console.info("values:", values);
         try {
             actions.setSubmitting(true);
-            await addProject(values);
-            actions.setSubmitting(false);
-            setDrawerOpen(false);
+            if (hasProjectWithSameName(projects, values.name)) {
+                const answer = window.confirm(
+                    "Project with same name already exists. Do you want to add project anyway?",
+                );
+                if (answer) {
+                    actions.setSubmitting(true);
+                    await addProject(values);
+                    actions.setSubmitting(false);
+                    setDrawerOpen(false);
+                } else {
+                    console.log("Cancelled by user");
+                    actions.setSubmitting(false);
+                }
+            } else {
+                actions.setSubmitting(true);
+                await addProject(values);
+                actions.setSubmitting(false);
+                setDrawerOpen(false);
+            }
         } catch (error) {
             console.error(error);
             actions.setSubmitting(false);

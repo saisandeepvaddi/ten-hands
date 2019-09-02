@@ -25,6 +25,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     const currentTheme = React.useRef<any>(null);
     const { config } = useConfig();
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
         if (elRef && elRef.current) {
             if (terminal.current === null) {
@@ -34,49 +35,49 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         }
     }, []);
 
-    const setTerminalTheme = React.useCallback(() => {
-        if (!config.enableTerminalTheme) {
-            if (terminal && terminal.current) {
-                terminal.current.removeTheme();
-            }
-            return;
-        }
-
-        try {
-            const hasATheme = terminal.current!.getTheme();
-            if (
-                hasATheme !== undefined &&
-                JSON.stringify(hasATheme) !== "{}" &&
-                theme === currentTheme.current &&
-                currentTheme.current
-            ) {
-                console.log("theme: Not setting theme again");
+    useEffect(() => {
+        const setTerminalTheme = () => {
+            if (!config.enableTerminalTheme) {
+                if (terminal && terminal.current) {
+                    terminal.current.removeTheme();
+                }
                 return;
             }
-        } catch (error) {
-            console.log("error:", error);
-        }
 
-        let themeTimeout: any = null;
-        // Setting theme is taking a LOOOOOOOOOONG time.
-        // So had to do it later in a different call stack.
-        const setThemeLater = () => {
-            themeTimeout = setTimeout(() => {
-                if (terminal && terminal.current) {
-                    terminal.current.setTheme(theme);
-                    if (currentTheme && currentTheme.current) {
-                        currentTheme.current = theme;
-                    }
+            try {
+                const hasATheme = terminal.current!.getTheme();
+                if (
+                    hasATheme !== undefined &&
+                    JSON.stringify(hasATheme) !== "{}" &&
+                    theme === currentTheme.current &&
+                    currentTheme.current
+                ) {
+                    console.log("theme: Not setting theme again");
+                    return;
                 }
-            }, 0);
-        };
-        setThemeLater();
-        return () => {
-            clearTimeout(themeTimeout);
-        };
-    }, [theme, config]);
+            } catch (error) {
+                console.log("error:", error);
+            }
 
-    useEffect(() => {
+            let themeTimeout: any = null;
+            // Setting theme is taking a LOOOOOOOOOONG time.
+            // So had to do it later in a different call stack.
+            const setThemeLater = () => {
+                themeTimeout = setTimeout(() => {
+                    if (terminal && terminal.current) {
+                        terminal.current.setTheme(theme);
+                        if (currentTheme && currentTheme.current) {
+                            currentTheme.current = theme;
+                        }
+                    }
+                }, 0);
+            };
+            setThemeLater();
+            return () => {
+                clearTimeout(themeTimeout);
+            };
+        };
+
         setTerminalTheme();
     }, [theme, config]);
 
