@@ -8,11 +8,10 @@ interface IProjectContextValue {
     setActiveProject: (activeProject: IProject) => void;
     setProjects: any;
     updateProjects: () => void;
-    deleteTask: (projectId: string, taskId: string) => Promise<any>;
-    addProject: (data: any) => Promise<any>;
-    addProjectWithDrop: (data: any, currentProjects: IProject[]) => Promise<any>;
-    deleteProject: (projectId: string) => Promise<any>;
-    reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => Promise<any>;
+    deleteTask: (projectId: string, taskId: string) => any;
+    addProject: (data: any) => any;
+    deleteProject: (projectId: string) => any;
+    reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => any;
     loadingProjects: boolean;
 }
 
@@ -36,10 +35,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const [activeProject, setActiveProject] = React.useState(initialProject);
     const [projects, setProjects] = React.useState<IProject[]>([]);
     const [loadingProjects, setLoadingProjects] = React.useState(true);
-
-    React.useEffect(() => {
-        console.log("check projects:", projects);
-    }, [projects]);
 
     const updateProjects = React.useCallback(() => {
         const reloadProjects = async () => {
@@ -73,48 +68,61 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             }
         };
         reloadProjects();
-    }, [projects, activeProject]);
+    }, [activeProject, config, setActiveProject]);
 
-    const deleteTask = async (projectId, taskId) => {
-        await Axios.delete(`http://localhost:${config.port}/projects/${projectId}/commands/${taskId}`);
+    const deleteTask = React.useCallback(
+        (projectId, taskId) => {
+            const deleteTaskFn = async () => {
+                await Axios.delete(`http://localhost:${config.port}/projects/${projectId}/commands/${taskId}`);
 
-        const currentProjectIndex = projects.findIndex(x => x._id === projectId);
-        const projectWithThisTask = projects[currentProjectIndex];
+                const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+                const projectWithThisTask = projects[currentProjectIndex];
 
-        if (projectWithThisTask) {
-            const currentTasks = [...projectWithThisTask.commands];
-            const updatedTasks = currentTasks.filter((x: IProjectCommand) => x._id !== taskId);
-            const updatedProject: IProject = {
-                ...projectWithThisTask,
-                commands: updatedTasks,
+                if (projectWithThisTask) {
+                    const currentTasks = [...projectWithThisTask.commands];
+                    const updatedTasks = currentTasks.filter((x: IProjectCommand) => x._id !== taskId);
+                    const updatedProject: IProject = {
+                        ...projectWithThisTask,
+                        commands: updatedTasks,
+                    };
+                    const _projects = [...projects];
+                    _projects.splice(currentProjectIndex, 1, updatedProject);
+                    setProjects(_projects);
+                    setActiveProject(updatedProject);
+                }
             };
-            const _projects = [...projects];
-            _projects.splice(currentProjectIndex, 1, updatedProject);
-            setProjects(_projects);
-            setActiveProject(updatedProject);
-        }
-    };
+            deleteTaskFn();
+        },
+        [projects, config],
+    );
 
-    const reorderTasks = async (projectId: string, commands: IProjectCommand[]) => {
-        await Axios.post(`http://localhost:${config.port}/projects/${projectId}/commands/reorder`, {
-            commands,
-        });
+    const reorderTasks = React.useCallback(
+        (projectId: string, commands: IProjectCommand[]) => {
+            const reorderTasksFn = async () => {
+                await Axios.post(`http://localhost:${config.port}/projects/${projectId}/commands/reorder`, {
+                    commands,
+                });
 
-        const currentProjectIndex = projects.findIndex(x => x._id === projectId);
-        const projectWithThisTask = projects[currentProjectIndex];
+                const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+                const projectWithThisTask = projects[currentProjectIndex];
 
-        if (projectWithThisTask) {
-            const updatedProject: IProject = {
-                ...projectWithThisTask,
-                commands,
+                if (projectWithThisTask) {
+                    const updatedProject: IProject = {
+                        ...projectWithThisTask,
+                        commands,
+                    };
+                    const _projects = [...projects];
+                    _projects.splice(currentProjectIndex, 1, updatedProject);
+                    setProjects(_projects);
+                    setActiveProject(updatedProject);
+                }
             };
-            const _projects = [...projects];
-            _projects.splice(currentProjectIndex, 1, updatedProject);
-            setProjects(_projects);
-            setActiveProject(updatedProject);
-        }
-    };
+            reorderTasksFn();
+        },
+        [projects, config],
+    );
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     const saveProjectInDb = async (projectData: any) => {
         const responseData: AxiosResponse = await Axios({
             method: "post",
@@ -128,42 +136,47 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         return newProject;
     };
 
-    const addProject = async (projectData: any) => {
-        const newProject = await saveProjectInDb(projectData);
-        if (!newProject) {
-            throw new Error("Failed to add project. Something wrong with server.");
-        }
+    /* eslint-disable react-hooks/exhaustive-deps */
+    const addProject = React.useCallback(
+        (projectData: any) => {
+            const addProjectFn = async () => {
+                const newProject = await saveProjectInDb(projectData);
+                if (!newProject) {
+                    throw new Error("Failed to add project. Something wrong with server.");
+                }
 
-        const copyOfProjects = projects.slice();
-        const updatedProjects = [...copyOfProjects, newProject];
-        setProjects(updatedProjects);
-        setActiveProject(newProject);
-    };
+                const copyOfProjects = projects.slice();
+                const updatedProjects = [...copyOfProjects, newProject];
+                setProjects(updatedProjects);
+                setActiveProject(newProject);
+            };
+            addProjectFn();
+        },
+        [projects, saveProjectInDb],
+    );
 
-    const addProjectWithDrop = async (projectData: any, currentProjects: IProject[]) => {
-        const newProject = await saveProjectInDb(projectData);
-        if (!newProject) {
-            throw new Error("Failed to add project. Something wrong with server.");
-        }
-        const updatedProjects = [...currentProjects, newProject];
-        setProjects(updatedProjects);
-        setActiveProject(newProject);
-    };
+    const deleteProject = React.useCallback(
+        (projectId: string) => {
+            const deleteProjectFn = async () => {
+                if (!projectId) {
+                    throw new Error("ProjectID not passed to deleteProject");
+                }
+                await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
+                const newProjects = projects.filter((x: IProject) => x._id !== projectId);
+                setProjects(newProjects);
+                if (newProjects && newProjects.length > 0) {
+                    setActiveProject(newProjects[0]);
+                } else {
+                    setActiveProject(initialProject);
+                }
+            };
 
-    const deleteProject = async (projectId: string) => {
-        if (!projectId) {
-            throw new Error("ProjectID not passed to deleteProject");
-        }
-        await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
-        const newProjects = projects.filter((x: IProject) => x._id !== projectId);
-        setProjects(newProjects);
-        if (newProjects && newProjects.length > 0) {
-            setActiveProject(newProjects[0]);
-        } else {
-            setActiveProject(initialProject);
-        }
-    };
+            deleteProjectFn();
+        },
+        [projects, config, initialProject],
+    );
 
+    /* eslint-disable */
     React.useEffect(() => {
         async function updateNewProjects() {
             await updateProjects();
@@ -183,7 +196,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             addProject,
             deleteProject,
             reorderTasks,
-            addProjectWithDrop,
         };
     }, [
         projects,
@@ -196,7 +208,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         addProject,
         deleteProject,
         reorderTasks,
-        addProjectWithDrop,
     ]);
 
     return <ProjectContext.Provider value={value} {...props} />;

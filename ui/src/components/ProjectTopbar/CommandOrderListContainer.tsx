@@ -1,7 +1,5 @@
-import Axios from "axios";
 import React from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import CommandsOrderList from "./CommandsOrderList";
 
@@ -10,7 +8,6 @@ interface ICommandsOrderListContainerProps {
 }
 
 const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = React.memo(({ activeProject }) => {
-    const { config } = useConfig();
     const { reorderTasks } = useProjects();
     const [commands, setCommands] = React.useState(activeProject.commands);
 
