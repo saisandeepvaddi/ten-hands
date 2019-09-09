@@ -1,35 +1,9 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import { render } from "@testing-library/react";
 import App from "./App";
+import { render } from "../../utils/test-utils";
 
-// jest.mock("../utils/api", () => {
-//   const projects = [
-//     {
-//       id: "1",
-//       name: "Mock Project 1",
-//       type: "node",
-//       configFile: "package.json",
-//       commands: [
-//         {
-//           start: "yarn start"
-//         },
-//         {
-//           dev: "yarn dev"
-//         },
-//         {
-//           test: "yarn test"
-//         }
-//       ]
-//     }
-//   ];
-
-//   return {
-//     getProjects: jest.fn(() => {
-//       return Promise.resolve(projects);
-//     })
-//   };
 // });
 
 // // this is just a little hack to silence a warning that we'll get until react

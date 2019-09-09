@@ -9,7 +9,7 @@
     "start:browser": "react-scripts start",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
-    "test:not-using-it": "rescripts test",
+    "test:electron": "rescripts test",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run": "./node_modules/.bin/cypress run"
   },
@@ -62,6 +62,7 @@
     "cypress": "^3.4.1",
     "eslint-plugin-cypress": "^2.6.1",
     "jest-dom": "^3.2.2",
+    "test-data-bot": "^0.8.0",
     "tslint": "^5.16.0",
     "tslint-react-hooks": "^2.1.0",
     "typescript": "^3.4.5"
