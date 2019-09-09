@@ -3,11 +3,6 @@ import React from "react";
 import { isRunningInElectron } from "../../utils/electron";
 import { getItem } from "../../utils/storage";
 
-interface IConfig {
-    port: string | number;
-    enableTerminalTheme: boolean;
-}
-
 interface IConfigContextValue {
     config: IConfig;
     setConfig: (config: IConfig) => void;

@@ -1,5 +1,5 @@
-import Axios, { AxiosResponse } from "axios";
 import React from "react";
+import { deleteProjectInDb, deleteTaskInDb, getProjects, reorderTasksInDb, saveProjectInDb } from "./API";
 import { useConfig } from "./Config";
 
 interface IProjectContextValue {
@@ -40,9 +40,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         const reloadProjects = async () => {
             try {
                 setLoadingProjects(true);
-                const response = await Axios.get(`http://localhost:${config.port}/projects`);
-                console.log("response:", response);
-                const receivedProjects: IProject[] = response.data;
+                const receivedProjects: IProject[] = await getProjects(config);
                 if (receivedProjects.length > 0) {
                     setProjects(receivedProjects);
                     if (activeProject._id === "") {
@@ -73,8 +71,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const deleteTask = React.useCallback(
         (projectId, taskId) => {
             const deleteTaskFn = async () => {
-                await Axios.delete(`http://localhost:${config.port}/projects/${projectId}/commands/${taskId}`);
-
+                await deleteTaskInDb(config, projectId, taskId);
                 const currentProjectIndex = projects.findIndex(x => x._id === projectId);
                 const projectWithThisTask = projects[currentProjectIndex];
 
@@ -99,10 +96,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     const reorderTasks = React.useCallback(
         (projectId: string, commands: IProjectCommand[]) => {
             const reorderTasksFn = async () => {
-                await Axios.post(`http://localhost:${config.port}/projects/${projectId}/commands/reorder`, {
-                    commands,
-                });
-
+                await reorderTasksInDb(config, projectId, commands);
                 const currentProjectIndex = projects.findIndex(x => x._id === projectId);
                 const projectWithThisTask = projects[currentProjectIndex];
 
@@ -123,24 +117,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     );
 
     /* eslint-disable react-hooks/exhaustive-deps */
-    const saveProjectInDb = async (projectData: any) => {
-        const responseData: AxiosResponse = await Axios({
-            method: "post",
-            baseURL: `http://localhost:${config.port}`,
-            url: "projects",
-            data: projectData,
-        });
-
-        // Take data from backend so we know it's committed to database.
-        const newProject = responseData.data;
-        return newProject;
-    };
-
-    /* eslint-disable react-hooks/exhaustive-deps */
     const addProject = React.useCallback(
         (projectData: any) => {
             const addProjectFn = async () => {
-                const newProject = await saveProjectInDb(projectData);
+                const newProject = await saveProjectInDb(config, projectData);
                 if (!newProject) {
                     throw new Error("Failed to add project. Something wrong with server.");
                 }
@@ -152,7 +132,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             };
             addProjectFn();
         },
-        [projects, saveProjectInDb],
+        [projects],
     );
 
     const deleteProject = React.useCallback(
@@ -161,7 +141,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                 if (!projectId) {
                     throw new Error("ProjectID not passed to deleteProject");
                 }
-                await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
+                await deleteProjectInDb(config, projectId);
                 const newProjects = projects.filter((x: IProject) => x._id !== projectId);
                 setProjects(newProjects);
                 if (newProjects && newProjects.length > 0) {
