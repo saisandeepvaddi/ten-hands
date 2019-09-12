@@ -7,6 +7,34 @@ import { ProjectsProvider } from "../components/shared/Projects";
 import { SocketsProvider } from "../components/shared/Sockets";
 import { ThemeProvider } from "../components/shared/Themes";
 
+jest.mock("localforage");
+
+jest.mock("../utils/storage", () => {
+  return {
+    getItem: jest.fn(key => {
+      switch (key) {
+        case "port": {
+          return 5010;
+        }
+        case "state": {
+          return null;
+        }
+        case "theme": {
+          return "bp3-dark";
+        }
+        case "enableTerminalTheme": {
+          return true;
+        }
+        default:
+          return null;
+      }
+    }),
+    setItem: jest.fn((key, value) => {
+      return true;
+    })
+  };
+});
+
 const commandBuilder = build("Command").fields({
   _id: fake(f => f.random.uuid()),
   name: fake(f => f.random.word()),
@@ -34,7 +62,6 @@ const getFakeProjects = (n = 5) => {
 
 const AllTheProviders = ({ children }) => {
   const projects = getFakeProjects(5);
-  console.log("projects:", projects);
   return (
     <ConfigProvider>
       <ThemeProvider>
