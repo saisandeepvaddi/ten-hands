@@ -51,6 +51,10 @@ function SocketsProvider(props: ISocketProviderProps) {
             return;
         }
 
+        _socket.current.on(`connect`, () => {
+            // console.info("Socket connected to server");
+        });
+
         _socket.current.on(`job_started`, message => {
             const room = message.room;
             console.info(`Process started for cmd: ${room}`);
