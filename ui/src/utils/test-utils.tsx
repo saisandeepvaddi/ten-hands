@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import React from "react";
 import { arrayOf, build, fake, sequence } from "test-data-bot";
 import { ConfigProvider } from "../components/shared/Config";
@@ -78,8 +78,16 @@ const AllTheProviders = ({ children }) => {
     );
 };
 
-const customRender = (ui, options?) => {
-    return render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = async (ui, options?) => {
+    try {
+        let utils: any = null;
+        await act(async () => {
+            utils = render(ui, { wrapper: AllTheProviders, ...options });
+        });
+        return utils;
+    } catch (error) {
+        console.error("customRender error:", error);
+    }
 };
 
 export * from "@testing-library/react";
