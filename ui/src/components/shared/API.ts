@@ -57,3 +57,36 @@ export const reorderTasksInDb = async (config: IConfig, projectId: string, comma
         throw error;
     }
 };
+
+export const saveTaskInDb = async (
+    config: IConfig,
+    activeProjectId: string,
+    newTask: IProjectCommand,
+): Promise<any> => {
+    try {
+        const responseData: AxiosResponse = await Axios({
+            timeout: 5000,
+            method: "post",
+            baseURL: `http://localhost:${config.port}`,
+            url: `projects/${activeProjectId}/commands`,
+            data: newTask,
+        });
+
+        const updatedProject = responseData.data;
+        return updatedProject;
+    } catch (error) {
+        console.error("saveProjectInDb error:", error);
+        throw error;
+    }
+};
+
+export const reorderProjectsInDb = async (config: IConfig, projectIds: string[]) => {
+    try {
+        await Axios.post(`http://localhost:${config.port}/projects/reorder`, {
+            projectIds,
+        });
+    } catch (error) {
+        console.error("reorderProjects error:", error);
+        throw error;
+    }
+};

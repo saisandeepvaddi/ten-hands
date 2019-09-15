@@ -1,9 +1,9 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
-import Axios, { AxiosResponse } from "axios";
 import { Formik } from "formik";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import { saveTaskInDb } from "../shared/API";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 
@@ -32,16 +32,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
             const saveCommand = async (newCommand: IProjectCommand): Promise<any> => {
                 try {
                     actions.setSubmitting(true);
-                    const responseData: AxiosResponse = await Axios({
-                        timeout: 5000,
-                        method: "post",
-                        baseURL: `http://localhost:${config.port}`,
-                        url: `projects/${activeProject._id}/commands`,
-                        data: newCommand,
-                    });
+                    const updatedProject = await saveTaskInDb(config, activeProject._id!, newCommand);
                     actions.setSubmitting(false);
-                    const updatedProject = responseData.data;
-                    console.log("updatedProject:", updatedProject);
                     await updateProjects();
                     setDrawerOpen(false);
                     setActiveProject(updatedProject);

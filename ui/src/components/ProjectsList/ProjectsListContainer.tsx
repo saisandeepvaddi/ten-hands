@@ -1,5 +1,4 @@
 import { Classes, Icon } from "@blueprintjs/core";
-import Axios from "axios";
 import React from "react";
 import {
     DragDropContext,
@@ -9,6 +8,7 @@ import {
     DroppableProvided,
     DropResult,
 } from "react-beautiful-dnd";
+import { reorderProjectsInDb } from "../shared/API";
 import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
 import { useProjects } from "../shared/Projects";
@@ -109,10 +109,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
             const save = async (projects: IProject[]) => {
                 try {
                     console.info("Saving new projects order");
-                    const projectIds = projects.map(project => project._id);
-                    await Axios.post(`http://localhost:${config.port}/projects/reorder`, {
-                        projectIds,
-                    });
+                    const projectIds = projects.map(project => project._id!);
+                    await reorderProjectsInDb(config, projectIds);
                     setProjects(projects);
                 } catch (error) {
                     console.log("Error Reordering:", error);
