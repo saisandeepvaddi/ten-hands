@@ -1,8 +1,8 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import { act, render } from "../../utils/test-utils";
-import App from "./App";
+import { render } from "../../utils/test-utils";
+import AppLayout from "./AppLayout";
 
 // });
 
@@ -23,9 +23,9 @@ import App from "./App";
 //   console.error = originalError;
 // });
 
-describe("App Component", () => {
+describe("AppLayout Component", () => {
     it("renders without crashing", () => {
-        const { container, getByText } = render(<App />);
+        const { container, getByText } = render(<AppLayout />);
         expect(container).not.toBeNull();
         expect(getByText(/ten hands/i)).toBeInTheDocument();
     });
