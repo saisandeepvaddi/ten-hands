@@ -20,7 +20,8 @@ jest.mock("../utils/storage", () => {
                     return null;
                 }
                 case "theme": {
-                    return "dark";
+                    // tslint:disable-next-line
+          return "bp3-dark";
                 }
                 case "enableTerminalTheme": {
                     return true;
@@ -47,7 +48,7 @@ export const commandBuilder = build("Command").fields({
 export const projectBuilder = build("Project").fields({
     _id: fake(f => f.random.uuid()),
     name: fake(f => f.random.word()),
-    path: fake(f => f.system.directoryPath()),
+    path: fake(f => f.fake("D:\\{{random.word}}\\{{random.word}}")),
     commands: arrayOf(commandBuilder, Math.ceil(Math.random() * 5 + 0)),
 });
 
@@ -77,7 +78,7 @@ const AllTheProviders = ({ children }) => {
     );
 };
 
-const customRender = (ui, options) => {
+const customRender = (ui, options?) => {
     return render(ui, { wrapper: AllTheProviders, ...options });
 };
 
