@@ -1,4 +1,3 @@
-import Axios, { AxiosResponse } from "axios";
 import { getFakeProjects } from "../../../utils/test-utils";
 
 export const getProjects = async (config: IConfig): Promise<IProject[]> => {
@@ -68,4 +67,14 @@ export const reorderProjectsInDb = async (config: IConfig, projectIds: string[])
         console.error("reorderProjects error:", error);
         throw error;
     }
+};
+
+export const allMockAjaxFunctions = {
+    getProjects,
+    saveProjectInDb,
+    deleteProjectInDb,
+    deleteTaskInDb,
+    reorderTasksInDb,
+    saveTaskInDb,
+    reorderProjectsInDb,
 };

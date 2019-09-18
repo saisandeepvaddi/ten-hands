@@ -36,7 +36,7 @@ jest.mock("../utils/storage", () => {
     };
 });
 
-jest.mock("../components/shared/API");
+// jest.mock("../components/shared/API");
 
 export const commandBuilder = build("Command").fields({
     _id: fake(f => f.random.uuid()),

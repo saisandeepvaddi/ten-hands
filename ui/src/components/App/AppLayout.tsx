@@ -40,8 +40,8 @@ const AppLayout = React.memo(() => {
                     }}
                 >
                     <SplitPane data-testid="splitPane" split="vertical" defaultSize={350} maxSize={500}>
-                        <Sidebar data-testid="sidebar" />
-                        <Main data-testid="main" />
+                        <Sidebar />
+                        <Main />
                     </SplitPane>
                 </div>
             </div>
