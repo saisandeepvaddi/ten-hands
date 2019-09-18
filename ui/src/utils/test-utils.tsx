@@ -8,6 +8,7 @@ import { SocketsProvider } from "../components/shared/Sockets";
 import { ThemeProvider } from "../components/shared/Themes";
 
 jest.mock("localforage");
+jest.mock("../components/shared/API");
 
 jest.mock("../utils/storage", () => {
     return {

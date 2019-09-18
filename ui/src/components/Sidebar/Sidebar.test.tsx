@@ -4,11 +4,7 @@ import React from "react";
 import { render } from "../../utils/test-utils";
 import Sidebar from "./Sidebar";
 
-jest.mock("../shared/API.ts", () => {
-    return require("../shared/mocks/API").allMockAjaxFunctions;
-});
-
-describe("Sidebar Component", () => {
+describe.skip("Sidebar Component", () => {
     let component: any = null;
     it("renders without crashing", async () => {
         try {

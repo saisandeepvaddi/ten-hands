@@ -1,44 +1,53 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import { render } from "../../utils/test-utils";
+import { getFakeProjects, render } from "../../utils/test-utils";
+import * as ajaxCalls from "../shared/API";
 import AppLayout from "./AppLayout";
 
-// });
-
-// // this is just a little hack to silence a warning that we'll get until react
-// // fixes this: https://github.com/facebook/react/pull/14853
-// // https://github.com/testing-library/react-testing-library/issues/281
-// const originalError = console.error;
-// beforeAll(() => {
-//   console.error = (...args) => {
-//     if (/Warning.*not wrapped in act/.test(args[0])) {
-//       return;
-//     }
-//     originalError.call(console, ...args);
-//   };
-// });
-
-// afterAll(() => {
-//   console.error = originalError;
-// });
-
-jest.mock("../shared/API.ts", () => {
-    return require("../shared/mocks/API").allMockAjaxFunctions;
-});
-
 describe("AppLayout Component", () => {
-    let component: any = null;
+    let projectsSpy: jest.SpyInstance;
     it("renders without crashing", async () => {
         try {
-            component = await render(<AppLayout />);
-            const { container, getByText } = component;
+            const { container, getByText } = await render(<AppLayout />);
             expect(container).not.toBeNull();
             expect(getByText(/ten hands/i)).toBeInTheDocument();
             expect(getByText(/new project/i)).toBeInTheDocument();
             expect(getByText(/new task/i)).toBeInTheDocument();
         } catch (error) {
             console.log("AppLayout error:", error);
+        }
+    });
+
+    it("shows no projects message on no projects", async () => {
+        projectsSpy = jest.spyOn(ajaxCalls, "getProjects");
+        projectsSpy.mockImplementation(() => Promise.resolve([]));
+        const { getByText } = await render(<AppLayout />);
+        expect(projectsSpy).toHaveBeenCalledTimes(1);
+        expect(getByText(/Add a project using/i)).toBeInTheDocument();
+    });
+
+    it("doesn't show no projects message on projects > 1", async () => {
+        projectsSpy = jest.spyOn(ajaxCalls, "getProjects");
+        projectsSpy.mockImplementation(() => Promise.resolve(getFakeProjects(1)));
+        const { queryByText } = await render(<AppLayout />);
+        expect(projectsSpy).toHaveBeenCalledTimes(1);
+        expect(queryByText(/Add a project using/i)).toBeNull();
+    });
+
+    it.only("has projects on shown on ui", async () => {
+        projectsSpy = jest.spyOn(ajaxCalls, "getProjects");
+        const projects: IProject[] = getFakeProjects(2);
+        projectsSpy.mockImplementation(() => Promise.resolve(projects));
+        const { getAllByText } = await render(<AppLayout />);
+        expect(projectsSpy).toHaveBeenCalledTimes(1);
+        expect(getAllByText(projects[0].name).length).toBeGreaterThan(0);
+        expect(getAllByText(projects[1].name).length).toBeGreaterThan(0);
+    });
+
+    afterEach(() => {
+        if (projectsSpy) {
+            projectsSpy.mockRestore();
         }
     });
 
