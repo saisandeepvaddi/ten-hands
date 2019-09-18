@@ -23,14 +23,26 @@ import AppLayout from "./AppLayout";
 //   console.error = originalError;
 // });
 
+jest.mock("../shared/API.ts", () => {
+    return require("../shared/mocks/API").allMockAjaxFunctions;
+});
+
 describe("AppLayout Component", () => {
+    let component: any = null;
     it("renders without crashing", async () => {
         try {
-            const { container, getByText } = await render(<AppLayout />);
+            component = await render(<AppLayout />);
+            const { container, getByText } = component;
             expect(container).not.toBeNull();
             expect(getByText(/ten hands/i)).toBeInTheDocument();
+            expect(getByText(/new project/i)).toBeInTheDocument();
+            expect(getByText(/new task/i)).toBeInTheDocument();
         } catch (error) {
             console.log("AppLayout error:", error);
         }
+    });
+
+    afterAll(() => {
+        jest.restoreAllMocks();
     });
 });
