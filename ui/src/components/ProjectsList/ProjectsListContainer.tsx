@@ -188,7 +188,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                                             : "inherit",
                                                 }}
                                             >
-                                                {project.name}
+                                                <span data-testid="project-name">{project.name}</span>
                                                 <div className="running-tasks-count" style={{ marginLeft: "auto" }}>
                                                     <ProjectRunningTasksTag
                                                         count={projectRunningTaskCount[project._id!]}

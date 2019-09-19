@@ -1,11 +1,10 @@
-// import "jest-dom/extend-expect";
-// import "react-testing-library/cleanup-after-each";
 import React from "react";
 import { getFakeProjects, render } from "../../utils/test-utils";
 import * as ajaxCalls from "../shared/API";
 import AppLayout from "./AppLayout";
 
-describe("AppLayout Component", () => {
+// Since AppLayout component is a container for the app, this suite is kind of works like integration.
+describe.skip("AppLayout Component", () => {
     let projectsSpy: jest.SpyInstance;
     it("renders without crashing", async () => {
         try {
@@ -35,7 +34,7 @@ describe("AppLayout Component", () => {
         expect(queryByText(/Add a project using/i)).toBeNull();
     });
 
-    it.only("has projects on shown on ui", async () => {
+    it("has projects on shown on ui", async () => {
         projectsSpy = jest.spyOn(ajaxCalls, "getProjects");
         const projects: IProject[] = getFakeProjects(2);
         projectsSpy.mockImplementation(() => Promise.resolve(projects));
