@@ -9,6 +9,21 @@ import { ThemeProvider } from "../components/shared/Themes";
 
 jest.mock("localforage");
 jest.mock("../components/shared/API");
+jest.mock("socket.io-client", () => {
+    const socket: any = {
+        on: jest.fn().mockImplementation((event, cb) => {
+            console.log(`mock on with event: ${event}`);
+        }),
+        emit: jest.fn().mockImplementation((event, data) => {
+            console.log(`mock emit with event: ${event}`);
+        }),
+    };
+
+    return {
+        __esModule: true,
+        default: jest.fn(_ => socket),
+    };
+});
 
 jest.mock("../utils/storage", () => {
     return {
