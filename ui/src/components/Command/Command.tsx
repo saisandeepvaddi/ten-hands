@@ -40,7 +40,6 @@ const CommandHeader = styled.div`
 
 interface ICommandProps {
     command: IProjectCommand;
-    socket: any;
     projectPath: string;
 }
 
