@@ -32,7 +32,7 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject 
 
     if (commands.length === 0) {
         return (
-            <EmptyContainer theme={theme} className="main-container">
+            <EmptyContainer theme={theme} className="main-container" data-testid="no-tasks-message">
                 There are no tasks in the project
             </EmptyContainer>
         );
@@ -42,7 +42,7 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject 
             {commands.map(command => {
                 return (
                     <Card key={command._id} elevation={Elevation.ONE} style={{ margin: 20 }}>
-                        <Command projectPath={activeProject.path} command={command} socket={socket} />
+                        <Command projectPath={activeProject.path} command={command} />
                     </Card>
                 );
             })}

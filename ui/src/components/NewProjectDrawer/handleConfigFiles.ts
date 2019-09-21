@@ -59,18 +59,24 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
 
         project.name = packageJsonData.name;
         project.type = "nodejs";
-        project.commands = Object.keys(packageJsonData.scripts).map(name => {
-            // Instead of running actual command, run yarn cmd or npm run cmd.
-            // Reason, getting '.' is not recognized errors might happen if cmd is ran directly
-            return {
-                _id: uuidv4(),
-                name,
-                cmd: shouldRunWithYarn ? `yarn ${name}` : `npm run ${name}`,
-                execDir: "",
-            };
-        });
+        const scriptsInPackageJson = packageJsonData.scripts;
+        if (scriptsInPackageJson && typeof scriptsInPackageJson === "object") {
+            project.commands = Object.keys(scriptsInPackageJson).map(name => {
+                // Instead of running actual command, run yarn cmd or npm run cmd.
+                // Reason, getting '.' is not recognized errors might happen if cmd is ran directly
+                return {
+                    _id: uuidv4(),
+                    name,
+                    cmd: shouldRunWithYarn ? `yarn ${name}` : `npm run ${name}`,
+                    execDir: "",
+                };
+            });
+        } else {
+            project.commands = [];
+        }
         return project;
     } catch (error) {
+        console.log("nodeConfigFileParser error:", error);
         return null;
     }
 };

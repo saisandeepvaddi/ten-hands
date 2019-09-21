@@ -79,6 +79,11 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
         };
 
         setTerminalTheme();
+        return () => {
+            if (terminal && terminal.current) {
+                terminal.current.removeTheme();
+            }
+        };
     }, [theme, config]);
 
     const handleResize = React.useCallback(

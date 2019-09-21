@@ -62,7 +62,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                     data: fileData,
                 };
                 setConfigFileName(fileName);
-
                 fillFormWithProjectConfig(tenHandsFile, setFieldValue);
             }
         } catch (error) {

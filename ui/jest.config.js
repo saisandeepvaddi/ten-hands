@@ -1,3 +1,14 @@
 module.exports = {
-  setupFiles: ["<rootDir>/src/setupTests.js"]
+  setupFiles: ["<rootDir>/src/setupTests.js"],
+  roots: ["<rootDir>/src"],
+  transform: {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  globals: {
+    "ts-jest": {
+      tsConfig: {
+        importHelpers: true
+      }
+    }
+  }
 };

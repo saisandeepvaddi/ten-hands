@@ -145,6 +145,10 @@ exports.startBrowser = series(
   parallel(startUIForBrowser, startBuildWatchForApp, startServerForBrowser)
 );
 
+exports.startServer = series(
+  parallel(startBuildWatchForApp, startServerForBrowser)
+);
+
 exports.startCLI = series(startBuildWatchForCLI);
 
 /* BUILD TASKS */

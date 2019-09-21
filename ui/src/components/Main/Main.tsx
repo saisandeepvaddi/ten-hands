@@ -37,7 +37,7 @@ const Main = React.memo(() => {
     }
     if (!projects || projects.length === 0) {
         return (
-            <EmptyContainer theme={theme} className="main-container">
+            <EmptyContainer theme={theme} className="main-container" data-testid="no-projects-message">
                 Add a project using <span>New Project</span> button
             </EmptyContainer>
         );

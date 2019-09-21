@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots": ["node_modules/@types", "src/types"],
+    // "types": ["jest", "node"],
+    // "typeRoots": ["node_modules/@types", "src/types"],
     "sourceMap": true
   },
   "include": ["src"]
