@@ -9,10 +9,11 @@ import {
     MenuItem,
     Navbar,
     Popover,
+    Tooltip,
 } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { isRunningInElectron } from "../../utils/electron";
+import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
@@ -73,6 +74,16 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
             <Navbar>
                 <Navbar.Group>
                     <Navbar.Heading data-testid="active-project-name">{activeProject.name}</Navbar.Heading>
+                    {isRunningInElectron() ? (
+                        <Tooltip content="Open project in file explorer">
+                            <Button
+                                data-testid="open-project-directory-button"
+                                icon="folder-shared-open"
+                                minimal={true}
+                                onClick={() => openInExplorer(activeProject.path)}
+                            />
+                        </Tooltip>
+                    ) : null}
                     <Navbar.Heading data-testid="active-project-git-branch">
                         {getGitBranch() ? (
                             <GitBranchContainer>
