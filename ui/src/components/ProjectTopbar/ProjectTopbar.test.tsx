@@ -7,8 +7,6 @@ import { cleanup, fireEvent, getFakeProjects, render, wait } from "../../utils/t
 import ProjectTopbar from "./ProjectTopbar";
 
 describe.only("ProjectTopbar Component", () => {
-    let projectsSpy: jest.SpyInstance;
-
     it("shows active project name, new task, project settings buttons", async () => {
         try {
             const activeProject: IProject = getFakeProjects(1)[0];
@@ -104,12 +102,6 @@ describe.only("ProjectTopbar Component", () => {
             cleanup();
         } catch (error) {
             console.log("ProjectTopbar error:", error);
-        }
-    });
-
-    afterEach(() => {
-        if (projectsSpy) {
-            projectsSpy.mockRestore();
         }
     });
 

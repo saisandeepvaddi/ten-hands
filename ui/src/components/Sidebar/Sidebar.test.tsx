@@ -1,7 +1,7 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import { act, fireEvent, getFakeProjects, render, wait, waitForElement } from "../../utils/test-utils";
+import { getFakeProjects, render } from "../../utils/test-utils";
 import * as ajaxCalls from "../shared/API";
 
 import Sidebar from "./Sidebar";
