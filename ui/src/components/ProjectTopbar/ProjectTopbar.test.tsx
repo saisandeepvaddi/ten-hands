@@ -1,8 +1,9 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
+import { axe } from "jest-axe";
 import React from "react";
 import * as utils from "../../utils/electron";
-import { cleanup, fireEvent, getDefaultNormalizer, getFakeProjects, render } from "../../utils/test-utils";
+import { cleanup, fireEvent, getFakeProjects, render } from "../../utils/test-utils";
 import ProjectTopbar from "./ProjectTopbar";
 
 describe.only("ProjectTopbar Component", () => {
@@ -16,10 +17,18 @@ describe.only("ProjectTopbar Component", () => {
             expect(getByTestId("active-project-name").textContent).toBe(activeProject.name);
             expect(getByTestId("new-task-button")).toBeInTheDocument();
             expect(getByTestId("project-settings-button")).toBeInTheDocument();
+            cleanup();
         } catch (error) {
             console.log("ProjectTopbar error:", error);
         }
     });
+
+    // it("Checks accessibility", async () => {
+    //     const activeProject: IProject = getFakeProjects(1)[0];
+    //     const { container } = await render(<ProjectTopbar activeProject={activeProject} />);
+    //     const results = await axe(container.innerHTML);
+    //     expect(results).toHaveNoViolations();
+    // });
 
     // Remove isRunningInElectron() check in component before running this testcase.
     it.skip("opens project directory in explorer in electron", async () => {
@@ -53,7 +62,8 @@ describe.only("ProjectTopbar Component", () => {
                 expect(item.textContent).toBe(activeProject.commands[index].name);
             });
             fireEvent.click(getByLabelText("Close"));
-            console.log("Closed this");
+
+            // For some reason, cleanup-aftereach did not work may be. If remove this cleanup, throws error
             cleanup();
             // TODO: Drag & Drop
         } catch (error) {
@@ -75,14 +85,12 @@ describe.only("ProjectTopbar Component", () => {
             expect(getByTestId("delete-project-warning").textContent.toLowerCase()).toBe(
                 `are you sure you want to delete project ${activeProject.name.toLowerCase()}?`,
             );
+            // DO actual delete project in an integration test instead.
             fireEvent.click(getByText(/cancel/i));
             cleanup();
         } catch (error) {
             console.log("ProjectTopbar error:", error);
         }
-        // fireEvent.click(deleteProjectMenuItem);
-        // debug();
-        // expect(getByText(/are you sure you want to delete project/i)).toBeInTheDocument();
     });
 
     afterEach(() => {
