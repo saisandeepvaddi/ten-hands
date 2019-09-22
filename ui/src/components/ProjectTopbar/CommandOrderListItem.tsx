@@ -23,7 +23,7 @@ const CommandsOrderListItem: React.FC<ICommandsOrderListItemProps> = React.memo(
         <Draggable draggableId={command._id} index={index}>
             {(provided: DraggableProvided) => (
                 <CommandItem {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                    {command.name}
+                    <span data-testid="reorder-task-list-item">{command.name}</span>
                     <Icon icon={"drag-handle-horizontal"} />
                 </CommandItem>
             )}

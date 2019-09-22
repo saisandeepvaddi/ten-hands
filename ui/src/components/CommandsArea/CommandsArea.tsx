@@ -1,7 +1,6 @@
 import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import JobSocket from "../../utils/socket";
 import Command from "../Command/Command";
 import { useTheme } from "../shared/Themes";
 
@@ -26,7 +25,6 @@ const EmptyContainer = styled(Container)`
 `;
 
 const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject }) => {
-    const socket = JobSocket.getSocket();
     const commands: IProjectCommand[] = activeProject.commands;
     const { theme } = useTheme();
 
