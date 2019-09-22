@@ -3,7 +3,7 @@
 import { axe } from "jest-axe";
 import React from "react";
 import * as utils from "../../utils/electron";
-import { cleanup, fireEvent, getFakeProjects, render } from "../../utils/test-utils";
+import { cleanup, fireEvent, getFakeProjects, render, wait } from "../../utils/test-utils";
 import ProjectTopbar from "./ProjectTopbar";
 
 describe.only("ProjectTopbar Component", () => {
@@ -20,6 +20,20 @@ describe.only("ProjectTopbar Component", () => {
             cleanup();
         } catch (error) {
             console.log("ProjectTopbar error:", error);
+        }
+    });
+
+    it("opens new task sidebar", async () => {
+        try {
+            const activeProject: IProject = getFakeProjects(1)[0];
+            const { getByTestId, getByText } = await render(<ProjectTopbar activeProject={activeProject} />);
+            const newTaskButton = getByTestId("new-task-button");
+            fireEvent.click(newTaskButton);
+            expect(getByText(/add task/i)).toBeInTheDocument();
+            expect(getByTestId("save-task-button")).toBeInTheDocument();
+            cleanup();
+        } catch (error) {
+            console.log("error:", error);
         }
     });
 
