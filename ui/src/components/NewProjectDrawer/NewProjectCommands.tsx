@@ -30,7 +30,7 @@ const NewProjectCommands: React.FC<INewProjectCommandsProps> = React.memo(({ com
                 <tbody>
                     {commands.map(command => {
                         return (
-                            <tr key={command._id}>
+                            <tr key={command._id} data-testid="new-project-task-row">
                                 <td>{command.name}</td>
                                 <td>{command.cmd}</td>
                                 <td>

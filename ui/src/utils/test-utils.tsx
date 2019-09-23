@@ -12,10 +12,10 @@ jest.mock("../components/shared/API");
 jest.mock("socket.io-client", () => {
     const socket: any = {
         on: jest.fn().mockImplementation((event, cb) => {
-            console.log(`mock on with event: ${event}`);
+            // console.log(`mock on with event: ${event}`);
         }),
         emit: jest.fn().mockImplementation((event, data) => {
-            console.log(`mock emit with event: ${event}`);
+            // console.log(`mock emit with event: ${event}`);
         }),
     };
 
@@ -67,6 +67,20 @@ export const projectBuilder = build("Project").fields({
     path: fake(f => f.fake("D:\\{{random.word}}\\{{random.word}}")),
     commands: arrayOf(commandBuilder, Math.ceil(Math.random() * 5 + 0)),
 });
+
+export const packageJsonBuilder = build("PackageJSON").fields({
+    name: fake(f => f.random.word()),
+    version: "1.0.0",
+    scripts: {
+        start: "npm run start",
+        test: "yarn test",
+    },
+});
+
+export const getFakePackageJson = () => {
+    const packageJson: any = packageJsonBuilder();
+    return packageJson;
+};
 
 export const getFakeProjects = (n = 5) => {
     const projects: any = [];

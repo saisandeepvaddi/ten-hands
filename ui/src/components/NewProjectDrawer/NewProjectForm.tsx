@@ -32,7 +32,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
-        console.info("parsedProjectData:", parsedProjectData);
         if (parsedProjectData !== null) {
             const { name: projectName, type, commands, configFile, path } = parsedProjectData;
             // Manually set each field after parsing the file
@@ -76,6 +75,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         const file = e.target.files[0];
 
         reader.onloadend = () => {
+            console.log("file:", file);
             const { name } = file;
             setConfigFileName(name);
             const readerResult = reader.result;
@@ -97,7 +97,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = async (values, actions) => {
-        console.log("values:", values);
         // console.info("values:", values);
         try {
             actions.setSubmitting(true);
@@ -132,11 +131,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 initialValues={initialProject}
                 onSubmit={handleSubmit}
                 render={props => (
-                    <form onSubmit={props.handleSubmit}>
+                    <form data-testid="new-project-form" onSubmit={props.handleSubmit}>
                         <FormGroup
-                            labelFor="configFile"
-                            label="Project Config File (Currently supports package.json. You can create an empty project now.)"
-                            helperText="E.g., package.json"
+                            label="Project Config File"
+                            helperText="Currently supports only package.json. You can create a project without this."
                         >
                             {isRunningInElectron() ? (
                                 <ProjectFileUpload
@@ -148,7 +146,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             ) : (
                                 <FileInput
                                     text={configFileName || "Choose file..."}
-                                    inputProps={{ id: "configFile" }}
+                                    inputProps={{
+                                        id: "configFile",
+                                    }}
                                     fill={true}
                                     onInputChange={e => onProjectFileChange(e, props.setFieldValue)}
                                 />
@@ -204,6 +204,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         </FormGroup>
                         <FormGroup>
                             <Button
+                                data-testid="save-project-button"
                                 intent="primary"
                                 text="Save Project"
                                 type="submit"

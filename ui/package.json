@@ -7,7 +7,7 @@
   "scripts": {
     "start:electron": "cross-env PORT=3010 rescripts start",
     "start:browser": "react-scripts start",
-    "test:browser": "react-scripts test",
+    "test": "react-scripts test",
     "build:electron": "rescripts build",
     "build:browser": "react-scripts build",
     "test:electron": "rescripts test",
@@ -63,6 +63,7 @@
     "@types/styled-components": "^4.1.15",
     "cross-env": "^5.2.0",
     "cypress": "^3.4.1",
+    "cypress-file-upload": "^3.3.4",
     "eslint-plugin-cypress": "^2.6.1",
     "jest-axe": "^3.2.0",
     "jest-canvas-mock": "^2.1.1",
