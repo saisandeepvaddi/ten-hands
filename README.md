@@ -17,10 +17,6 @@ You can organize tasks into projects and run them whenever you want with a click
 
 Downloads are available in `releases` section if you just want to download and run.
 
-## Note
-
-I am making updates in `v2.0.0` branch. Check Projects tab to see what I'm working on. You can pull and build that branch to get latest updates (with a risk of getting unstable build).
-
 # Steps to build (To get latest features)
 
 1. Install nodejs >= 10.6.0.
