@@ -157,7 +157,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Name"
                             labelFor="name"
-                            helperText="Will be auto-filled if available in package.json. Enter manually otherwise."
+                            helperText="Will be auto-filled if you are using a package.json. Otherwise, choose a name."
                         >
                             <InputGroup
                                 id="name"
@@ -208,7 +208,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Tasks"
                             labelFor="commands"
-                            helperText="Will be auto-filled if available in package.json. You can add tasks later."
+                            helperText="Will be auto-filled if available in package.json. Otherwise, you can add tasks after creating the project."
                         >
                             <NewProjectCommands
                                 commands={props.values.commands}
