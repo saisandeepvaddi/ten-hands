@@ -1,6 +1,6 @@
 import { getFakeProjects, getFakePackageJson } from "../support/generate";
 
-describe("Test Project Add/Remove", () => {
+describe.skip("Test Project Add/Remove", () => {
   const fakeProjects = getFakeProjects(5);
   before(() => {
     cy.visit("/");
