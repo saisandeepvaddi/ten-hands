@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export const useIsInView = (_ref, margin = "0px") => {
+export const useIsInView = (ref, margin = "0px") => {
     const [isIntersecting, setIntersecting] = useState(false);
-    const ref = _ref;
-
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
