@@ -10,7 +10,6 @@ describe("Test Project Add/Remove", () => {
       response: getFakeProjects(5)
     });
   });
-
   it("Tests new project upload", () => {
     cy.getByTestId("new-project-button").click();
     cy.wait(1000);
@@ -57,6 +56,13 @@ describe("Test Project Add/Remove", () => {
 
     cy.wait(2000);
 
-    cy.getAllByText(fakeProject.name).should("have.length", 2);
+    cy.getAllByTestId("project-name").then(sidebarProjectnames => {
+      const oneWithAddedProjectName = Array.from(sidebarProjectnames).filter(
+        x => x.textContent === fakeProject.name
+      );
+      console.log("oneWithAddedProjectName:", oneWithAddedProjectName);
+      expect(oneWithAddedProjectName).to.have.length(1);
+    });
+    cy.getByTestId("active-project-name").should("have.text", fakeProject.name);
   });
 });
