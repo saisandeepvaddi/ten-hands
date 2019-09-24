@@ -1,6 +1,9 @@
-describe.skip("Tests App top-most ui", () => {
+import { getFakeProjects } from "../support/generate";
+
+describe("Tests App top-most ui", () => {
   before(() => {
     cy.visit("/");
+    cy.server();
   });
 
   it("Checks if topbar loaded", () => {
@@ -14,5 +17,33 @@ describe.skip("Tests App top-most ui", () => {
     cy.getByTestId("theme-light").click();
     cy.wait(2000);
     cy.getByTestId("theme-dark").click();
+  });
+
+  // TODO: NOT WORKING
+  it.skip("Reorders projects", () => {
+    const fakeProjects = getFakeProjects(5);
+    cy.route({
+      method: "GET",
+      url: "/projects",
+      response: fakeProjects
+    });
+    cy.wait(200);
+
+    cy.getByText(fakeProjects[1].name).then(el => {
+      const coords = el[0].getBoundingClientRect();
+      cy.wrap(el)
+        .trigger("click")
+        .trigger("mousedown", {
+          button: 0,
+          clientX: coords.x,
+          clientY: coords.y
+        })
+        .trigger("mousemove", {
+          button: 0,
+          clientX: coords.x,
+          clientY: coords.y + 50
+        })
+        .trigger("mouseup", { force: true });
+    });
   });
 });
