@@ -1,4 +1,4 @@
-import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
+import { Button, Code, FileInput, FormGroup, HTMLSelect, InputGroup, Pre } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ import ProjectFileUpload from "./ProjectFileUpload";
 
 const initialProject: IProject = {
     name: "",
-    type: "none",
+    type: "",
     commands: [],
     configFile: "",
     path: "",
@@ -157,7 +157,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Name"
                             labelFor="name"
-                            helperText="Will be auto-filled if available in config file."
+                            helperText="Will be auto-filled if available in package.json. Enter manually otherwise."
                         >
                             <InputGroup
                                 id="name"
@@ -170,32 +170,45 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Path"
                             labelFor="path"
-                            helperText="Will be auto-filled if a config file uploaded."
+                            helperText={
+                                isRunningInElectron() ? (
+                                    "Absolute path to the project directory. Will be auto-filled if a package.json uploaded."
+                                ) : (
+                                    <span>
+                                        Absolute path to the project directory. Will be auto-filled if{" "}
+                                        <i>tenHands.path</i> exists in package.json.
+                                    </span>
+                                )
+                            }
                         >
                             <InputGroup
                                 required={true}
                                 id="path"
                                 type="text"
-                                placeholder="Absolute path to the project directory"
+                                placeholder={
+                                    navigator.platform.toLowerCase() === "win32"
+                                        ? "D:\\AllProjects\\MyProjectDirectory"
+                                        : "/home/all-projects/my-project"
+                                }
                                 onChange={props.handleChange}
                                 value={props.values.path}
                             />
                         </FormGroup>
-                        <FormGroup
+                        {/* <FormGroup
                             label="Project Type"
                             labelFor="type"
-                            helperText="Will be auto-filled if it can be determined from config file."
+                            helperText="Will be auto-filled if it can be determined from package.json."
                         >
                             <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
                                 <option value="">Select Project Type</option>
                                 <option value="nodejs">NodeJS</option>
                                 <option value="other">Other</option>
                             </HTMLSelect>
-                        </FormGroup>
+                        </FormGroup> */}
                         <FormGroup
                             label="Tasks"
                             labelFor="commands"
-                            helperText="Will be auto-filled if available in config file. You can add tasks later."
+                            helperText="Will be auto-filled if available in package.json. You can add tasks later."
                         >
                             <NewProjectCommands
                                 commands={props.values.commands}
