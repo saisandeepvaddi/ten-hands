@@ -74,15 +74,18 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
             };
             setThemeLater();
             return () => {
-                clearTimeout(themeTimeout);
+                if (themeTimeout) {
+                    clearTimeout(themeTimeout);
+                }
             };
         };
 
-        setTerminalTheme();
+        const clearTimer = setTerminalTheme();
         return () => {
             if (terminal && terminal.current) {
                 terminal.current.removeTheme();
             }
+            clearTimer && clearTimer();
         };
     }, [theme, config]);
 
