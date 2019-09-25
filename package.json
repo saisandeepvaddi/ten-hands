@@ -10,7 +10,7 @@
     "start:desktop": "./node_modules/.bin/gulp startDesktop",
     "start:browser": "./node_modules/.bin/gulp startBrowser",
     "start:server": "./node_modules/.bin/gulp startServer",
-    "test:ui": "cd ./ui && yarn test:browser",
+    "test:ui": "cd ./ui && yarn test",
     "start:cli": "./node_modules/.bin/gulp startCLI"
   },
   "tenHands": {

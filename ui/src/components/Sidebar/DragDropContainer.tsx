@@ -5,6 +5,7 @@ import { getFileData } from "../App/dragDropProject";
 import { useProjects } from "../shared/Projects";
 
 import styled from "styled-components";
+import { isRunningInElectron } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
 import { useTheme } from "../shared/Themes";
 
@@ -69,6 +70,14 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
         onDrop,
         noClick: true,
     });
+
+    if (!isRunningInElectron()) {
+        return (
+            <Container theme={theme} className="file-drag-container h-100 w-100">
+                {children}
+            </Container>
+        );
+    }
 
     return (
         <>

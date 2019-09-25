@@ -100,33 +100,22 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         intent="success"
                         text="New Task"
                         minimal={true}
+                        data-testid="new-task-button"
                     />
                     <Navbar.Divider />
-                    <Alert
-                        cancelButtonText="Cancel"
-                        confirmButtonText="Yes, Delete"
-                        className={theme}
-                        icon="trash"
-                        intent="danger"
-                        isOpen={isDeleteAlertOpen}
-                        onCancel={() => setDeleteAlertOpen(false)}
-                        onConfirm={() => shouldDeleteProject(true)}
-                    >
-                        <p>
-                            Are you sure you want to delete project <b>{activeProject.name}</b> ?
-                        </p>
-                    </Alert>
                     <Popover position="left-top">
-                        <Button icon="cog" minimal={true} />
+                        <Button icon="cog" minimal={true} data-testid="project-settings-button" />
                         <Menu key="menu">
                             <MenuDivider title="Layout" />
                             <MenuItem
+                                data-testid="change-tasks-order-menu-item"
                                 icon="sort"
                                 text="Change Tasks order"
                                 onClick={() => setCommandsOrderModalOpen(true)}
                             />
                             <MenuDivider title="Danger" />
                             <MenuItem
+                                data-testid="delete-project-menu-item"
                                 icon="trash"
                                 text="Delete Project"
                                 intent="danger"
@@ -145,6 +134,20 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                     </Dialog>
                 </Navbar.Group>
             </Navbar>
+            <Alert
+                cancelButtonText="Cancel"
+                confirmButtonText="Yes, Delete"
+                className={theme}
+                icon="trash"
+                intent="danger"
+                isOpen={isDeleteAlertOpen}
+                onCancel={() => setDeleteAlertOpen(false)}
+                onConfirm={() => shouldDeleteProject(true)}
+            >
+                <p data-testid="delete-project-warning">
+                    Are you sure you want to delete project <b>{activeProject.name}</b>?
+                </p>
+            </Alert>
             <NewCommandDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
         </>
     );

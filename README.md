@@ -35,7 +35,7 @@ Downloads are available in `releases` section if you just want to download and r
 
 This project can be run in browser instead of desktop version. But desktop version comes with additional features and is recommended. The following is the list of additional features available in desktop version.
 
-1. Drag & Drop __package.json__ to add project.
+1. Drag & Drop **package.json** to add project.
 2. Link to open project directory in file explorer.
 3. A warning when you are closing window to suggest to stop running processes.
 
@@ -56,11 +56,11 @@ This project is in experimental stage, so there are some limitations to use the 
 
 1. Can I create a project without `package.json`?
 
->Yes, a project in `ten-hands` is just a logical separation for task organization. It is **not** specific for running nodejs based projects. So, if you are not using a nodejs based project, simply create a project with any name. Then add your tasks with any name and command.
+> Yes, a project in `ten-hands` is just a logical separation for task organization. It is **not** specific for running nodejs based projects. So, if you are not using a nodejs based project, simply create a project with any name. Then add your tasks with any name and command.
 
 2. Does adding a task in a project updates the project's `package.json`?
 
->No, when you create a project from `package.json`, it extracts it's name, scripts, directory path (in desktop version) and saves in it's own database file. `package.json` is only useful to quickly create a project from file. You can add more tasks related or unrelated to this nodejs project once a project is created.
+> No, when you create a project from `package.json`, it extracts it's name, scripts, directory path (in desktop version) and saves in it's own database file. `package.json` is only useful to quickly create a project from file. You can add more tasks related or unrelated to this nodejs project once a project is created.
 
 3. I just need to run global commands as tasks. Do I have to give a path? What path do I use?
 
@@ -68,15 +68,15 @@ This project is in experimental stage, so there are some limitations to use the 
 
 4. Why do I see black color flashes on terminals when I switch projects?
 
->Terminal renders with default black color. Applying dark/light theme on all terminals taking time when there are large number of tasks in the project. I'm working on a solution. If you do not need theme on terminals, set `enableTerminalTheme` to `false` in config file which can make it responsive. Check [Configuration](#configuration) section for info.
+> Terminal renders with default black color. Applying dark/light theme on all terminals taking time when there are large number of tasks in the project. I'm working on a solution. If you do not need theme on terminals, set `enableTerminalTheme` to `false` in config file which can make it responsive. Check [Configuration](#configuration) section for info.
 
 5. My app doesn't start.
 
->Try changing the port in config file and restart the app.
+> Try changing the port in config file and restart the app.
 
 6. My task automatically stops saying `process closed with code` right after clicking the start button.
 
->Check if task is running at correct location. By default, task is executed in the project directory path if no path entered at task creation time. Relative paths to project path *do not* work. When you create a task, you either have to enter absolute path where the command needs to execute or leave empty to run it at project's path.
+> Check if task is running at correct location. By default, task is executed in the project directory path if no path entered at task creation time. Relative paths to project path _do not_ work. When you create a task, you either have to enter absolute path where the command needs to execute or leave empty to run it at project's path.
 
 # Contributions
 
