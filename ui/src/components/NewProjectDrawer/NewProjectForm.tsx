@@ -1,4 +1,4 @@
-import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
+import { Button, Code, FileInput, FormGroup, HTMLSelect, InputGroup, Pre } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ import ProjectFileUpload from "./ProjectFileUpload";
 
 const initialProject: IProject = {
     name: "",
-    type: "none",
+    type: "",
     commands: [],
     configFile: "",
     path: "",
@@ -32,7 +32,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
-        console.info("parsedProjectData:", parsedProjectData);
         if (parsedProjectData !== null) {
             const { name: projectName, type, commands, configFile, path } = parsedProjectData;
             // Manually set each field after parsing the file
@@ -76,6 +75,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         const file = e.target.files[0];
 
         reader.onloadend = () => {
+            console.log("file:", file);
             const { name } = file;
             setConfigFileName(name);
             const readerResult = reader.result;
@@ -97,7 +97,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = async (values, actions) => {
-        console.log("values:", values);
         // console.info("values:", values);
         try {
             actions.setSubmitting(true);
@@ -132,11 +131,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 initialValues={initialProject}
                 onSubmit={handleSubmit}
                 render={props => (
-                    <form onSubmit={props.handleSubmit}>
+                    <form data-testid="new-project-form" onSubmit={props.handleSubmit}>
                         <FormGroup
-                            labelFor="configFile"
-                            label="Project Config File (Currently supports package.json. You can create an empty project now.)"
-                            helperText="E.g., package.json"
+                            label="Project Config File"
+                            helperText="Currently supports only package.json. You can create a project without this."
                         >
                             {isRunningInElectron() ? (
                                 <ProjectFileUpload
@@ -148,7 +146,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             ) : (
                                 <FileInput
                                     text={configFileName || "Choose file..."}
-                                    inputProps={{ id: "configFile" }}
+                                    inputProps={{
+                                        id: "configFile",
+                                    }}
                                     fill={true}
                                     onInputChange={e => onProjectFileChange(e, props.setFieldValue)}
                                 />
@@ -157,7 +157,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Name"
                             labelFor="name"
-                            helperText="Will be auto-filled if available in config file."
+                            helperText="Will be auto-filled if you are using a package.json. Otherwise, choose a name."
                         >
                             <InputGroup
                                 id="name"
@@ -170,32 +170,45 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Path"
                             labelFor="path"
-                            helperText="Will be auto-filled if a config file uploaded."
+                            helperText={
+                                isRunningInElectron() ? (
+                                    "Absolute path to the project directory. Will be auto-filled if a package.json uploaded."
+                                ) : (
+                                    <span>
+                                        Absolute path to the project directory. Will be auto-filled if{" "}
+                                        <i>tenHands.path</i> exists in package.json.
+                                    </span>
+                                )
+                            }
                         >
                             <InputGroup
                                 required={true}
                                 id="path"
                                 type="text"
-                                placeholder="Absolute path to the project directory"
+                                placeholder={
+                                    navigator.platform.toLowerCase() === "win32"
+                                        ? "D:\\AllProjects\\MyProjectDirectory"
+                                        : "/home/all-projects/my-project"
+                                }
                                 onChange={props.handleChange}
                                 value={props.values.path}
                             />
                         </FormGroup>
-                        <FormGroup
+                        {/* <FormGroup
                             label="Project Type"
                             labelFor="type"
-                            helperText="Will be auto-filled if it can be determined from config file."
+                            helperText="Will be auto-filled if it can be determined from package.json."
                         >
                             <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
                                 <option value="">Select Project Type</option>
                                 <option value="nodejs">NodeJS</option>
                                 <option value="other">Other</option>
                             </HTMLSelect>
-                        </FormGroup>
+                        </FormGroup> */}
                         <FormGroup
                             label="Tasks"
                             labelFor="commands"
-                            helperText="Will be auto-filled if available in config file. You can add tasks later."
+                            helperText="Will be auto-filled if available in package.json. Otherwise, you can add tasks after creating the project."
                         >
                             <NewProjectCommands
                                 commands={props.values.commands}
@@ -204,6 +217,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         </FormGroup>
                         <FormGroup>
                             <Button
+                                data-testid="save-project-button"
                                 intent="primary"
                                 text="Save Project"
                                 type="submit"
