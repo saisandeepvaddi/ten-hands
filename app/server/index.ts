@@ -5,6 +5,7 @@ import socketIO from "socket.io";
 import { JobManager } from "./services/job";
 import { getConfig } from "../shared/config";
 import SocketManager from "./services/socket";
+import fixPath from "fix-path";
 
 /**
  * Starts Node server for ten-hands project.
@@ -16,6 +17,8 @@ import SocketManager from "./services/socket";
 export async function startServer() {
   return new Promise(async (res, rej) => {
     try {
+      // To fix /bin/sh: npm: command not found in macOS
+      fixPath();
       const port = process.env.PORT || getConfig().port || 5010;
 
       const server = createServer(app);
