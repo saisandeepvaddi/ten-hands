@@ -1,9 +1,17 @@
+/// <reference types="react-scripts" />
+
+interface IConfig {
+    port: string | number;
+    enableTerminalTheme: boolean;
+}
+
 interface IMyTheme {
     theme: string;
     setTheme: any;
 }
 
 interface IProjectCommand {
+    _id: string;
     [name: string]: string;
 }
 

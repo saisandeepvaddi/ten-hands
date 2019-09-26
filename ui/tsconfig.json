@@ -15,11 +15,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types",
-      "node_modules/type-fest/index"
-    ]
+    // "types": ["jest", "node"],
+    // "typeRoots": ["node_modules/@types", "src/types"],
+    "sourceMap": true
   },
   "include": ["src"]
 }

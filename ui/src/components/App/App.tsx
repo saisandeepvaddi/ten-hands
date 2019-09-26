@@ -11,6 +11,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import { ConfigProvider } from "../shared/Config";
 import { JobsProvider } from "../shared/Jobs";
 import { ProjectsProvider } from "../shared/Projects";
+import { SocketsProvider } from "../shared/Sockets";
 import "./App.css";
 import AppLayout from "./AppLayout";
 
@@ -20,7 +21,9 @@ const App = () => {
             <ThemeProvider>
                 <ProjectsProvider>
                     <JobsProvider>
-                        <AppLayout />
+                        <SocketsProvider>
+                            <AppLayout />
+                        </SocketsProvider>
                     </JobsProvider>
                 </ProjectsProvider>
             </ThemeProvider>

@@ -1,12 +1,10 @@
-import { Alert, Button, Collapse, H5 } from "@blueprintjs/core";
-import Axios from "axios";
+import { Button, Collapse, H5 } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { useConfig } from "../shared/Config";
 import { useJobs } from "../shared/Jobs";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
+import { useSockets } from "../shared/Sockets";
 import CommandOutputXterm from "./CommandOutputXterm";
 
 const Container = styled.div`
@@ -42,7 +40,6 @@ const CommandHeader = styled.div`
 
 interface ICommandProps {
     command: IProjectCommand;
-    socket: any;
     projectPath: string;
 }
 
@@ -50,36 +47,23 @@ function getJobData(state, room: string) {
     return state[room] || "";
 }
 
-const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectPath }) => {
+const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
-    const { theme } = useTheme();
+    const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
-    const { config } = useConfig();
-    const { updateProjects, activeProject, setActiveProject } = useProjects();
+    const { activeProject, deleteTask } = useProjects();
 
-    const deleteCommand = React.useCallback(
-        async shouldDelete => {
-            try {
-                if (shouldDelete) {
-                    console.info(`Deleting command: `, command);
-                    const responseData = await Axios.delete(
-                        `http://localhost:${config.port}/projects/${activeProject._id}/commands/${room}`,
-                    );
-                    const updatedProject = responseData.data;
-                    await updateProjects();
-                    setDeleteAlertOpen(false);
-
-                    setActiveProject(updatedProject);
-                }
-            } catch (error) {
-                console.error(`Error deleting project: `, error);
-            }
-        },
-        [activeProject, updateProjects, room],
-    );
+    const deleteCommand = async () => {
+        try {
+            await deleteTask(activeProject._id!, room);
+        } catch (error) {
+            console.log("error:", error);
+            console.error("Error deleting task");
+        }
+    };
 
     const updateJobProcess = (room, jobProcess) => {
         dispatch({
@@ -99,21 +83,13 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
 
     const startJob = () => {
         clearJobOutput(room);
-        socket.emit("subscribe", {
-            room,
-            command,
-            projectPath,
-        });
+        subscribeToTaskSocket(room, command, projectPath);
     };
 
     const stopJob = () => {
         const process = getJobData(jobState, room).process;
         const { pid } = process;
-
-        socket.emit("unsubscribe", {
-            room: command._id,
-            pid,
-        });
+        unsubscribeFromTaskSocket(room, pid);
         updateJobProcess(room, {
             pid: -1,
         });
@@ -128,9 +104,9 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
             <Container>
                 <CommandHeader>
                     <CommandTitleActions>
-                        <H5>{command.name}</H5>
+                        <H5 data-testid="command-name">{command.name}</H5>
                         <Button
-                            data-testid="job-start"
+                            data-testid="start-task-button"
                             icon="play"
                             intent="success"
                             minimal={true}
@@ -138,7 +114,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                             onClick={startJob}
                         />
                         <Button
-                            data-testid="job-stop"
+                            data-testid="stop-task-button"
                             intent="danger"
                             icon="stop"
                             minimal={true}
@@ -146,8 +122,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                             onClick={stopJob}
                         />
                     </CommandTitleActions>
-                    <span>{command.cmd}</span>
-
+                    <span data-testid="command-cmd">{command.cmd}</span>
                     <CommandOutputButtonsContainer>
                         <Button
                             onClick={() => clearJobOutput(room)}
@@ -162,7 +137,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                             title={isOutputOpen ? "Hide Output" : "Show Output"}
                         />
                         <Button
-                            onClick={() => setDeleteAlertOpen(true)}
+                            onClick={deleteCommand}
                             icon="trash"
                             minimal={true}
                             intent="danger"
@@ -174,20 +149,6 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, socket, projectP
                     <CommandOutputXterm room={room} />
                 </Collapse>
             </Container>
-            <Alert
-                cancelButtonText="Cancel"
-                confirmButtonText="Yes, Delete"
-                className={theme}
-                icon="trash"
-                intent="danger"
-                isOpen={isDeleteAlertOpen}
-                onCancel={() => setDeleteAlertOpen(false)}
-                onConfirm={() => deleteCommand(true)}
-            >
-                <p>
-                    Are you sure you want to delete command <b>{command.name || ""}</b> ?
-                </p>
-            </Alert>
         </>
     );
 });

@@ -10,6 +10,10 @@ const startUIForElectron = task("yarn start:electron", {
   cwd: path.join(__dirname, "ui")
 });
 
+const startUIForBrowser = task("yarn start:browser", {
+  cwd: path.join(__dirname, "ui")
+});
+
 const startBuildWatchForApp = task("yarn build:watch", {
   cwd: path.join(__dirname, "app")
 });
@@ -22,10 +26,14 @@ const startAppsForDev = task("yarn dev", {
   cwd: path.join(__dirname, "app")
 });
 
+const startServerForBrowser = task("yarn start:server", {
+  cwd: path.join(__dirname, "app")
+});
+
 exports.startUIForElectron = startUIForElectron;
+exports.startUIForBrowser = startUIForBrowser;
 exports.startBuildWatchForApp = startBuildWatchForApp;
 exports.startAppsForDev = startAppsForDev;
-
 
 /* BUILDING TASKS */
 
@@ -131,6 +139,14 @@ const delay = time => {
 // Just refresh (Ctrl + R) once to get fresh content once app starts in dev mode
 exports.startDesktop = series(
   parallel(startUIForElectron, startBuildWatchForApp, startAppsForDev)
+);
+
+exports.startBrowser = series(
+  parallel(startUIForBrowser, startBuildWatchForApp, startServerForBrowser)
+);
+
+exports.startServer = series(
+  parallel(startBuildWatchForApp, startServerForBrowser)
 );
 
 exports.startCLI = series(startBuildWatchForCLI);

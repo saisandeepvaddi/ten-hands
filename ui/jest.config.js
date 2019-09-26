@@ -1,6 +1,14 @@
 module.exports = {
-  projects: ["<rootDir>/server/__tests__/*.js"],
-  watchPlugins: ["jest-watch-yarn-workspaces"],
-  testPathIgnorePatterns: ["<rootDir>/server/projects/"],
-  watchPathIgnorePatterns: ["<rootDir>/server/projects/"]
+  setupFiles: ["<rootDir>/src/setupTests.ts"],
+  roots: ["<rootDir>/src"],
+  transform: {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  globals: {
+    "ts-jest": {
+      tsConfig: {
+        importHelpers: true
+      }
+    }
+  }
 };

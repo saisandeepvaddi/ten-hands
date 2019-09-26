@@ -1,43 +1,51 @@
 import React, { useEffect } from "react";
 import SplitPane from "react-split-pane";
-import io from "socket.io-client";
-import styled from "styled-components";
-import JobSocket from "../../utils/socket";
+import { isRunningInElectron } from "../../utils/electron";
 import Main from "../Main/Main";
-import { useConfig } from "../shared/Config";
+import { useSockets } from "../shared/Sockets";
 import { useTheme } from "../shared/Themes";
 import Sidebar from "../Sidebar";
 import Topbar from "../Topbar";
+import DesktopMenu from "./DesktopMenu";
 
-const SplitContainer = styled.div`
-    min-height: calc(100vh - 50px);
-    padding-top: 50px;
-`;
+const isWindows = navigator.platform.toLowerCase() === "win32";
 
 const AppLayout = React.memo(() => {
-    const { config } = useConfig();
+    const { theme } = useTheme();
+    const { isSocketInitialized, initializeSocket } = useSockets();
+    const topbarHeight = isRunningInElectron() ? "30px" : "50px";
+
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
         try {
-            const socket = io(`http://localhost:${config.port}`);
-            console.log(config);
-            JobSocket.bindSocket(socket);
+            initializeSocket();
         } catch (error) {
-            console.error(`Error at starting socket`);
+            console.error(`Error at starting socket`, error);
         }
     }, []);
 
-    const { theme } = useTheme();
+    if (!isSocketInitialized) {
+        return null;
+    }
 
     return (
-        <div className={theme}>
-            <Topbar />
-            <SplitContainer>
-                <SplitPane split="vertical" defaultSize={350} maxSize={500}>
-                    <Sidebar />
-                    <Main />
-                </SplitPane>
-            </SplitContainer>
-        </div>
+        <>
+            <div className={theme}>
+                {/* New menubar is only for Windows in this release :( */}
+                {isRunningInElectron() && isWindows ? <DesktopMenu /> : <Topbar data-testid="topbar" />}
+                <div
+                    style={{
+                        minHeight: `calc(100vh - ${topbarHeight})`,
+                        paddingTop: `${topbarHeight}`,
+                    }}
+                >
+                    <SplitPane data-testid="splitPane" split="vertical" defaultSize={350} maxSize={500}>
+                        <Sidebar />
+                        <Main />
+                    </SplitPane>
+                </div>
+            </div>
+        </>
     );
 });
 

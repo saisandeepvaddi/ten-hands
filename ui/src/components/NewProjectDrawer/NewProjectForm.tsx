@@ -1,10 +1,9 @@
-import { Button, FileInput, FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
-import Axios, { AxiosResponse } from "axios";
+import { Button, Code, FileInput, FormGroup, HTMLSelect, InputGroup, Pre } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
-import { useConfig } from "../shared/Config";
+import { hasProjectWithSameName } from "../../utils/projects";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -12,7 +11,7 @@ import ProjectFileUpload from "./ProjectFileUpload";
 
 const initialProject: IProject = {
     name: "",
-    type: "none",
+    type: "",
     commands: [],
     configFile: "",
     path: "",
@@ -29,12 +28,10 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
-    const { updateProjects, setActiveProject } = useProjects();
-    const { config } = useConfig();
+    const { projects, addProject } = useProjects();
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
-        console.info("parsedProjectData:", parsedProjectData);
         if (parsedProjectData !== null) {
             const { name: projectName, type, commands, configFile, path } = parsedProjectData;
             // Manually set each field after parsing the file
@@ -64,7 +61,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                     data: fileData,
                 };
                 setConfigFileName(fileName);
-
                 fillFormWithProjectConfig(tenHandsFile, setFieldValue);
             }
         } catch (error) {
@@ -79,6 +75,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         const file = e.target.files[0];
 
         reader.onloadend = () => {
+            console.log("file:", file);
             const { name } = file;
             setConfigFileName(name);
             const readerResult = reader.result;
@@ -99,33 +96,34 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     }, []);
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
-    const handleSubmit = useCallback(
-        async (values, actions) => {
-            console.log("values:", values);
-            // console.info("values:", values);
-            try {
+    const handleSubmit = async (values, actions) => {
+        // console.info("values:", values);
+        try {
+            actions.setSubmitting(true);
+            if (hasProjectWithSameName(projects, values.name)) {
+                const answer = window.confirm(
+                    "Project with same name already exists. Do you want to add project anyway?",
+                );
+                if (answer) {
+                    actions.setSubmitting(true);
+                    await addProject(values);
+                    actions.setSubmitting(false);
+                    setDrawerOpen(false);
+                } else {
+                    console.log("Cancelled by user");
+                    actions.setSubmitting(false);
+                }
+            } else {
                 actions.setSubmitting(true);
-                const responseData: AxiosResponse = await Axios({
-                    timeout: 5000,
-                    method: "post",
-                    baseURL: `http://localhost:${config.port}`,
-                    url: "projects",
-                    data: values,
-                });
+                await addProject(values);
                 actions.setSubmitting(false);
-                const updatedProject = responseData.data;
-                await updateProjects();
                 setDrawerOpen(false);
-                setActiveProject(updatedProject);
-            } catch (error) {
-                console.error(error);
-                actions.setSubmitting(false);
             }
-        },
-        [setActiveProject, setDrawerOpen, updateProjects],
-    );
-
-    console.log("isRunningInElectron: ", isRunningInElectron());
+        } catch (error) {
+            console.error(error);
+            actions.setSubmitting(false);
+        }
+    };
 
     return (
         <Container>
@@ -133,11 +131,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                 initialValues={initialProject}
                 onSubmit={handleSubmit}
                 render={props => (
-                    <form onSubmit={props.handleSubmit}>
+                    <form data-testid="new-project-form" onSubmit={props.handleSubmit}>
                         <FormGroup
-                            labelFor="configFile"
-                            label="Project Config File (Currently supports package.json. You can create an empty project now.)"
-                            helperText="E.g., package.json"
+                            label="Project Config File"
+                            helperText="Currently supports only package.json. You can create a project without this."
                         >
                             {isRunningInElectron() ? (
                                 <ProjectFileUpload
@@ -149,7 +146,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             ) : (
                                 <FileInput
                                     text={configFileName || "Choose file..."}
-                                    inputProps={{ id: "configFile" }}
+                                    inputProps={{
+                                        id: "configFile",
+                                    }}
                                     fill={true}
                                     onInputChange={e => onProjectFileChange(e, props.setFieldValue)}
                                 />
@@ -158,7 +157,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Name"
                             labelFor="name"
-                            helperText="Will be auto-filled if available in config file."
+                            helperText="Will be auto-filled if you are using a package.json. Otherwise, choose a name."
                         >
                             <InputGroup
                                 id="name"
@@ -171,37 +170,54 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Project Path"
                             labelFor="path"
-                            helperText="Will be auto-filled if a config file uploaded."
+                            helperText={
+                                isRunningInElectron() ? (
+                                    "Absolute path to the project directory. Will be auto-filled if a package.json uploaded."
+                                ) : (
+                                    <span>
+                                        Absolute path to the project directory. Will be auto-filled if{" "}
+                                        <i>tenHands.path</i> exists in package.json.
+                                    </span>
+                                )
+                            }
                         >
                             <InputGroup
                                 required={true}
                                 id="path"
                                 type="text"
-                                placeholder="Absolute path to the project directory"
+                                placeholder={
+                                    navigator.platform.toLowerCase() === "win32"
+                                        ? "D:\\AllProjects\\MyProjectDirectory"
+                                        : "/home/all-projects/my-project"
+                                }
                                 onChange={props.handleChange}
                                 value={props.values.path}
                             />
                         </FormGroup>
-                        <FormGroup
+                        {/* <FormGroup
                             label="Project Type"
                             labelFor="type"
-                            helperText="Will be auto-filled if it can be determined from config file."
+                            helperText="Will be auto-filled if it can be determined from package.json."
                         >
                             <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
                                 <option value="">Select Project Type</option>
                                 <option value="nodejs">NodeJS</option>
                                 <option value="other">Other</option>
                             </HTMLSelect>
-                        </FormGroup>
+                        </FormGroup> */}
                         <FormGroup
-                            label="Commands"
+                            label="Tasks"
                             labelFor="commands"
-                            helperText="Will be auto-filled if available in config file. You can add commands later."
+                            helperText="Will be auto-filled if available in package.json. Otherwise, you can add tasks after creating the project."
                         >
-                            <NewProjectCommands commands={props.values.commands} />
+                            <NewProjectCommands
+                                commands={props.values.commands}
+                                setCommands={(commands: IProjectCommand[]) => props.setFieldValue("commands", commands)}
+                            />
                         </FormGroup>
                         <FormGroup>
                             <Button
+                                data-testid="save-project-button"
                                 intent="primary"
                                 text="Save Project"
                                 type="submit"

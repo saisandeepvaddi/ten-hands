@@ -74,3 +74,6 @@ cli/build
 dist
 
 .idea
+
+ui/cypress/screenshots/**
+ui/cypress/videos/**

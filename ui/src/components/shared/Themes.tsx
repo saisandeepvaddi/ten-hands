@@ -20,7 +20,7 @@ function ThemeProvider(props: IThemeProviderProps) {
 
     const value = React.useMemo(() => {
         return { theme, setTheme };
-    }, [theme]);
+    }, [theme, setTheme]);
 
     // Change theme in localStorage whenever user changes on UI
     React.useEffect(() => {
@@ -36,12 +36,7 @@ function useTheme() {
         throw new Error("useTheme must be used within a ThemeProvider");
     }
 
-    const { theme, setTheme } = context;
-
-    return {
-        theme,
-        setTheme,
-    };
+    return context;
 }
 
 export { ThemeProvider, useTheme };

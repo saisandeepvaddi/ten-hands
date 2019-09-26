@@ -1,7 +1,7 @@
 (function() {
   let count = 0;
   const interval = setInterval(() => {
-    console.log("hehe", count++);
+    console.log("test line: ", count++);
   }, 1000);
 
   setTimeout(() => {
