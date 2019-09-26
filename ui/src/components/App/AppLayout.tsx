@@ -13,7 +13,7 @@ const isWindows = navigator.platform.toLowerCase() === "win32";
 const AppLayout = React.memo(() => {
     const { theme } = useTheme();
     const { isSocketInitialized, initializeSocket } = useSockets();
-    const topbarHeight = isRunningInElectron() ? "30px" : "50px";
+    const topbarHeight = (isRunningInElectron() && isWindows) ? "30px" : "50px";
 
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
