@@ -37,7 +37,6 @@ This project can be run in browser instead of desktop version. But desktop versi
 
 1. Drag & Drop **package.json** to add project.
 2. Link to open project directory in file explorer.
-3. A warning when you are closing window to suggest to stop running processes.
 
 # Configuration
 
