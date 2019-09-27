@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "@blueprintjs/tslint-config",
+    "tslint-react-hooks"
+  ],
+  "rules": {
+    "no-default-export": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false,
+    "linebreak-style": false,
+    "no-console": false,
+    "no-unused-variable": true
+  }
+}

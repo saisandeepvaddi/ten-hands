@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+html {
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.full-div {
+  overflow: auto;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-100 > .bp3-tab-list {
+  width: 100%;
+}
+
+/* Styles for React-Split-Pane resizer */
+.Resizer {
+  background: #000;
+  opacity: 0.2;
+  z-index: 1;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+}
+
+.Resizer:hover {
+  -webkit-transition: all 2s ease;
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+}
+
+.Resizer.horizontal:hover {
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+}
+
+.Resizer.vertical {
+  width: 0px; /* Changed from default 11px to 0 to remove border whitening on gray*/
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
+}
+
+.Resizer.vertical:hover {
+  border-left: 5px solid rgba(0, 0, 0, 0.5);
+  border-right: 5px solid rgba(0, 0, 0, 0.5);
+}
+.Resizer.disabled {
+  cursor: not-allowed;
+}
+.Resizer.disabled:hover {
+  border-color: transparent;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+
+.bp3-dark .command-output::-webkit-scrollbar-thumb {
+  background-color: #182026;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+.bp3-dark ::-webkit-scrollbar-thumb {
+  background-color: #bfccd654;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202b335d;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
+}
+
+pre {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.all-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button:focus {
+  outline: none;
+}

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "build",
+    "allowJs": true,
+    "typeRoots": ["node_modules/@types", "server/types", "electron/types"]
+  },
+  "include": ["server/**/*", "electron/**/*", "shared/**/*"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"]
+}
