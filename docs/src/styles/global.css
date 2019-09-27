@@ -6,7 +6,8 @@ html {
 }
 
 footer,
-p {
+p,
+span {
   color: #f5f8fa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -24,7 +25,9 @@ a:hover {
   text-decoration: underline;
   outline-width: 0;
 }
-
+.bold {
+  font-weight: 800;
+}
 a:hover {
   font-weight: 800;
 }
