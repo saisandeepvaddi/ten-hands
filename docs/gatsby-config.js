@@ -1,4 +1,5 @@
 module.exports = {
+  pathPrefix: "/ten-hands",
   siteMetadata: {
     title: `Ten Hands`,
     description: `One place to run your command-line tasks`,
