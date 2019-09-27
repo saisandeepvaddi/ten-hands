@@ -9,9 +9,9 @@ You can organize tasks into projects and run them whenever you want with a click
 
 # Sample UI (in v2.0.0)
 
-|                  Dark                  |                  Light                  |
-| :------------------------------------: | :-------------------------------------: |
-| <img src="/docs/images/demo_dark.jpg"> | <img src="/docs/images/demo_light.jpg"> |
+|                    Dark                    |                    Light                    |
+| :----------------------------------------: | :-----------------------------------------: |
+| <img src="/docs/src/images/demo_dark.jpg"> | <img src="/docs/src/images/demo_light.jpg"> |
 
 # Downloads
 
