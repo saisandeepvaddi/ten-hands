@@ -18,7 +18,7 @@ const Image = () => {
     query {
       placeholderImage: file(relativePath: { eq: "demo_dark.jpg" }) {
         childImageSharp {
-          fluid(maxWidth: 1300) {
+          fluid(quality: 100) {
             ...GatsbyImageSharpFluid
           }
         }
@@ -26,7 +26,12 @@ const Image = () => {
     }
   `);
 
-  return <Img fluid={data.placeholderImage.childImageSharp.fluid} />;
+  return (
+    <Img
+      fluid={data.placeholderImage.childImageSharp.fluid}
+      alt="Ten Hands demo image"
+    />
+  );
 };
 
 export default Image;
