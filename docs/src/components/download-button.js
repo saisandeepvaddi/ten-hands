@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  ButtonGroup,
-  AnchorButton,
-  Button,
-  Popover,
-  Menu,
-  MenuItem,
-  MenuDivider,
-} from "@blueprintjs/core";
+import { ButtonGroup, AnchorButton, Button, Popover } from "@blueprintjs/core";
 
 import { DiApple, DiWindows, DiLinux } from "react-icons/di";
 
