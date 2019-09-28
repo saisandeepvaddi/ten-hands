@@ -1,13 +1,5 @@
-import React from "react";
-import {
-  ButtonGroup,
-  AnchorButton,
-  Button,
-  Popover,
-  Menu,
-  MenuItem,
-  MenuDivider,
-} from "@blueprintjs/core";
+import React, { useEffect } from "react";
+import { ButtonGroup, AnchorButton, Button, Popover } from "@blueprintjs/core";
 
 import { DiApple, DiWindows, DiLinux } from "react-icons/di";
 
@@ -60,8 +52,8 @@ const getButtonsOrder = () => {
   return !os ? windows : order[os].map(o => list[o]);
 };
 
-function ExtraDownloads() {
-  const buttonsOrder = getButtonsOrder();
+function ExtraDownloads({ buttonsOrder }) {
+  if (!buttonsOrder) return null;
   return (
     <>
       <div>
@@ -93,7 +85,15 @@ function ExtraDownloads() {
 }
 
 function DownloadButton() {
-  const buttonsOrder = getButtonsOrder();
+  const [buttonsOrder, setButtonsOrder] = React.useState(null);
+
+  useEffect(() => {
+    const buttonsOrder = getButtonsOrder();
+    setButtonsOrder(buttonsOrder);
+  }, []);
+
+  if (!buttonsOrder) return null;
+
   return (
     <>
       <ButtonGroup>
@@ -105,7 +105,10 @@ function DownloadButton() {
         >
           Download for {buttonsOrder[0].name}
         </AnchorButton>
-        <Popover content={<ExtraDownloads />} position="bottom">
+        <Popover
+          content={<ExtraDownloads buttonsOrder={buttonsOrder} />}
+          position="bottom"
+        >
           <Button intent="success" rightIcon="caret-down" />
         </Popover>
       </ButtonGroup>
