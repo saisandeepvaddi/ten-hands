@@ -2,6 +2,8 @@ import { Link } from "gatsby";
 import PropTypes from "prop-types";
 import React from "react";
 import logo from "../images/logo.png";
+import { AnchorButton } from "@blueprintjs/core";
+import { DiGithubBadge } from "react-icons/di";
 
 const Header = ({ siteTitle }) => (
   <header
@@ -15,7 +17,7 @@ const Header = ({ siteTitle }) => (
         maxWidth: 960,
         padding: `1rem`,
       }}
-      className="d-flex align-center"
+      className="d-flex align-center justify-between"
     >
       <div style={{ margin: 0 }}>
         <Link
@@ -36,6 +38,15 @@ const Header = ({ siteTitle }) => (
           </div>
         </Link>
       </div>
+      <AnchorButton
+        large
+        minimal
+        target="_blank"
+        icon={<DiGithubBadge size="1.5em" />}
+        href="https://github.com/saisandeepvaddi/ten-hands"
+      >
+        Github
+      </AnchorButton>
     </div>
   </header>
 );

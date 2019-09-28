@@ -12,7 +12,7 @@ span {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-a {
+/* a {
   color: #0a6640;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
@@ -24,13 +24,13 @@ a:hover {
   color: #0a6640;
   text-decoration: underline;
   outline-width: 0;
-}
+} */
 .bold {
   font-weight: 800;
 }
-a:hover {
+/* a:hover {
   font-weight: 800;
-}
+} */
 
 a.download,
 a.github {
@@ -67,6 +67,10 @@ a.github {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .align-center {
