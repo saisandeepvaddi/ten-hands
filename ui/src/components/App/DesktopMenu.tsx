@@ -135,19 +135,7 @@ const DesktopMenu = () => {
                     onMouseOver={() => setIsCloseButtonMinimal(false)}
                     onMouseOut={() => setIsCloseButtonMinimal(true)}
                     onClick={() => {
-                        const response = remote.dialog.showMessageBox({
-                            type: "info",
-                            title: "Warning",
-                            message: "Are you sure you want to exit?",
-                            detail: "Any running tasks will keep running.",
-                            buttons: ["Cancel", "Exit"],
-                        });
-
-                        // Cancel = 0
-                        // Exit = 1
-                        if (response === 1) {
-                            remote.app.quit();
-                        }
+                        remote.app.quit();
                     }}
                 >
                     <Icon icon="cross" />

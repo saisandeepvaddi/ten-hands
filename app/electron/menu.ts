@@ -75,7 +75,7 @@ const macMenu: MenuItem[] = [
 const winMenu: MenuItem[] = [
   new MenuItem({
     label: "File",
-    submenu: [{ role: "close" }]
+    submenu: [{ role: "quit" }]
   }),
   ...commonMenu
 ];

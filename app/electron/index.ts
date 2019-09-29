@@ -1,8 +1,7 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 const electron = require("electron");
-const { BrowserWindow, ipcMain } = electron;
-const app = electron.app;
+const { BrowserWindow, ipcMain, app, dialog } = electron;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -70,6 +69,22 @@ async function startApplication() {
           mainWindow.show();
         }
         mainWindow.focus();
+      }
+    });
+
+    app.on("before-quit", e => {
+      const response = dialog.showMessageBox({
+        type: "info",
+        title: "Warning",
+        message: "Are you sure you want to exit?",
+        detail: "Any running tasks will keep running.",
+        buttons: ["Cancel", "Exit"]
+      });
+
+      // Cancel = 0
+      // Exit = 1
+      if (response !== 1) {
+        e.preventDefault();
       }
     });
 
