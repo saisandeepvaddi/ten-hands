@@ -89,7 +89,7 @@ async function startApplication() {
       if (isWindows) {
         const appMenu = getMenu();
         if (mainWindow) {
-          appMenu.popup(mainWindow, args.x, args.y);
+          appMenu.popup({ window: mainWindow, x: args.x, y: args.y });
         }
       }
     });
