@@ -1,4 +1,14 @@
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node"
+  transform: {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  watchPlugins: ["jest-watch-yarn-workspaces"],
+  globals: {
+    "ts-jest": {
+      diagnostics: false,
+      tsConfig: {
+        importHelpers: true
+      }
+    }
+  }
 };
