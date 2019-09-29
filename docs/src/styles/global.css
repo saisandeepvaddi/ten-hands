@@ -1,0 +1,78 @@
+html {
+  background-color: #202b33;
+  color: #f5f8fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+footer,
+p,
+span {
+  color: #f5f8fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* a {
+  color: #0a6640;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+a:visited,
+a:active,
+a:hover {
+  color: #0a6640;
+  text-decoration: underline;
+  outline-width: 0;
+} */
+.bold {
+  font-weight: 800;
+}
+/* a:hover {
+  font-weight: 800;
+} */
+
+a.download,
+a.github {
+  color: #0a6640;
+}
+
+.py-1 {
+  padding: 10px 0;
+}
+
+.py-2 {
+  padding: 20px 0;
+}
+
+.px-1 {
+  padding: 0 10px;
+}
+
+.px-2 {
+  padding: 0 20px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}

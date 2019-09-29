@@ -1,6 +1,17 @@
-# ten-hands
+<p align="center">
+    <a href="https://github.com/saisandeepvaddi/ten-hands">
+      <img alt="Ten Hands Logo" src="./docs/src/images/logo.png" width="60" />
+    </a>
+  <h1 align="center">
+    Ten Hands
+  </h1>
+</p>
 
-[![Build Status](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/All%20OS?branchName=master)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=4&branchName=master)
+<h3 align="center">
+  One place to run your command-line tasks
+</h3>
+
+[![Build Status](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_apis/build/status/All%20OS?branchName=releases)](https://dev.azure.com/saisandeepvaddi/Ten%20Hands/_build/latest?definitionId=4&branchName=master)
 
 # What is this?
 
@@ -9,9 +20,9 @@ You can organize tasks into projects and run them whenever you want with a click
 
 # Sample UI (in v2.0.0)
 
-|                  Dark                  |                  Light                  |
-| :------------------------------------: | :-------------------------------------: |
-| <img src="/docs/images/demo_dark.jpg"> | <img src="/docs/images/demo_light.jpg"> |
+|                    Dark                    |                    Light                    |
+| :----------------------------------------: | :-----------------------------------------: |
+| <img src="/docs/src/images/demo_dark.jpg"> | <img src="/docs/src/images/demo_light.jpg"> |
 
 # Downloads
 
