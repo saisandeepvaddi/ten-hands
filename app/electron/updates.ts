@@ -39,6 +39,22 @@ export const showUpdateNotAvailableMessage = () => {
   }
 };
 
+export const showUnableToCheckUpdatesMessage = () => {
+  const response = dialog.showMessageBox({
+    type: "error",
+    title: "Unable to check for updates.",
+    message:
+      "Unable to check for updates now. Please visit GitHub page for checking manually.",
+    buttons: ["Go to GitHub", "Cancel"]
+  });
+
+  if (response === 0) {
+    shell.openExternalSync(
+      "https://github.com/saisandeepvaddi/ten-hands/releases"
+    );
+  }
+};
+
 export const getAppUpdate = async (
   currentVersion?
 ): Promise<null | IUpdate> => {

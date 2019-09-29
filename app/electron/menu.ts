@@ -2,7 +2,8 @@ import { CONFIG_FILES } from "../shared/config";
 import {
   getAppUpdate,
   showUpdateAvailableMessage,
-  showUpdateNotAvailableMessage
+  showUpdateNotAvailableMessage,
+  showUnableToCheckUpdatesMessage
 } from "./updates";
 import { MenuItem } from "electron";
 
@@ -55,7 +56,7 @@ const helpMenu: MenuItem = new MenuItem({
           }
         } catch (error) {
           console.log("error:", error);
-          showUpdateNotAvailableMessage();
+          showUnableToCheckUpdatesMessage();
         }
       }
     }
