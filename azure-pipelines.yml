@@ -2,8 +2,7 @@ variables:
   node_version: "10.x"
 
 trigger:
-  branches:
-    - releases
+  - releases
 
 jobs:
   - job: Windows
