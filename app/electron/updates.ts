@@ -9,7 +9,7 @@ interface IUpdate {
 }
 
 export const showUpdateAvailableMessage = () => {
-  const response = dialog.showMessageBox({
+  const response = dialog.showMessageBoxSync({
     type: "info",
     title: "Update Available",
     message: "An update available for Ten Hands. Do you want to download?",
@@ -24,7 +24,7 @@ export const showUpdateAvailableMessage = () => {
 };
 
 export const showUpdateNotAvailableMessage = () => {
-  const response = dialog.showMessageBox({
+  const response = dialog.showMessageBoxSync({
     type: "info",
     title: "Already up to date",
     message:
@@ -40,7 +40,7 @@ export const showUpdateNotAvailableMessage = () => {
 };
 
 export const showUnableToCheckUpdatesMessage = () => {
-  const response = dialog.showMessageBox({
+  const response = dialog.showMessageBoxSync({
     type: "error",
     title: "Unable to check for updates.",
     message:

@@ -24,15 +24,7 @@ const editMenu: MenuItem = new MenuItem({
 });
 
 const viewMenu: MenuItem = new MenuItem({
-  label: "View",
-  submenu: [
-    { role: "reload" },
-    { role: "forcereload" },
-    { role: "toggledevtools" },
-    { type: "separator" },
-    { type: "separator" },
-    { role: "togglefullscreen" }
-  ]
+  label: "View"
 });
 
 const helpMenu: MenuItem = new MenuItem({
@@ -84,10 +76,10 @@ const winMenu: MenuItem[] = [
 export const menuTemplate: MenuItem[] = isMac ? macMenu : winMenu;
 
 export const getMenu = () => {
-  return Menu.buildFromTemplate(menuTemplate);
+  // return Menu.buildFromTemplate(menuTemplate);
 };
 
 export const createMenu = () => {
-  const appMenu = getMenu();
-  Menu.setApplicationMenu(appMenu);
+  // const appMenu = getMenu();
+  // Menu.setApplicationMenu(appMenu);
 };
