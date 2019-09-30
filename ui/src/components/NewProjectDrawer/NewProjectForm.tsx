@@ -1,9 +1,13 @@
+import { validate } from "@babel/types";
 import { Button, Code, FileInput, FormGroup, HTMLSelect, InputGroup, Pre } from "@blueprintjs/core";
-import { Formik } from "formik";
+import { Formik, FormikErrors, FormikValues } from "formik";
+import throttle from "lodash/throttle";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
+import { isValidPath } from "../../utils/node";
 import { hasProjectWithSameName } from "../../utils/projects";
+import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -29,6 +33,55 @@ interface INewProjectFormProps {
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
     const [configFileName, setConfigFileName] = useState("");
     const { projects, addProject } = useProjects();
+    const { config } = useConfig();
+
+    const [errors, setErrors] = useState<any>({
+        name: "",
+        path: "",
+    });
+
+    const isDuplicateName = useCallback(
+        newProjectName => {
+            return (
+                projects
+                    .map(project => project.name.toLowerCase())
+                    .findIndex(name => name === newProjectName.toLowerCase()) > -1
+            );
+        },
+        [projects],
+    );
+
+    const validateProjectName = value => {
+        let error = "";
+        if (!value) {
+            error = "Project name cannot be empty";
+        }
+
+        if (isDuplicateName(value)) {
+            error = "Project name already exists";
+        }
+
+        return error;
+    };
+
+    const validateProjectPath = async value => {
+        try {
+            let error = "";
+            if (!value) {
+                error = "Project path cannot be empty";
+            }
+
+            const isPathValid = await isValidPath(config, value);
+
+            if (!isPathValid) {
+                error = "This path doesn't exist";
+            }
+
+            return error;
+        } catch (error) {
+            console.log("error:", error);
+        }
+    };
 
     const fillFormWithProjectConfig = (file: ITenHandsFile, setFieldValue) => {
         const parsedProjectData = handleConfigFiles(file);
@@ -98,30 +151,31 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
     // const { fileName, values, handleChange, onProjectFileChange } = props;
     const handleSubmit = async (values, actions) => {
         // console.info("values:", values);
+        const nameError = validateProjectName(values.name);
+        const pathError = await validateProjectPath(values.path);
+        console.log("nameError:", nameError);
+        console.log("pathError:", pathError);
+        if (nameError || pathError) {
+            actions.setSubmitting(false);
+            setErrors({
+                name: nameError,
+                path: pathError,
+            });
+            return;
+        }
+
         try {
             actions.setSubmitting(true);
-            if (hasProjectWithSameName(projects, values.name)) {
-                const answer = window.confirm(
-                    "Project with same name already exists. Do you want to add project anyway?",
-                );
-                if (answer) {
-                    actions.setSubmitting(true);
-                    await addProject(values);
-                    actions.setSubmitting(false);
-                    setDrawerOpen(false);
-                } else {
-                    console.log("Cancelled by user");
-                    actions.setSubmitting(false);
-                }
-            } else {
-                actions.setSubmitting(true);
-                await addProject(values);
-                actions.setSubmitting(false);
-                setDrawerOpen(false);
-            }
+            await addProject(values);
+            setDrawerOpen(false);
         } catch (error) {
             console.error(error);
+        } finally {
             actions.setSubmitting(false);
+            setErrors({
+                name: "",
+                path: "",
+            });
         }
     };
 
@@ -130,8 +184,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
             <Formik
                 initialValues={initialProject}
                 onSubmit={handleSubmit}
-                render={props => (
-                    <form data-testid="new-project-form" onSubmit={props.handleSubmit}>
+                render={({ handleSubmit, handleChange, values, setFieldValue, isSubmitting }) => (
+                    <form data-testid="new-project-form" onSubmit={handleSubmit}>
                         <FormGroup
                             label="Project Config File"
                             helperText="Currently supports only package.json. You can create a project without this."
@@ -140,7 +194,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                                 <ProjectFileUpload
                                     configFileName={configFileName}
                                     onConfigFileUpload={(fileName, fileData) =>
-                                        onConfigFileUpload(fileName, fileData, props.setFieldValue)
+                                        onConfigFileUpload(fileName, fileData, setFieldValue)
                                     }
                                 />
                             ) : (
@@ -150,28 +204,37 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                                         id: "configFile",
                                     }}
                                     fill={true}
-                                    onInputChange={e => onProjectFileChange(e, props.setFieldValue)}
+                                    onInputChange={e => onProjectFileChange(e, setFieldValue)}
                                 />
                             )}
                         </FormGroup>
                         <FormGroup
                             label="Project Name"
                             labelFor="name"
-                            helperText="Will be auto-filled if you are using a package.json. Otherwise, choose a name."
+                            intent={errors.name ? "danger" : "none"}
+                            helperText={
+                                errors.name
+                                    ? errors.name
+                                    : "Will be auto-filled if you are using a package.json. Otherwise, choose a name."
+                            }
                         >
                             <InputGroup
                                 id="name"
                                 type="text"
+                                required={true}
                                 placeholder="My Awesome Project"
-                                onChange={props.handleChange}
-                                value={props.values.name}
+                                onChange={handleChange}
+                                value={values.name}
                             />
                         </FormGroup>
                         <FormGroup
                             label="Project Path"
                             labelFor="path"
+                            intent={errors.path ? "danger" : "none"}
                             helperText={
-                                isRunningInElectron() ? (
+                                errors.path ? (
+                                    errors.path
+                                ) : isRunningInElectron() ? (
                                     "Absolute path to the project directory. Will be auto-filled if a package.json uploaded."
                                 ) : (
                                     <span>
@@ -190,8 +253,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                                         ? "D:\\AllProjects\\MyProjectDirectory"
                                         : "/home/all-projects/my-project"
                                 }
-                                onChange={props.handleChange}
-                                value={props.values.path}
+                                onChange={handleChange}
+                                value={values.path}
                             />
                         </FormGroup>
                         {/* <FormGroup
@@ -199,7 +262,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             labelFor="type"
                             helperText="Will be auto-filled if it can be determined from package.json."
                         >
-                            <HTMLSelect fill={true} id="type" onChange={props.handleChange} value={props.values.type}>
+                            <HTMLSelect fill={true} id="type" onChange={handleChange} value={values.type}>
                                 <option value="">Select Project Type</option>
                                 <option value="nodejs">NodeJS</option>
                                 <option value="other">Other</option>
@@ -211,8 +274,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                             helperText="Will be auto-filled if available in package.json. Otherwise, you can add tasks after creating the project."
                         >
                             <NewProjectCommands
-                                commands={props.values.commands}
-                                setCommands={(commands: IProjectCommand[]) => props.setFieldValue("commands", commands)}
+                                commands={values.commands}
+                                setCommands={(commands: IProjectCommand[]) => setFieldValue("commands", commands)}
                             />
                         </FormGroup>
                         <FormGroup>
@@ -221,7 +284,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                                 intent="primary"
                                 text="Save Project"
                                 type="submit"
-                                loading={props.isSubmitting}
+                                loading={isSubmitting}
                                 large={true}
                             />
                         </FormGroup>

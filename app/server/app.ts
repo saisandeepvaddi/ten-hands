@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import projectRoutes from "./routes/projects";
+import utilsRoutes from "./routes/utilities";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/projects", projectRoutes);
+app.use("/utils", utilsRoutes);
 
 // Default Error Handler
 app.use(function(error, req, res, next) {
