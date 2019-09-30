@@ -1,8 +1,9 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import { isValidPath } from "../../utils/node";
 import { saveTaskInDb } from "../shared/API";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
@@ -24,32 +25,57 @@ interface INewProjectFormProps {
 }
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
-    const { updateProjects, setActiveProject, activeProject } = useProjects();
+    const { updateProjects, setActiveProject, activeProject, addTask } = useProjects();
     const { config } = useConfig();
 
-    const handleSubmit = useCallback(
-        (values, actions) => {
-            const saveCommand = async (newCommand: IProjectCommand): Promise<any> => {
-                try {
-                    actions.setSubmitting(true);
-                    const updatedProject = await saveTaskInDb(config, activeProject._id!, newCommand);
-                    actions.setSubmitting(false);
-                    await updateProjects();
-                    setDrawerOpen(false);
-                    setActiveProject(updatedProject);
-                } catch (error) {
-                    console.error(error);
-                    actions.setSubmitting(false);
-                }
-            };
-            const newCommand = {
+    const [errors, setErrors] = useState<any>({
+        path: "",
+    });
+
+    const validateCommandPath = async value => {
+        try {
+            let error = "";
+
+            if (!value) {
+                return "";
+            }
+            console.log("value:", value);
+
+            const isPathValid = await isValidPath(config, value);
+
+            if (!isPathValid) {
+                error = "This path doesn't exist. You can leave the path empty to run task in project's path.";
+            }
+
+            return error;
+        } catch (error) {
+            console.log("error:", error);
+        }
+    };
+
+    const handleSubmit = async (values, actions): Promise<any> => {
+        try {
+            const newCommand: IProjectCommand = {
                 ...values,
                 _id: uuidv4(),
             };
-            saveCommand(newCommand);
-        },
-        [setActiveProject, setDrawerOpen, updateProjects, config, activeProject],
-    );
+            const pathError = await validateCommandPath(newCommand.execDir);
+            if (pathError) {
+                actions.setSubmitting(false);
+                setErrors({
+                    path: pathError,
+                });
+                return;
+            }
+            actions.setSubmitting(true);
+            await addTask(activeProject._id!, newCommand);
+            actions.setSubmitting(false);
+            setDrawerOpen(false);
+        } catch (error) {
+            console.error(error);
+            actions.setSubmitting(false);
+        }
+    };
 
     return (
         <Container>
@@ -71,7 +97,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
                         <FormGroup
                             label="Path"
                             labelFor="execDir"
-                            helperText="Will take the project's path if left empty."
+                            intent={errors.path ? "danger" : "none"}
+                            helperText={errors.path ? errors.path : "Will take the project's path if left empty."}
                         >
                             <InputGroup
                                 placeholder="E.g., Absolute path where to execute the task."
