@@ -1,7 +1,5 @@
-import { validate } from "@babel/types";
-import { Button, Code, FileInput, FormGroup, HTMLSelect, InputGroup, Pre } from "@blueprintjs/core";
-import { Formik, FormikErrors, FormikValues } from "formik";
-import throttle from "lodash/throttle";
+import { Button, FileInput, FormGroup, InputGroup } from "@blueprintjs/core";
+import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
@@ -40,24 +38,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         path: "",
     });
 
-    const isDuplicateName = useCallback(
-        newProjectName => {
-            return (
-                projects
-                    .map(project => project.name.toLowerCase())
-                    .findIndex(name => name === newProjectName.toLowerCase()) > -1
-            );
-        },
-        [projects],
-    );
-
     const validateProjectName = value => {
         let error = "";
         if (!value) {
             error = "Project name cannot be empty";
         }
 
-        if (isDuplicateName(value)) {
+        if (hasProjectWithSameName(projects, value)) {
             error = "Project name already exists";
         }
 

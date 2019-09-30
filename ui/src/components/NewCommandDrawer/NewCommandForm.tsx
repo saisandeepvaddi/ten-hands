@@ -1,10 +1,9 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { isValidPath } from "../../utils/node";
-import { saveTaskInDb } from "../shared/API";
 import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 
@@ -25,7 +24,7 @@ interface INewProjectFormProps {
 }
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOpen }) => {
-    const { updateProjects, setActiveProject, activeProject, addTask } = useProjects();
+    const { activeProject, addTask } = useProjects();
     const { config } = useConfig();
 
     const [errors, setErrors] = useState<any>({
