@@ -120,7 +120,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
     const addTask = React.useCallback(
         (projectId: string, task: IProjectCommand) => {
-            (async function() {
+            const addTask = async (projectId, task) => {
                 try {
                     await saveTaskInDb(config, projectId, task);
                     const currentProjectIndex = projects.findIndex(x => x._id === projectId);
@@ -139,7 +139,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                 } catch (error) {
                     console.log("error:", error);
                 }
-            })();
+            };
+            addTask(projectId, task);
         },
         [projects, config],
     );
