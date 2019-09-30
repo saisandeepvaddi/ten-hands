@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
 import { useTheme } from "../shared/Themes";
+import { toaster } from "../shared/Toaster";
 
 interface IDragDropContainerProps {
     children: ReactNodeArray;
@@ -29,14 +30,9 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
     const handleProjectFileUpload = async file => {
         try {
             if (hasProjectWithSameName(projects, file.name)) {
-                const answer = window.confirm(
-                    "Project with same name already exists. Do you want to add project anyway?",
+                toaster.error(
+                    "Project exists with same name. You can use New Project button to upload file and change project name.",
                 );
-                if (answer) {
-                    await addProject(file);
-                } else {
-                    console.log("Cancelled by user");
-                }
             } else {
                 await addProject(file);
             }
