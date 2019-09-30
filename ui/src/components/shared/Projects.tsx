@@ -1,6 +1,5 @@
 import React from "react";
-import { saveTaskInDb } from "./__mocks__/API";
-import { deleteProjectInDb, deleteTaskInDb, getProjects, reorderTasksInDb, saveProjectInDb } from "./API";
+import { deleteProjectInDb, deleteTaskInDb, getProjects, reorderTasksInDb, saveProjectInDb, saveTaskInDb } from "./API";
 import { useConfig } from "./Config";
 
 interface IProjectContextValue {
@@ -120,7 +119,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
     const addTask = React.useCallback(
         (projectId: string, task: IProjectCommand) => {
-            const addTask = async (projectId, task) => {
+            const addTaskInFn = async (projectId, task) => {
                 try {
                     await saveTaskInDb(config, projectId, task);
                     const currentProjectIndex = projects.findIndex(x => x._id === projectId);
@@ -140,7 +139,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                     console.log("error:", error);
                 }
             };
-            addTask(projectId, task);
+            addTaskInFn(projectId, task);
         },
         [projects, config],
     );
