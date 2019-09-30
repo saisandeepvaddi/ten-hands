@@ -153,8 +153,6 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(({ setDrawerOp
         // console.info("values:", values);
         const nameError = validateProjectName(values.name);
         const pathError = await validateProjectPath(values.path);
-        console.log("nameError:", nameError);
-        console.log("pathError:", pathError);
         if (nameError || pathError) {
             actions.setSubmitting(false);
             setErrors({
