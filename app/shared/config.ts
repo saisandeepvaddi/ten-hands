@@ -7,7 +7,8 @@ const tenHandsDir = path.join(homedir(), ".ten-hands");
 
 export const CONFIG_FILES = {
   configFile: path.join(tenHandsDir, "config.json"),
-  dbFile: path.join(tenHandsDir, "db.json")
+  dbFile: path.join(tenHandsDir, "db.json"),
+  logFile: path.join(tenHandsDir, "log.log")
 };
 
 mkdirp.sync(tenHandsDir);

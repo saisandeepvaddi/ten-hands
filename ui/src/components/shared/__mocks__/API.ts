@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { getFakeProjects } from "../../../utils/test-utils";
 
 export const getProjects = async (config: IConfig): Promise<IProject[]> => {
@@ -69,6 +70,17 @@ export const reorderProjectsInDb = async (config: IConfig, projectIds: string[])
     }
 };
 
+export const checkIfValidPath = async (config: IConfig, path: string) => {
+    try {
+        return {
+            isValid: true,
+        };
+    } catch (error) {
+        console.log("checkIfValidPath error:", error);
+        throw error;
+    }
+};
+
 export const allMockAjaxFunctions = {
     getProjects,
     saveProjectInDb,
@@ -77,4 +89,5 @@ export const allMockAjaxFunctions = {
     reorderTasksInDb,
     saveTaskInDb,
     reorderProjectsInDb,
+    checkIfValidPath,
 };

@@ -90,3 +90,16 @@ export const reorderProjectsInDb = async (config: IConfig, projectIds: string[])
         throw error;
     }
 };
+
+
+export const checkIfValidPath = async (config: IConfig, path: string) => {
+    try {
+        const response = await Axios.post(`http://localhost:${config.port}/utils/is-valid-path`, {
+            path
+        });
+        return response.data;
+    } catch (error) {
+        console.log('checkIfValidPath error:', error)
+        throw error;
+    }
+}

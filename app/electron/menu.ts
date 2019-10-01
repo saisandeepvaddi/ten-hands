@@ -27,9 +27,8 @@ const viewMenu: MenuItem = new MenuItem({
   label: "View",
   submenu: [
     { role: "reload" },
-    { role: "forcereload" },
-    { role: "toggledevtools" },
-    { type: "separator" },
+    { role: "forceReload" },
+    { role: "toggleDevTools" },
     { type: "separator" },
     { role: "togglefullscreen" }
   ]
@@ -55,7 +54,6 @@ const helpMenu: MenuItem = new MenuItem({
             showUpdateNotAvailableMessage();
           }
         } catch (error) {
-          console.log("error:", error);
           showUnableToCheckUpdatesMessage();
         }
       }
