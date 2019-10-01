@@ -1,8 +1,7 @@
 variables:
   node_version: "10.x"
 
-trigger: none
-pr:
+trigger:
   - releases
 
 jobs:
