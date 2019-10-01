@@ -1,7 +1,8 @@
 import Axios from "axios";
-import { dialog, shell } from "electron";
+import { dialog, shell, app } from "electron";
 import readPkg from "read-pkg";
 
+const isDev = require("electron-is-dev");
 interface IUpdate {
   prerelease: boolean;
   published_at: Date;
@@ -58,7 +59,8 @@ export const showUnableToCheckUpdatesMessage = () => {
 export const getAppUpdate = async (
   currentVersion?
 ): Promise<null | IUpdate> => {
-  const _appVersion = currentVersion || (await readPkg()).version;
+  const _appVersion =
+    currentVersion || (isDev ? (await readPkg()).version : app.getVersion());
   const appVersion = _appVersion.startsWith("v")
     ? _appVersion
     : "v" + _appVersion;

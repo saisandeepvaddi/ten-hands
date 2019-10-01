@@ -48,9 +48,13 @@ async function startApplication() {
 
     app.on("ready", () => {
       createWindow();
-      // if (!isWindows) {
-      //   createMenu();
-      // }
+      if (!isWindows) {
+        try {
+          createMenu();
+        } catch (error) {
+          console.log("error:", error);
+        }
+      }
     });
 
     ipcMain.on(`get-config`, e => {
@@ -101,12 +105,12 @@ async function startApplication() {
     });
 
     ipcMain.on(`display-app-menu`, (e, args) => {
-      // if (isWindows) {
-      //   const appMenu = getMenu();
-      //   if (mainWindow) {
-      //     appMenu.popup({ window: mainWindow, x: args.x, y: args.y });
-      //   }
-      // }
+      if (isWindows) {
+        const appMenu = getMenu();
+        if (mainWindow) {
+          appMenu.popup({ window: mainWindow, x: args.x, y: args.y });
+        }
+      }
     });
   } catch (error) {
     console.log("error:", error);

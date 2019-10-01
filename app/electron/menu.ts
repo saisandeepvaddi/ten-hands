@@ -24,7 +24,14 @@ const editMenu: MenuItem = new MenuItem({
 });
 
 const viewMenu: MenuItem = new MenuItem({
-  label: "View"
+  label: "View",
+  submenu: [
+    { role: "reload" },
+    { role: "forceReload" },
+    { role: "toggleDevTools" },
+    { type: "separator" },
+    { role: "togglefullscreen" }
+  ]
 });
 
 const helpMenu: MenuItem = new MenuItem({
@@ -47,7 +54,6 @@ const helpMenu: MenuItem = new MenuItem({
             showUpdateNotAvailableMessage();
           }
         } catch (error) {
-          console.log("error:", error);
           showUnableToCheckUpdatesMessage();
         }
       }
@@ -76,10 +82,10 @@ const winMenu: MenuItem[] = [
 export const menuTemplate: MenuItem[] = isMac ? macMenu : winMenu;
 
 export const getMenu = () => {
-  // return Menu.buildFromTemplate(menuTemplate);
+  return Menu.buildFromTemplate(menuTemplate);
 };
 
 export const createMenu = () => {
-  // const appMenu = getMenu();
-  // Menu.setApplicationMenu(appMenu);
+  const appMenu = getMenu();
+  Menu.setApplicationMenu(appMenu);
 };
