@@ -7,7 +7,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
-import { createMenu, menuTemplate, getMenu } from "./menu";
+import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
 
 const isWindows = process.platform === "win32";
@@ -49,7 +49,11 @@ async function startApplication() {
     app.on("ready", () => {
       createWindow();
       if (!isWindows) {
-        createMenu();
+        try {
+          createMenu();
+        } catch (error) {
+          console.log("error:", error);
+        }
       }
     });
 
@@ -57,7 +61,7 @@ async function startApplication() {
       e.returnValue = getConfig();
     });
 
-    app.on("second-instance", (event, commandLine, workingDirectory) => {
+    app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
 
       // Someone tried to run a second instance, we should focus our window.
@@ -73,7 +77,7 @@ async function startApplication() {
     });
 
     app.on("before-quit", e => {
-      const response = dialog.showMessageBox({
+      const response = dialog.showMessageBoxSync({
         type: "info",
         title: "Warning",
         message: "Are you sure you want to exit?",
