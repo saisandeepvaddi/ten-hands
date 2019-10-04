@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { dialog, shell, app } from "electron";
 import readPkg from "read-pkg";
+import { log } from "./logger";
 
 const isDev = require("electron-is-dev");
 interface IUpdate {
@@ -14,7 +15,7 @@ export const showUpdateAvailableMessage = () => {
     type: "info",
     title: "Update Available",
     message: "An update available for Ten Hands. Do you want to download?",
-    buttons: ["Yes, Get Update", "Cancel"]
+    buttons: ["Yes, Get Update", "Cancel"],
   });
 
   if (response === 0) {
@@ -30,7 +31,7 @@ export const showUpdateNotAvailableMessage = () => {
     title: "Already up to date",
     message:
       "You are already running latest version of Ten Hands. You can check for any pre-releases in GitHub.",
-    buttons: ["Go to GitHub", "Cancel"]
+    buttons: ["Go to GitHub", "Cancel"],
   });
 
   if (response === 0) {
@@ -46,7 +47,7 @@ export const showUnableToCheckUpdatesMessage = () => {
     title: "Unable to check for updates.",
     message:
       "Unable to check for updates now. Please visit GitHub page for checking manually.",
-    buttons: ["Go to GitHub", "Cancel"]
+    buttons: ["Go to GitHub", "Cancel"],
   });
 
   if (response === 0) {
@@ -64,6 +65,8 @@ export const getAppUpdate = async (
   const appVersion = _appVersion.startsWith("v")
     ? _appVersion
     : "v" + _appVersion;
+
+  log.info("App Version: " + appVersion);
   const githubReleases = await Axios.get(
     "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases"
   );

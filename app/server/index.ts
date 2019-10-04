@@ -1,11 +1,10 @@
 import { createServer } from "http";
 import app from "./app";
-
-import socketIO from "socket.io";
 import { JobManager } from "./services/job";
 import { getConfig } from "../shared/config";
 import SocketManager from "./services/socket";
 import fixPath from "fix-path";
+import { log } from "../electron/logger";
 
 /**
  * Starts Node server for ten-hands project.
@@ -31,10 +30,12 @@ export async function startServer() {
 
       server.listen(port, () => {
         console.log(`Server running on ${port}`);
+        log.info(`Server running on ${port}`);
         res(true);
       });
     } catch (err) {
       rej(err);
+      log.error(`startServer Error: ${err.message}`);
     }
   });
 }
