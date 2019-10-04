@@ -18,31 +18,36 @@ export let mainWindow;
 const singleInstanceLock = app.requestSingleInstanceLock();
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
-    frame: isWindows ? false : true,
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  });
+  try {
+    mainWindow = new BrowserWindow({
+      width: 1366,
+      height: 768,
+      frame: isWindows ? false : true,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
+    if (isDev) {
+      mainWindow.webContents.openDevTools();
+    }
+
+    const uiUrl = isDev
+      ? "http://localhost:3010"
+      : `file://${path.join(__dirname, "../ui/index.html")}`;
+    mainWindow.loadURL(uiUrl);
+
+    mainWindow.on("closed", () => (mainWindow = null));
+    return mainWindow;
+  } catch (error) {
+    console.log("error:", error);
+    log.error("createWindow Error: ", error.message);
   }
-
-  const uiUrl = isDev
-    ? "http://localhost:3010"
-    : `file://${path.join(__dirname, "../ui/index.html")}`;
-  mainWindow.loadURL(uiUrl);
-
-  mainWindow.on("closed", () => (mainWindow = null));
-  return mainWindow;
 }
 
 async function startApplication() {
   try {
-    const config: IConfig = require("../shared/config").default;
+    const config: IConfig = getConfig();
     console.log("config:", config);
     log.info(`config: ${JSON.stringify(config, null, 2)}`);
 
