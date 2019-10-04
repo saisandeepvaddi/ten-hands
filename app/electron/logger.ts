@@ -1,4 +1,4 @@
-import Logger from "just-enough-logger";
+const Logger = require("just-enough-logger").default;
 import { CONFIG_FILES } from "../shared/config";
 
 export const log = new Logger({
