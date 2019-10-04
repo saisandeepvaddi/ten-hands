@@ -70,6 +70,7 @@ async function startApplication() {
     log.info("Server Started");
 
     app.on("ready", () => {
+      log.info("app.on.ready called");
       createWindow();
       log.info("Window Created in app.ready");
       if (!isWindows) {
