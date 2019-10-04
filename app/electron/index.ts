@@ -35,9 +35,13 @@ function createWindow() {
     const uiUrl = isDev
       ? "http://localhost:3010"
       : `file://${path.join(__dirname, "../ui/index.html")}`;
+    log.info("uiUrl:" + uiUrl);
     mainWindow.loadURL(uiUrl);
 
-    mainWindow.on("closed", () => (mainWindow = null));
+    mainWindow.on("closed", () => {
+      log.info("Window Closing");
+      mainWindow = null;
+    });
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
