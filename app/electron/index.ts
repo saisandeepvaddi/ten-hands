@@ -9,6 +9,7 @@ const isDev = require("electron-is-dev");
 import { startServer } from "../server";
 import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
+import { log } from "./logger";
 
 const isWindows = process.platform === "win32";
 
@@ -22,8 +23,8 @@ function createWindow() {
     height: 768,
     frame: isWindows ? false : true,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   if (isDev) {
@@ -43,16 +44,20 @@ async function startApplication() {
   try {
     const config: IConfig = require("../shared/config").default;
     console.log("config:", config);
+    log.info(`config: ${JSON.stringify(config, null, 2)}`);
 
     await startServer();
 
     app.on("ready", () => {
       createWindow();
+      log.info("Window Created in app.ready");
       if (!isWindows) {
         try {
+          log.info("Creating Menu");
           createMenu();
         } catch (error) {
           console.log("error:", error);
+          log.error("app.ready error: " + error.message);
         }
       }
     });
@@ -63,6 +68,7 @@ async function startApplication() {
 
     app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
+      log.warn("Requesting second instance. Deny it");
 
       // Someone tried to run a second instance, we should focus our window.
       if (mainWindow) {
@@ -82,7 +88,7 @@ async function startApplication() {
         title: "Warning",
         message: "Are you sure you want to exit?",
         detail: "Any running tasks will keep running.",
-        buttons: ["Cancel", "Exit"]
+        buttons: ["Cancel", "Exit"],
       });
 
       // Cancel = 0
@@ -120,8 +126,9 @@ async function startApplication() {
 /* Makes app a single instance application */
 if (!singleInstanceLock) {
   app.quit();
+  log.error("Quitting instance because of single instance lock.");
 } else {
   console.log("starting app");
-
+  log.info("Starting app");
   startApplication();
 }

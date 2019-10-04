@@ -52,6 +52,7 @@
     "electron-is-dev": "^1.1.0",
     "express": "^4.16.4",
     "fix-path": "^2.1.0",
+    "just-enough-logger": "^1.0.1",
     "lowdb": "^1.0.0",
     "mkdirp": "^0.5.1",
     "node-watch": "^0.6.3",
