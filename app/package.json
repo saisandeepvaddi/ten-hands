@@ -18,7 +18,7 @@
     "start:server": "cross-env PORT=5010 node ./build/server/start",
     "dev": "cross-env NODE_ENV=developement ./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
-    "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --dir --publish never",
+    "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --publish never",
     "electron-only": "./node_modules/.bin/electron ./build/electron/index.js",
     "test:server": "jest --watch",
     "test:electron": "jest --testPathPattern=\".*/electron/__tests__/.*\\.test.ts\""
