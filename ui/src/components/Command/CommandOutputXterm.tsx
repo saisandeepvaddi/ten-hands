@@ -9,6 +9,7 @@ import { useTheme } from "../shared/Themes";
 
 interface ICommandProps {
     room: string;
+    index: number;
 }
 
 const TerminalContainer = styled.div`
@@ -18,12 +19,44 @@ const TerminalContainer = styled.div`
     white-space: pre-wrap;
 `;
 
-const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
+const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room, index }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
     const currentTheme = React.useRef<any>(null);
+    const themeTimeout = React.useRef<any>(null);
+    const terminalAttached = React.useRef<boolean>(false);
     const { config } = useConfig();
+
+    const setTheme = () => {
+        if (terminal && terminal.current) {
+            terminal.current.setTheme(theme);
+            if (currentTheme && currentTheme.current) {
+                currentTheme.current = theme;
+            }
+        }
+    };
+
+    // const attachTerminal = () => {
+    //     if (elRef && elRef.current && terminal && terminal.current && !terminalAttached.current) {
+    //         terminal.current.attachTo(elRef.current);
+    //         terminalAttached.current = true;
+    //     }
+    // };
+
+    const removeTheme = () => {
+        if (terminal && terminal.current) {
+            terminal.current.removeTheme();
+        }
+    };
+
+    // Setting theme is taking a LOOOOOOOOOONG time.
+    // So had to do it later in a different call stack.
+    const setThemeAfter = (timeout = 0) => {
+        themeTimeout.current = setTimeout(() => {
+            setTheme();
+        }, timeout);
+    };
 
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
@@ -36,58 +69,24 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room }) => {
     }, []);
 
     useEffect(() => {
-        const setTerminalTheme = () => {
-            if (!config.enableTerminalTheme) {
-                if (terminal && terminal.current) {
-                    terminal.current.removeTheme();
-                }
-                return;
-            }
+        if (!config.enableTerminalTheme) {
+            removeTheme();
+        }
 
-            try {
-                const hasATheme = terminal.current!.getTheme();
-                if (
-                    hasATheme !== undefined &&
-                    JSON.stringify(hasATheme) !== "{}" &&
-                    theme === currentTheme.current &&
-                    currentTheme.current
-                ) {
-                    console.log("theme: Not setting theme again");
-                    return;
-                }
-            } catch (error) {
-                console.log("error:", error);
-            }
+        if (index < 3) {
+            setThemeAfter(0);
+        } else {
+            setThemeAfter(index * 100);
+        }
 
-            let themeTimeout: any = null;
-            // Setting theme is taking a LOOOOOOOOOONG time.
-            // So had to do it later in a different call stack.
-            const setThemeLater = () => {
-                themeTimeout = setTimeout(() => {
-                    if (terminal && terminal.current) {
-                        terminal.current.setTheme(theme);
-                        if (currentTheme && currentTheme.current) {
-                            currentTheme.current = theme;
-                        }
-                    }
-                }, 0);
-            };
-            setThemeLater();
-            return () => {
-                if (themeTimeout) {
-                    clearTimeout(themeTimeout);
-                }
-            };
-        };
-
-        const clearTimer = setTerminalTheme();
         return () => {
-            if (terminal && terminal.current) {
-                terminal.current.removeTheme();
+            // Remove them if unmounting
+            removeTheme();
+            if (themeTimeout.current) {
+                clearTimeout(themeTimeout.current);
             }
-            clearTimer && clearTimer();
         };
-    }, [theme, config]);
+    }, [theme, config, index]);
 
     const handleResize = React.useCallback(
         debounce((entries: IResizeEntry[]) => {
