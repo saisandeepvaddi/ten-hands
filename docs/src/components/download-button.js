@@ -13,6 +13,44 @@ const getOS = () => {
   return os;
 };
 
+// const getLatestReleases = async () => {
+//   const releasesPage = "https://github.com/saisandeepvaddi/ten-hands/releases";
+//   try {
+//     const data = await fetch(
+//       "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases/latest"
+//     ).then(r => r.json());
+//     if (!data) {
+//       throw new Error(
+//         "Releases data not available. Please go to " + releasesPage
+//       );
+//     }
+
+//     const { assets } = data;
+
+//     const downloadUrls = assets.map(asset => asset.browser_download_url);
+
+//     const windows =
+//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
+//     const linux =
+//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
+//     const macos =
+//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
+
+//     return {
+//       windows,
+//       linux,
+//       macos,
+//     };
+//   } catch (error) {
+//     console.log("error:", error);
+//     return {
+//       windows: releasesPage,
+//       linux: releasesPage,
+//       macos: releasesPage,
+//     };
+//   }
+// };
+
 const getButtonsOrder = () => {
   const os = getOS();
 
@@ -20,21 +58,21 @@ const getButtonsOrder = () => {
     icon: <DiWindows size="1.5em" />,
     name: "Windows",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands.Setup.2.0.0-alpha.0.exe",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands.Setup.2.0.0-alpha.1.exe",
   };
 
   let macos = {
     icon: <DiApple size="1.5em" />,
     name: "macOS",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands-2.0.0-alpha.0.dmg",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands-2.0.0-alpha.1.dmg",
   };
 
   let linux = {
     icon: <DiLinux size="1.5em" />,
     name: "Linux",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/ten-hands-app_2.0.0-alpha.0_amd64.deb",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/ten-hands-app_2.0.0-alpha.1_amd64.deb",
   };
 
   let list = {
