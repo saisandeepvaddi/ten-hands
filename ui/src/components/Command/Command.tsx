@@ -41,13 +41,14 @@ const CommandHeader = styled.div`
 interface ICommandProps {
     command: IProjectCommand;
     projectPath: string;
+    index: number;
 }
 
 function getJobData(state, room: string) {
     return state[room] || "";
 }
 
-const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath }) => {
+const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath, index }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
@@ -146,7 +147,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command, projectPath }) =
                     </CommandOutputButtonsContainer>
                 </CommandHeader>
                 <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-                    <CommandOutputXterm room={room} />
+                    <CommandOutputXterm index={index} room={room} />
                 </Collapse>
             </Container>
         </>
