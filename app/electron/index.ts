@@ -32,7 +32,6 @@ function createWindow() {
       },
     });
 
-    log.log("isDev: " + isDev);
     if (isDev) {
       mainWindow.webContents.openDevTools();
     }
@@ -40,6 +39,7 @@ function createWindow() {
     const uiUrl = isDev
       ? "http://localhost:3010"
       : `file://${path.join(__dirname, "../ui/index.html")}`;
+
     log.info("uiUrl:" + uiUrl);
     mainWindow.loadURL(uiUrl);
 
@@ -50,7 +50,7 @@ function createWindow() {
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
-    log.error("createWindow Error: ", error.message);
+    log.error("createWindow Error: " + error.message);
   }
 }
 
@@ -58,7 +58,7 @@ async function startApplication() {
   try {
     const config: IConfig = getConfig();
     console.log("config:", config);
-    log.info(`config: ${JSON.stringify(config, null, 2)}`);
+    log.info(`config: ${JSON.stringify(config)}`);
 
     try {
       await startServer();
