@@ -37,10 +37,10 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject 
     }
     return (
         <Container>
-            {commands.map(command => {
+            {commands.map((command, index) => {
                 return (
                     <Card key={command._id} elevation={Elevation.ONE} style={{ margin: 20 }}>
-                        <Command projectPath={activeProject.path} command={command} />
+                        <Command index={index} projectPath={activeProject.path} command={command} />
                     </Card>
                 );
             })}

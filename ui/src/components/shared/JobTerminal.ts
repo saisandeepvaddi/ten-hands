@@ -2,7 +2,7 @@ import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
 
 // tslint:disable-next-line: no-submodule-imports
-import "xterm/dist/xterm.css";
+import "xterm/css/xterm.css";
 
 class JobTerminal {
     public _id: string;
@@ -64,7 +64,7 @@ class JobTerminal {
     }
 
     public destroy() {
-        this.terminal.destroy();
+        this.terminal.dispose();
     }
 }
 
