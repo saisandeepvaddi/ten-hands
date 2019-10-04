@@ -25,7 +25,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room, index })
     const { theme } = useTheme();
     const currentTheme = React.useRef<any>(null);
     const themeTimeout = React.useRef<any>(null);
-    const terminalAttached = React.useRef<boolean>(false);
+    // const terminalAttached = React.useRef<boolean>(false);
     const { config } = useConfig();
 
     const setTheme = () => {
@@ -37,25 +37,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room, index })
         }
     };
 
-    // const attachTerminal = () => {
-    //     if (elRef && elRef.current && terminal && terminal.current && !terminalAttached.current) {
-    //         terminal.current.attachTo(elRef.current);
-    //         terminalAttached.current = true;
-    //     }
-    // };
-
     const removeTheme = () => {
         if (terminal && terminal.current) {
             terminal.current.removeTheme();
         }
-    };
-
-    // Setting theme is taking a LOOOOOOOOOONG time.
-    // So had to do it later in a different call stack.
-    const setThemeAfter = (timeout = 0) => {
-        themeTimeout.current = setTimeout(() => {
-            setTheme();
-        }, timeout);
     };
 
     /* eslint-disable react-hooks/exhaustive-deps */
@@ -73,14 +58,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(({ room, index })
             removeTheme();
         }
 
-        if (index < 3) {
-            setThemeAfter(0);
-        } else {
-            setThemeAfter(index * 100);
-        }
+        setTheme();
 
         return () => {
-            // Remove them if unmounting
+            // Remove unmounting
             removeTheme();
             if (themeTimeout.current) {
                 clearTimeout(themeTimeout.current);
