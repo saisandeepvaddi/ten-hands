@@ -50,6 +50,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.1.0",
+    "electron-unhandled": "^3.0.0",
     "express": "^4.16.4",
     "fix-path": "^2.1.0",
     "just-enough-logger": "^1.0.1",

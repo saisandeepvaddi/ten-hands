@@ -3,6 +3,10 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 const electron = require("electron");
 const { BrowserWindow, ipcMain, app, dialog } = electron;
 
+const unhandled = require("electron-unhandled");
+
+unhandled();
+
 const path = require("path");
 const isDev = require("electron-is-dev");
 
@@ -92,6 +96,7 @@ async function startApplication() {
     });
 
     app.on("before-quit", e => {
+      log.info("App before-quit");
       const response = dialog.showMessageBoxSync({
         type: "info",
         title: "Warning",
@@ -108,6 +113,7 @@ async function startApplication() {
     });
 
     app.on("window-all-closed", () => {
+      log.info("window-all-closed");
       if (process.platform !== "darwin") {
         app.quit();
       }
@@ -115,6 +121,7 @@ async function startApplication() {
 
     app.on("activate", () => {
       if (mainWindow === null) {
+        log.info("app.on.activate");
         createWindow();
       }
     });
@@ -129,6 +136,7 @@ async function startApplication() {
     });
   } catch (error) {
     console.log("error:", error);
+    log.error("startApplication error: " + error.message);
   }
 }
 
