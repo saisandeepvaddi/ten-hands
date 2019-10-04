@@ -32,6 +32,7 @@ function createWindow() {
       },
     });
 
+    log.log("isDev: " + isDev);
     if (isDev) {
       mainWindow.webContents.openDevTools();
     }
