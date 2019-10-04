@@ -59,7 +59,14 @@ async function startApplication() {
     console.log("config:", config);
     log.info(`config: ${JSON.stringify(config, null, 2)}`);
 
-    await startServer();
+    try {
+      await startServer();
+    } catch (error) {
+      console.log("error:", error);
+      log.error("failed to start server: " + error.message);
+    }
+
+    log.info("Server Started");
 
     app.on("ready", () => {
       createWindow();
