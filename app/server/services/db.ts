@@ -29,7 +29,7 @@ class Database {
     this.db
       .defaults({
         projectsOrder: [],
-        projects: []
+        projects: [],
       })
       .write();
   }
@@ -124,18 +124,18 @@ class Database {
     const commands = project.commands.map(command => {
       return {
         _id: uuidv4(),
-        ...command
+        ...command,
       };
     });
 
     const projectWithUpdatedCommands = {
       ...project,
-      commands
+      commands,
     };
 
     const newProject: IProject = {
       _id: uuidv4(),
-      ...projectWithUpdatedCommands
+      ...projectWithUpdatedCommands,
     };
 
     this.db
@@ -203,7 +203,7 @@ class Database {
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
-      .push({ ...command })
+      .unshift({ ...command })
       .write();
     const project = this.getProject(projectId);
     return project;
