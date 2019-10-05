@@ -2,7 +2,7 @@
   "name": "ten-hands-website",
   "private": true,
   "description": "One place to run your command-line tasks",
-  "version": "0.1.0",
+  "version": "2.0.0-alpha.1",
   "author": "Sai Sandeep Vaddi <saisandeepvaddi@gmail.com>",
   "dependencies": {
     "gatsby": "^2.15.28",

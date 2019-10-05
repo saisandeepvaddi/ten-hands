@@ -1,6 +1,6 @@
 {
   "name": "ten-hands-ui",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "private": true,
   "homepage": "./",
   "main": "./electron/index.ts",
@@ -46,7 +46,7 @@
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0",
     "uuid": "^3.3.2",
-    "xterm": "^3.14.5"
+    "xterm": "^4.0.2"
   },
   "devDependencies": {
     "@blueprintjs/tslint-config": "^1.8.0",

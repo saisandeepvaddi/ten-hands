@@ -1,15 +1,19 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 const electron = require("electron");
-const { BrowserWindow, ipcMain } = electron;
-const app = electron.app;
+const { BrowserWindow, ipcMain, app, dialog } = electron;
+
+const unhandled = require("electron-unhandled");
+
+unhandled();
 
 const path = require("path");
 const isDev = require("electron-is-dev");
 
 import { startServer } from "../server";
-import { createMenu, menuTemplate, getMenu } from "./menu";
+import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
+import { log } from "./logger";
 
 const isWindows = process.platform === "win32";
 
@@ -18,39 +22,65 @@ export let mainWindow;
 const singleInstanceLock = app.requestSingleInstanceLock();
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
-    frame: isWindows ? false : true,
-    webPreferences: {
-      nodeIntegration: true
+  try {
+    mainWindow = new BrowserWindow({
+      width: 1366,
+      height: 768,
+      frame: isWindows ? false : true,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
+
+    if (isDev) {
+      mainWindow.webContents.openDevTools();
     }
-  });
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
+    const uiUrl = isDev
+      ? "http://localhost:3010"
+      : `file://${path.join(__dirname, "../ui/index.html")}`;
+
+    log.info("uiUrl:" + uiUrl);
+    mainWindow.loadURL(uiUrl);
+
+    mainWindow.on("closed", () => {
+      log.info("Window Closing");
+      mainWindow = null;
+    });
+    return mainWindow;
+  } catch (error) {
+    console.log("error:", error);
+    log.error("createWindow Error: " + error.message);
   }
-
-  const uiUrl = isDev
-    ? "http://localhost:3010"
-    : `file://${path.join(__dirname, "../ui/index.html")}`;
-  mainWindow.loadURL(uiUrl);
-
-  mainWindow.on("closed", () => (mainWindow = null));
-  return mainWindow;
 }
 
 async function startApplication() {
   try {
-    const config: IConfig = require("../shared/config").default;
+    const config: IConfig = getConfig();
     console.log("config:", config);
+    log.info(`config: ${JSON.stringify(config)}`);
 
-    await startServer();
+    try {
+      await startServer();
+    } catch (error) {
+      console.log("error:", error);
+      log.error("failed to start server: " + error.message);
+    }
+
+    log.info("Server Started");
 
     app.on("ready", () => {
+      log.info("app.on.ready called");
       createWindow();
+      log.info("Window Created in app.ready");
       if (!isWindows) {
-        createMenu();
+        try {
+          log.info("Creating Menu");
+          createMenu();
+        } catch (error) {
+          console.log("error:", error);
+          log.error("app.ready error: " + error.message);
+        }
       }
     });
 
@@ -58,8 +88,9 @@ async function startApplication() {
       e.returnValue = getConfig();
     });
 
-    app.on("second-instance", (event, commandLine, workingDirectory) => {
+    app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
+      log.warn("Requesting second instance. Deny it");
 
       // Someone tried to run a second instance, we should focus our window.
       if (mainWindow) {
@@ -73,7 +104,25 @@ async function startApplication() {
       }
     });
 
+    app.on("before-quit", e => {
+      log.info("App before-quit");
+      const response = dialog.showMessageBoxSync({
+        type: "info",
+        title: "Warning",
+        message: "Are you sure you want to exit?",
+        detail: "Any running tasks will keep running.",
+        buttons: ["Cancel", "Exit"],
+      });
+
+      // Cancel = 0
+      // Exit = 1
+      if (response !== 1) {
+        e.preventDefault();
+      }
+    });
+
     app.on("window-all-closed", () => {
+      log.info("window-all-closed");
       if (process.platform !== "darwin") {
         app.quit();
       }
@@ -81,6 +130,7 @@ async function startApplication() {
 
     app.on("activate", () => {
       if (mainWindow === null) {
+        log.info("app.on.activate");
         createWindow();
       }
     });
@@ -89,20 +139,22 @@ async function startApplication() {
       if (isWindows) {
         const appMenu = getMenu();
         if (mainWindow) {
-          appMenu.popup(mainWindow, args.x, args.y);
+          appMenu.popup({ window: mainWindow, x: args.x, y: args.y });
         }
       }
     });
   } catch (error) {
     console.log("error:", error);
+    log.error("startApplication error: " + error.message);
   }
 }
 
 /* Makes app a single instance application */
 if (!singleInstanceLock) {
   app.quit();
+  log.error("Quitting instance because of single instance lock.");
 } else {
   console.log("starting app");
-
+  log.info("Starting app");
   startApplication();
 }
