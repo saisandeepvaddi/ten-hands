@@ -29,6 +29,24 @@ export const saveProjectInDb = async (config: IConfig, projectData: any): Promis
     }
 };
 
+export const renameProjectInDb = async (config: IConfig, projectId: string, newName: string): Promise<IProject> => {
+    try {
+        const responseData: AxiosResponse = await Axios({
+            method: "patch",
+            url: `http://localhost:${config.port}/projects/${projectId}`,
+            data: {
+                name: newName
+            }
+        })
+        const updatedProject = responseData.data;
+        return updatedProject;
+    } catch (error) {
+        console.log('renameProjectInDb error:', error);
+        throw error;
+        
+    }
+}
+
 export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
     try {
         await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);

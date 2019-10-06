@@ -1,5 +1,13 @@
 import React from "react";
-import { deleteProjectInDb, deleteTaskInDb, getProjects, reorderTasksInDb, saveProjectInDb, saveTaskInDb } from "./API";
+import {
+    deleteProjectInDb,
+    deleteTaskInDb,
+    getProjects,
+    renameProjectInDb,
+    reorderTasksInDb,
+    saveProjectInDb,
+    saveTaskInDb,
+} from "./API";
 import { useConfig } from "./Config";
 
 interface IProjectContextValue {
@@ -14,6 +22,7 @@ interface IProjectContextValue {
     deleteProject: (projectId: string) => any;
     reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => any;
     loadingProjects: boolean;
+    renameProject: (projectId: string, newName: string) => any;
 }
 
 interface IProjectsProviderProps {
@@ -90,6 +99,30 @@ function ProjectsProvider(props: IProjectsProviderProps) {
                 }
             };
             deleteTaskFn();
+        },
+        [projects, config],
+    );
+
+    const renameProject = React.useCallback(
+        (projectId: string, newName: string) => {
+            const renameProjectFn = async () => {
+                await renameProjectInDb(config, projectId, newName);
+                const currentProjectIndex = projects.findIndex(x => x._id === projectId);
+                const renamingProject = projects[currentProjectIndex];
+
+                if (renamingProject) {
+                    const updatedProject: IProject = {
+                        ...renamingProject,
+                        name: newName,
+                    };
+                    const _projects = [...projects];
+                    _projects.splice(currentProjectIndex, 1, updatedProject);
+                    setProjects(_projects);
+                    setActiveProject(updatedProject);
+                }
+            };
+
+            renameProjectFn();
         },
         [projects, config],
     );
@@ -205,6 +238,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
             addProject,
             deleteProject,
             reorderTasks,
+            renameProject,
         };
     }, [
         projects,
@@ -218,6 +252,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         addProject,
         deleteProject,
         reorderTasks,
+        renameProject,
     ]);
 
     return <ProjectContext.Provider value={value} {...props} />;

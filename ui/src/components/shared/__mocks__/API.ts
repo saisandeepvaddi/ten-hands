@@ -21,6 +21,16 @@ export const saveProjectInDb = async (config: IConfig, projectData: any): Promis
     }
 };
 
+export const renameProjectInDb = async (config: IConfig, projectId: string, newName: string): Promise<IProject> => {
+    try {
+        const project = getFakeProjects(1)[0];
+        return {...project, name: newName};
+    } catch (error) {
+        console.error("saveProjectInDb error:", error);
+        throw error;
+    }
+};
+
 export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
     try {
         Promise.resolve();
