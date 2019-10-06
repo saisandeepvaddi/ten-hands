@@ -1,9 +1,9 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
-import { axe } from "jest-axe";
 import React from "react";
 import * as utils from "../../utils/electron";
 import { cleanup, fireEvent, getFakeProjects, render, wait } from "../../utils/test-utils";
+import * as ajaxCalls from "../shared/API";
 import ProjectTopbar from "./ProjectTopbar";
 
 describe.only("ProjectTopbar Component", () => {
@@ -57,6 +57,56 @@ describe.only("ProjectTopbar Component", () => {
         }
     });
 
+    it.only("rename project name", async () => {
+        try {
+            const projectsSpy = jest.spyOn(ajaxCalls, "getProjects");
+            const submitSpy = jest.spyOn(ajaxCalls, "renameProjectInDb");
+
+            const projects: IProject[] = getFakeProjects(3);
+            projectsSpy.mockImplementation(() => Promise.resolve(projects));
+            const activeProject: IProject = projects[0];
+            const { getByTestId, getByText } = await render(<ProjectTopbar activeProject={activeProject} />);
+            const projectSettingsButton = getByTestId("project-settings-button");
+            // const deleteProjectMenuItem = getByTestId("delete-project-menu-item")
+            fireEvent.click(projectSettingsButton);
+            const renameProjectNameMenuItem = getByTestId("rename-project-menu-item");
+            fireEvent.click(renameProjectNameMenuItem);
+            expect(getByText(`Rename project: ${activeProject.name}`)).toBeInTheDocument();
+            const updatedProjectNameInput = getByTestId("updated-project-name");
+            const renameForm = getByTestId("rename-project-form");
+
+            fireEvent.change(updatedProjectNameInput, {
+                target: {
+                    value: activeProject.name,
+                },
+            });
+
+            fireEvent.submit(renameForm);
+            wait();
+
+            expect(getByText(/Project name already exists/i)).toBeInTheDocument();
+
+            const randomNewName = activeProject.name + Math.random() * 5;
+
+            fireEvent.change(updatedProjectNameInput, {
+                target: {
+                    value: randomNewName,
+                },
+            });
+
+            fireEvent.submit(renameForm);
+            wait();
+
+            expect(submitSpy).toHaveBeenCalled();
+
+            // For some reason, cleanup-aftereach did not work may be. If remove this cleanup, throws error
+            cleanup();
+            // TODO: Drag & Drop
+        } catch (error) {
+            console.log("ProjectTopbar error:", error);
+        }
+    });
+
     it("checks change tasks order", async () => {
         try {
             const activeProject: IProject = getFakeProjects(1)[0];
@@ -86,7 +136,7 @@ describe.only("ProjectTopbar Component", () => {
     it("checks project delete button", async () => {
         try {
             const activeProject: IProject = getFakeProjects(1)[0];
-            const { getByTestId, getByText, debug, queryByTestId } = await render(
+            const { getByTestId, getByText, queryByTestId } = await render(
                 <ProjectTopbar activeProject={activeProject} />,
             );
             const projectSettingsButton = getByTestId("project-settings-button");

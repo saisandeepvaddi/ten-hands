@@ -3,7 +3,9 @@ import {
     Alignment,
     Button,
     Dialog,
+    FormGroup,
     Icon,
+    InputGroup,
     Menu,
     MenuDivider,
     MenuItem,
@@ -11,18 +13,16 @@ import {
     Popover,
     Tooltip,
 } from "@blueprintjs/core";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { isRunningInElectron, openInExplorer } from "../../utils/electron";
+import { hasProjectWithSameName } from "../../utils/projects";
 import NewCommandDrawer from "../NewCommandDrawer";
+import { getGitRepo } from "../shared/API";
+import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 import CommandOrderListContainer from "./CommandOrderListContainer";
-
-// Have to use require because it's type-definition doesn't have function that allows path
-// Do not want to update node_module's file.
-// tslint:disable-next-line: no-var-requires
-const getRepoInfo = require("git-repo-info");
 
 interface IProjectTopbarProps {
     activeProject: IProject;
@@ -39,10 +39,16 @@ const GitBranchContainer = styled.div`
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject }) => {
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<boolean>(false);
+    const [updatedProjectName, setUpdatedProjectName] = React.useState<string>("");
+    const [renameProjectModalOpen, setRenameProjectModalOpen] = React.useState<boolean>(false);
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+    const [projectNameError, setProjectNameError] = React.useState<string>("");
+    const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
+    const [gitBranch, setGitBranch] = React.useState<string>("");
+    const { config } = useConfig();
 
-    const { deleteProject } = useProjects();
+    const { deleteProject, projects, renameProject } = useProjects();
 
     const shouldDeleteProject = async shouldDelete => {
         try {
@@ -59,14 +65,68 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
         setCommandsOrderModalOpen(false);
     };
 
-    const getGitBranch = React.useCallback(() => {
-        if (isRunningInElectron()) {
-            const projectPath = activeProject.path;
-            const gitInfo = getRepoInfo(projectPath);
-            return gitInfo.branch || "";
-        } else {
-            return "";
+    const handleRenameProjectModalClose = () => {
+        setRenameProjectModalOpen(false);
+        setProjectNameError("");
+        setUpdatedProjectName("");
+    };
+
+    const validateProjectName = value => {
+        let error = "";
+        if (!value) {
+            error = "Project name cannot be empty";
         }
+
+        if (hasProjectWithSameName(projects, value)) {
+            error = "Project name already exists";
+        }
+
+        return error;
+    };
+
+    const updateProjectName = async e => {
+        e.preventDefault();
+        try {
+            setIsRenaming(true);
+
+            const projectNameError = validateProjectName(updatedProjectName);
+
+            if (projectNameError) {
+                setProjectNameError(projectNameError);
+                return;
+            }
+
+            await renameProject(activeProject._id!, updatedProjectName);
+
+            handleRenameProjectModalClose();
+        } catch (error) {
+            console.log("error:", error);
+            setProjectNameError(error.message);
+        } finally {
+            setIsRenaming(false);
+        }
+    };
+
+    useEffect(() => {
+        let shouldUpdate = true;
+        (async function getGitInfo() {
+            try {
+                const projectPath = activeProject.path;
+                const gitInfo = await getGitRepo(config, projectPath);
+                if (shouldUpdate) {
+                    setGitBranch(gitInfo.branch || "");
+                }
+            } catch (error) {
+                console.log("getGitInfo error:", error);
+                if (shouldUpdate) {
+                    setGitBranch("");
+                }
+            }
+        })();
+
+        return () => {
+            shouldUpdate = false;
+        };
     }, [activeProject]);
 
     return (
@@ -85,10 +145,10 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         </Tooltip>
                     ) : null}
                     <Navbar.Heading data-testid="active-project-git-branch">
-                        {getGitBranch() ? (
+                        {gitBranch ? (
                             <GitBranchContainer>
                                 <Navbar.Divider style={{ paddingRight: 10 }} /> <Icon icon="git-branch" />
-                                {<span className="git-branch-name">{getGitBranch()}</span>}
+                                {<span className="git-branch-name">{gitBranch}</span>}
                             </GitBranchContainer>
                         ) : null}
                     </Navbar.Heading>
@@ -106,11 +166,18 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                     <Popover position="left-top">
                         <Button icon="cog" minimal={true} data-testid="project-settings-button" />
                         <Menu key="menu">
+                            <MenuDivider title="Edit" />
+                            <MenuItem
+                                data-testid="rename-project-menu-item"
+                                icon="edit"
+                                text="Rename Project"
+                                onClick={() => setRenameProjectModalOpen(true)}
+                            />
                             <MenuDivider title="Layout" />
                             <MenuItem
                                 data-testid="change-tasks-order-menu-item"
                                 icon="sort"
-                                text="Change Tasks order"
+                                text="Change Tasks Order"
                                 onClick={() => setCommandsOrderModalOpen(true)}
                             />
                             <MenuDivider title="Danger" />
@@ -123,17 +190,17 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                             />
                         </Menu>
                     </Popover>
-                    <Dialog
-                        title="Change Tasks Order"
-                        icon={"numbered-list"}
-                        className={theme}
-                        isOpen={commandsOrderModalOpen}
-                        onClose={handleChangeOrderModalClose}
-                    >
-                        <CommandOrderListContainer activeProject={activeProject} />
-                    </Dialog>
                 </Navbar.Group>
             </Navbar>
+            <Dialog
+                title="Change Tasks Order"
+                icon={"numbered-list"}
+                className={theme}
+                isOpen={commandsOrderModalOpen}
+                onClose={handleChangeOrderModalClose}
+            >
+                <CommandOrderListContainer activeProject={activeProject} />
+            </Dialog>
             <Alert
                 cancelButtonText="Cancel"
                 confirmButtonText="Yes, Delete"
@@ -149,6 +216,43 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                 </p>
             </Alert>
             <NewCommandDrawer isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
+            <Dialog
+                title={`Rename project: ${activeProject.name}`}
+                icon="edit"
+                className={theme}
+                isOpen={renameProjectModalOpen}
+                onClose={handleRenameProjectModalClose}
+                style={{ paddingBottom: 0 }}
+            >
+                <form onSubmit={updateProjectName} style={{ padding: "10px 20px" }} data-testid="rename-project-form">
+                    <FormGroup
+                        labelFor="updated-project-name"
+                        intent={projectNameError ? "danger" : "none"}
+                        helperText={projectNameError ? projectNameError : ""}
+                    >
+                        <InputGroup
+                            autoFocus={true}
+                            type="text"
+                            required={true}
+                            data-testid="updated-project-name"
+                            onChange={e => setUpdatedProjectName(e.target.value)}
+                            value={updatedProjectName}
+                        />
+                    </FormGroup>
+                    <div className="d-flex justify-center align-center">
+                        <FormGroup>
+                            <Button
+                                data-testid="rename-project-button"
+                                intent="primary"
+                                text="Update"
+                                type="submit"
+                                loading={isRenaming}
+                                large={true}
+                            />
+                        </FormGroup>
+                    </div>
+                </form>
+            </Dialog>
         </>
     );
 });

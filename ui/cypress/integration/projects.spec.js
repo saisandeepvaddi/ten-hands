@@ -1,6 +1,6 @@
 import { getFakeProjects, getFakePackageJson } from "../support/generate";
 
-describe.skip("Test Project Add/Remove", () => {
+describe("Test Project Add/Remove", () => {
   const fakeProjects = getFakeProjects(5);
   before(() => {
     cy.visit("/");
@@ -72,7 +72,34 @@ describe.skip("Test Project Add/Remove", () => {
     cy.getByTestId("active-project-name").should("have.text", fakeProject.name);
   });
 
-  it.only("Removes project", () => {
+  it.only("Renames a project", () => {
+    cy.wait(2000);
+    const firstProject = fakeProjects[0];
+    let updatedName = firstProject.name + "-updated";
+
+    cy.route({
+      method: "PATCH",
+      url: "/projects",
+      response: {
+        ...firstProject,
+        name: updatedName
+      }
+    });
+    cy.getByTestId("project-settings-button").click();
+    cy.getByTestId("rename-project-menu-item").click();
+    cy.getByText(`Rename project: ${firstProject.name}`).should("exist");
+    cy.getByTestId("updated-project-name").type(firstProject.name);
+    cy.getByTestId("rename-project-form").submit();
+    cy.getByText(/project name already exists/i).should("exist");
+    cy.getByTestId("updated-project-name")
+      .clear()
+      .type(updatedName);
+    cy.getByTestId("rename-project-form").submit();
+    cy.wait(2000);
+    cy.getByTestId("active-project-name").should("have.text", updatedName);
+  });
+
+  it("Removes project", () => {
     const secondProject = fakeProjects[1];
     cy.getAllByTestId("project-name").then(sidebarProjectnames => {
       const projectSidebarItem = cy.wrap(
@@ -104,7 +131,7 @@ describe.skip("Test Project Add/Remove", () => {
     );
   });
 
-  it.only("Deletes all projects", () => {
+  it("Deletes all projects", () => {
     let projectsCount = 2;
     const fakeProjects = getFakeProjects(projectsCount);
     cy.route({
