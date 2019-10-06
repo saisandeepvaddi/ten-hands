@@ -13,19 +13,16 @@ import {
     Popover,
     Tooltip,
 } from "@blueprintjs/core";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
 import NewCommandDrawer from "../NewCommandDrawer";
+import { getGitRepo } from "../shared/API";
+import { useConfig } from "../shared/Config";
 import { useProjects } from "../shared/Projects";
 import { useTheme } from "../shared/Themes";
 import CommandOrderListContainer from "./CommandOrderListContainer";
-
-// Have to use require because it's type-definition doesn't have function that allows path
-// Do not want to update node_module's file.
-// tslint:disable-next-line: no-var-requires
-const getRepoInfo = require("git-repo-info");
 
 interface IProjectTopbarProps {
     activeProject: IProject;
@@ -48,6 +45,8 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
     const [projectNameError, setProjectNameError] = React.useState<string>("");
     const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
+    const [gitBranch, setGitBranch] = React.useState<string>("");
+    const { config } = useConfig();
 
     const { deleteProject, projects, renameProject } = useProjects();
 
@@ -108,14 +107,26 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
         }
     };
 
-    const getGitBranch = React.useCallback(() => {
-        if (isRunningInElectron()) {
-            const projectPath = activeProject.path;
-            const gitInfo = getRepoInfo(projectPath);
-            return gitInfo.branch || "";
-        } else {
-            return "";
-        }
+    useEffect(() => {
+        let shouldUpdate = true;
+        (async function getGitInfo() {
+            try {
+                const projectPath = activeProject.path;
+                const gitInfo = await getGitRepo(config, projectPath);
+                if (shouldUpdate) {
+                    setGitBranch(gitInfo.branch || "");
+                }
+            } catch (error) {
+                console.log("getGitInfo error:", error);
+                if (shouldUpdate) {
+                    setGitBranch("");
+                }
+            }
+        })();
+
+        return () => {
+            shouldUpdate = false;
+        };
     }, [activeProject]);
 
     return (
@@ -134,10 +145,10 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(({ activeProject
                         </Tooltip>
                     ) : null}
                     <Navbar.Heading data-testid="active-project-git-branch">
-                        {getGitBranch() ? (
+                        {gitBranch ? (
                             <GitBranchContainer>
                                 <Navbar.Divider style={{ paddingRight: 10 }} /> <Icon icon="git-branch" />
-                                {<span className="git-branch-name">{getGitBranch()}</span>}
+                                {<span className="git-branch-name">{gitBranch}</span>}
                             </GitBranchContainer>
                         ) : null}
                     </Navbar.Heading>

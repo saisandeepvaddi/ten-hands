@@ -121,3 +121,15 @@ export const checkIfValidPath = async (config: IConfig, path: string) => {
         throw error;
     }
 }
+
+export const getGitRepo = async (config: IConfig, path: string) => {
+    try {
+        const response = await Axios.post(`http://localhost:${config.port}/utils/git-info`, {
+            path
+        });
+        return response.data;
+    } catch (error) {
+        console.log('error:', error)
+        throw error;
+    }
+}

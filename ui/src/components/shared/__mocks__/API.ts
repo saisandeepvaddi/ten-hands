@@ -91,6 +91,17 @@ export const checkIfValidPath = async (config: IConfig, path: string) => {
     }
 };
 
+export const getGitRepo = async (config: IConfig, path: string) => {
+    try {
+        return {
+            branch: "fake-branch"
+        }
+    } catch (error) {
+        console.log('error:', error)
+        throw error;
+    }
+}
+
 export const allMockAjaxFunctions = {
     getProjects,
     saveProjectInDb,
@@ -100,4 +111,5 @@ export const allMockAjaxFunctions = {
     saveTaskInDb,
     reorderProjectsInDb,
     checkIfValidPath,
+    getGitRepo
 };
