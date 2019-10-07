@@ -126,7 +126,16 @@ const updateCLIPackageJson = async () => {
             },
             bin: {
               "ten-hands": "index.js"
-            }
+            },
+            files: [
+              "server",
+              "shared",
+              "cli.js",
+              "index.js",
+              "server.js",
+              "package.json",
+              "README.md"
+            ]
           });
 
           file.contents = Buffer.from(JSON.stringify(newPackageJson));
