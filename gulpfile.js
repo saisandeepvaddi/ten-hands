@@ -90,8 +90,20 @@ const moveDesktopBuildToFinalDist = async () => {
   return src("./app/dist/**/*").pipe(dest("./dist/desktop"));
 };
 
+const moveUIToCLI = async () => {
+  return src("./ui/build/**/*").pipe(dest("./cli/build/server/public"));
+};
+
+const moveServerToCLI = async () => {
+  return src("./app/build/server/**/*").pipe(dest("./cli/build/server"));
+};
+
+const moveServerConfigToCLI = async () => {
+  return src("./app/build/shared/**/*").pipe(dest("./cli/build/shared"));
+};
+
 const moveCLIBuildToFinalDist = async () => {
-  return src(["./cli/build/**/*"]).pipe(dest("./dist/cli"));
+  return src("./cli/build/**/*").pipe(dest("./dist/cli"));
 };
 
 const moveAppIconsToBuild = async () => {
@@ -173,8 +185,13 @@ exports.buildDesktopAzure = series(
 );
 
 exports.buildCLI = series(
-  parallel(cleanCLIBuild, cleanCLIFinalDist),
+  parallel(cleanAppBuild, cleanAppDist, cleanCLIBuild, cleanCLIFinalDist),
+  parallel(buildUIForBrowser, buildServerForElectron),
   buildCLI,
+  parallel(moveServerToCLI, moveServerConfigToCLI),
+  delay(2000),
+  moveUIToCLI,
+  delay(2000),
   moveCLIBuildToFinalDist,
   updateCLIPackageJson
 );

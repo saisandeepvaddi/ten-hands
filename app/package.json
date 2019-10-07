@@ -59,6 +59,7 @@
     "mkdirp": "^0.5.1",
     "node-watch": "^0.6.3",
     "read-pkg": "^5.2.0",
+    "serve-handler": "^6.1.2",
     "socket.io": "^2.2.0",
     "tree-kill": "^1.2.1",
     "uuid": "^3.3.2"
