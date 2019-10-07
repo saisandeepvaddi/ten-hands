@@ -1,7 +1,7 @@
 import React from "react";
 
 import { isRunningInElectron } from "../../utils/electron";
-import { getItem } from "../../utils/storage";
+import { getItem, setItem } from "../../utils/storage";
 
 interface IConfigContextValue {
     config: IConfig;
@@ -26,8 +26,10 @@ function ConfigProvider(props: IConfigProviderProps) {
                     return serverConfig;
                 }
             } else {
+                const port = window.location.port || getItem("port") || 5010;
+                setItem("port", port);
                 return {
-                    port: getItem("port") || 5010,
+                    port,
                     enableTerminalTheme: getItem("enableTerminalTheme") || true,
                 };
             }

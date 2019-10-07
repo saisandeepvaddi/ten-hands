@@ -103,7 +103,7 @@ const moveServerConfigToCLI = async () => {
 };
 
 const moveCLIBuildToFinalDist = async () => {
-  return src("./cli/build/**/*").pipe(dest("./dist/cli"));
+  return src(["./cli/build/**/*", "./cli/README.md"]).pipe(dest("./dist/cli"));
 };
 
 const moveAppIconsToBuild = async () => {
