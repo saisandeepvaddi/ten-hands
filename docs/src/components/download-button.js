@@ -20,21 +20,21 @@ const getButtonsOrder = () => {
     icon: <DiWindows size="1.5em" />,
     name: "Windows",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands.Setup.2.0.0-alpha.0.exe",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/Ten.Hands.Setup.2.0.0.exe",
   };
 
   let macos = {
     icon: <DiApple size="1.5em" />,
     name: "macOS",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands-2.0.0-alpha.0.dmg",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/Ten.Hands-2.0.0.dmg",
   };
 
   let linux = {
     icon: <DiLinux size="1.5em" />,
     name: "Linux",
     link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/ten-hands-app_2.0.0-alpha.0_amd64.deb",
+      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/ten-hands-app_2.0.0_amd64.deb",
   };
 
   let list = {
