@@ -19,7 +19,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "meow": "^5.0.0"
+    "meow": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "fix-path": "^2.1.0",
+    "git-repo-info": "^2.1.0",
+    "just-enough-logger": "^1.0.1",
+    "lowdb": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "read-pkg": "^5.2.0",
+    "serve-handler": "^6.1.2",
+    "socket.io": "^2.2.0",
+    "tree-kill": "^1.2.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "^12.7.11"
