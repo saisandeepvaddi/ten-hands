@@ -38,9 +38,11 @@ Downloads are available in `releases` section if you just want to download and r
 
 3. To start in development mode - `yarn start:desktop`. (`yarn start:browser` to start browser version instead.)
 
-4. To build the app - `yarn build:desktop` (Building for browser version not available yet.)
+4. To build the app - `yarn build:desktop` (Desktop version)
 
-5. Installers for your platform will be available in `dist` folder.
+5. To build the cli tool - `yarn build:cli` (Browser version)
+
+6. Installers for your platform will be available in `dist` folder.
 
 # Note
 
@@ -48,6 +50,18 @@ This project can be run in browser instead of desktop version. But desktop versi
 
 1. Drag & Drop **package.json** to add project.
 2. Link to open project directory in file explorer.
+
+To run in browser.
+
+1. Install `ten-hands-cli` tool from npm.
+
+```
+  npm install --global ten-hands-cli
+
+  (or)
+
+  yarn global add ten-hands-cli
+```
 
 # Configuration
 
