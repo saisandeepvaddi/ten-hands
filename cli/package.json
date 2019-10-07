@@ -18,7 +18,6 @@
     "README.md"
   ],
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "meow": "^5.0.0"
   },
