@@ -18,7 +18,9 @@
 Do you keep opening terminals to run your scripts/commands/tasks etc,. If you have to do that everyday for same project (Example running scripts from `package.json` for multiple projects), `Ten Hands` makes it easier to organize all your tasks in one place.
 You can organize tasks into projects and run them whenever you want with a click of a button.
 
-# Sample UI (in v2.0.0)
+# UI
+
+Please visit website to see intro video.
 
 |                    Dark                    |                    Light                    |
 | :----------------------------------------: | :-----------------------------------------: |
@@ -82,7 +84,6 @@ You have to restart the app when you change configuration.
 
 ## FAQ
 
-This project is in experimental stage, so there are some limitations to use the app. Expect them to be resolved soon.
 
 1. Can I create a project without `package.json`?
 
