@@ -63,6 +63,12 @@ To run in browser.
   yarn global add ten-hands-cli
 ```
 
+2. Start app
+
+```
+  ten-hands start
+```
+
 # Configuration
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
