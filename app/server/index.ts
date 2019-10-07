@@ -29,6 +29,9 @@ export async function startServer() {
 
       server.listen(port, () => {
         console.log(`Server running on ${port}`);
+        console.log(
+          `Go to http://localhost:${port} in your browser if you started server from ten-hands cli.`
+        );
         res(true);
       });
     } catch (err) {

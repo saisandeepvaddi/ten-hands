@@ -1,23 +1,13 @@
-// const execSync = require("child_process").execSync;
+// import { getConfig } from "../../app/shared/config";
+import { execSync } from "child_process";
+import { resolve } from "path";
 
-// const getServerPath = async () => {
-//   try {
-//     const npmStdOut = execSync(`npm list -g --depth 0`);
-//     const globalPackageList = npmStdOut
-//       .toString()
-//       .toLowerCase()
-//       .replace(/\s|\n/g, "");
-
-//     const isServerInstalled =
-//       globalPackageList.indexOf("@ten-hands/server") > -1;
-//   } catch (error) {
-//     console.log(`Error: `);
-//     console.log(error);
-//   }
-// };
-
-// export const startServer = async () => {
-//   try {
-//     console.log(await getServerPath());
-//   } catch (error) {}
-// };
+export const startServer = async () => {
+  try {
+    let serverPath = resolve(__dirname, "server", "start.js");
+    execSync(`node ${serverPath}`, { stdio: "inherit" });
+  } catch (error) {
+    console.log("error:", error);
+    console.error("Error starting server: ", error.message);
+  }
+};

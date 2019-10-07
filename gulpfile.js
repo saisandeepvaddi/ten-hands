@@ -91,7 +91,7 @@ const moveDesktopBuildToFinalDist = async () => {
 };
 
 const moveUIToCLI = async () => {
-  return src("./ui/build/**/*").pipe(dest("./cli/build/ui"));
+  return src("./ui/build/**/*").pipe(dest("./cli/build/server/public"));
 };
 
 const moveServerToCLI = async () => {
@@ -188,7 +188,9 @@ exports.buildCLI = series(
   parallel(cleanAppBuild, cleanAppDist, cleanCLIBuild, cleanCLIFinalDist),
   parallel(buildUIForBrowser, buildServerForElectron),
   buildCLI,
-  parallel(moveUIToCLI, moveServerToCLI, moveServerConfigToCLI),
+  parallel(moveServerToCLI, moveServerConfigToCLI),
+  delay(2000),
+  moveUIToCLI,
   delay(2000),
   moveCLIBuildToFinalDist,
   updateCLIPackageJson

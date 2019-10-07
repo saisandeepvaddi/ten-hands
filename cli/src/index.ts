@@ -1,9 +1,17 @@
-const startTenHands = async () => {
-  try {
-    console.log("starting");
-  } catch (error) {
-    console.log("Error");
-  }
-};
+#!/usr/bin/env node
 
-startTenHands();
+import meow from "meow";
+import { startServer } from "./server";
+
+const serverCLI = meow(`
+  Usage
+    $ ten-hands <input>
+
+  Examples
+    $ ten-hands start
+`);
+
+const inputs = serverCLI.input;
+if (inputs[0] === "start") {
+  startServer();
+}

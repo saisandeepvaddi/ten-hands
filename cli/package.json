@@ -1,7 +1,7 @@
 {
   "name": "ten-hands-cli",
   "version": "1.0.0",
-  "description": "CLI for ten-hands app",
+  "description": "CLI companion for ten-hands. Visit https://tenhands.app",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "main": "build/index.js",
   "scripts": {
@@ -19,10 +19,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.0",
-    "chalk": "^2.4.2",
-    "qoa": "^0.2.0",
-    "uuid": "^3.3.2"
+    "meow": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^12.7.11"

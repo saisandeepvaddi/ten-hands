@@ -1,3 +1,4 @@
+import meow from "meow";
 // import qoa from "qoa";
 
 // qoa.prefix(">");
@@ -114,3 +115,11 @@
 //     console.log("error:", error);
 //   }
 // };
+
+export const serverCLI = meow(`
+  Usage
+    $ ten-hands <input>
+
+  Examples
+    $ ten-hands start
+`);
