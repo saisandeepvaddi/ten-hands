@@ -1,7 +1,7 @@
 {
   "name": "ten-hands-cli",
-  "version": "1.0.0",
-  "description": "CLI companion for ten-hands. Visit https://tenhands.app",
+  "version": "2.0.0",
+  "description": "CLI utility for ten-hands browser version. Visit https://tenhands.app",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "main": "build/index.js",
   "scripts": {
@@ -14,7 +14,8 @@
   },
   "files": [
     "build",
-    "package.json"
+    "package.json",
+    "README.md"
   ],
   "license": "MIT",
   "private": true,

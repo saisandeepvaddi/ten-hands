@@ -18,7 +18,7 @@ export async function startServer() {
       // To fix /bin/sh: npm: command not found in macOS
       fixPath();
       const port = process.env.PORT || getConfig().port || 5010;
-
+      app.set("port", port);
       const server = createServer(app);
 
       const socketManager: SocketManager = SocketManager.getInstance();
