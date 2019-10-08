@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ButtonGroup, AnchorButton, Button, Popover } from "@blueprintjs/core";
-
+import axios from "axios";
 import { DiApple, DiWindows, DiLinux } from "react-icons/di";
 
 const getOS = () => {
@@ -13,28 +13,50 @@ const getOS = () => {
   return os;
 };
 
-const getButtonsOrder = () => {
+const getLatestReleases = async () => {
+  const url = `https://api.github.com/repos/saisandeepvaddi/ten-hands/releases/latest`;
+  const { data } = await axios.get(url);
+  const defaultLink = "https://github.com/saisandeepvaddi/ten-hands/releases";
+  const { assets } = data;
+  let releases = {
+    windows: defaultLink,
+    linux: defaultLink,
+    macos: defaultLink,
+  };
+
+  assets.forEach(({ browser_download_url }) => {
+    if (browser_download_url.endsWith("exe")) {
+      releases.windows = browser_download_url;
+    } else if (browser_download_url.endsWith("deb")) {
+      releases.linux = browser_download_url;
+    } else if (browser_download_url.endsWith("dmg")) {
+      releases.macos = browser_download_url;
+    }
+  });
+
+  return releases;
+};
+
+const getButtonsOrder = async () => {
   const os = getOS();
+  const latestReleases = await getLatestReleases();
 
   let windows = {
     icon: <DiWindows size="1.5em" />,
     name: "Windows",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/Ten.Hands.Setup.2.0.0.exe",
+    link: latestReleases.windows,
   };
 
   let macos = {
     icon: <DiApple size="1.5em" />,
     name: "macOS",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/Ten.Hands-2.0.0.dmg",
+    link: latestReleases.macos,
   };
 
   let linux = {
     icon: <DiLinux size="1.5em" />,
     name: "Linux",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0/ten-hands-app_2.0.0_amd64.deb",
+    link: latestReleases.linux,
   };
 
   let list = {
@@ -88,8 +110,10 @@ function DownloadButton() {
   const [buttonsOrder, setButtonsOrder] = React.useState(null);
 
   useEffect(() => {
-    const buttonsOrder = getButtonsOrder();
-    setButtonsOrder(buttonsOrder);
+    (async function getDownloadLinks() {
+      const buttonsOrder = await getButtonsOrder();
+      setButtonsOrder(buttonsOrder);
+    })();
   }, []);
 
   if (!buttonsOrder) return null;

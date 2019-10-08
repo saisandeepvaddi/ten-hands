@@ -19,7 +19,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "meow": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
@@ -27,6 +26,7 @@
     "git-repo-info": "^2.1.0",
     "just-enough-logger": "^1.0.1",
     "lowdb": "^1.0.0",
+    "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
     "read-pkg": "^5.2.0",
     "serve-handler": "^6.1.2",
