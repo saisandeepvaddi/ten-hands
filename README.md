@@ -30,25 +30,9 @@ Please visit website to see intro video.
 
 Downloads are available in `releases` section if you just want to download and run.
 
-# Steps to build (To get latest features)
+# Installing browser version
 
-1. Install nodejs >= 10.6.0
-
-2. Install dependencies (Use [_yarn_](https://yarnpkg.com/en/) because I used workspaces).
-
-   - `yarn install`. Only in root folder.
-
-3. To start in development mode - `yarn start:desktop`. (`yarn start:browser` to start browser version instead.)
-
-4. To build the app - `yarn build:desktop` (Desktop version)
-
-5. To build the cli tool - `yarn build:cli` (Browser version)
-
-6. Installers for your platform will be available in `dist` folder.
-
-# Note
-
-This project can be run in browser instead of desktop version. But desktop version comes with additional features and is recommended. The following is the list of additional features available in desktop version.
+This project can be run in browser instead of desktop version. Before installing browser version, check what additional features the desktop version has currently.
 
 1. Drag & Drop **package.json** to add project.
 2. Link to open project directory in file explorer.
@@ -115,7 +99,7 @@ You have to restart the app when you change configuration.
 
 # Contributions
 
-Please use issue tracker for any kind of bugs/suggestions/discussions.
+Check [CONTRIBUTING](/CONTRIBUTING.md) for project setup and folder structure details. Please use issue tracker for any kind of bugs/suggestions/discussions.
 
 # License
 
