@@ -78,25 +78,27 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
     return (
         <>
             <Container theme={theme} className="file-drag-container h-100 w-100" {...getRootProps()}>
-                {children}
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                    <div className="h-100 w-100 d-flex justify-center align-center">Drop the files here ...</div>
-                ) : (
-                    <div className="h-100 w-100">
-                        <div
-                            className="w-100 d-flex justify-center align-center p-absolute"
-                            style={{
-                                bottom: 20,
-                            }}
-                        >
+                <div
+                    className="w-100 h-100"
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    {!isDragActive && children}
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                        <div className="h-100 w-100 d-flex justify-center align-center">Drop the files here ...</div>
+                    ) : (
+                        <div className="w-100 d-flex justify-center align-center">
                             <span>
                                 <Icon icon={"lightbulb"} intent="warning" /> Drop <Code>package.json</Code> here to add
                                 project.
                             </span>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </Container>
         </>
     );
