@@ -8536,9 +8536,9 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   integrity sha512-kssjab8CvdXfcXMXVcvsXum4Hwdq9XGtRD3TteMEvEbq0LXyiNQr6AprqKqfeaDXze7SxWvRxdpwE6ku7ikLkg==
 
 hosted-git-info@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-3.0.1.tgz#bac7defb648d3823d0300ed329665d86f0dfddcf"
-  integrity sha512-lGTU3MEr3+Rt2FRZl9DnrMh+yPj7nRVhD/VpVBj5hPliqsdEw/EvugflNCplBhmj2L2VSfyo2gQIK+GidQv5PA==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-3.0.2.tgz#8b7e3bd114b59b51786f8bade0f39ddc80275a97"
+  integrity sha512-ezZMWtHXm7Eb7Rq4Mwnx2vs79WUx2QmRg3+ZqeGroKzfDO+EprOcgRPYghsOP9JuYBfK18VojmRTGCg8Ma+ktw==
   dependencies:
     lru-cache "^5.1.1"
 

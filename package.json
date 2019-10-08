@@ -1,6 +1,6 @@
 {
   "name": "ten-hands",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.1",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -19,7 +19,6 @@
   "workspaces": [
     "app",
     "ui",
-    "cli",
     "docs"
   ],
   "repository": {
