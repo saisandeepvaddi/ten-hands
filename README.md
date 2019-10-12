@@ -55,6 +55,8 @@ To run in browser.
   ten-hands start
 ```
 
+3. Your teminal will show you the localhost address with port where Ten Hands is running. Copy and open it in browser.
+
 # Configuration
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
