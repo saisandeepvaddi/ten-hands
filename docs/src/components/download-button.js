@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ButtonGroup, AnchorButton, Button, Popover } from "@blueprintjs/core";
-
+import axios from "axios";
 import { DiApple, DiWindows, DiLinux } from "react-icons/di";
 
 const getOS = () => {
@@ -13,78 +13,62 @@ const getOS = () => {
   return os;
 };
 
-// const getLatestReleases = async () => {
-//   const releasesPage = "https://github.com/saisandeepvaddi/ten-hands/releases";
-//   try {
-//     const data = await fetch(
-//       "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases/latest"
-//     ).then(r => r.json());
-//     if (!data) {
-//       throw new Error(
-//         "Releases data not available. Please go to " + releasesPage
-//       );
-//     }
+const getLatestReleases = async () => {
+  const url = `https://api.github.com/repos/saisandeepvaddi/ten-hands/releases/latest`;
+  const { data } = await axios.get(url);
+  const defaultLink = "https://github.com/saisandeepvaddi/ten-hands/releases";
+  const { assets } = data;
+  let releases = {
+    windows: defaultLink,
+    linux: defaultLink,
+    macos: defaultLink
+  };
 
-//     const { assets } = data;
+  assets.forEach(({ browser_download_url }) => {
+    if (browser_download_url.endsWith("exe")) {
+      releases.windows = browser_download_url;
+    } else if (browser_download_url.endsWith("deb")) {
+      releases.linux = browser_download_url;
+    } else if (browser_download_url.endsWith("dmg")) {
+      releases.macos = browser_download_url;
+    }
+  });
 
-//     const downloadUrls = assets.map(asset => asset.browser_download_url);
+  return releases;
+};
 
-//     const windows =
-//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
-//     const linux =
-//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
-//     const macos =
-//       downloadUrls.find(url => url.endsWith(".exe")) || releasesPage;
-
-//     return {
-//       windows,
-//       linux,
-//       macos,
-//     };
-//   } catch (error) {
-//     console.log("error:", error);
-//     return {
-//       windows: releasesPage,
-//       linux: releasesPage,
-//       macos: releasesPage,
-//     };
-//   }
-// };
-
-const getButtonsOrder = () => {
+const getButtonsOrder = async () => {
   const os = getOS();
+  const latestReleases = await getLatestReleases();
 
   let windows = {
     icon: <DiWindows size="1.5em" />,
     name: "Windows",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands.Setup.2.0.0-alpha.1.exe",
+    link: latestReleases.windows
   };
 
   let macos = {
     icon: <DiApple size="1.5em" />,
     name: "macOS",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/Ten.Hands-2.0.0-alpha.1.dmg",
+    link: latestReleases.macos
   };
 
   let linux = {
     icon: <DiLinux size="1.5em" />,
     name: "Linux",
-    link:
-      "https://github.com/saisandeepvaddi/ten-hands/releases/download/v2.0.0-alpha.0/ten-hands-app_2.0.0-alpha.1_amd64.deb",
+    link: latestReleases.linux
   };
 
   let list = {
     windows,
     macos,
-    linux,
+    linux
   };
 
   const order = {
     windows: ["windows", "macos", "linux"],
     macos: ["macos", "windows", "linux"],
-    linux: ["linux", "windows", "macos"],
+    linux: ["linux", "windows", "macos"]
   };
 
   return !os ? windows : order[os].map(o => list[o]);
@@ -126,8 +110,10 @@ function DownloadButton() {
   const [buttonsOrder, setButtonsOrder] = React.useState(null);
 
   useEffect(() => {
-    const buttonsOrder = getButtonsOrder();
-    setButtonsOrder(buttonsOrder);
+    (async function getDownloadLinks() {
+      const buttonsOrder = await getButtonsOrder();
+      setButtonsOrder(buttonsOrder);
+    })();
   }, []);
 
   if (!buttonsOrder) return null;

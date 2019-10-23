@@ -19,3 +19,15 @@ export const useIsInView = (ref, margin = "0px") => {
 
     return [ref, isIntersecting];
 };
+
+
+export const useUpdateEffect = (fn, deps) => {
+    let isFirstRun = useRef<boolean>(true);
+    useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        } 
+        fn();
+    }, deps)
+}

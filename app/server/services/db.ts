@@ -20,7 +20,6 @@ class Database {
    * @memberof Database
    */
   private constructor() {
-    console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
     const adapter: AdapterSync =
       process.env.NODE_ENV === "test"
         ? new Memory(CONFIG_FILES.dbFile)
@@ -173,6 +172,34 @@ class Database {
   }
 
   /**
+   * Rename project with projectId from database
+   *
+   * @param {string} projectId
+   * @returns {IProject[]} Updated list of projects
+   * @memberof Database
+   */
+  public renameProject(projectId: string, newName: string): IProject {
+    const hasName =
+      this.db
+        .get("projects")
+        .findIndex({ name: newName })
+        .value() > -1;
+
+    if (hasName) {
+      throw new Error("Project name already exists");
+    }
+
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .set("name", newName)
+      .write();
+
+    const updatedProject = this.getProject(projectId);
+    return updatedProject;
+  }
+
+  /**
    * Get a specific project with id
    *
    * @param {string} id Project Id
@@ -203,7 +230,7 @@ class Database {
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
-      .push({ ...command })
+      .unshift({ ...command })
       .write();
     const project = this.getProject(projectId);
     return project;

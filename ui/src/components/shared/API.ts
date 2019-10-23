@@ -29,6 +29,24 @@ export const saveProjectInDb = async (config: IConfig, projectData: any): Promis
     }
 };
 
+export const renameProjectInDb = async (config: IConfig, projectId: string, newName: string): Promise<IProject> => {
+    try {
+        const responseData: AxiosResponse = await Axios({
+            method: "patch",
+            url: `http://localhost:${config.port}/projects/${projectId}`,
+            data: {
+                name: newName
+            }
+        })
+        const updatedProject = responseData.data;
+        return updatedProject;
+    } catch (error) {
+        console.log('renameProjectInDb error:', error);
+        throw error;
+        
+    }
+}
+
 export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
     try {
         await Axios.delete(`http://localhost:${config.port}/projects/${projectId}`);
@@ -100,6 +118,18 @@ export const checkIfValidPath = async (config: IConfig, path: string) => {
         return response.data;
     } catch (error) {
         console.log('checkIfValidPath error:', error)
+        throw error;
+    }
+}
+
+export const getGitRepo = async (config: IConfig, path: string) => {
+    try {
+        const response = await Axios.post(`http://localhost:${config.port}/utils/git-info`, {
+            path
+        });
+        return response.data;
+    } catch (error) {
+        console.log('error:', error)
         throw error;
     }
 }

@@ -50,7 +50,9 @@ export const getConfig = () => {
     const validConfig = getValidConfig(conf);
     return validConfig;
   } catch (error) {
-    console.log("error:", error);
+    console.log(
+      "Config file not found. Creating default config file and database file at ~/.ten-hands/"
+    );
     return defaultConfig;
   }
 };

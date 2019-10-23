@@ -1,7 +1,7 @@
 {
   "name": "ten-hands-app",
-  "description": "One place to run your command line tasks",
-  "version": "2.0.0-alpha.1",
+  "description": "One place to run your command-line tasks",
+  "version": "2.0.1",
   "private": true,
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "author": {
@@ -53,11 +53,12 @@
     "electron-unhandled": "^3.0.0",
     "express": "^4.16.4",
     "fix-path": "^2.1.0",
+    "git-repo-info": "^2.1.0",
     "just-enough-logger": "^1.0.1",
     "lowdb": "^1.0.0",
     "mkdirp": "^0.5.1",
-    "node-watch": "^0.6.3",
     "read-pkg": "^5.2.0",
+    "serve-handler": "^6.1.2",
     "socket.io": "^2.2.0",
     "tree-kill": "^1.2.1",
     "uuid": "^3.3.2"

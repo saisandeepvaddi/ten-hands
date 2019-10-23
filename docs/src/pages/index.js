@@ -4,6 +4,9 @@ import Layout from "../components/layout";
 import Image from "../components/image";
 import SEO from "../components/seo";
 import DownloadButton from "../components/download-button";
+import Video from "../components/video";
+import demoVideo from "../assets/Ten Hands Demo.mp4";
+import demoImage from "../images/demo_dark.jpg";
 
 const IndexPage = () => (
   <Layout>
@@ -15,7 +18,10 @@ const IndexPage = () => (
       <DownloadButton />
     </div>
     <div className="py-2"></div>
-    <Image />
+    {/* <Image /> */}
+    <div className="d-flex justify-center align-center">
+      <Video video={demoVideo} poster={demoImage} />
+    </div>
     <div className="py-2"></div>
   </Layout>
 );
