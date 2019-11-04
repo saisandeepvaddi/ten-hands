@@ -59,6 +59,9 @@ function SocketsProvider(props: ISocketProviderProps) {
             const room = message.room;
             console.info(`Process started for cmd: ${room}`);
             updateJobProcess(room, message.data);
+            if (message.data.pid) {
+                updateJob(room, `--Process started with PID: ${message.data.pid}--\n\n`, true);
+            }
         });
         _socket.current.on(`job_output`, message => {
             const room = message.room;
