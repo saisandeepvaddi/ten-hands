@@ -135,7 +135,7 @@ const DesktopMenu = () => {
                     onMouseOver={() => setIsCloseButtonMinimal(false)}
                     onMouseOut={() => setIsCloseButtonMinimal(true)}
                     onClick={() => {
-                        remote.app.quit();
+                        remote.getCurrentWindow().close();
                     }}
                 >
                     <Icon icon="cross" />

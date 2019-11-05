@@ -15,9 +15,12 @@ import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
 import { log } from "./logger";
 
+import { createTray } from "./tray";
+import { isAppQuitting, setIsAppQuitting } from "./app-state";
+
 const isWindows = process.platform === "win32";
 
-export let mainWindow;
+let mainWindow = null;
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 
@@ -28,8 +31,8 @@ function createWindow() {
       height: 768,
       frame: isWindows ? false : true,
       webPreferences: {
-        nodeIntegration: true,
-      },
+        nodeIntegration: true
+      }
     });
 
     if (isDev) {
@@ -47,6 +50,17 @@ function createWindow() {
       log.info("Window Closing");
       mainWindow = null;
     });
+
+    mainWindow.on("close", e => {
+      if (!isAppQuitting()) {
+        log.info("Hiding app");
+
+        e.preventDefault();
+        mainWindow.hide();
+        e.returnValue = false;
+      }
+    });
+
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
@@ -82,6 +96,7 @@ async function startApplication() {
           log.error("app.ready error: " + error.message);
         }
       }
+      createTray(mainWindow);
     });
 
     ipcMain.on(`get-config`, e => {
@@ -111,20 +126,14 @@ async function startApplication() {
         title: "Warning",
         message: "Are you sure you want to exit?",
         detail: "Any running tasks will keep running.",
-        buttons: ["Cancel", "Exit"],
+        buttons: ["Cancel", "Exit"]
       });
 
       // Cancel = 0
       // Exit = 1
       if (response !== 1) {
+        setIsAppQuitting(false);
         e.preventDefault();
-      }
-    });
-
-    app.on("window-all-closed", () => {
-      log.info("window-all-closed");
-      if (process.platform !== "darwin") {
-        app.quit();
       }
     });
 

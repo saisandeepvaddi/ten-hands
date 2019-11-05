@@ -42,6 +42,8 @@ class Job {
         maxBuffer: 100 * 1024 * 1024
       });
 
+      console.log(`Process started with PID: ${n.pid}`);
+
       this.socketManager.emit(`job_started`, { room, data: n });
       n.stdout.on("data", chunk => {
         this.socketManager.emit(`job_output`, { room, data: chunk });
@@ -54,14 +56,16 @@ class Job {
       n.on("close", (code, signal) => {
         this.socketManager.emit(`job_close`, {
           room,
-          data: `Process closed with code ${code} by signal ${signal}`
+          data: `Process with PID ${n.pid ||
+            "--"} closed with code ${code} by signal ${signal}`
         });
       });
 
       n.on("exit", (code, signal) => {
         this.socketManager.emit(`job_exit`, {
           room,
-          data: `Process exited with code ${code} by signal ${signal}`
+          data: `Process with PID ${n.pid ||
+            "--"} exited with code ${code} by signal ${signal}`
         });
       });
     } catch (error) {
