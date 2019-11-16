@@ -1,33 +1,45 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export const useIsInView = (ref, margin = "0px") => {
-    const [isIntersecting, setIntersecting] = useState(false);
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIntersecting(entry.isIntersecting);
-            },
-            { rootMargin: margin },
-        );
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-        return () => {
-            observer.unobserve(ref.current);
-        };
-    }, []);
+  const [isIntersecting, setIntersecting] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIntersecting(entry.isIntersecting);
+      },
+      { rootMargin: margin }
+    );
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+    return () => {
+      observer.unobserve(ref.current);
+    };
+  }, []);
 
-    return [ref, isIntersecting];
+  return [ref, isIntersecting];
 };
 
-
 export const useUpdateEffect = (fn, deps) => {
-    let isFirstRun = useRef<boolean>(true);
-    useEffect(() => {
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
-        } 
-        fn();
-    }, deps)
-}
+  let isFirstRun = useRef<boolean>(true);
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    fn();
+  }, deps);
+};
+
+export const useMountedState = () => {
+  let mountedRef = React.useRef<boolean>(false);
+  const isMounted = React.useCallback(() => mountedRef.current, []);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+
+  return isMounted;
+};
