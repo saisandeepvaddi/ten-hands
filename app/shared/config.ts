@@ -15,7 +15,8 @@ mkdirp.sync(tenHandsDir);
 
 const defaultConfig: IConfig = {
   port: 5010,
-  enableTerminalTheme: true
+  enableTerminalTheme: true,
+  globalHotKey: "CommandOrControl+Alt+T"
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -32,6 +33,10 @@ const getValidConfig = config => {
 
   if (typeof config.enableTerminalTheme !== "boolean") {
     _config.enableTerminalTheme = defaultConfig.enableTerminalTheme;
+  }
+
+  if (typeof config.globalHotKey !== "string") {
+    _config.globalHotKey = defaultConfig.globalHotKey;
   }
 
   return _config;
