@@ -9,11 +9,16 @@ export const registerGlobalShortcuts = () => {
   try {
     if (config.globalHotKey && config.globalHotKey !== "") {
       const ret = globalShortcut.register(config.globalHotKey, () => {
-        console.log(
-          `Global Hot Key: ${config.globalHotKey} pressed. Opening Ten Hands window.`
-        );
+        console.log(`Global Hot Key: ${config.globalHotKey} pressed.`);
         const mainWindow: BrowserWindow = getMainWindow();
-        openAndFocusWindow(mainWindow);
+        if (
+          mainWindow &&
+          (mainWindow.isMinimized() || !mainWindow.isVisible())
+        ) {
+          openAndFocusWindow(mainWindow);
+        } else {
+          mainWindow.hide();
+        }
       });
 
       if (!ret) {
