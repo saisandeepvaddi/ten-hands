@@ -17,10 +17,18 @@ import { log } from "./logger";
 
 import { createTray } from "./tray";
 import { isAppQuitting, setIsAppQuitting } from "./app-state";
+import {
+  registerGlobalShortcuts,
+  unregisterGlobalShortcuts
+} from "./global-hot-keys";
 
 const isWindows = process.platform === "win32";
 
-let mainWindow = null;
+export let mainWindow = null;
+
+export function getMainWindow() {
+  return mainWindow;
+}
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 
@@ -86,6 +94,7 @@ async function startApplication() {
     app.on("ready", () => {
       log.info("app.on.ready called");
       createWindow();
+      registerGlobalShortcuts();
       log.info("Window Created in app.ready");
       if (!isWindows) {
         try {
@@ -135,6 +144,10 @@ async function startApplication() {
         setIsAppQuitting(false);
         e.preventDefault();
       }
+    });
+
+    app.on("will-quit", () => {
+      unregisterGlobalShortcuts();
     });
 
     app.on("activate", () => {
