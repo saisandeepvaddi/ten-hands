@@ -8,6 +8,7 @@ import {
 } from "electron";
 import path from "path";
 import { setIsAppQuitting } from "./app-state";
+import { openAndFocusWindow } from "./utils";
 
 // This is the path after building TS
 const iconPath = path.resolve(__dirname, "..", "tray-icon.png");
@@ -18,25 +19,13 @@ const icon: NativeImage = nativeImage
 
 export let tray: Tray = null;
 
-const showMainWindow = (mainWindow: BrowserWindow) => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    if (!mainWindow.isVisible()) {
-      mainWindow.show();
-    }
-    mainWindow.focus();
-  }
-};
-
 export function createTray(mainWindow: BrowserWindow): Tray {
   tray = new Tray(icon);
   const trayContextMenu = Menu.buildFromTemplate([
     {
       label: "Show",
       click() {
-        showMainWindow(mainWindow);
+        openAndFocusWindow(mainWindow);
       }
     },
     {
@@ -48,7 +37,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
     }
   ]);
 
-  tray.on("double-click", () => showMainWindow(mainWindow));
+  tray.on("double-click", () => openAndFocusWindow(mainWindow));
   tray.setToolTip("Ten Hands");
   tray.setContextMenu(trayContextMenu);
 
