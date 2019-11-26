@@ -40,7 +40,9 @@ const GitBranchContainer = styled.div`
 
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
   ({ activeProject }) => {
-    const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
+    const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState<boolean>(
+      false
+    );
     const isMounted = useMountedState();
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
       boolean
@@ -52,11 +54,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       boolean
     >(false);
     const { theme } = useTheme();
-    const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+    const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
     const [projectNameError, setProjectNameError] = React.useState<string>("");
     const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
     const [gitBranch, setGitBranch] = React.useState<string>("");
     const { config } = useConfig();
+    let checkBranchTimerRef = React.useRef<number>();
 
     const { deleteProject, projects, renameProject } = useProjects();
 
@@ -136,6 +139,16 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
 
     useEffect(() => {
       updateGitBranch();
+
+      checkBranchTimerRef.current = setInterval(() => {
+        updateGitBranch();
+      }, 2000);
+
+      return () => {
+        if (checkBranchTimerRef.current) {
+          clearInterval(checkBranchTimerRef.current);
+        }
+      };
     }, [activeProject]);
 
     return (
@@ -161,14 +174,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                   <Navbar.Divider style={{ paddingRight: 10 }} />{" "}
                   <Icon icon="git-branch" />
                   {<span className="git-branch-name">{gitBranch}</span>}
-                  <Button
-                    data-testid="refresh-git-branch-button"
-                    icon={<Icon icon="refresh" iconSize={10} />}
-                    minimal={true}
-                    small
-                    onClick={() => updateGitBranch()}
-                    title="Check Git branch again"
-                  />
                 </GitBranchContainer>
               ) : null}
             </Navbar.Heading>
