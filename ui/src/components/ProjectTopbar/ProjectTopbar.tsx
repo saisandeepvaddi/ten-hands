@@ -57,6 +57,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
     const [gitBranch, setGitBranch] = React.useState<string>("");
     const { config } = useConfig();
+    let checkBranchTimerRef = React.useRef<any>();
 
     const { deleteProject, projects, renameProject } = useProjects();
 
@@ -136,6 +137,16 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
 
     useEffect(() => {
       updateGitBranch();
+
+      checkBranchTimerRef.current = setInterval(() => {
+        updateGitBranch();
+      }, 2000);
+
+      return () => {
+        if (checkBranchTimerRef.current) {
+          clearInterval(checkBranchTimerRef.current);
+        }
+      };
     }, [activeProject]);
 
     return (
@@ -161,14 +172,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                   <Navbar.Divider style={{ paddingRight: 10 }} />{" "}
                   <Icon icon="git-branch" />
                   {<span className="git-branch-name">{gitBranch}</span>}
-                  <Button
-                    data-testid="refresh-git-branch-button"
-                    icon={<Icon icon="refresh" iconSize={10} />}
-                    minimal={true}
-                    small
-                    onClick={() => updateGitBranch()}
-                    title="Check Git branch again"
-                  />
                 </GitBranchContainer>
               ) : null}
             </Navbar.Heading>
