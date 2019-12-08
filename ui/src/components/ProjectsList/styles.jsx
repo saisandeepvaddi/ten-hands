@@ -22,7 +22,9 @@ export const Item = styled.div`
   line-height: 40px;
   font-size: 14px;
   max-width: 100%;
-  overflor: hidden;
+  overflow: hidden;
+  white-space: no-wrap;
+  text-overflow: ellipsis;
   justify-content: space-between;
   align-items: center;
   .drag-handle-container {
