@@ -13,7 +13,6 @@ code {
     monospace;
 }
 
-
 .d-flex {
   display: flex;
 }
@@ -81,7 +80,7 @@ code {
   position: relative;
 }
 
-button.truncate {
+.truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
