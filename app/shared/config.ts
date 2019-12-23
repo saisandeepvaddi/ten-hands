@@ -16,7 +16,8 @@ mkdirp.sync(tenHandsDir);
 const defaultConfig: IConfig = {
   port: 5010,
   enableTerminalTheme: true,
-  globalHotKey: "CommandOrControl+Alt+T"
+  globalHotKey: "CommandOrControl+Alt+T",
+  showAppRunningTrayMessage: true
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -39,6 +40,10 @@ const getValidConfig = config => {
     _config.globalHotKey = defaultConfig.globalHotKey;
   }
 
+  if (typeof config.showAppRunningTrayMessage !== "boolean") {
+    _config.showAppRunningTrayMessage = defaultConfig.showAppRunningTrayMessage;
+  }
+
   return _config;
 };
 
@@ -46,7 +51,7 @@ const writeConfigToFS = config => {
   fs.writeFileSync(CONFIG_FILES.configFile, JSON.stringify(config, null, 2));
 };
 
-export const getConfig = () => {
+export const getConfig = (): IConfig => {
   try {
     let conf: IConfig = JSON.parse(
       fs.readFileSync(CONFIG_FILES.configFile, "utf8")
