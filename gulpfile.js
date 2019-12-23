@@ -57,6 +57,13 @@ const buildCLI = task("yarn build", {
   cwd: path.join(__dirname, "cli")
 });
 
+/* VERSIONING TASKS */
+
+const updateVersion = (type = "patch", where = "ui") =>
+  task(`npm version ${type}`, {
+    cwd: path.join(__dirname, where)
+  });
+
 /* CLEANING TASKS */
 
 const cleanAppBuild = async () => {
@@ -203,4 +210,22 @@ exports.buildCLI = series(
   delay(2000),
   moveCLIBuildToFinalDist,
   updateCLIPackageJson
+);
+
+exports.updateMajorVersion = parallel(
+  updateVersion("major", "ui"),
+  updateVersion("major", "app"),
+  updateVersion("major", "cli")
+);
+
+exports.updateMinorVersion = parallel(
+  updateVersion("minor", "ui"),
+  updateVersion("minor", "app"),
+  updateVersion("minor", "cli")
+);
+
+exports.updatePatchVersion = parallel(
+  updateVersion("patch", "ui"),
+  updateVersion("patch", "app"),
+  updateVersion("patch", "cli")
 );
