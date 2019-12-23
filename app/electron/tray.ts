@@ -43,3 +43,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
 
   return tray;
 }
+
+export function showMessage(content = "", title = "Ten Hands") {
+  tray.displayBalloon({ icon, title, content });
+}

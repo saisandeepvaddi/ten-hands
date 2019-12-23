@@ -21,6 +21,7 @@ import {
   registerGlobalShortcuts,
   unregisterGlobalShortcuts
 } from "./global-hot-keys";
+import { hideWindowToTray } from "./utils";
 
 const isWindows = process.platform === "win32";
 
@@ -61,10 +62,8 @@ function createWindow() {
 
     mainWindow.on("close", e => {
       if (!isAppQuitting()) {
-        log.info("Hiding app");
-
         e.preventDefault();
-        mainWindow.hide();
+        hideWindowToTray(mainWindow);
         e.returnValue = false;
       }
     });
