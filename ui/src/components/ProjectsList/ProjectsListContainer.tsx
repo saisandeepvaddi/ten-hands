@@ -216,6 +216,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                                 : "#106ba3"
                               : "inherit"
                         }}
+                        title={project.path}
                       >
                         <span data-testid="project-name" className="truncate">
                           {project.name}

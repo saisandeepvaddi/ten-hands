@@ -1,7 +1,7 @@
 import { getConfig } from "../shared/config";
 import { globalShortcut, BrowserWindow } from "electron";
 import { getMainWindow } from ".";
-import { openAndFocusWindow } from "./utils";
+import { openAndFocusWindow, hideWindowToTray } from "./utils";
 
 const config: IConfig = getConfig();
 
@@ -17,7 +17,7 @@ export const registerGlobalShortcuts = () => {
         ) {
           openAndFocusWindow(mainWindow);
         } else {
-          mainWindow.hide();
+          hideWindowToTray(mainWindow);
         }
       });
 

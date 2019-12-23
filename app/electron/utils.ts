@@ -1,4 +1,6 @@
 import { BrowserWindow } from "electron";
+import { showMessage } from "./tray";
+import { getConfig } from "../shared/config";
 
 export const openAndFocusWindow = (mainWindow: BrowserWindow) => {
   if (mainWindow) {
@@ -9,5 +11,15 @@ export const openAndFocusWindow = (mainWindow: BrowserWindow) => {
       mainWindow.show();
     }
     mainWindow.focus();
+  }
+};
+
+export const hideWindowToTray = (mainWindow: BrowserWindow) => {
+  console.info("Hiding app to tray.");
+  mainWindow.hide();
+  if (getConfig()?.showAppRunningTrayMessage) {
+    showMessage(
+      "Ten Hands is still running. Exit it from tray to completely quit Ten Hands."
+    );
   }
 };
