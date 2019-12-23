@@ -17,7 +17,7 @@ export const openAndFocusWindow = (mainWindow: BrowserWindow) => {
 export const hideWindowToTray = (mainWindow: BrowserWindow) => {
   console.info("Hiding app to tray.");
   mainWindow.hide();
-  if (getConfig()?.showAppRunningTrayMessage) {
+  if (getConfig()?.showAppRunningTrayNotification) {
     showMessage(
       "Ten Hands is still running. Exit it from tray to completely quit Ten Hands."
     );
