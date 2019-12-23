@@ -17,7 +17,7 @@ const defaultConfig: IConfig = {
   port: 5010,
   enableTerminalTheme: true,
   globalHotKey: "CommandOrControl+Alt+T",
-  showAppRunningTrayMessage: true
+  showAppRunningTrayNotification: true
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -40,8 +40,9 @@ const getValidConfig = config => {
     _config.globalHotKey = defaultConfig.globalHotKey;
   }
 
-  if (typeof config.showAppRunningTrayMessage !== "boolean") {
-    _config.showAppRunningTrayMessage = defaultConfig.showAppRunningTrayMessage;
+  if (typeof config.showAppRunningTrayNotification !== "boolean") {
+    _config.showAppRunningTrayNotification =
+      defaultConfig.showAppRunningTrayNotification;
   }
 
   return _config;
