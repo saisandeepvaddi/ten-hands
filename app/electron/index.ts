@@ -1,10 +1,7 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-const electron = require("electron");
-const { BrowserWindow, ipcMain, app, dialog } = electron;
-
+import { BrowserWindow, ipcMain, app, dialog } from "electron";
 const unhandled = require("electron-unhandled");
-
 unhandled();
 
 const path = require("path");
@@ -24,10 +21,9 @@ import {
 import { hideWindowToTray } from "./utils";
 
 const isWindows = process.platform === "win32";
+export let mainWindow: BrowserWindow | null;
 
-export let mainWindow = null;
-
-export function getMainWindow() {
+export function getMainWindow(): BrowserWindow | null {
   return mainWindow;
 }
 
@@ -63,7 +59,9 @@ function createWindow() {
     mainWindow.on("close", e => {
       if (!isAppQuitting()) {
         e.preventDefault();
-        hideWindowToTray(mainWindow);
+        if (mainWindow) {
+          hideWindowToTray(mainWindow);
+        }
         e.returnValue = false;
       }
     });
@@ -104,7 +102,9 @@ async function startApplication() {
           log.error("app.ready error: " + error.message);
         }
       }
-      createTray(mainWindow);
+      if (mainWindow) {
+        createTray(mainWindow);
+      }
     });
 
     ipcMain.on(`get-config`, e => {
