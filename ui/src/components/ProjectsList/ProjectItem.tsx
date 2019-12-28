@@ -5,6 +5,7 @@ import { useTheme } from "../shared/stores/ThemeStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
 import { Classes, Icon, Collapse, Button, Alignment } from "@blueprintjs/core";
+import { wait } from "../shared/utilities";
 
 interface IProjectItemProps {
   project: IProject;
@@ -25,8 +26,15 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   const { activeProject } = useProjects();
   const [isTaskListOpen, setIsTaskListOpen] = React.useState<boolean>(false);
   const [showDragHandle, setShowDragHandle] = React.useState<boolean>(false);
+  const isThisActiveProject = activeProject._id === project._id;
 
-  const scrollToTask = task => {
+  const scrollToTask = async task => {
+    // If you click on task directly it should first switch the active project then scroll to task
+    if (!isThisActiveProject) {
+      changeActiveProject(project._id!, itemIndex);
+      await wait(200);
+    }
+
     const taskCard = document.getElementById(task._id);
     if (taskCard) {
       taskCard.scrollIntoView({
@@ -43,6 +51,14 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
     setShowDragHandle(false);
   };
 
+  const handleItemClick = () => {
+    changeActiveProject(project._id!, itemIndex);
+    // If task list is not open, open it
+    if (!isTaskListOpen) {
+      setIsTaskListOpen(true);
+    }
+  };
+
   return (
     <React.Fragment>
       <Item
@@ -51,16 +67,18 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
         ref={draggableProvided.innerRef}
         {...draggableProvided.draggableProps}
         {...draggableProvided.dragHandleProps}
-        onClick={() => changeActiveProject(project._id!, itemIndex)}
+        onClick={handleItemClick}
         theme={theme}
         style={{
           ...draggableProvided.draggableProps.style,
-          color:
-            activeProject._id === project._id
-              ? theme === Classes.DARK
-                ? "#48aff0"
-                : "#106ba3"
-              : "inherit"
+          color: isThisActiveProject
+            ? theme === Classes.DARK
+              ? "#48aff0"
+              : "#106ba3"
+            : "inherit",
+          background: isThisActiveProject
+            ? "rgba(19, 124, 189, 0.2)"
+            : "inherit"
         }}
         title={project.path}
       >
@@ -97,6 +115,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
                 onClick={() => scrollToTask(command)}
                 alignText={Alignment.LEFT}
                 icon={"dot"}
+                className="truncate"
               >
                 {command.name}
               </Button>

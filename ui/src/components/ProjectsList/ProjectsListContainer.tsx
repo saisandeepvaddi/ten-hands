@@ -192,11 +192,11 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
             >
-              <TabSwitchAnimator
+              {/* <TabSwitchAnimator
                 style={{
                   transform: `translateY(${selectedItemIndex * 40}px)`
                 }}
-              />
+              /> */}
               {projects.map((project: IProject, index: number) => {
                 return (
                   <Draggable
