@@ -58,11 +58,10 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   };
 
   const handleItemClick = () => {
-    changeActiveProject(project._id!, itemIndex);
     // If task list is not open, open it
-    if (!isTaskListOpen) {
-      setIsTaskListOpen(true);
-    }
+    setIsTaskListOpen(!isTaskListOpen);
+
+    changeActiveProject(project._id!, itemIndex);
   };
 
   return (

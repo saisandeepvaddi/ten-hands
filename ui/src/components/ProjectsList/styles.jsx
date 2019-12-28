@@ -27,9 +27,6 @@ export const Item = styled.div`
   text-overflow: ellipsis;
   justify-content: space-between;
   align-items: center;
-  .drag-handle-container {
-    visibility: hidden;
-  }
   &:hover {
     cursor: pointer;
     color: ${props =>
