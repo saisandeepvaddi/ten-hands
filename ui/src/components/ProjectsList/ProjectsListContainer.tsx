@@ -9,10 +9,10 @@ import {
   DropResult
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
-import { useConfig } from "../shared/Config";
-import { useJobs } from "../shared/Jobs";
-import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
+import { useConfig } from "../shared/stores/ConfigStore";
+import { useJobs } from "../shared/stores/JobStore";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useTheme } from "../shared/stores/ThemeStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
 import { Container, Item, TabSwitchAnimator } from "./styles";
 

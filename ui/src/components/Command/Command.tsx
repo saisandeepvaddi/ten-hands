@@ -1,10 +1,10 @@
 import { Button, Collapse, H5 } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { useJobs } from "../shared/Jobs";
+import { useJobs } from "../shared/stores/JobStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
-import { useProjects } from "../shared/Projects";
-import { useSockets } from "../shared/Sockets";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
 
 const Container = styled.div`

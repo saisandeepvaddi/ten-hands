@@ -19,9 +19,9 @@ import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { getGitRepo } from "../shared/API";
-import { useConfig } from "../shared/Config";
-import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
+import { useConfig } from "../shared/stores/ConfigStore";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
 
