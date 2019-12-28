@@ -15,6 +15,7 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
 import { Container, Item, TabSwitchAnimator } from "./styles";
+import ProjectItem from "./ProjectItem";
 
 interface IProjectsListContainerProps {}
 
@@ -186,8 +187,11 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     <React.Fragment>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId={"project-list-droppable"}>
-          {(provided: DroppableProvided) => (
-            <Container ref={provided.innerRef} {...provided.droppableProps}>
+          {(droppableProvided: DroppableProvided) => (
+            <Container
+              ref={droppableProvided.innerRef}
+              {...droppableProvided.droppableProps}
+            >
               <TabSwitchAnimator
                 style={{
                   transform: `translateY(${selectedItemIndex * 40}px)`
@@ -200,44 +204,19 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                     index={index}
                     key={project._id}
                   >
-                    {(provided: DraggableProvided) => (
-                      <Item
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        onClick={() => changeActiveProject(project._id, index)}
-                        theme={theme}
-                        style={{
-                          ...provided.draggableProps.style,
-                          color:
-                            activeProject._id === project._id
-                              ? theme === Classes.DARK
-                                ? "#48aff0"
-                                : "#106ba3"
-                              : "inherit"
-                        }}
-                        title={project.path}
-                      >
-                        <span data-testid="project-name" className="truncate">
-                          {project.name}
-                        </span>
-                        <div
-                          className="running-tasks-count"
-                          style={{ marginLeft: "auto" }}
-                        >
-                          <ProjectRunningTasksTag
-                            count={projectRunningTaskCount[project._id!]}
-                          />
-                        </div>
-                        <div className="drag-handle-container">
-                          <Icon icon="drag-handle-horizontal" />
-                        </div>
-                      </Item>
+                    {(draggableProvided: DraggableProvided) => (
+                      <ProjectItem
+                        project={project}
+                        draggableProvided={draggableProvided}
+                        changeActiveProject={changeActiveProject}
+                        itemIndex={index}
+                        projectRunningTaskCount={projectRunningTaskCount}
+                      />
                     )}
                   </Draggable>
                 );
               })}
-              {provided.placeholder}
+              {droppableProvided.placeholder}
             </Container>
           )}
         </Droppable>
