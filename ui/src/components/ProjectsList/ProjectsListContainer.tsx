@@ -183,7 +183,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId={"project-list-droppable"}>
           {(provided: DroppableProvided) => (
@@ -242,7 +242,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
           )}
         </Droppable>
       </DragDropContext>
-    </>
+    </React.Fragment>
   );
 };
 

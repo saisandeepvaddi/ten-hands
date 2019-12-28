@@ -103,7 +103,7 @@ const Command: React.FC<ICommandProps> = React.memo(
     };
 
     return (
-      <>
+      <React.Fragment>
         <Container>
           <CommandHeader>
             <CommandTitleActions>
@@ -154,7 +154,7 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandOutputXterm index={index} room={room} />
           </Collapse>
         </Container>
-      </>
+      </React.Fragment>
     );
   }
 );

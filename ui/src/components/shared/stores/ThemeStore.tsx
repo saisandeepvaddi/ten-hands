@@ -2,6 +2,7 @@ import { Classes } from "@blueprintjs/core";
 import React from "react";
 
 import { getItem, setItem } from "../../../utils/storage";
+import { useMountedState } from "../hooks";
 
 interface IThemeContextValue {
   theme: string;
@@ -18,6 +19,7 @@ export const ThemeContext = React.createContext<IThemeContextValue | undefined>(
 );
 
 function ThemeProvider(props: IThemeProviderProps) {
+  const isMounted = useMountedState();
   const [theme, setTheme] = React.useState(getItem("theme") || Classes.DARK);
 
   const value = React.useMemo(() => {
@@ -26,7 +28,9 @@ function ThemeProvider(props: IThemeProviderProps) {
 
   // Change theme in localStorage whenever user changes on UI
   React.useEffect(() => {
-    setItem("theme", theme);
+    if (isMounted()) {
+      setItem("theme", theme);
+    }
   }, [theme]);
 
   return <ThemeContext.Provider value={value} {...props} />;

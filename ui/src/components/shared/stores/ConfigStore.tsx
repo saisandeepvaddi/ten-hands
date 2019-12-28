@@ -59,7 +59,7 @@ function ConfigProvider(props: IConfigProviderProps) {
 
   const value = React.useMemo(() => {
     return { config, setConfig };
-  }, [config]);
+  }, [config, setConfig]);
 
   return <ConfigContext.Provider value={value} {...props} />;
 }

@@ -9,6 +9,7 @@ import {
   saveTaskInDb
 } from "../API";
 import { useConfig } from "./ConfigStore";
+import { useMountedState } from "../hooks";
 
 interface IProjectContextValue {
   projects: IProject[];
@@ -43,6 +44,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     commands: []
   };
 
+  const isMounted = useMountedState();
+
   const { config } = useConfig();
   const [activeProject, setActiveProject] = React.useState(initialProject);
   const [projects, setProjects] = React.useState<IProject[]>([]);
@@ -73,10 +76,12 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         } else {
           setProjects([]);
         }
-
-        setLoadingProjects(false);
       } catch (error) {
         console.error(error);
+      } finally {
+        if (isMounted()) {
+          setLoadingProjects(false);
+        }
       }
     };
     reloadProjects();
@@ -127,8 +132,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           };
           const _projects = [...projects];
           _projects.splice(currentProjectIndex, 1, updatedProject);
-          setProjects(_projects);
-          setActiveProject(updatedProject);
+          if (isMounted()) {
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+          }
         }
       };
 

@@ -29,7 +29,7 @@ const AppLayout = React.memo(() => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <div className={theme}>
         {/* New menubar is only for Windows in this release :( */}
         {isRunningInElectron() && isWindows ? (
@@ -54,7 +54,7 @@ const AppLayout = React.memo(() => {
           </SplitPane>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 });
 

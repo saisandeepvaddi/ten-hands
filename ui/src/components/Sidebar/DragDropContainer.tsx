@@ -77,7 +77,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Container
         theme={theme}
         className="file-drag-container h-100 w-100"
@@ -107,7 +107,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
           )}
         </div>
       </Container>
-    </>
+    </React.Fragment>
   );
 };
 
