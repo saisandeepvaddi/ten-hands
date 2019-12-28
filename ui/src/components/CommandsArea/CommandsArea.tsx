@@ -44,10 +44,12 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
       <Container>
         {commands.map((command, index) => {
           return (
+            // Use id for card to use to scroll when clicked on task in sidebar
             <Card
+              id={`task-card-${command._id}`}
               key={command._id}
               elevation={Elevation.ONE}
-              style={{ margin: 20 }}
+              style={{ margin: 20, padding: 15 }}
             >
               <Command
                 index={index}

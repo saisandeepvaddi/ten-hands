@@ -6,6 +6,7 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
 import { Classes, Icon, Collapse, Button, Alignment } from "@blueprintjs/core";
 import { wait } from "../shared/utilities";
+import { useJobs } from "../shared/stores/JobStore";
 
 interface IProjectItemProps {
   project: IProject;
@@ -24,9 +25,14 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
 }) => {
   const { theme } = useTheme();
   const { activeProject } = useProjects();
+  const { runningTasks } = useJobs();
   const [isTaskListOpen, setIsTaskListOpen] = React.useState<boolean>(false);
   const [showDragHandle, setShowDragHandle] = React.useState<boolean>(false);
   const isThisActiveProject = activeProject._id === project._id;
+
+  const isTaskRunning = (taskId: string) => {
+    return runningTasks[taskId] === true;
+  };
 
   const scrollToTask = async task => {
     // If you click on task directly it should first switch the active project then scroll to task
@@ -35,7 +41,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
       await wait(200);
     }
 
-    const taskCard = document.getElementById(task._id);
+    const taskCard = document.getElementById(`task-card-${task._id}`);
     if (taskCard) {
       taskCard.scrollIntoView({
         behavior: "smooth"
@@ -114,7 +120,12 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
                 minimal
                 onClick={() => scrollToTask(command)}
                 alignText={Alignment.LEFT}
-                icon={"dot"}
+                icon={
+                  <Icon
+                    icon={"dot"}
+                    color={isTaskRunning(command._id) ? "green" : undefined}
+                  />
+                }
                 className="truncate"
               >
                 {command.name}
