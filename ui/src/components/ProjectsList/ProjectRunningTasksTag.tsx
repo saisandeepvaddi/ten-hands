@@ -11,7 +11,7 @@ const ProjectRunningTasksTag: React.FC<IProjectRunningTasksTagProps> = ({
   return (
     <React.Fragment>
       {count > 0 ? (
-        <span style={{ paddingRight: 20 }}>
+        <span>
           <Tooltip content={`${count} ${count > 1 ? "tasks" : "task"} running`}>
             <Tag intent="success" minimal={true}>
               {count}

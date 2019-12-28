@@ -104,7 +104,7 @@ const Command: React.FC<ICommandProps> = React.memo(
 
     return (
       <React.Fragment>
-        <Container>
+        <Container id={command._id}>
           <CommandHeader>
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>

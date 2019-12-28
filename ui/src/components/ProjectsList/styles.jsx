@@ -32,9 +32,6 @@ export const Item = styled.div`
   }
   &:hover {
     cursor: pointer;
-    .drag-handle-container {
-      visibility: visible;
-    }
     color: ${props =>
       props.theme === Classes.DARK ? "#48aff0" : "#106ba3"} !important;
   }
