@@ -1,4 +1,3 @@
-import { Classes, Icon } from "@blueprintjs/core";
 import React from "react";
 import {
   DragDropContext,
@@ -9,12 +8,11 @@ import {
   DropResult
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
-import { useConfig } from "../shared/Config";
-import { useJobs } from "../shared/Jobs";
-import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
-import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
-import { Container, Item, TabSwitchAnimator } from "./styles";
+import { useConfig } from "../shared/stores/ConfigStore";
+import { useJobs } from "../shared/stores/JobStore";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { Container } from "./styles";
+import ProjectItem from "./ProjectItem";
 
 interface IProjectsListContainerProps {}
 
@@ -46,8 +44,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     activeProject
   } = useProjects();
   const { runningTasks } = useJobs();
-  const { theme } = useTheme();
-  const [selectedItemIndex, setSelectedItemIndex] = React.useState<number>(0);
+  /* tslint:disable-next-line */
+  const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>([]);
   const [
     activeProjectIndexBeforeDrag,
@@ -183,16 +181,19 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId={"project-list-droppable"}>
-          {(provided: DroppableProvided) => (
-            <Container ref={provided.innerRef} {...provided.droppableProps}>
-              <TabSwitchAnimator
+          {(droppableProvided: DroppableProvided) => (
+            <Container
+              ref={droppableProvided.innerRef}
+              {...droppableProvided.droppableProps}
+            >
+              {/* <TabSwitchAnimator
                 style={{
                   transform: `translateY(${selectedItemIndex * 40}px)`
                 }}
-              />
+              /> */}
               {projects.map((project: IProject, index: number) => {
                 return (
                   <Draggable
@@ -200,49 +201,24 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                     index={index}
                     key={project._id}
                   >
-                    {(provided: DraggableProvided) => (
-                      <Item
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        onClick={() => changeActiveProject(project._id, index)}
-                        theme={theme}
-                        style={{
-                          ...provided.draggableProps.style,
-                          color:
-                            activeProject._id === project._id
-                              ? theme === Classes.DARK
-                                ? "#48aff0"
-                                : "#106ba3"
-                              : "inherit"
-                        }}
-                        title={project.path}
-                      >
-                        <span data-testid="project-name" className="truncate">
-                          {project.name}
-                        </span>
-                        <div
-                          className="running-tasks-count"
-                          style={{ marginLeft: "auto" }}
-                        >
-                          <ProjectRunningTasksTag
-                            count={projectRunningTaskCount[project._id!]}
-                          />
-                        </div>
-                        <div className="drag-handle-container">
-                          <Icon icon="drag-handle-horizontal" />
-                        </div>
-                      </Item>
+                    {(draggableProvided: DraggableProvided) => (
+                      <ProjectItem
+                        project={project}
+                        draggableProvided={draggableProvided}
+                        changeActiveProject={changeActiveProject}
+                        itemIndex={index}
+                        projectRunningTaskCount={projectRunningTaskCount}
+                      />
                     )}
                   </Draggable>
                 );
               })}
-              {provided.placeholder}
+              {droppableProvided.placeholder}
             </Container>
           )}
         </Droppable>
       </DragDropContext>
-    </>
+    </React.Fragment>
   );
 };
 

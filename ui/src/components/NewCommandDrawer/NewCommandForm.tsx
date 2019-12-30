@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { isValidPath } from "../../utils/node";
-import { useConfig } from "../shared/Config";
-import { useProjects } from "../shared/Projects";
+import { useConfig } from "../shared/stores/ConfigStore";
+import { useProjects } from "../shared/stores/ProjectStore";
 
 const initialCommand: IProjectCommand = {
   _id: "",

@@ -2,12 +2,12 @@ import { Classes, Code, Colors, Icon } from "@blueprintjs/core";
 import React, { ReactNodeArray, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { getFileData } from "../App/dragDropProject";
-import { useProjects } from "../shared/Projects";
+import { useProjects } from "../shared/stores/ProjectStore";
 
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
-import { useTheme } from "../shared/Themes";
+import { useTheme } from "../shared/stores/ThemeStore";
 import { toaster } from "../shared/Toaster";
 
 interface IDragDropContainerProps {
@@ -77,7 +77,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Container
         theme={theme}
         className="file-drag-container h-100 w-100"
@@ -107,7 +107,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
           )}
         </div>
       </Container>
-    </>
+    </React.Fragment>
   );
 };
 

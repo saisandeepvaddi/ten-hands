@@ -13,8 +13,8 @@ export interface ISocketListener {
  */
 class SocketManager {
   private static _instance: SocketManager;
-  socket: Socket = null;
-  io: any = null;
+  socket: Socket;
+  io: SocketIO.Server;
   subscribers: ISocketListener[] = [];
 
   /**

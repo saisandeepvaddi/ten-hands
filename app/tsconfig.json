@@ -7,7 +7,9 @@
     "sourceMap": true,
     "outDir": "build",
     "allowJs": true,
-    "typeRoots": ["node_modules/@types", "server/types", "electron/types"]
+    "typeRoots": ["node_modules/@types", "server/types", "electron/types"],
+    "strictNullChecks": true,
+    "noImplicitAny": true
   },
   "include": ["server/**/*", "electron/**/*", "shared/**/*"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"]

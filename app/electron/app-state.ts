@@ -1,5 +1,3 @@
-import { BrowserWindow } from "electron";
-
 let isQuitting: boolean = false;
 
 export function setIsAppQuitting(isAppQuitting: boolean) {

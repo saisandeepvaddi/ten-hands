@@ -19,9 +19,9 @@ import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { getGitRepo } from "../shared/API";
-import { useConfig } from "../shared/Config";
-import { useProjects } from "../shared/Projects";
-import { useTheme } from "../shared/Themes";
+import { useConfig } from "../shared/stores/ConfigStore";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
 
@@ -79,9 +79,9 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     };
 
     const handleRenameProjectModalClose = () => {
-      setRenameProjectModalOpen(false);
       setProjectNameError("");
       setUpdatedProjectName("");
+      setRenameProjectModalOpen(false);
     };
 
     const validateProjectName = value => {
@@ -114,9 +114,13 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
         handleRenameProjectModalClose();
       } catch (error) {
         console.log("error:", error);
-        setProjectNameError(error.message);
+        if (isMounted()) {
+          setProjectNameError(error.message);
+        }
       } finally {
-        setIsRenaming(false);
+        if (isMounted()) {
+          setIsRenaming(false);
+        }
       }
     };
 
@@ -152,7 +156,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     }, [activeProject]);
 
     return (
-      <>
+      <React.Fragment>
         <Navbar>
           <Navbar.Group>
             <Navbar.Heading data-testid="active-project-name">
@@ -289,7 +293,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
             </div>
           </form>
         </Dialog>
-      </>
+      </React.Fragment>
     );
   }
 );

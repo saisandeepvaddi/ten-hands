@@ -17,7 +17,7 @@ const icon: NativeImage = nativeImage
   .createFromPath(iconPath)
   .resize({ width: 16, height: 16 });
 
-export let tray: Tray = null;
+export let tray: Tray;
 
 export function createTray(mainWindow: BrowserWindow): Tray {
   tray = new Tray(icon);
