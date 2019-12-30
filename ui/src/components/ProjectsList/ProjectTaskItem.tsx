@@ -114,6 +114,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     <React.Fragment>
       <Button
         key={command._id}
+        data-testid="project-task-button"
         fill
         title={command.cmd}
         style={{

@@ -1,4 +1,3 @@
-import { Classes, Icon } from "@blueprintjs/core";
 import React from "react";
 import {
   DragDropContext,
@@ -12,9 +11,7 @@ import { reorderProjectsInDb } from "../shared/API";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
-import { useTheme } from "../shared/stores/ThemeStore";
-import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
-import { Container, Item, TabSwitchAnimator } from "./styles";
+import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
 
 interface IProjectsListContainerProps {}
@@ -47,8 +44,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     activeProject
   } = useProjects();
   const { runningTasks } = useJobs();
-  const { theme } = useTheme();
-  const [selectedItemIndex, setSelectedItemIndex] = React.useState<number>(0);
+  /* tslint:disable-next-line */
+  const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>([]);
   const [
     activeProjectIndexBeforeDrag,
