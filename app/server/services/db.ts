@@ -1,4 +1,4 @@
-import low, { AdapterSync } from "lowdb";
+import low, { AdapterSync, LowdbSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import Memory from "lowdb/adapters/Memory";
 import { v4 as uuidv4 } from "uuid";
@@ -11,9 +11,14 @@ import { areTwoArraysEqual } from "./utils";
  *
  * @class Database
  */
+
+interface IDatabase {
+  projectsOrder: string[];
+  projects: IProject[];
+}
 class Database {
   private static _instance: Database;
-  private db = null;
+  private db: LowdbSync<IDatabase>;
   /**
    * Creates an instance of Database.
    * @private
@@ -69,7 +74,7 @@ class Database {
 
     if (projects.length === 0) {
       // Seems there are some inconsistencies when updating the versions. When projects are deleted, the projects order doesn't match.
-      // Shold not be the case generally.
+      // Should not be the case generally.
       if (projectsOrder.length !== 0) {
         this.reorderProjects([]);
       }
@@ -98,7 +103,9 @@ class Database {
     }
 
     // To get project in order
-    let projectsMap = {};
+    let projectsMap: {
+      [id: string]: IProject;
+    } = {};
 
     projects.map(project => {
       projectsMap[project._id] = project;
@@ -160,15 +167,15 @@ class Database {
   public deleteProject(projectId: string): IProject[] {
     const result = this.db
       .get("projects")
-      .remove({ _id: projectId })
+      .remove(project => project._id === projectId)
       .write();
 
     this.db
       .get("projectsOrder")
-      .remove(projectId)
+      .remove(_id => _id === projectId)
       .write();
 
-    return result;
+    return Array.from(result);
   }
 
   /**
@@ -252,7 +259,7 @@ class Database {
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
-      .remove({ _id: commandId })
+      .remove(command => command._id === commandId)
       .write();
     const project = this.getProject(projectId);
     return project;

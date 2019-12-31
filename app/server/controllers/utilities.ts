@@ -27,7 +27,7 @@ export function isValidPath(req: Request, res: Response) {
 }
 
 /**
- * Retuns git repo info at the given path
+ * Returns git repo info at the given path
  *
  * @export
  * @param {Request} req

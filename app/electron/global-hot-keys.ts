@@ -10,11 +10,13 @@ export const registerGlobalShortcuts = () => {
     if (config.globalHotKey && config.globalHotKey !== "") {
       const ret = globalShortcut.register(config.globalHotKey, () => {
         console.log(`Global Hot Key: ${config.globalHotKey} pressed.`);
-        const mainWindow: BrowserWindow = getMainWindow();
-        if (
-          mainWindow &&
-          (mainWindow.isMinimized() || !mainWindow.isVisible())
-        ) {
+        const mainWindow: BrowserWindow | null = getMainWindow();
+
+        if (!mainWindow) {
+          return;
+        }
+
+        if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
           openAndFocusWindow(mainWindow);
         } else {
           hideWindowToTray(mainWindow);

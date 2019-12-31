@@ -2,50 +2,66 @@ import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
 import Command from "../Command/Command";
-import { useTheme } from "../shared/Themes";
+import { useTheme } from "../shared/stores/ThemeStore";
 
 interface ICommandsAreaProps {
-    activeProject: IProject;
+  activeProject: IProject;
 }
 
 const Container = styled.div`
-    height: calc(100% - 50px);
-    overflow: auto;
+  height: calc(100% - 50px);
+  overflow: auto;
 `;
 
 const EmptyContainer = styled(Container)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    & > span {
-        padding: 10px;
-        border-bottom: 1px solid #0a6640;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  & > span {
+    padding: 10px;
+    border-bottom: 1px solid #0a6640;
+  }
 `;
 
-const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(({ activeProject }) => {
+const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
+  ({ activeProject }) => {
     const commands: IProjectCommand[] = activeProject.commands;
     const { theme } = useTheme();
 
     if (commands.length === 0) {
-        return (
-            <EmptyContainer theme={theme} className="main-container" data-testid="no-tasks-message">
-                Add a task using <span>New Task</span> button
-            </EmptyContainer>
-        );
+      return (
+        <EmptyContainer
+          theme={theme}
+          className="main-container"
+          data-testid="no-tasks-message"
+        >
+          Add a task using <span>New Task</span> button
+        </EmptyContainer>
+      );
     }
     return (
-        <Container>
-            {commands.map((command, index) => {
-                return (
-                    <Card key={command._id} elevation={Elevation.ONE} style={{ margin: 20 }}>
-                        <Command index={index} projectPath={activeProject.path} command={command} />
-                    </Card>
-                );
-            })}
-        </Container>
+      <Container>
+        {commands.map((command, index) => {
+          return (
+            // Use id for card to use to scroll when clicked on task in sidebar
+            <Card
+              id={`task-card-${command._id}`}
+              key={command._id}
+              elevation={Elevation.ONE}
+              style={{ margin: 20, padding: 15 }}
+            >
+              <Command
+                index={index}
+                projectPath={activeProject.path}
+                command={command}
+              />
+            </Card>
+          );
+        })}
+      </Container>
     );
-});
+  }
+);
 
 export default CommandsArea;

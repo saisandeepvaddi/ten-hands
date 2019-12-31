@@ -21,7 +21,7 @@ const defaultConfig: IConfig = {
 };
 
 /* If user accidentally updates config file with invalid values, send default */
-const getValidConfig = config => {
+const getValidConfig = (config: IConfig): IConfig => {
   const _config = { ...config };
 
   if (
@@ -48,7 +48,7 @@ const getValidConfig = config => {
   return _config;
 };
 
-const writeConfigToFS = config => {
+const writeConfigToFS = (config: IConfig) => {
   fs.writeFileSync(CONFIG_FILES.configFile, JSON.stringify(config, null, 2));
 };
 
