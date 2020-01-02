@@ -5,7 +5,7 @@ import {
   showUpdateNotAvailableMessage,
   showUnableToCheckUpdatesMessage
 } from "./updates";
-import { MenuItem } from "electron";
+import { MenuItem, dialog } from "electron";
 import { log } from "./logger";
 
 const { app, Menu, shell } = require("electron");
@@ -65,6 +65,16 @@ const helpMenu: MenuItem = new MenuItem({
           showUnableToCheckUpdatesMessage();
           log.error("check for updates error: " + error.message);
         }
+      }
+    },
+    {
+      label: "About",
+      async click() {
+        dialog.showMessageBoxSync({
+          type: "info",
+          title: "Ten Hands",
+          message: `Version: ${app.getVersion()}`
+        });
       }
     }
   ]

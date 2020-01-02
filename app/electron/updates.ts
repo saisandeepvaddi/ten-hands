@@ -46,7 +46,7 @@ export const showUnableToCheckUpdatesMessage = () => {
     type: "error",
     title: "Unable to check for updates.",
     message:
-      "Unable to check for updates now. Please visit GitHub page for checking manually.",
+      "Unable to check for updates now. Please visit GitHub page to check manually.",
     buttons: ["Go to GitHub", "Cancel"]
   });
 
