@@ -1,10 +1,7 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-const electron = require("electron");
-const { BrowserWindow, ipcMain, app, dialog } = electron;
-
+import { BrowserWindow, ipcMain, app, dialog } from "electron";
 const unhandled = require("electron-unhandled");
-
 unhandled();
 
 const path = require("path");
@@ -15,9 +12,20 @@ import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
 import { log } from "./logger";
 
-const isWindows = process.platform === "win32";
+import { createTray } from "./tray";
+import { isAppQuitting, setIsAppQuitting } from "./app-state";
+import {
+  registerGlobalShortcuts,
+  unregisterGlobalShortcuts
+} from "./global-hot-keys";
+import { hideWindowToTray } from "./utils";
 
-export let mainWindow;
+const isWindows = process.platform === "win32";
+export let mainWindow: BrowserWindow | null;
+
+export function getMainWindow(): BrowserWindow | null {
+  return mainWindow;
+}
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 
@@ -28,8 +36,8 @@ function createWindow() {
       height: 768,
       frame: isWindows ? false : true,
       webPreferences: {
-        nodeIntegration: true,
-      },
+        nodeIntegration: true
+      }
     });
 
     if (isDev) {
@@ -47,6 +55,17 @@ function createWindow() {
       log.info("Window Closing");
       mainWindow = null;
     });
+
+    mainWindow.on("close", e => {
+      if (!isAppQuitting()) {
+        e.preventDefault();
+        if (mainWindow) {
+          hideWindowToTray(mainWindow);
+        }
+        e.returnValue = false;
+      }
+    });
+
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
@@ -72,6 +91,7 @@ async function startApplication() {
     app.on("ready", () => {
       log.info("app.on.ready called");
       createWindow();
+      registerGlobalShortcuts();
       log.info("Window Created in app.ready");
       if (!isWindows) {
         try {
@@ -81,6 +101,9 @@ async function startApplication() {
           console.log("error:", error);
           log.error("app.ready error: " + error.message);
         }
+      }
+      if (mainWindow) {
+        createTray(mainWindow);
       }
     });
 
@@ -111,21 +134,19 @@ async function startApplication() {
         title: "Warning",
         message: "Are you sure you want to exit?",
         detail: "Any running tasks will keep running.",
-        buttons: ["Cancel", "Exit"],
+        buttons: ["Cancel", "Exit"]
       });
 
       // Cancel = 0
       // Exit = 1
       if (response !== 1) {
+        setIsAppQuitting(false);
         e.preventDefault();
       }
     });
 
-    app.on("window-all-closed", () => {
-      log.info("window-all-closed");
-      if (process.platform !== "darwin") {
-        app.quit();
-      }
+    app.on("will-quit", () => {
+      unregisterGlobalShortcuts();
     });
 
     app.on("activate", () => {

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import path from "path";
 import projectRoutes from "./routes/projects";
@@ -29,7 +29,7 @@ app.get("/___serve-ui", async (req, res) => {
 });
 
 // Default Error Handler
-app.use(function(error, req, res, next) {
+app.use(function(error: Error, _req: Request, res: Response) {
   console.error(error.stack);
 
   return res.status(500).send({ error });
@@ -46,7 +46,7 @@ process.on("SIGINT", function(signal) {
 });
 
 process.on("exit", function(code) {
-  console.warn("Ten Hands server exising with code: " + code);
+  console.warn("Ten Hands server exiting with code: " + code);
 });
 
 export default app;

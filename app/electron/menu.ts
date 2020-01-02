@@ -3,9 +3,9 @@ import {
   getAppUpdate,
   showUpdateAvailableMessage,
   showUpdateNotAvailableMessage,
-  showUnableToCheckUpdatesMessage,
+  showUnableToCheckUpdatesMessage
 } from "./updates";
-import { MenuItem } from "electron";
+import { MenuItem, dialog } from "electron";
 import { log } from "./logger";
 
 const { app, Menu, shell } = require("electron");
@@ -19,9 +19,15 @@ const editMenu: MenuItem = new MenuItem({
       label: "Configuration",
       click() {
         shell.openItem(CONFIG_FILES.configFile);
-      },
+      }
     },
-  ],
+    {
+      label: "Database",
+      click() {
+        shell.openItem(CONFIG_FILES.dbFile);
+      }
+    }
+  ]
 });
 
 const viewMenu: MenuItem = new MenuItem({
@@ -31,8 +37,8 @@ const viewMenu: MenuItem = new MenuItem({
     { role: "forceReload" },
     { role: "toggleDevTools" },
     { type: "separator" },
-    { role: "togglefullscreen" },
-  ],
+    { role: "togglefullscreen" }
+  ]
 });
 
 const helpMenu: MenuItem = new MenuItem({
@@ -42,7 +48,7 @@ const helpMenu: MenuItem = new MenuItem({
       label: "Learn More",
       click() {
         shell.openExternalSync("https://github.com/saisandeepvaddi/ten-hands");
-      },
+      }
     },
     {
       label: "Check for Updates",
@@ -59,9 +65,19 @@ const helpMenu: MenuItem = new MenuItem({
           showUnableToCheckUpdatesMessage();
           log.error("check for updates error: " + error.message);
         }
-      },
+      }
     },
-  ],
+    {
+      label: "About",
+      async click() {
+        dialog.showMessageBoxSync({
+          type: "info",
+          title: "Ten Hands",
+          message: `Version: ${app.getVersion()}`
+        });
+      }
+    }
+  ]
 });
 
 const commonMenu: MenuItem[] = [editMenu, viewMenu, helpMenu];
@@ -69,17 +85,17 @@ const commonMenu: MenuItem[] = [editMenu, viewMenu, helpMenu];
 const macMenu: MenuItem[] = [
   new MenuItem({
     label: app.getName(),
-    submenu: [{ role: "about" }, { type: "separator" }, { role: "quit" }],
+    submenu: [{ role: "about" }, { type: "separator" }, { role: "quit" }]
   }),
-  ...commonMenu,
+  ...commonMenu
 ];
 
 const winMenu: MenuItem[] = [
   new MenuItem({
     label: "File",
-    submenu: [{ role: "quit" }],
+    submenu: [{ role: "quit" }]
   }),
-  ...commonMenu,
+  ...commonMenu
 ];
 
 export const menuTemplate: MenuItem[] = isMac ? macMenu : winMenu;

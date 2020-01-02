@@ -1,6 +1,6 @@
 {
   "name": "ten-hands",
-  "version": "2.0.1",
+  "version": "2.2.0",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -11,7 +11,10 @@
     "start:browser": "./node_modules/.bin/gulp startBrowser",
     "start:server": "./node_modules/.bin/gulp startServer",
     "test:ui": "cd ./ui && yarn test",
-    "start:cli": "./node_modules/.bin/gulp startCLI"
+    "start:cli": "./node_modules/.bin/gulp startCLI",
+    "bump-version:major": "./node_modules/.bin/gulp updateMajorVersion",
+    "bump-version:minor": "./node_modules/.bin/gulp updateMinorVersion",
+    "bump-version:patch": "./node_modules/.bin/gulp updatePatchVersion"
   },
   "tenHands": {
     "path": "D:\\Programming\\ten-hands"

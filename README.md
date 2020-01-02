@@ -61,15 +61,11 @@ To run in browser.
 
 A `config.json` is supported which is placed at `~/.ten-hands/` path.
 
-> {  
->  "port": 5010, // number  
->  "enableTerminalTheme": true // boolean  
-> }
+> Check [Configration](https://github.com/saisandeepvaddi/ten-hands/wiki/Configuration) at Wiki for configuration options.
 
 You have to restart the app when you change configuration.
 
 ## FAQ
-
 
 1. Can I create a project without `package.json`?
 

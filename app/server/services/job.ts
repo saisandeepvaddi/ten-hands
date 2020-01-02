@@ -26,7 +26,7 @@ class Job {
    * @param {*} projectPath
    * @memberof Job
    */
-  public start(command, projectPath) {
+  public start(command: IProjectCommand, projectPath: string) {
     try {
       const job = command.cmd;
       const execPath =
@@ -42,26 +42,30 @@ class Job {
         maxBuffer: 100 * 1024 * 1024
       });
 
+      console.log(`Process started with PID: ${n.pid}`);
+
       this.socketManager.emit(`job_started`, { room, data: n });
-      n.stdout.on("data", chunk => {
+      n.stdout?.on("data", chunk => {
         this.socketManager.emit(`job_output`, { room, data: chunk });
       });
 
-      n.stderr.on("data", chunk => {
+      n.stderr?.on("data", chunk => {
         this.socketManager.emit(`job_error`, { room, data: chunk });
       });
 
       n.on("close", (code, signal) => {
         this.socketManager.emit(`job_close`, {
           room,
-          data: `Process closed with code ${code} by signal ${signal}`
+          data: `Process with PID ${n.pid ||
+            "--"} closed with code ${code} by signal ${signal}`
         });
       });
 
       n.on("exit", (code, signal) => {
         this.socketManager.emit(`job_exit`, {
           room,
-          data: `Process exited with code ${code} by signal ${signal}`
+          data: `Process with PID ${n.pid ||
+            "--"} exited with code ${code} by signal ${signal}`
         });
       });
     } catch (error) {
@@ -94,7 +98,7 @@ export class JobManager {
    * @param {*} pid Process Id of the task. (Created by OS)
    * @memberof JobManager
    */
-  private killJob(room, pid) {
+  private killJob(room: string, pid: number) {
     console.log(`Killing process: ${pid}`);
     pKill(pid);
     this.socketManager.emit(`job_killed`, {

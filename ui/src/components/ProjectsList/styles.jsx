@@ -22,17 +22,13 @@ export const Item = styled.div`
   line-height: 40px;
   font-size: 14px;
   max-width: 100%;
-  overflor: hidden;
+  overflow: hidden;
+  white-space: no-wrap;
+  text-overflow: ellipsis;
   justify-content: space-between;
   align-items: center;
-  .drag-handle-container {
-    visibility: hidden;
-  }
   &:hover {
     cursor: pointer;
-    .drag-handle-container {
-      visibility: visible;
-    }
     color: ${props =>
       props.theme === Classes.DARK ? "#48aff0" : "#106ba3"} !important;
   }

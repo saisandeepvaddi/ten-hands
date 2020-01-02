@@ -1,4 +1,6 @@
 interface IConfig {
   port: string | number;
-  enableTerminalTheme: boolean;
+  enableTerminalTheme?: boolean;
+  globalHotKey?: string;
+  showAppRunningTrayNotification?: boolean;
 }
