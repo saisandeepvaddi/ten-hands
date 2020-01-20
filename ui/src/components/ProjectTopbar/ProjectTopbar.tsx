@@ -61,7 +61,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const { config } = useConfig();
     let checkBranchTimerRef = React.useRef<number>();
 
-    const { deleteProject, projects, renameProject } = useProjects();
+    const {
+      deleteProject,
+      projects,
+      renameProject,
+      projectsRunningTaskCount
+    } = useProjects();
 
     const shouldDeleteProject = async shouldDelete => {
       try {
@@ -220,6 +225,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                   text="Delete Project"
                   intent="danger"
                   onClick={() => setDeleteAlertOpen(true)}
+                  title={
+                    projectsRunningTaskCount[activeProject._id!] > 0
+                      ? "Cannot delete project while tasks are running."
+                      : undefined
+                  }
+                  disabled={projectsRunningTaskCount[activeProject._id!] > 0}
                 />
               </Menu>
             </Popover>

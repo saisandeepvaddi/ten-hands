@@ -10,8 +10,10 @@ import {
 } from "../API";
 import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
+import { useJobs } from "./JobStore";
 
 interface IProjectContextValue {
+  projectsRunningTaskCount: { [key: string]: number };
   projects: IProject[];
   activeProject: IProject;
   setActiveProject: (activeProject: IProject) => void;
@@ -31,6 +33,27 @@ interface IProjectsProviderProps {
   children: React.ReactNode;
 }
 
+const getRunningTasksCountForProjects = (
+  projects: IProject[],
+  runningTasks: any
+) => {
+  const taskCount = {};
+
+  projects.forEach((project: IProject) => {
+    const { commands, _id } = project;
+    let runningCount: number = 0;
+    commands.forEach((command: IProjectCommand) => {
+      const { _id } = command;
+      if (runningTasks[_id]) {
+        runningCount++;
+      }
+    });
+    taskCount[_id!] = runningCount;
+  });
+
+  return taskCount;
+};
+
 export const ProjectContext = React.createContext<
   IProjectContextValue | undefined
 >(undefined);
@@ -45,11 +68,29 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   };
 
   const isMounted = useMountedState();
+  const { runningTasks } = useJobs();
 
   const { config } = useConfig();
   const [activeProject, setActiveProject] = React.useState(initialProject);
   const [projects, setProjects] = React.useState<IProject[]>([]);
   const [loadingProjects, setLoadingProjects] = React.useState(true);
+  const [
+    projectsRunningTaskCount,
+    setProjectsRunningTaskCount
+  ] = React.useState<any>({});
+
+  React.useEffect(() => {
+    if (!projects) {
+      return;
+    }
+
+    const taskCountMap = getRunningTasksCountForProjects(
+      projects,
+      runningTasks
+    );
+
+    setProjectsRunningTaskCount(taskCountMap);
+  }, [runningTasks, projects]);
 
   const updateProjects = React.useCallback(() => {
     const reloadProjects = async () => {
@@ -253,6 +294,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const value = React.useMemo(() => {
     return {
       projects,
+      projectsRunningTaskCount,
       activeProject,
       setActiveProject,
       setProjects,
@@ -267,6 +309,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     };
   }, [
     projects,
+    projectsRunningTaskCount,
     activeProject,
     setActiveProject,
     setProjects,
