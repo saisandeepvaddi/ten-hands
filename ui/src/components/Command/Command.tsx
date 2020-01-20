@@ -145,8 +145,13 @@ const Command: React.FC<ICommandProps> = React.memo(
                 onClick={deleteCommand}
                 icon="trash"
                 minimal={true}
+                title={
+                  isProcessRunning()
+                    ? "Cannot delete while task is running."
+                    : "Delete Task"
+                }
                 intent="danger"
-                title="Delete Task"
+                disabled={isProcessRunning()}
               />
             </CommandOutputButtonsContainer>
           </CommandHeader>
