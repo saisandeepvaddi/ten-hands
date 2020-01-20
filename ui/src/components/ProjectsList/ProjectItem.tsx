@@ -4,10 +4,7 @@ import { DraggableProvided } from "react-beautiful-dnd";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
-import { Classes, Icon, Collapse, Button, Alignment } from "@blueprintjs/core";
-import { wait } from "../shared/utilities";
-import { useJobs } from "../shared/stores/JobStore";
-import styled from "styled-components";
+import { Classes, Icon, Collapse } from "@blueprintjs/core";
 import ProjectTaskItem from "./ProjectTaskItem";
 
 interface IProjectItemProps {
@@ -15,7 +12,7 @@ interface IProjectItemProps {
   draggableProvided: DraggableProvided;
   changeActiveProject: (projectId: string, index: number) => any;
   itemIndex: number;
-  projectRunningTaskCount: any;
+  projectRunningTaskCount: number;
 }
 
 const ProjectItem: React.FC<IProjectItemProps> = ({
@@ -31,11 +28,11 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   const [showDragHandle, setShowDragHandle] = React.useState<boolean>(false);
   const isThisActiveProject = activeProject._id === project._id;
 
-  const handleMouseOver = e => {
+  const handleMouseOver = () => {
     setShowDragHandle(true);
   };
 
-  const handleMouseOut = e => {
+  const handleMouseOut = () => {
     setShowDragHandle(false);
   };
 
@@ -83,9 +80,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
           </div>
         ) : (
           <div className="running-tasks-count" style={{ marginLeft: "auto" }}>
-            <ProjectRunningTasksTag
-              count={projectRunningTaskCount[project._id!]}
-            />
+            <ProjectRunningTasksTag count={projectRunningTaskCount} />
           </div>
         )}
       </Item>

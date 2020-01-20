@@ -16,34 +16,13 @@ import ProjectItem from "./ProjectItem";
 
 interface IProjectsListContainerProps {}
 
-const getRunningTasksCountForProjects = (
-  projects: IProject[],
-  runningTasks: any
-) => {
-  const taskCount = {};
-
-  projects.forEach((project: IProject) => {
-    const { commands, _id } = project;
-    let runningCount: number = 0;
-    commands.forEach((command: IProjectCommand) => {
-      const { _id } = command;
-      if (runningTasks[_id]) {
-        runningCount++;
-      }
-    });
-    taskCount[_id!] = runningCount;
-  });
-
-  return taskCount;
-};
-
 const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const {
     projects: tempProjects,
     setActiveProject,
-    activeProject
+    activeProject,
+    projectsRunningTaskCount
   } = useProjects();
-  const { runningTasks } = useJobs();
   /* tslint:disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>([]);
@@ -51,9 +30,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     activeProjectIndexBeforeDrag,
     setActiveProjectIndexBeforeDrag
   ] = React.useState<number>(0);
-  const [projectRunningTaskCount, setProjectRunningTaskCount] = React.useState<
-    any
-  >({});
+
   const { config } = useConfig();
 
   React.useEffect(() => {
@@ -63,19 +40,6 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
     setProjects(tempProjects);
   }, [tempProjects]);
-
-  React.useEffect(() => {
-    if (!projects) {
-      return;
-    }
-
-    const taskCountMap = getRunningTasksCountForProjects(
-      projects,
-      runningTasks
-    );
-
-    setProjectRunningTaskCount(taskCountMap);
-  }, [runningTasks, projects]);
 
   const changeActiveProject = React.useCallback(
     (projectId, index: number) => {
@@ -207,7 +171,9 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                         draggableProvided={draggableProvided}
                         changeActiveProject={changeActiveProject}
                         itemIndex={index}
-                        projectRunningTaskCount={projectRunningTaskCount}
+                        projectRunningTaskCount={
+                          projectsRunningTaskCount[project._id!]
+                        }
                       />
                     )}
                   </Draggable>

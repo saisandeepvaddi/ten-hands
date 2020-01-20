@@ -19,13 +19,13 @@ const App = () => {
   return (
     <ConfigProvider>
       <ThemeProvider>
-        <ProjectsProvider>
-          <JobsProvider>
+        <JobsProvider>
+          <ProjectsProvider>
             <SocketsProvider>
               <AppLayout />
             </SocketsProvider>
-          </JobsProvider>
-        </ProjectsProvider>
+          </ProjectsProvider>
+        </JobsProvider>
       </ThemeProvider>
     </ConfigProvider>
   );
