@@ -85,17 +85,17 @@ List of primary libs/frameworks.
 
 # Tips on changes
 
-1. This project aims to run in desktop version using electron as well as a browser version with same feature parity as much as possible. Please check if the feature can work on both ends, and if it can,  make sure it works in both environments.
-> For example, in electron version, you can directly use nodejs related code in front-end code. In such cases, make sure it won't break browser version. For this specific example, always use `isRunningInElectron()` utility functinon defined in `/ui/src/utils/electron.ts`.
+1. This project aims to run in desktop version using electron as well as a browser version with same feature parity as much as possible. Please check if the feature can work on both ends, and if it can, make sure it works in both environments.
+> For example, in electron version, you can directly use nodejs related code in front-end code. In such cases, make sure it won't break browser version (CLI/web app version). Always use `isRunningInElectron()` utility functinon defined in `/ui/src/utils/electron.ts` to add any code that uses electron APIs on front-end.
 
 2. Tests
   - Tests are good. It doesn't have to have 100% coverage on lines/branches etc. But, make sure the use case is covered will all possible corner cases you can think of are tested.
-  - There is a large part yet to be coverted in tests. Please do contribute even if you want to write only tests (Actually, very much required for existing code).
-  - Testing is set up in Jest ([@testing-library/react](https://testing-library.com/docs/react-testing-library/intro)) and [Cypress](https://www.cypress.io/).
+  - There is a large part yet to be coverted in tests. Please do contribute even if you want to write only tests (Actually, very much required).
+  - Testing is done using [Jest](https://jestjs.io/), [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro), and [Cypress](https://www.cypress.io/).
 
 3. Typings
   - Define types in [/project]/types/index.d.ts
   
 4. Improving the existing code.
-  - This project started out as educational for myself to learn. So, the code is not reviewed by any expert developer (as of Oct, 2019). If you think the code can be improved in quality/performance, please discuss your suggestion and make a PR.
+  - This project started out as educational for myself to learn. So, the code is not reviewed by any expert developer. If you think the code can be improved in quality/performance, please discuss your suggestion in an issue and create a PR. I'd very much appreciate any guidance about code quality. 🙂
 
