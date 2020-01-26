@@ -76,6 +76,12 @@ List of primary libs/frameworks.
   
 4. To start brower version
    - In root folder -> `yarn start:browser`
+   
+5. To build installers
+   - In root folder
+      - For Desktop: `yarn build:desktop` (builds for whichever OS you are currently running)
+      - For Browser: `yarn build:cli` (CLI is how you can run Ten Hands as web app. Check [README](https://github.com/saisandeepvaddi/ten-hands/blob/master/README.md#installing-browser-version) for details)
+      - Building in Azure Pipelines - `yarn build:desktop-azure`. I use this to create release builds for multiple platforms. You can **ignore** this. Check [azure-pipelines.yml](/azure-pipelines.yml) if you are curious about configuration.
 
 # Tips on changes
 
