@@ -66,7 +66,6 @@ List of primary libs/frameworks.
    - If you are working on CLI
       - In root folder -> `yarn install`
       - In /cli folder -> `yarn install` (because `cli` is not part of yarn workspaces)
-      - 
    - For other sub-projects
       - In root folder -> `yarn install`
 
