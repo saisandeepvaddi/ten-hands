@@ -14,6 +14,7 @@ import { useJobs } from "./JobStore";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
+  totalRunningTaskCount: number;
   projects: IProject[];
   activeProject: IProject;
   setActiveProject: (activeProject: IProject) => void;
@@ -36,9 +37,9 @@ interface IProjectsProviderProps {
 const getRunningTasksCountForProjects = (
   projects: IProject[],
   runningTasks: any
-) => {
-  const taskCount = {};
-
+): { taskCountMap: object; totalRunningTaskCount: number } => {
+  const taskCountMap = {};
+  let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
     const { commands, _id } = project;
     let runningCount: number = 0;
@@ -46,12 +47,13 @@ const getRunningTasksCountForProjects = (
       const { _id } = command;
       if (runningTasks[_id]) {
         runningCount++;
+        totalRunningTaskCount++;
       }
     });
-    taskCount[_id!] = runningCount;
+    taskCountMap[_id!] = runningCount;
   });
 
-  return taskCount;
+  return { taskCountMap, totalRunningTaskCount };
 };
 
 export const ProjectContext = React.createContext<
@@ -79,17 +81,22 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     setProjectsRunningTaskCount
   ] = React.useState<any>({});
 
+  const [totalRunningTaskCount, setTotalRunningTaskCount] = React.useState<
+    number
+  >(0);
+
   React.useEffect(() => {
     if (!projects) {
       return;
     }
 
-    const taskCountMap = getRunningTasksCountForProjects(
-      projects,
-      runningTasks
-    );
+    const {
+      taskCountMap,
+      totalRunningTaskCount
+    } = getRunningTasksCountForProjects(projects, runningTasks);
 
     setProjectsRunningTaskCount(taskCountMap);
+    setTotalRunningTaskCount(totalRunningTaskCount);
   }, [runningTasks, projects]);
 
   const updateProjects = React.useCallback(() => {
@@ -305,7 +312,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       addProject,
       deleteProject,
       reorderTasks,
-      renameProject
+      renameProject,
+      totalRunningTaskCount
     };
   }, [
     projects,
@@ -320,7 +328,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     addProject,
     deleteProject,
     reorderTasks,
-    renameProject
+    renameProject,
+    totalRunningTaskCount
   ]);
 
   return <ProjectContext.Provider value={value} {...props} />;

@@ -144,12 +144,3 @@ pre {
 button:focus {
   outline: none;
 }
-
-.statusbar {
-  height: 20px;
-  background: orange;
-  z-index: 9999;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}

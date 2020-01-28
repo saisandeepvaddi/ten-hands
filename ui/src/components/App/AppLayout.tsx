@@ -5,6 +5,7 @@ import Main from "../Main/Main";
 import { useSockets } from "../shared/stores/SocketStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import Sidebar from "../Sidebar";
+import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 
@@ -57,7 +58,7 @@ const AppLayout = React.memo(() => {
             <Sidebar />
             <Main />
           </SplitPane>
-          <div className="statusbar"></div>
+          <Statusbar />
         </div>
       </div>
     </React.Fragment>
