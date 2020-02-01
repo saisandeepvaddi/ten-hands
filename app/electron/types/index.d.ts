@@ -3,4 +3,5 @@ interface IConfig {
   enableTerminalTheme?: boolean;
   globalHotKey?: string;
   showAppRunningTrayNotification?: boolean;
+  showStatusBar?: boolean;
 }

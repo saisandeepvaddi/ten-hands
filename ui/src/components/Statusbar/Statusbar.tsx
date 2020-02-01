@@ -7,7 +7,7 @@ import { Classes } from "@blueprintjs/core";
 const Container = styled.div`
   height: 20px;
   background: ${props =>
-    props.theme === Classes.DARK ? "#5C7080" : "#BFCCD6"};
+    props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   z-index: 9999;
   width: 100%;
   font-size: 0.75em;
