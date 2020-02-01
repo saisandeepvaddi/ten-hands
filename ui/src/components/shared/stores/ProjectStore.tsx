@@ -16,6 +16,7 @@ import { useSockets } from "./SocketStore";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
+  totalRunningTaskCount: number;
   projects: IProject[];
   activeProject: IProject;
   setActiveProject: (activeProject: IProject) => void;
@@ -44,9 +45,9 @@ function getJobData(state, room: string) {
 const getRunningTasksCountForProjects = (
   projects: IProject[],
   runningTasks: any
-) => {
-  const taskCount = {};
-
+): { runningTasksPerProject: object; totalRunningTaskCount: number } => {
+  const runningTasksPerProject = {};
+  let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
     const { commands, _id } = project;
     let runningCount: number = 0;
@@ -54,12 +55,13 @@ const getRunningTasksCountForProjects = (
       const { _id } = command;
       if (runningTasks[_id]) {
         runningCount++;
+        totalRunningTaskCount++;
       }
     });
-    taskCount[_id!] = runningCount;
+    runningTasksPerProject[_id!] = runningCount;
   });
 
-  return taskCount;
+  return { runningTasksPerProject, totalRunningTaskCount };
 };
 
 export const ProjectContext = React.createContext<
@@ -142,18 +144,22 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       console.log(`stopTask error: `, error);
     }
   };
+  const [totalRunningTaskCount, setTotalRunningTaskCount] = React.useState<
+    number
+  >(0);
 
   React.useEffect(() => {
     if (!projects) {
       return;
     }
 
-    const taskCountMap = getRunningTasksCountForProjects(
-      projects,
-      runningTasks
-    );
+    const {
+      runningTasksPerProject,
+      totalRunningTaskCount
+    } = getRunningTasksCountForProjects(projects, runningTasks);
 
-    setProjectsRunningTaskCount(taskCountMap);
+    setProjectsRunningTaskCount(runningTasksPerProject);
+    setTotalRunningTaskCount(totalRunningTaskCount);
   }, [runningTasks, projects]);
 
   const updateProjects = React.useCallback(() => {
@@ -389,7 +395,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       reorderTasks,
       renameProject,
       runAllStoppedTasks,
-      stopAllRunningTasks
+      stopAllRunningTasks,
+      totalRunningTaskCount
     };
   }, [
     projects,
@@ -406,7 +413,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     reorderTasks,
     renameProject,
     runAllStoppedTasks,
-    stopAllRunningTasks
+    stopAllRunningTasks,
+    totalRunningTaskCount
   ]);
 
   return <ProjectContext.Provider value={value} {...props} />;

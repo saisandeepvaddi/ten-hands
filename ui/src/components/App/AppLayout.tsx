@@ -5,6 +5,7 @@ import Main from "../Main/Main";
 import { useSockets } from "../shared/stores/SocketStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import Sidebar from "../Sidebar";
+import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 
@@ -14,6 +15,7 @@ const AppLayout = React.memo(() => {
   const { theme } = useTheme();
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
+  const statusbarHeight = "20px";
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -30,7 +32,7 @@ const AppLayout = React.memo(() => {
 
   return (
     <React.Fragment>
-      <div className={theme}>
+      <div className={theme} style={{ height: "100%", width: "100%" }}>
         {/* New menubar is only for Windows in this release :( */}
         {isRunningInElectron() && isWindows ? (
           <DesktopMenu />
@@ -39,19 +41,24 @@ const AppLayout = React.memo(() => {
         )}
         <div
           style={{
-            minHeight: `calc(100vh - ${topbarHeight})`,
             paddingTop: `${topbarHeight}`
           }}
+          className="h-100 w-100"
         >
           <SplitPane
             data-testid="splitPane"
             split="vertical"
             defaultSize={350}
             maxSize={500}
+            style={{
+              maxHeight: `calc(100% - ${statusbarHeight})`,
+              position: "relative"
+            }}
           >
             <Sidebar />
             <Main />
           </SplitPane>
+          <Statusbar />
         </div>
       </div>
     </React.Fragment>
