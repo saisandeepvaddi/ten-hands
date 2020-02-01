@@ -8,14 +8,16 @@ import Sidebar from "../Sidebar";
 import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
+import { useConfig } from "../shared/stores/ConfigStore";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 
 const AppLayout = React.memo(() => {
   const { theme } = useTheme();
+  const { config } = useConfig();
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
-  const statusbarHeight = "20px";
+  const statusbarHeight = config.showStatusBar ? "20px" : "0px";
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -58,7 +60,7 @@ const AppLayout = React.memo(() => {
             <Sidebar />
             <Main />
           </SplitPane>
-          <Statusbar />
+          {config.showStatusBar ? <Statusbar /> : null}
         </div>
       </div>
     </React.Fragment>

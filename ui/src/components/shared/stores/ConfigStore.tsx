@@ -30,10 +30,12 @@ function ConfigProvider(props: IConfigProviderProps) {
       } else {
         const port = window.location.port || getItem("port") || 5010;
         setItem("port", port);
-        return {
+        const browserOnlyConfig: IConfig = {
           port,
-          enableTerminalTheme: getItem("enableTerminalTheme") || true
+          enableTerminalTheme: Boolean(getItem("enableTerminalTheme")) || true,
+          showStatusBar: Boolean(getItem("showStatusBar")) || true
         };
+        return browserOnlyConfig;
       }
     } catch (error) {
       console.error(`Error getting config.`);
