@@ -11,6 +11,8 @@ import {
 import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
 import { useJobs } from "./JobStore";
+import JobTerminalManager from "../JobTerminalManager";
+import { useSockets } from "./SocketStore";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -26,11 +28,17 @@ interface IProjectContextValue {
   reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => any;
   loadingProjects: boolean;
   renameProject: (projectId: string, newName: string) => any;
+  runAllStoppedTasks: () => void;
+  stopAllRunningTasks: () => void;
 }
 
 interface IProjectsProviderProps {
   value?: IProjectContextValue;
   children: React.ReactNode;
+}
+
+function getJobData(state, room: string) {
+  return state[room] || "";
 }
 
 const getRunningTasksCountForProjects = (
@@ -68,7 +76,15 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   };
 
   const isMounted = useMountedState();
-  const { runningTasks } = useJobs();
+  const {
+    runningTasks,
+    state: jobState,
+    dispatch,
+    ACTION_TYPES,
+    isTaskRunning
+  } = useJobs();
+  const terminalManager = JobTerminalManager.getInstance();
+  const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
   const { config } = useConfig();
   const [activeProject, setActiveProject] = React.useState(initialProject);
@@ -78,6 +94,54 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     projectsRunningTaskCount,
     setProjectsRunningTaskCount
   ] = React.useState<any>({});
+
+  const clearJobOutput = room => {
+    dispatch({
+      type: ACTION_TYPES.CLEAR_OUTPUT,
+      room
+    });
+    terminalManager.clearTerminalInRoom(room);
+  };
+
+  const updateJobProcess = (room, jobProcess) => {
+    dispatch({
+      room,
+      type: ACTION_TYPES.UPDATE_JOB_PROCESS,
+      process: jobProcess
+    });
+  };
+
+  const startJob = (command: IProjectCommand) => {
+    const room = command._id;
+    clearJobOutput(room);
+    subscribeToTaskSocket(room, command, activeProject.path);
+  };
+
+  const stopJob = (command: IProjectCommand) => {
+    const room = command._id;
+    const process = getJobData(jobState, room).process;
+    const { pid } = process;
+    unsubscribeFromTaskSocket(room, pid);
+    updateJobProcess(room, {
+      pid: -1
+    });
+  };
+
+  const startTask = (command: IProjectCommand) => {
+    try {
+      startJob(command);
+    } catch (error) {
+      console.log(`startTask error: `, error);
+    }
+  };
+
+  const stopTask = (command: IProjectCommand) => {
+    try {
+      stopJob(command);
+    } catch (error) {
+      console.log(`stopTask error: `, error);
+    }
+  };
 
   React.useEffect(() => {
     if (!projects) {
@@ -283,6 +347,24 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     [projects, config, initialProject]
   );
 
+  const runAllStoppedTasks = () => {
+    const commandsInProject = activeProject.commands;
+    commandsInProject.forEach(command => {
+      if (!isTaskRunning(command._id)) {
+        startTask(command);
+      }
+    });
+  };
+
+  const stopAllRunningTasks = () => {
+    const commandsInProject = activeProject.commands;
+    commandsInProject.forEach(command => {
+      if (isTaskRunning(command._id)) {
+        stopTask(command);
+      }
+    });
+  };
+
   /* eslint-disable */
   React.useEffect(() => {
     async function updateNewProjects() {
@@ -305,7 +387,9 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       addProject,
       deleteProject,
       reorderTasks,
-      renameProject
+      renameProject,
+      runAllStoppedTasks,
+      stopAllRunningTasks
     };
   }, [
     projects,
@@ -320,7 +404,9 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     addProject,
     deleteProject,
     reorderTasks,
-    renameProject
+    renameProject,
+    runAllStoppedTasks,
+    stopAllRunningTasks
   ]);
 
   return <ProjectContext.Provider value={value} {...props} />;

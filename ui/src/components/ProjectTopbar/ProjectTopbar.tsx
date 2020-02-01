@@ -65,7 +65,9 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       deleteProject,
       projects,
       renameProject,
-      projectsRunningTaskCount
+      projectsRunningTaskCount,
+      runAllStoppedTasks,
+      stopAllRunningTasks
     } = useProjects();
 
     const shouldDeleteProject = async shouldDelete => {
@@ -186,6 +188,41 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                 </GitBranchContainer>
               ) : null}
             </Navbar.Heading>
+          </Navbar.Group>
+          <Navbar.Group>
+            <Navbar.Divider style={{ paddingRight: 10 }} />{" "}
+            <Button
+              onClick={() => runAllStoppedTasks()}
+              icon="play"
+              intent="success"
+              text="Run All"
+              minimal={true}
+              data-testid="run-all-stopped-tasks"
+              title={
+                projectsRunningTaskCount[activeProject._id!] ===
+                activeProject.commands.length
+                  ? "All the tasks in the project are already running."
+                  : "Runs all stopped tasks in this project."
+              }
+              disabled={
+                projectsRunningTaskCount[activeProject._id!] ===
+                activeProject.commands.length
+              }
+            />
+            <Button
+              onClick={() => stopAllRunningTasks()}
+              icon="stop"
+              intent="danger"
+              text="Stop All"
+              minimal={true}
+              data-testid="stop-all-running-tasks"
+              title={
+                projectsRunningTaskCount[activeProject._id!] === 0
+                  ? "No tasks are running in the project."
+                  : "Stops all running tasks in this project."
+              }
+              disabled={projectsRunningTaskCount[activeProject._id!] === 0}
+            />
           </Navbar.Group>
           <Navbar.Group align={Alignment.RIGHT}>
             <Button

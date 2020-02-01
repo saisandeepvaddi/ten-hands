@@ -91,6 +91,7 @@ interface IJobsContextValue {
   state: object;
   dispatch: React.Dispatch<IJobAction>;
   runningTasks: object;
+  isTaskRunning: (taskId: string) => boolean;
 }
 
 interface IJobsProviderProps {
@@ -106,6 +107,10 @@ function JobsProvider(props: IJobsProviderProps) {
   const isMounted = useMountedState();
   const [state, dispatch] = React.useReducer(jobsReducer, initialState);
   const [runningTasks, setRunningTasks] = React.useState<any>({});
+
+  const isTaskRunning = (taskId: string) => {
+    return runningTasks[taskId] === true;
+  };
 
   React.useEffect(() => {
     const keys = Object.keys(state);
@@ -149,9 +154,10 @@ function JobsProvider(props: IJobsProviderProps) {
     return {
       state,
       dispatch,
-      runningTasks
+      runningTasks,
+      isTaskRunning
     };
-  }, [state, dispatch, runningTasks]);
+  }, [state, dispatch, runningTasks, isTaskRunning]);
   return <JobsContext.Provider value={value} {...props} />;
 }
 
