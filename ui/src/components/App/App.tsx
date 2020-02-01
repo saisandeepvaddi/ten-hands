@@ -20,11 +20,11 @@ const App = () => {
     <ConfigProvider>
       <ThemeProvider>
         <JobsProvider>
-          <ProjectsProvider>
-            <SocketsProvider>
+          <SocketsProvider>
+            <ProjectsProvider>
               <AppLayout />
-            </SocketsProvider>
-          </ProjectsProvider>
+            </ProjectsProvider>
+          </SocketsProvider>
         </JobsProvider>
       </ThemeProvider>
     </ConfigProvider>

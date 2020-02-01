@@ -12,6 +12,11 @@ body {
   padding: 0;
 }
 
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
 *,
 *:before,
 *:after {

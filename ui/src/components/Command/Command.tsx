@@ -84,12 +84,12 @@ const Command: React.FC<ICommandProps> = React.memo(
       terminalManager.clearTerminalInRoom(room);
     };
 
-    const startJob = () => {
+    const startJob = room => {
       clearJobOutput(room);
       subscribeToTaskSocket(room, command, projectPath);
     };
 
-    const stopJob = () => {
+    const stopJob = room => {
       const process = getJobData(jobState, room).process;
       const { pid } = process;
       unsubscribeFromTaskSocket(room, pid);
@@ -114,7 +114,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                 intent="success"
                 minimal={true}
                 disabled={isProcessRunning()}
-                onClick={startJob}
+                onClick={() => startJob(room)}
               />
               <Button
                 data-testid="stop-task-button"
@@ -122,7 +122,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                 icon="stop"
                 minimal={true}
                 disabled={!isProcessRunning()}
-                onClick={stopJob}
+                onClick={() => stopJob(room)}
               />
             </CommandTitleActions>
             <span data-testid="command-cmd" className="truncate">
