@@ -7,22 +7,32 @@ import { Classes } from "@blueprintjs/core";
 const Container = styled.div`
   height: 20px;
   background: ${props =>
-    props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
+    props.theme === Classes.DARK ? "#5C7080" : "#BFCCD6"};
   z-index: 9999;
   width: 100%;
   font-size: 0.75em;
   padding: 0 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Statusbar = () => {
   const { theme } = useTheme();
-  const { totalRunningTaskCount } = useProjects();
+  const {
+    totalRunningTaskCount,
+    activeProject,
+    projectsRunningTaskCount
+  } = useProjects();
   return (
     <React.Fragment>
       <Container theme={theme}>
-        Total Running tasks: {totalRunningTaskCount}
+        <div className="total-stats">
+          Total Running tasks: {totalRunningTaskCount}
+        </div>
+        <div className="active-project-stats">
+          {projectsRunningTaskCount[activeProject._id!] ?? 0} tasks running
+        </div>
       </Container>
     </React.Fragment>
   );

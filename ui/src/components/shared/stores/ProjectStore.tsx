@@ -37,8 +37,8 @@ interface IProjectsProviderProps {
 const getRunningTasksCountForProjects = (
   projects: IProject[],
   runningTasks: any
-): { taskCountMap: object; totalRunningTaskCount: number } => {
-  const taskCountMap = {};
+): { runningTasksPerProject: object; totalRunningTaskCount: number } => {
+  const runningTasksPerProject = {};
   let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
     const { commands, _id } = project;
@@ -50,10 +50,10 @@ const getRunningTasksCountForProjects = (
         totalRunningTaskCount++;
       }
     });
-    taskCountMap[_id!] = runningCount;
+    runningTasksPerProject[_id!] = runningCount;
   });
 
-  return { taskCountMap, totalRunningTaskCount };
+  return { runningTasksPerProject, totalRunningTaskCount };
 };
 
 export const ProjectContext = React.createContext<
@@ -91,11 +91,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     }
 
     const {
-      taskCountMap,
+      runningTasksPerProject,
       totalRunningTaskCount
     } = getRunningTasksCountForProjects(projects, runningTasks);
 
-    setProjectsRunningTaskCount(taskCountMap);
+    setProjectsRunningTaskCount(runningTasksPerProject);
     setTotalRunningTaskCount(totalRunningTaskCount);
   }, [runningTasks, projects]);
 
