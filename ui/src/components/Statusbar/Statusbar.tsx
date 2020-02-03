@@ -24,6 +24,8 @@ const Statusbar = () => {
     activeProject,
     projectsRunningTaskCount
   } = useProjects();
+  const activeProjectRunningTaskCount =
+    projectsRunningTaskCount[activeProject._id!];
   return (
     <React.Fragment>
       <Container theme={theme}>
@@ -31,7 +33,7 @@ const Statusbar = () => {
           Total Running tasks: {totalRunningTaskCount}
         </div>
         <div className="active-project-stats">
-          {projectsRunningTaskCount[activeProject._id!] ?? 0} tasks running
+          Tasks running in this project: {activeProjectRunningTaskCount ?? 0}
         </div>
       </Container>
     </React.Fragment>
