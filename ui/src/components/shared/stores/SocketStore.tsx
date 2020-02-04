@@ -7,7 +7,7 @@ import JobTerminalManager from "../JobTerminalManager";
 
 // see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
 const options: any = { enabled: true, level: 3 };
-const forcedChalk = new chalk.constructor(options);
+const forcedChalk = new chalk.Instance(options);
 
 interface ISocketContextValue {
   isSocketInitialized: boolean;
