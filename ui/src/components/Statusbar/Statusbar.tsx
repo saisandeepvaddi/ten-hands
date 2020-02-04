@@ -30,7 +30,7 @@ const Statusbar = () => {
     <React.Fragment>
       <Container theme={theme}>
         <div className="total-stats">
-          Total Running tasks: {totalRunningTaskCount}
+          Total running tasks: {totalRunningTaskCount}
         </div>
         <div className="active-project-stats">
           Tasks running in this project: {activeProjectRunningTaskCount ?? 0}
