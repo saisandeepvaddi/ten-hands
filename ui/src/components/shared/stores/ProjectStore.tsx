@@ -378,7 +378,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         stopTask(command);
       }
     });
-  }, [activeProject, stopTask]);
+  }, [activeProject, stopTask, isTaskRunning]);
 
   /* eslint-disable */
   React.useEffect(() => {
