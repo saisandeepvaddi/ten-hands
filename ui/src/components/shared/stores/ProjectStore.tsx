@@ -105,13 +105,16 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     terminalManager.clearTerminalInRoom(room);
   };
 
-  const updateJobProcess = (room, jobProcess) => {
-    dispatch({
-      room,
-      type: ACTION_TYPES.UPDATE_JOB_PROCESS,
-      process: jobProcess
-    });
-  };
+  const updateJobProcess = React.useCallback(
+    (room, jobProcess) => {
+      dispatch({
+        room,
+        type: ACTION_TYPES.UPDATE_JOB_PROCESS,
+        process: jobProcess
+      });
+    },
+    [dispatch, ACTION_TYPES]
+  );
 
   const startJob = (command: IProjectCommand) => {
     const room = command._id;
@@ -119,15 +122,18 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     subscribeToTaskSocket(room, command, activeProject.path);
   };
 
-  const stopJob = (command: IProjectCommand) => {
-    const room = command._id;
-    const process = getJobData(jobState, room).process;
-    const { pid } = process;
-    unsubscribeFromTaskSocket(room, pid);
-    updateJobProcess(room, {
-      pid: -1
-    });
-  };
+  const stopJob = React.useCallback(
+    (command: IProjectCommand) => {
+      const room = command._id;
+      const process = getJobData(jobState, room).process;
+      const { pid } = process;
+      unsubscribeFromTaskSocket(room, pid);
+      updateJobProcess(room, {
+        pid: -1
+      });
+    },
+    [jobState, updateJobProcess, unsubscribeFromTaskSocket]
+  );
 
   const startTask = (command: IProjectCommand) => {
     try {
@@ -137,13 +143,16 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     }
   };
 
-  const stopTask = (command: IProjectCommand) => {
-    try {
-      stopJob(command);
-    } catch (error) {
-      console.log(`stopTask error: `, error);
-    }
-  };
+  const stopTask = React.useCallback(
+    (command: IProjectCommand) => {
+      try {
+        stopJob(command);
+      } catch (error) {
+        console.log(`stopTask error: `, error);
+      }
+    },
+    [stopJob]
+  );
   const [totalRunningTaskCount, setTotalRunningTaskCount] = React.useState<
     number
   >(0);
@@ -196,7 +205,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       }
     };
     reloadProjects();
-  }, [activeProject, config, setActiveProject]);
+  }, [activeProject, config, setActiveProject, isMounted]);
 
   const deleteTask = React.useCallback(
     (projectId, taskId) => {
@@ -252,7 +261,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       renameProjectFn();
     },
-    [projects, config]
+    [projects, config, isMounted]
   );
 
   const reorderTasks = React.useCallback(
@@ -362,14 +371,14 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     });
   };
 
-  const stopAllRunningTasks = () => {
+  const stopAllRunningTasks = React.useCallback(() => {
     const commandsInProject = activeProject.commands;
     commandsInProject.forEach(command => {
       if (isTaskRunning(command._id)) {
         stopTask(command);
       }
     });
-  };
+  }, [activeProject, stopTask, isTaskRunning]);
 
   /* eslint-disable */
   React.useEffect(() => {
