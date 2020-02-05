@@ -146,7 +146,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           }
         }
       })();
-    }, [activeProject]);
+    }, [activeProject, isMounted, config]);
 
     useEffect(() => {
       updateGitBranch();
@@ -160,7 +160,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           clearInterval(checkBranchTimerRef.current);
         }
       };
-    }, [activeProject]);
+    }, [activeProject, updateGitBranch]);
 
     return (
       <React.Fragment>

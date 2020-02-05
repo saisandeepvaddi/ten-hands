@@ -6,7 +6,9 @@ import * as serviceWorker from "./serviceWorker";
 
 if (process.env.NODE_ENV === "development") {
   const whyDidYouRender = require("@welldone-software/why-did-you-render");
-  whyDidYouRender(React);
+  whyDidYouRender(React, {
+    include: [/^CommandOutputXterm/]
+  });
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));

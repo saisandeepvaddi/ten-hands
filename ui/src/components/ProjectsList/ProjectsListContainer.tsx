@@ -9,7 +9,6 @@ import {
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
 import { useConfig } from "../shared/stores/ConfigStore";
-import { useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
@@ -24,6 +23,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     projectsRunningTaskCount
   } = useProjects();
   /* tslint:disable-next-line */
+  /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>([]);
   const [
