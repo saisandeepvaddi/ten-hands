@@ -135,8 +135,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
           {command.name}
           <span
             style={{
-              marginLeft: "auto",
-              marginRight: "10%"
+              marginLeft: "auto"
             }}
             className="task-action-button-container"
             /*eslint-disable*/
