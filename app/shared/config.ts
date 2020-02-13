@@ -18,7 +18,8 @@ const defaultConfig: IConfig = {
   enableTerminalTheme: true,
   globalHotKey: "CommandOrControl+Alt+T",
   showAppRunningTrayNotification: true,
-  showStatusBar: true
+  showStatusBar: true,
+  taskViewStyle: "tabs"
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -48,6 +49,13 @@ const getValidConfig = (config: IConfig): IConfig => {
 
   if (typeof config.showStatusBar !== "boolean") {
     _config.showStatusBar = defaultConfig.showStatusBar;
+  }
+
+  if (
+    typeof config.taskViewStyle !== "string" ||
+    ["tabs", "rows"].indexOf(config.taskViewStyle) === -1
+  ) {
+    _config.taskViewStyle = defaultConfig.taskViewStyle;
   }
 
   return _config;

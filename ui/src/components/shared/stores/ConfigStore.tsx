@@ -33,7 +33,8 @@ function ConfigProvider(props: IConfigProviderProps) {
         const browserOnlyConfig: IConfig = {
           port,
           enableTerminalTheme: Boolean(getItem("enableTerminalTheme")) || true,
-          showStatusBar: Boolean(getItem("showStatusBar")) || true
+          showStatusBar: Boolean(getItem("showStatusBar")) || true,
+          taskViewStyle: (getItem("taskViewStyle") as TaskViewStyle) || "tabs"
         };
         return browserOnlyConfig;
       }

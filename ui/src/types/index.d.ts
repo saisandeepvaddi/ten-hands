@@ -1,9 +1,12 @@
 /// <reference types="react-scripts" />
 
+type TaskViewStyle = "tabs" | "rows";
+
 interface IConfig {
   port: string | number;
   enableTerminalTheme: boolean;
   showStatusBar: boolean;
+  taskViewStyle: TaskViewStyle;
 }
 
 interface IMyTheme {
