@@ -6,9 +6,6 @@ import {
   FormGroup,
   Icon,
   InputGroup,
-  Menu,
-  MenuDivider,
-  MenuItem,
   Navbar,
   Popover,
   Tooltip
@@ -24,6 +21,7 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
+import ProjectMenu from "./ProjectMenu";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -240,36 +238,13 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                 minimal={true}
                 data-testid="project-settings-button"
               />
-              <Menu key="menu">
-                <MenuDivider title="Edit" />
-                <MenuItem
-                  data-testid="rename-project-menu-item"
-                  icon="edit"
-                  text="Rename Project"
-                  onClick={() => setRenameProjectModalOpen(true)}
-                />
-                <MenuDivider title="Layout" />
-                <MenuItem
-                  data-testid="change-tasks-order-menu-item"
-                  icon="sort"
-                  text="Change Tasks Order"
-                  onClick={() => setCommandsOrderModalOpen(true)}
-                />
-                <MenuDivider title="Danger" />
-                <MenuItem
-                  data-testid="delete-project-menu-item"
-                  icon="trash"
-                  text="Delete Project"
-                  intent="danger"
-                  onClick={() => setDeleteAlertOpen(true)}
-                  title={
-                    projectsRunningTaskCount[activeProject._id!] > 0
-                      ? "Cannot delete project while tasks are running."
-                      : undefined
-                  }
-                  disabled={projectsRunningTaskCount[activeProject._id!] > 0}
-                />
-              </Menu>
+              <ProjectMenu
+                setRenameProjectModalOpen={setRenameProjectModalOpen}
+                setCommandsOrderModalOpen={setCommandsOrderModalOpen}
+                setDeleteAlertOpen={setDeleteAlertOpen}
+                activeProject={activeProject}
+                projectsRunningTaskCount={projectsRunningTaskCount}
+              />
             </Popover>
           </Navbar.Group>
         </Navbar>
