@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab } from "@blueprintjs/core";
+import { Tabs, Tab, Card, Elevation } from "@blueprintjs/core";
 import Command from "../Command/Command";
 
 interface ICommandsTabViewProps {
@@ -26,6 +26,7 @@ const CommandsTabView: React.FC<ICommandsTabViewProps> = ({
           id="TabsExample"
           onChange={handleTabChange}
           selectedTabId={selectedTaskId}
+          renderActiveTabPanelOnly
         >
           {commands.map((command, index) => {
             return (
@@ -34,11 +35,18 @@ const CommandsTabView: React.FC<ICommandsTabViewProps> = ({
                 id={command._id}
                 title={command.name}
                 panel={
-                  <Command
-                    index={index}
-                    projectPath={activeProject.path}
-                    command={command}
-                  />
+                  <Card
+                    id={`task-card-${command._id}`}
+                    key={command._id}
+                    elevation={Elevation.ONE}
+                    style={{ padding: 15 }}
+                  >
+                    <Command
+                      index={index}
+                      projectPath={activeProject.path}
+                      command={command}
+                    />
+                  </Card>
                 }
               ></Tab>
             );
