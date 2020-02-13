@@ -22,6 +22,7 @@ import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
 import ProjectMenu from "./ProjectMenu";
+import ProjectRenameDialog from "./ProjectRenameDialog";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -275,47 +276,17 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           isDrawerOpen={isDrawerOpen}
           setDrawerOpen={setDrawerOpen}
         />
-        <Dialog
-          title={`Rename project: ${activeProject.name}`}
-          icon="edit"
-          className={theme}
-          isOpen={renameProjectModalOpen}
-          onClose={handleRenameProjectModalClose}
-          style={{ paddingBottom: 0 }}
-        >
-          <form
-            onSubmit={updateProjectName}
-            style={{ padding: "10px 20px" }}
-            data-testid="rename-project-form"
-          >
-            <FormGroup
-              labelFor="updated-project-name"
-              intent={projectNameError ? "danger" : "none"}
-              helperText={projectNameError ? projectNameError : ""}
-            >
-              <InputGroup
-                autoFocus={true}
-                type="text"
-                required={true}
-                data-testid="updated-project-name"
-                onChange={e => setUpdatedProjectName(e.target.value)}
-                value={updatedProjectName}
-              />
-            </FormGroup>
-            <div className="d-flex justify-center align-center">
-              <FormGroup>
-                <Button
-                  data-testid="rename-project-button"
-                  intent="primary"
-                  text="Update"
-                  type="submit"
-                  loading={isRenaming}
-                  large={true}
-                />
-              </FormGroup>
-            </div>
-          </form>
-        </Dialog>
+        <ProjectRenameDialog
+          activeProject={activeProject}
+          theme={theme}
+          renameProjectModalOpen={renameProjectModalOpen}
+          handleRenameProjectModalClose={handleRenameProjectModalClose}
+          updateProjectName={updateProjectName}
+          projectNameError={projectNameError}
+          setUpdatedProjectName={setUpdatedProjectName}
+          updatedProjectName={updatedProjectName}
+          isRenaming={isRenaming}
+        />
       </React.Fragment>
     );
   }
