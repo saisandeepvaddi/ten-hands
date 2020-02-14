@@ -43,6 +43,10 @@ body {
 }
 
 /* Styles for React-Split-Pane resizer */
+.split-pane > .Pane {
+  overflow: auto;
+}
+
 .Resizer {
   background: #000;
   opacity: 0.2;
