@@ -6,6 +6,10 @@ import { getItem, setItem } from "../../../utils/storage";
 interface IConfigContextValue {
   config: IConfig;
   setConfig: (config: IConfig) => void;
+  changeConfigOption: <K extends keyof IConfig, V extends IConfig[K]>(
+    key: K,
+    value: V
+  ) => void;
 }
 
 interface IConfigProviderProps {
@@ -60,9 +64,21 @@ function ConfigProvider(props: IConfigProviderProps) {
     };
   }, []);
 
+  const changeConfigOption = React.useCallback(
+    <K extends keyof IConfig, V extends IConfig[K]>(key: K, value: V) => {
+      const newConfig = {
+        ...config,
+        [key]: value
+      };
+      setConfig(newConfig);
+      //TODO: save new config
+    },
+    [config, setConfig]
+  );
+
   const value = React.useMemo(() => {
-    return { config, setConfig };
-  }, [config, setConfig]);
+    return { config, setConfig, changeConfigOption };
+  }, [config, setConfig, changeConfigOption]);
 
   return <ConfigContext.Provider value={value} {...props} />;
 }
@@ -73,12 +89,7 @@ function useConfig() {
     throw new Error("useConfig must be used within a ConfigProvider");
   }
 
-  const { config, setConfig } = context;
-
-  return {
-    config,
-    setConfig
-  };
+  return context;
 }
 
 export { ConfigProvider, useConfig };

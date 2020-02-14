@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { useProjects } from "../shared/stores/ProjectStore";
-import { Classes } from "@blueprintjs/core";
+import { Classes, Button } from "@blueprintjs/core";
+import { useConfig } from "../shared/stores/ConfigStore";
 
 const Container = styled.div`
   height: 20px;
@@ -24,15 +25,34 @@ const Statusbar = () => {
     activeProject,
     projectsRunningTaskCount
   } = useProjects();
+
+  const { changeConfigOption, config } = useConfig();
+  const changeTerminalView = () => {
+    if (config.taskViewStyle === "rows") {
+      changeConfigOption("taskViewStyle", "tabs");
+    } else {
+      changeConfigOption("taskViewStyle", "rows");
+    }
+  };
+
   const activeProjectRunningTaskCount =
     projectsRunningTaskCount[activeProject._id!];
+
   return (
     <React.Fragment>
       <Container theme={theme}>
-        <div className="total-stats">
+        <div className="left">
           Total running tasks: {totalRunningTaskCount}
+          <Button
+            small
+            minimal
+            onClick={() => changeTerminalView()}
+            style={{ fontSize: "1em", marginLeft: 10 }}
+          >
+            Switch Terminal View
+          </Button>
         </div>
-        <div className="active-project-stats">
+        <div className="right">
           Tasks running in this project: {activeProjectRunningTaskCount ?? 0}
         </div>
       </Container>
