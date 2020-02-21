@@ -6,7 +6,6 @@ import { Classes, Button } from "@blueprintjs/core";
 import { useConfig } from "../shared/stores/ConfigStore";
 
 const Container = styled.div`
-  height: 20px;
   background: ${props =>
     props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   z-index: 9999;
@@ -18,7 +17,11 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Statusbar = () => {
+interface IStatusbarProps {
+  height: number;
+}
+
+const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
   const { theme } = useTheme();
   const {
     totalRunningTaskCount,
@@ -40,7 +43,7 @@ const Statusbar = () => {
 
   return (
     <React.Fragment>
-      <Container theme={theme}>
+      <Container theme={theme} style={{ height: height + "px" ?? "20px" }}>
         <div className="left">
           Total running tasks: {totalRunningTaskCount}
           <Button
