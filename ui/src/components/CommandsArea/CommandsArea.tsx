@@ -3,6 +3,9 @@ import React from "react";
 import styled from "styled-components";
 import Command from "../Command/Command";
 import { useTheme } from "../shared/stores/ThemeStore";
+import CommandsRowView from "./CommandsRowView";
+import { useConfig } from "../shared/stores/ConfigStore";
+import CommandsTabView from "./CommandsTabView";
 
 interface ICommandsAreaProps {
   activeProject: IProject;
@@ -27,6 +30,7 @@ const EmptyContainer = styled(Container)`
 const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
   ({ activeProject }) => {
     const commands: IProjectCommand[] = activeProject.commands;
+    const { config } = useConfig();
     const { theme } = useTheme();
 
     if (commands.length === 0) {
@@ -42,23 +46,13 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
     }
     return (
       <Container>
-        {commands.map((command, index) => {
-          return (
-            // Use id for card to use to scroll when clicked on task in sidebar
-            <Card
-              id={`task-card-${command._id}`}
-              key={command._id}
-              elevation={Elevation.ONE}
-              style={{ margin: 20, padding: 15 }}
-            >
-              <Command
-                index={index}
-                projectPath={activeProject.path}
-                command={command}
-              />
-            </Card>
-          );
-        })}
+        <CommandsRowView commands={commands} activeProject={activeProject} />
+        {/* Later release */}
+        {/* {config.taskViewStyle === "rows" ? (
+          <CommandsRowView commands={commands} activeProject={activeProject} />
+        ) : (
+          <CommandsTabView commands={commands} activeProject={activeProject} />
+        )} */}
       </Container>
     );
   }

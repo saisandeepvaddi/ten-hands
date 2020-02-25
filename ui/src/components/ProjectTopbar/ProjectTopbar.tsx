@@ -6,9 +6,6 @@ import {
   FormGroup,
   Icon,
   InputGroup,
-  Menu,
-  MenuDivider,
-  MenuItem,
   Navbar,
   Popover,
   Tooltip
@@ -24,6 +21,8 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
+import ProjectMenu from "./ProjectMenu";
+import ProjectRenameDialog from "./ProjectRenameDialog";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -240,36 +239,13 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                 minimal={true}
                 data-testid="project-settings-button"
               />
-              <Menu key="menu">
-                <MenuDivider title="Edit" />
-                <MenuItem
-                  data-testid="rename-project-menu-item"
-                  icon="edit"
-                  text="Rename Project"
-                  onClick={() => setRenameProjectModalOpen(true)}
-                />
-                <MenuDivider title="Layout" />
-                <MenuItem
-                  data-testid="change-tasks-order-menu-item"
-                  icon="sort"
-                  text="Change Tasks Order"
-                  onClick={() => setCommandsOrderModalOpen(true)}
-                />
-                <MenuDivider title="Danger" />
-                <MenuItem
-                  data-testid="delete-project-menu-item"
-                  icon="trash"
-                  text="Delete Project"
-                  intent="danger"
-                  onClick={() => setDeleteAlertOpen(true)}
-                  title={
-                    projectsRunningTaskCount[activeProject._id!] > 0
-                      ? "Cannot delete project while tasks are running."
-                      : undefined
-                  }
-                  disabled={projectsRunningTaskCount[activeProject._id!] > 0}
-                />
-              </Menu>
+              <ProjectMenu
+                setRenameProjectModalOpen={setRenameProjectModalOpen}
+                setCommandsOrderModalOpen={setCommandsOrderModalOpen}
+                setDeleteAlertOpen={setDeleteAlertOpen}
+                activeProject={activeProject}
+                projectsRunningTaskCount={projectsRunningTaskCount}
+              />
             </Popover>
           </Navbar.Group>
         </Navbar>
@@ -300,47 +276,17 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           isDrawerOpen={isDrawerOpen}
           setDrawerOpen={setDrawerOpen}
         />
-        <Dialog
-          title={`Rename project: ${activeProject.name}`}
-          icon="edit"
-          className={theme}
-          isOpen={renameProjectModalOpen}
-          onClose={handleRenameProjectModalClose}
-          style={{ paddingBottom: 0 }}
-        >
-          <form
-            onSubmit={updateProjectName}
-            style={{ padding: "10px 20px" }}
-            data-testid="rename-project-form"
-          >
-            <FormGroup
-              labelFor="updated-project-name"
-              intent={projectNameError ? "danger" : "none"}
-              helperText={projectNameError ? projectNameError : ""}
-            >
-              <InputGroup
-                autoFocus={true}
-                type="text"
-                required={true}
-                data-testid="updated-project-name"
-                onChange={e => setUpdatedProjectName(e.target.value)}
-                value={updatedProjectName}
-              />
-            </FormGroup>
-            <div className="d-flex justify-center align-center">
-              <FormGroup>
-                <Button
-                  data-testid="rename-project-button"
-                  intent="primary"
-                  text="Update"
-                  type="submit"
-                  loading={isRenaming}
-                  large={true}
-                />
-              </FormGroup>
-            </div>
-          </form>
-        </Dialog>
+        <ProjectRenameDialog
+          activeProject={activeProject}
+          theme={theme}
+          renameProjectModalOpen={renameProjectModalOpen}
+          handleRenameProjectModalClose={handleRenameProjectModalClose}
+          updateProjectName={updateProjectName}
+          projectNameError={projectNameError}
+          setUpdatedProjectName={setUpdatedProjectName}
+          updatedProjectName={updatedProjectName}
+          isRenaming={isRenaming}
+        />
       </React.Fragment>
     );
   }

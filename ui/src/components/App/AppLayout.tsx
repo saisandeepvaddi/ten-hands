@@ -17,7 +17,7 @@ const AppLayout = React.memo(() => {
   const { config } = useConfig();
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
-  const statusbarHeight = config.showStatusBar ? "20px" : "0px";
+  const statusbarHeight = config.showStatusBar ? 30 : 0;
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -53,14 +53,14 @@ const AppLayout = React.memo(() => {
             defaultSize={350}
             maxSize={500}
             style={{
-              maxHeight: `calc(100% - ${statusbarHeight})`,
+              maxHeight: `calc(100% - ${statusbarHeight}px)`,
               position: "relative"
             }}
           >
             <Sidebar />
             <Main />
           </SplitPane>
-          {config.showStatusBar ? <Statusbar /> : null}
+          {config.showStatusBar ? <Statusbar height={statusbarHeight} /> : null}
         </div>
       </div>
     </React.Fragment>
