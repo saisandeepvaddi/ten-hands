@@ -46,11 +46,13 @@ const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
     }
     return (
       <Container>
-        {config.taskViewStyle === "rows" ? (
+        <CommandsRowView commands={commands} activeProject={activeProject} />
+        {/* Later release */}
+        {/* {config.taskViewStyle === "rows" ? (
           <CommandsRowView commands={commands} activeProject={activeProject} />
         ) : (
           <CommandsTabView commands={commands} activeProject={activeProject} />
-        )}
+        )} */}
       </Container>
     );
   }
