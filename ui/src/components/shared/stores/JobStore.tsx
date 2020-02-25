@@ -108,9 +108,12 @@ function JobsProvider(props: IJobsProviderProps) {
   const [state, dispatch] = React.useReducer(jobsReducer, initialState);
   const [runningTasks, setRunningTasks] = React.useState<any>({});
 
-  const isTaskRunning = (taskId: string) => {
-    return runningTasks[taskId] === true;
-  };
+  const isTaskRunning = React.useCallback(
+    (taskId: string) => {
+      return runningTasks[taskId] === true;
+    },
+    [runningTasks]
+  );
 
   React.useEffect(() => {
     const keys = Object.keys(state);
@@ -129,7 +132,7 @@ function JobsProvider(props: IJobsProviderProps) {
     if (isMounted()) {
       setRunningTasks(newTaskStatus);
     }
-  }, [state]);
+  }, [state, isMounted]);
 
   React.useEffect(() => {
     const restoreData = async () => {

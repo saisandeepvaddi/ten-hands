@@ -135,10 +135,10 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
           {command.name}
           <span
             style={{
-              marginLeft: "auto",
-              marginRight: "10%"
+              marginLeft: "auto"
             }}
             className="task-action-button-container"
+            /*eslint-disable*/
           >
             {isTaskRunning(command._id) ? (
               // Using anchor tag instead of Button to avoid blueprintjs warning about nested buttons
@@ -155,6 +155,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
                 title="Start task"
                 onClick={startTask}
               />
+              /*eslint-enable*/
             )}
           </span>
         </TaskContainer>

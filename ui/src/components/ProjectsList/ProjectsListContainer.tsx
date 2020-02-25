@@ -9,10 +9,10 @@ import {
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
 import { useConfig } from "../shared/stores/ConfigStore";
-import { useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
+import { Button, Icon } from "@blueprintjs/core";
 
 interface IProjectsListContainerProps {}
 
@@ -23,7 +23,12 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     activeProject,
     projectsRunningTaskCount
   } = useProjects();
+
+  const [projectTaskListOpenMap, setProjectTaskListOpenMap] = React.useState<{
+    [K: string]: boolean;
+  }>({});
   /* tslint:disable-next-line */
+  /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>([]);
   const [
@@ -33,13 +38,37 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   const { config } = useConfig();
 
+  const expandOrCollapseAllProjects = React.useCallback(
+    (collapse: boolean = false) => {
+      let projectTaskListOpenMap = {};
+      tempProjects.map(project => {
+        projectTaskListOpenMap[project._id!] = !collapse;
+      });
+
+      setProjectTaskListOpenMap(projectTaskListOpenMap);
+    },
+    [tempProjects]
+  );
+
   React.useEffect(() => {
     if (!tempProjects) {
       return;
     }
 
     setProjects(tempProjects);
-  }, [tempProjects]);
+
+    expandOrCollapseAllProjects(false);
+  }, [tempProjects, expandOrCollapseAllProjects]);
+
+  const updateProjectTaskListOpen = React.useCallback(
+    (projectId, shouldOpen) => {
+      setProjectTaskListOpenMap({
+        ...projectTaskListOpenMap,
+        [projectId]: shouldOpen
+      });
+    },
+    [projectTaskListOpenMap]
+  );
 
   const changeActiveProject = React.useCallback(
     (projectId, index: number) => {
@@ -146,6 +175,15 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   return (
     <React.Fragment>
+      <div className="d-flex justify-end">
+        <Button
+          onClick={() => expandOrCollapseAllProjects(false)}
+          icon={<Icon icon="collapse-all" iconSize={10} />}
+          minimal
+          small
+          title={"Collapse all projects"}
+        />
+      </div>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId={"project-list-droppable"}>
           {(droppableProvided: DroppableProvided) => (
@@ -174,6 +212,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                         projectRunningTaskCount={
                           projectsRunningTaskCount[project._id!]
                         }
+                        projectTaskListOpenMap={projectTaskListOpenMap}
+                        updateProjectTaskListOpen={updateProjectTaskListOpen}
                       />
                     )}
                   </Draggable>

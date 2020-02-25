@@ -4,4 +4,6 @@ interface IConfig {
   globalHotKey?: string;
   showAppRunningTrayNotification?: boolean;
   showStatusBar?: boolean;
+
+  taskViewStyle?: "tabs" | "rows";
 }

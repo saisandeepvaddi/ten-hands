@@ -31,7 +31,7 @@ function ThemeProvider(props: IThemeProviderProps) {
     if (isMounted()) {
       setItem("theme", theme);
     }
-  }, [theme]);
+  }, [theme, isMounted]);
 
   return <ThemeContext.Provider value={value} {...props} />;
 }
