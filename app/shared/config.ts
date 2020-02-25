@@ -18,8 +18,8 @@ const defaultConfig: IConfig = {
   enableTerminalTheme: true,
   globalHotKey: "CommandOrControl+Alt+T",
   showAppRunningTrayNotification: true,
-  showStatusBar: true,
-  taskViewStyle: "tabs"
+  showStatusBar: false,
+  taskViewStyle: "rows"
 };
 
 /* If user accidentally updates config file with invalid values, send default */

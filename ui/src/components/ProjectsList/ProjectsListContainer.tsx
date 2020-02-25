@@ -12,7 +12,7 @@ import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 
 interface IProjectsListContainerProps {}
 
@@ -177,9 +177,10 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     <React.Fragment>
       <div className="d-flex justify-end">
         <Button
-          icon="collapse-all"
           onClick={() => expandOrCollapseAllProjects(false)}
+          icon={<Icon icon="collapse-all" iconSize={10} />}
           minimal
+          small
           title={"Collapse all projects"}
         />
       </div>

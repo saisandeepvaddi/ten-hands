@@ -29,14 +29,14 @@ const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
     projectsRunningTaskCount
   } = useProjects();
 
-  const { changeConfigOption, config } = useConfig();
-  const changeTerminalView = () => {
-    if (config.taskViewStyle === "rows") {
-      changeConfigOption("taskViewStyle", "tabs");
-    } else {
-      changeConfigOption("taskViewStyle", "rows");
-    }
-  };
+  // const { changeConfigOption, config } = useConfig();
+  // const changeTerminalView = () => {
+  //   if (config.taskViewStyle === "rows") {
+  //     changeConfigOption("taskViewStyle", "tabs");
+  //   } else {
+  //     changeConfigOption("taskViewStyle", "rows");
+  //   }
+  // };
 
   const activeProjectRunningTaskCount =
     projectsRunningTaskCount[activeProject._id!];
@@ -46,14 +46,15 @@ const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
       <Container theme={theme} style={{ height: height + "px" ?? "20px" }}>
         <div className="left">
           Total running tasks: {totalRunningTaskCount}
-          <Button
+          {/* For future release where you can swith terminals view from list to tabs. */}
+          {/* <Button
             small
             minimal
             onClick={() => changeTerminalView()}
             style={{ fontSize: "1em", marginLeft: 10 }}
           >
             Switch Terminal View
-          </Button>
+          </Button> */}
         </div>
         <div className="right">
           Tasks running in this project: {activeProjectRunningTaskCount ?? 0}
