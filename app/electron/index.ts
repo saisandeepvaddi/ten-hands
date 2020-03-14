@@ -19,6 +19,7 @@ import {
   unregisterGlobalShortcuts
 } from "./global-hot-keys";
 import { hideWindowToTray } from "./utils";
+import registerIPC from "./ipc";
 
 const isWindows = process.platform === "win32";
 export let mainWindow: BrowserWindow | null;
@@ -107,9 +108,7 @@ async function startApplication() {
       }
     });
 
-    ipcMain.on(`get-config`, e => {
-      e.returnValue = getConfig();
-    });
+    registerIPC();
 
     app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
