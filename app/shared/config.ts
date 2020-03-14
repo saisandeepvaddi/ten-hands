@@ -18,7 +18,7 @@ const defaultConfig: IConfig = {
   enableTerminalTheme: true,
   globalHotKey: "CommandOrControl+Alt+T",
   showAppRunningTrayNotification: true,
-  showStatusBar: false,
+  showStatusBar: true,
   taskViewStyle: "rows"
 };
 
