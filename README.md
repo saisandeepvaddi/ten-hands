@@ -93,7 +93,7 @@ You have to restart the app when you change configuration.
 
 7. App installation says Ten Hands is from Unknown Publisher(Windows) or unidentified developer(macOS). Is it safe to install?
 
-> Of course, every single line of code is open source for you to verify. I just couldn't buy expensive code signing certificates. Google how to install app from unidentified developer for steps to allow app in macOS.
+> Of course, every single line of code is open source for you to verify. I just couldn't buy expensive code signing certificates. Google "how to install app from unidentified developer" for steps to allow app in macOS.
 
 # Contributions
 
