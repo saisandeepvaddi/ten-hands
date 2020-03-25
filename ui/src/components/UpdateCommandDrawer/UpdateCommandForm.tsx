@@ -7,26 +7,29 @@ import { isValidPath } from "../../utils/node";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 
-const initialCommand: IProjectCommand = {
-  _id: "",
-  name: "",
-  execDir: "",
-  cmd: ""
-};
-
 const Container = styled.div`
   height: 100%;
   overflow: auto;
 `;
 
-interface INewProjectFormProps {
+interface IUpdateCommandFormProps {
   setDrawerOpen: (isOpen: boolean) => any;
+  command: IProjectCommand;
 }
 
-const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
-  ({ setDrawerOpen }) => {
-    const { activeProject, addTask } = useProjects();
+const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
+  ({ setDrawerOpen, command }) => {
+    const { activeProject, updateTask } = useProjects();
     const { config } = useConfig();
+
+    const initialCommand: IProjectCommand = {
+      _id: "",
+      name: "",
+      execDir: "",
+      cmd: "",
+      ...command
+    };
+    console.log("initialCommand:", initialCommand);
 
     const [errors, setErrors] = useState<any>({
       path: ""
@@ -56,11 +59,12 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
 
     const handleSubmit = async (values, actions): Promise<any> => {
       try {
-        const newCommand: IProjectCommand = {
-          ...values,
-          _id: uuidv4()
+        const updatedCommand: IProjectCommand = {
+          ...command,
+          ...values
         };
-        const pathError = await validateCommandPath(newCommand.execDir);
+        console.log("updatedCommand:", updatedCommand);
+        const pathError = await validateCommandPath(updatedCommand.execDir);
         if (pathError) {
           actions.setSubmitting(false);
           setErrors({
@@ -69,7 +73,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
           return;
         }
         actions.setSubmitting(true);
-        await addTask(activeProject._id!, newCommand);
+        await updateTask(activeProject._id!, command._id, updatedCommand);
         actions.setSubmitting(false);
         setDrawerOpen(false);
       } catch (error) {
@@ -160,4 +164,4 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
   }
 );
 
-export default NewProjectForm;
+export default UpdateCommandForm;
