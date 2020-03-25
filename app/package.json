@@ -31,16 +31,47 @@
     "appId": "com.saisandeepvaddi.tenhands",
     "productName": "Ten Hands",
     "copyright": "Copyright © 2019 Sai Sandeep Vaddi",
-    "mac": {
-      "category": "public.app-category.utilities"
-    },
     "files": [
       "build/**/*",
       "package.json"
     ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
     "linux": {
       "target": [
-        "deb"
+        {
+          "target": "deb",
+          "arch": [
+            "ia32",
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "ia32",
+            "x64"
+          ]
+        }
       ],
       "category": "Utility"
     }
