@@ -6,7 +6,8 @@ import {
   renameProjectInDb,
   reorderTasksInDb,
   saveProjectInDb,
-  saveTaskInDb
+  saveTaskInDb,
+  updateTaskInDb
 } from "../API";
 import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
@@ -23,6 +24,7 @@ interface IProjectContextValue {
   setProjects: any;
   updateProjects: () => void;
   addTask: (projectId: string, task: IProjectCommand) => any;
+  updateTask: (projectId: string, taskId: string, task: IProjectCommand) => any;
   deleteTask: (projectId: string, taskId: string) => any;
   addProject: (data: any) => any;
   deleteProject: (projectId: string) => any;
@@ -318,6 +320,48 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     [projects, config]
   );
 
+  const updateTask = React.useCallback(
+    (projectId: string, taskId: string, task) => {
+      const updateTaskFn = async (projectId, taskId, task) => {
+        try {
+          await updateTaskInDb(config, projectId, taskId, task);
+          const currentProjectIndex = projects.findIndex(
+            x => x._id === projectId
+          );
+          const projectWithThisTask = projects[currentProjectIndex];
+          if (projectWithThisTask) {
+            const taskIndex = projectWithThisTask.commands.findIndex(
+              task => task._id === taskId
+            );
+
+            if (taskIndex < 0) {
+              return;
+            }
+
+            const updatedTasks = [...projectWithThisTask.commands];
+
+            updatedTasks.splice(taskIndex, 1, task);
+
+            const updatedProject: IProject = {
+              ...projectWithThisTask,
+              commands: updatedTasks
+            };
+
+            const _projects = [...projects];
+            _projects.splice(currentProjectIndex, 1, updatedProject);
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+          }
+        } catch (error) {
+          console.log("error:", error);
+        }
+      };
+
+      updateTaskFn(projectId, taskId, task);
+    },
+    [projects, config]
+  );
+
   /* eslint-disable react-hooks/exhaustive-deps */
   const addProject = React.useCallback(
     (projectData: any) => {
@@ -398,6 +442,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       updateProjects,
       loadingProjects,
       addTask,
+      updateTask,
       deleteTask,
       addProject,
       deleteProject,
@@ -416,6 +461,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     updateProjects,
     loadingProjects,
     addTask,
+    updateTask,
     deleteTask,
     addProject,
     deleteProject,

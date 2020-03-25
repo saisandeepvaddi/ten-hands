@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 import {
   addCommand,
+  updateCommand,
   removeCommand,
   reorderCommands
 } from "../controllers/commands";
@@ -27,6 +28,8 @@ router.post("/reorder", reorderCommands);
 router.post("/", addCommand);
 
 router.delete("/:commandId", removeCommand);
+
+router.put("/:commandId", updateCommand);
 
 /*
 Self Note: Use this to do REST Testing in REST Client extension in VSCode

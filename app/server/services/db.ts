@@ -244,6 +244,32 @@ class Database {
   }
 
   /**
+   * Update an existing command
+   *
+   * @param {string} projectId Existing project id
+   * @param {string} commandId Existing task id
+   * @param {IProjectCommand} command Updated Task
+   * @returns {IProject} Updated project
+   * @memberof Database
+   */
+  public updateCommandInProject(
+    projectId: string,
+    commandId: string,
+    command: IProjectCommand
+  ): IProject {
+    const { _id, ...otherCommandProps } = command;
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .get("commands")
+      .find({ _id: commandId })
+      .assign({ ...otherCommandProps })
+      .write();
+    const project = this.getProject(projectId);
+    return project;
+  }
+
+  /**
    * Removes a task from project.
    *
    * @param {string} projectId Project Id
