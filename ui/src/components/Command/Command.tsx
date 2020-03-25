@@ -6,6 +6,7 @@ import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
+import UpdateCommandDrawer from "../UpdateCommandDrawer";
 
 const Container = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ const Command: React.FC<ICommandProps> = React.memo(
   ({ command, projectPath, index }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+    const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
@@ -130,6 +132,12 @@ const Command: React.FC<ICommandProps> = React.memo(
             </span>
             <CommandOutputButtonsContainer>
               <Button
+                onClick={() => setDrawerOpen(true)}
+                icon="edit"
+                minimal={true}
+                title="Edit Task"
+              />
+              <Button
                 onClick={() => clearJobOutput(room)}
                 icon="eraser"
                 minimal={true}
@@ -159,6 +167,11 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandOutputXterm index={index} room={room} />
           </Collapse>
         </Container>
+        <UpdateCommandDrawer
+          isDrawerOpen={isDrawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          command={command}
+        />
       </React.Fragment>
     );
   }

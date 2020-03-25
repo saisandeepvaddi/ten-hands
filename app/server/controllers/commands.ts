@@ -25,6 +25,30 @@ export function addCommand(req: Request, res: Response) {
 }
 
 /**
+ * Controller to update task to project
+ *
+ * @export
+ * @param {Request} req
+ * @param {string} req.params.projectId Project Id
+ * @param {string} req.params.commandId Command/Task Id
+ * @param {IProjectCommand} req.body.command Task Details
+ * @param {Response} res
+ * @returns
+ */
+export function updateCommand(req: Request, res: Response) {
+  try {
+    const { projectId, commandId } = req.params;
+    const command = req.body;
+
+    const project = db.updateCommandInProject(projectId, commandId, command);
+    return res.status(200).send(project);
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(400).send({ error: error.message });
+  }
+}
+
+/**
  * Controller to remove a task from project
  *
  * @export
