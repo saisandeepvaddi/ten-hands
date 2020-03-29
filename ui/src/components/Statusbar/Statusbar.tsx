@@ -55,7 +55,7 @@ const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
       if (isRunningInElectron()) {
         const { ipcRenderer } = require("electron");
         const update = ipcRenderer.sendSync("get-updates");
-        console.log("update:", update);
+        // console.log("update:", update);
         if (update && !update.prerelease) {
           setIsUpdateAvailable(true);
         } else {
