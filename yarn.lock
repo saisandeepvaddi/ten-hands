@@ -5714,6 +5714,11 @@ css-declaration-sorter@^4.0.1:
     postcss "^7.0.1"
     timsort "^0.3.0"
 
+css-element-queries@^1.2.1:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/css-element-queries/-/css-element-queries-1.2.3.tgz#e14940b1fcd4bf0da60ea4145d05742d7172e516"
+  integrity sha512-QK9uovYmKTsV2GXWQiMOByVNrLn2qz6m3P7vWpOR4IdD6I3iXoDw5qtgJEN3Xq7gIbdHVKvzHjdAtcl+4Arc4Q==
+
 css-has-pseudo@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/css-has-pseudo/-/css-has-pseudo-0.10.0.tgz#3c642ab34ca242c59c41a125df9105841f6966ee"
@@ -15185,6 +15190,13 @@ react-side-effect@^1.1.0:
   integrity sha512-v1ht1aHg5k/thv56DRcjw+WtojuuDHFUgGfc+bFHOWsF4ZK6C2V57DO0Or0GPsg6+LSTE0M6Ry/gfzhzSwbc5w==
   dependencies:
     shallowequal "^1.0.1"
+
+react-spaces@^0.1.24:
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/react-spaces/-/react-spaces-0.1.24.tgz#3fe54ab33631dd9d7c98ff9ddcddf436833424ac"
+  integrity sha512-q4YxTQ2RKqNmc6C1Bb5kyGWxfv4xvwRAeqr0BOpePboje+b/EuNPtz9PPWIqi6lFynb5CpuoBcWiP4ocRcIIIw==
+  dependencies:
+    css-element-queries "^1.2.1"
 
 react-split-pane@^0.1.89:
   version "0.1.89"
