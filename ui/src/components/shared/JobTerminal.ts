@@ -55,7 +55,7 @@ class JobTerminal {
   }
 
   public resizeTerminal(width: number) {
-    this.terminal.resize(Math.floor(width / 10), this.options.rows!);
+    this.terminal.resize(Math.floor(width / 10), 20);
   }
 
   public updateOutput(stdout: string) {

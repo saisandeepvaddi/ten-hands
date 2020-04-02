@@ -91,9 +91,9 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     );
 
     return (
-      <>
+      <ResizeSensor onResize={handleResize}>
         <TerminalContainer ref={elRef} />
-      </>
+      </ResizeSensor>
     );
   }
 );
