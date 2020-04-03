@@ -164,7 +164,9 @@ const Command: React.FC<ICommandProps> = React.memo(
             </CommandOutputButtonsContainer>
           </CommandHeader>
           <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-            <CommandOutputXterm index={index} room={room} />
+            <div style={{ width: "100%", height: "100%", padding: 10 }}>
+              <CommandOutputXterm index={index} room={room} />
+            </div>
           </Collapse>
         </Container>
         <UpdateCommandDrawer

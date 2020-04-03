@@ -32,7 +32,7 @@ function ConfigProvider(props: IConfigProviderProps) {
           return serverConfig;
         }
       } else {
-        const port = window.location.port || getItem("port") || 5010;
+        const port = getItem("port") || window.location.port || 5010;
         setItem("port", port);
         const browserOnlyConfig: IConfig = {
           port,
