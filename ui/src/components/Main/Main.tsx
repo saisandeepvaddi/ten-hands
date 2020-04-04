@@ -8,10 +8,12 @@ import { useTheme } from "../shared/stores/ThemeStore";
 
 const Container = styled.div`
   border-top: 1px solid transparent; /* To prevent margin-collapse for first child doesn't happen */
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? Colors.DARK_GRAY1 : Colors.LIGHT_GRAY1};
   height: 100%;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const EmptyContainer = styled(Container)`
@@ -49,7 +51,9 @@ const Main = React.memo(() => {
   }
   return (
     <Container theme={theme} className="main-container">
-      <ProjectTopbar activeProject={activeProject} />
+      <div>
+        <ProjectTopbar activeProject={activeProject} />
+      </div>
       <CommandsArea activeProject={activeProject} />
     </Container>
   );

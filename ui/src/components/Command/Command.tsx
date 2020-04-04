@@ -19,7 +19,6 @@ const CommandTitleActions = styled.div`
   max-width: 100%;
   justify-content: space-between;
   align-items: center;
-
   & > h5 {
     margin: 0 0 4px;
   }
@@ -31,6 +30,7 @@ const CommandTitleActions = styled.div`
 const CommandOutputButtonsContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   width: 15%;
 `;
 
@@ -74,29 +74,29 @@ const Command: React.FC<ICommandProps> = React.memo(
       dispatch({
         room,
         type: ACTION_TYPES.UPDATE_JOB_PROCESS,
-        process: jobProcess
+        process: jobProcess,
       });
     };
 
-    const clearJobOutput = room => {
+    const clearJobOutput = (room) => {
       dispatch({
         type: ACTION_TYPES.CLEAR_OUTPUT,
-        room
+        room,
       });
       terminalManager.clearTerminalInRoom(room);
     };
 
-    const startJob = room => {
+    const startJob = (room) => {
       clearJobOutput(room);
       subscribeToTaskSocket(room, command, projectPath);
     };
 
-    const stopJob = room => {
+    const stopJob = (room) => {
       const process = getJobData(jobState, room).process;
       const { pid } = process;
       unsubscribeFromTaskSocket(room, pid);
       updateJobProcess(room, {
-        pid: -1
+        pid: -1,
       });
     };
 
@@ -127,7 +127,12 @@ const Command: React.FC<ICommandProps> = React.memo(
                 onClick={() => stopJob(room)}
               />
             </CommandTitleActions>
-            <span data-testid="command-cmd" className="truncate">
+            <span
+              data-testid="command-cmd"
+              className="truncate"
+              style={{ maxWidth: "50%" }}
+              title={command.cmd}
+            >
               {command.cmd}
             </span>
             <CommandOutputButtonsContainer>
