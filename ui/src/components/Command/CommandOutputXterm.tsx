@@ -13,9 +13,8 @@ interface ICommandProps {
 }
 
 const TerminalContainer = styled.div`
-  flex: 1;
-  max-width: 100%;
-  padding: 10px;
+  width: 100%;
+  height: 100%;
   white-space: pre-wrap;
 `;
 

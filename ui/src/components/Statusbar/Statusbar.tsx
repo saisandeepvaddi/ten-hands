@@ -19,6 +19,7 @@ const Container = styled.div`
     props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   z-index: 9999;
   width: 100%;
+  height: 100%;
   font-size: 0.75em;
   padding: 0 10px;
   display: flex;
@@ -26,11 +27,9 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-interface IStatusbarProps {
-  height: number;
-}
+interface IStatusbarProps {}
 
-const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
+const Statusbar: React.FC<IStatusbarProps> = () => {
   const { theme } = useTheme();
   const {
     totalRunningTaskCount,
@@ -89,7 +88,7 @@ const Statusbar: React.FC<IStatusbarProps> = ({ height }) => {
 
   return (
     <React.Fragment>
-      <Container theme={theme} style={{ height: height + "px" ?? "20px" }}>
+      <Container theme={theme}>
         <div className="left">
           {isRunningInElectron() && isUpdateAvailable && (
             <Button
