@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import SplitPane from "react-split-pane";
 import { isRunningInElectron } from "../../utils/electron";
 import Main from "../Main/Main";
 import { useSockets } from "../shared/stores/SocketStore";
