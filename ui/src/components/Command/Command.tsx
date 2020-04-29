@@ -43,6 +43,7 @@ const CommandHeader = styled.div`
 interface ICommandProps {
   command: IProjectCommand;
   projectPath: string;
+  projectId: string;
   index: number;
 }
 
@@ -51,7 +52,7 @@ function getJobData(state, room: string) {
 }
 
 const Command: React.FC<ICommandProps> = React.memo(
-  ({ command, projectPath, index }) => {
+  ({ command, projectPath, index, projectId }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
@@ -59,7 +60,7 @@ const Command: React.FC<ICommandProps> = React.memo(
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
-    const { activeProject, deleteTask } = useProjects();
+    const { activeProject, deleteTask, updateTask } = useProjects();
 
     const deleteCommand = async () => {
       try {
@@ -89,6 +90,10 @@ const Command: React.FC<ICommandProps> = React.memo(
     const startJob = (room) => {
       clearJobOutput(room);
       subscribeToTaskSocket(room, command, projectPath);
+      updateTask(projectId, command._id, {
+        ...command,
+        lastExecutedAt: new Date(),
+      });
     };
 
     const stopJob = (room) => {

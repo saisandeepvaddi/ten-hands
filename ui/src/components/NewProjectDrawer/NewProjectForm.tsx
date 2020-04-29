@@ -12,11 +12,12 @@ import NewProjectCommands from "./NewProjectCommands";
 import ProjectFileUpload from "./ProjectFileUpload";
 
 const initialProject: IProject = {
+  _id: "",
   name: "",
   type: "",
   commands: [],
   configFile: "",
-  path: ""
+  path: "",
 };
 
 const Container = styled.div`
@@ -36,10 +37,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
 
     const [errors, setErrors] = useState<any>({
       name: "",
-      path: ""
+      path: "",
     });
 
-    const validateProjectName = value => {
+    const validateProjectName = (value) => {
       let error = "";
       if (!value) {
         error = "Project name cannot be empty";
@@ -52,7 +53,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       return error;
     };
 
-    const validateProjectPath = async value => {
+    const validateProjectPath = async (value) => {
       try {
         let error = "";
         if (!value) {
@@ -79,7 +80,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
           type,
           commands,
           configFile,
-          path
+          path,
         } = parsedProjectData;
         // Manually set each field after parsing the file
         setFieldValue("configFile", configFile);
@@ -106,7 +107,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
             const tenHandsFile: ITenHandsFile = {
               name: fileName,
               path: projectPath,
-              data: fileData
+              data: fileData,
             };
             setConfigFileName(fileName);
             fillFormWithProjectConfig(tenHandsFile, setFieldValue);
@@ -131,7 +132,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         const readerResult = reader.result;
         const tenHandsFile: ITenHandsFile = {
           name,
-          data: readerResult
+          data: readerResult,
         };
 
         fillFormWithProjectConfig(tenHandsFile, setFieldValue);
@@ -154,7 +155,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         actions.setSubmitting(false);
         setErrors({
           name: nameError,
-          path: pathError
+          path: pathError,
         });
         return;
       }
@@ -169,7 +170,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         actions.setSubmitting(false);
         setErrors({
           name: "",
-          path: ""
+          path: "",
         });
       }
     };
@@ -184,7 +185,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
             handleChange,
             values,
             setFieldValue,
-            isSubmitting
+            isSubmitting,
           }) => (
             <form data-testid="new-project-form" onSubmit={handleSubmit}>
               <FormGroup
@@ -202,10 +203,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
                   <FileInput
                     text={configFileName || "Choose file..."}
                     inputProps={{
-                      id: "configFile"
+                      id: "configFile",
                     }}
                     fill={true}
-                    onInputChange={e => onProjectFileChange(e, setFieldValue)}
+                    onInputChange={(e) => onProjectFileChange(e, setFieldValue)}
                   />
                 )}
               </FormGroup>
