@@ -33,7 +33,7 @@ class Database {
     this.db
       .defaults({
         projectsOrder: [],
-        projects: []
+        projects: [],
       })
       .write();
   }
@@ -94,7 +94,7 @@ class Database {
       projectsOrder.length !== projects.length ||
       !areProjectsAndProjectsOrderSame
     ) {
-      const defaultOrder: string[] = projects.map(project => project._id);
+      const defaultOrder: string[] = projects.map((project) => project._id);
 
       // Update projectsOrder array for now while returning in default order
       // Useful to automatically create order when users update to new version of ten-hands
@@ -107,7 +107,7 @@ class Database {
       [id: string]: IProject;
     } = {};
 
-    projects.map(project => {
+    projects.map((project) => {
       projectsMap[project._id] = project;
     });
 
@@ -127,21 +127,21 @@ class Database {
    */
   public addProject(project: IProject): IProject {
     // Create IDs for commands submitted
-    const commands = project.commands.map(command => {
+    const commands = project.commands.map((command) => {
       return {
         _id: uuidv4(),
-        ...command
+        ...command,
       };
     });
 
     const projectWithUpdatedCommands = {
       ...project,
-      commands
+      commands,
     };
 
     const newProject: IProject = {
       _id: uuidv4(),
-      ...projectWithUpdatedCommands
+      ...projectWithUpdatedCommands,
     };
 
     this.db
@@ -167,12 +167,12 @@ class Database {
   public deleteProject(projectId: string): IProject[] {
     const result = this.db
       .get("projects")
-      .remove(project => project._id === projectId)
+      .remove((project) => project._id === projectId)
       .write();
 
     this.db
       .get("projectsOrder")
-      .remove(_id => _id === projectId)
+      .remove((_id) => _id === projectId)
       .write();
 
     return Array.from(result);
@@ -285,7 +285,7 @@ class Database {
       .get("projects")
       .find({ _id: projectId })
       .get("commands")
-      .remove(command => command._id === commandId)
+      .remove((command) => command._id === commandId)
       .write();
     const project = this.getProject(projectId);
     return project;
@@ -322,12 +322,17 @@ class Database {
    */
   public reorderProjectCommands(
     projectId: string,
-    commands: IProjectCommand[]
+    commands: IProjectCommand[],
+    taskSortOrder: TASK_SORT_ORDER
   ): IProject {
+    console.log("taskSortOrder:", taskSortOrder);
     this.db
       .get("projects")
       .find({ _id: projectId })
-      .set("commands", commands)
+      .assign({
+        commands,
+        taskSortOrder,
+      })
       .write();
     const project = this.getProject(projectId);
     return project;

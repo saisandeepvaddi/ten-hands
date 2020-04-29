@@ -16,7 +16,7 @@ const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = Re
       const save = async (commands: IProjectCommand[]) => {
         try {
           console.info("Saving new commands order");
-          reorderTasks(activeProject._id!, commands);
+          reorderTasks(activeProject._id!, commands, "custom");
         } catch (error) {
           console.log("Error Reordering:", error);
         }

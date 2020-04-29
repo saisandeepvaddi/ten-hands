@@ -6,12 +6,14 @@ import { v4 as uuidv4 } from "uuid";
 import { isValidPath } from "../../utils/node";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
+import { getYesterday } from "../../utils/general";
 
 const initialCommand: IProjectCommand = {
   _id: "",
   name: "",
   execDir: "",
-  cmd: ""
+  cmd: "",
+  lastExecutedAt: getYesterday(),
 };
 
 const Container = styled.div`
@@ -29,10 +31,10 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
     const { config } = useConfig();
 
     const [errors, setErrors] = useState<any>({
-      path: ""
+      path: "",
     });
 
-    const validateCommandPath = async value => {
+    const validateCommandPath = async (value) => {
       try {
         let error = "";
 
@@ -58,13 +60,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       try {
         const newCommand: IProjectCommand = {
           ...values,
-          _id: uuidv4()
+          _id: uuidv4(),
         };
         const pathError = await validateCommandPath(newCommand.execDir);
         if (pathError) {
           actions.setSubmitting(false);
           setErrors({
-            path: pathError
+            path: pathError,
           });
           return;
         }
@@ -83,7 +85,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         <Formik
           initialValues={initialCommand}
           onSubmit={handleSubmit}
-          render={props => (
+          render={(props) => (
             <form onSubmit={props.handleSubmit}>
               <FormGroup
                 label="Name"

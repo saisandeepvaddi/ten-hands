@@ -1,8 +1,12 @@
 interface IProjectCommand {
   _id: string;
   execDir: string;
-  [name: string]: string;
+  lastExecutedAt: Date;
+
+  [name: string]: any;
 }
+
+type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
 
 interface IProject {
   _id: string;
@@ -10,11 +14,12 @@ interface IProject {
   type: string;
   path: string;
   commands: IProjectCommand[];
+  taskSortOrder?: TASK_SORT_ORDER;
 }
 
 declare enum JobStatus {
   RUNNING,
-  STOPPED
+  STOPPED,
 }
 
 interface IJob {
