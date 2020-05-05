@@ -281,7 +281,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       taskSortOrder: TASK_SORT_ORDER = "name-asc"
     ) => {
       const reorderTasksFn = async () => {
-        await reorderTasksInDb(config, projectId, commands);
+        await reorderTasksInDb(config, projectId, commands, taskSortOrder);
         const currentProjectIndex = projects.findIndex(
           (x) => x._id === projectId
         );
