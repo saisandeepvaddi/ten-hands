@@ -83,11 +83,16 @@ export function removeCommand(req: Request, res: Response) {
 export function reorderCommands(req: Request, res: Response) {
   try {
     const { projectId } = req.params;
-    const { commands } = req.body;
+    const { commands, taskSortOrder } = req.body;
+    console.log("taskSortOrder:", taskSortOrder);
     if (!commands) {
       throw new Error("No commands sent");
     }
-    const project = db.reorderProjectCommands(projectId, commands);
+    const project = db.reorderProjectCommands(
+      projectId,
+      commands,
+      taskSortOrder
+    );
     return res.status(200).send(project);
   } catch (error) {
     console.log("error:", error);

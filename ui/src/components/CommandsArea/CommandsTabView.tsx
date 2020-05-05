@@ -9,13 +9,13 @@ interface ICommandsTabViewProps {
 
 const CommandsTabView: React.FC<ICommandsTabViewProps> = ({
   commands,
-  activeProject
+  activeProject,
 }) => {
   const [selectedTaskId, setSelectedTaskId] = React.useState<string>(
     commands[0].id
   );
 
-  const handleTabChange = tabId => {
+  const handleTabChange = (tabId) => {
     setSelectedTaskId(tabId);
   };
 
@@ -45,6 +45,7 @@ const CommandsTabView: React.FC<ICommandsTabViewProps> = ({
                       index={index}
                       projectPath={activeProject.path}
                       command={command}
+                      projectId={activeProject._id}
                     />
                   </Card>
                 }

@@ -9,7 +9,7 @@ interface ICommandsRowViewProps {
 
 const CommandsRowView: React.FC<ICommandsRowViewProps> = ({
   commands,
-  activeProject
+  activeProject,
 }) => {
   return (
     <React.Fragment>
@@ -25,6 +25,7 @@ const CommandsRowView: React.FC<ICommandsRowViewProps> = ({
             <Command
               index={index}
               projectPath={activeProject.path}
+              projectId={activeProject._id}
               command={command}
             />
           </Card>

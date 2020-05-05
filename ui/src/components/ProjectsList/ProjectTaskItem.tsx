@@ -33,14 +33,14 @@ function getJobData(state, room: string) {
 const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   command,
   project,
-  changeActiveProject
+  changeActiveProject,
 }) => {
   const room = command._id;
   const projectPath = project.path;
   const terminalManager = JobTerminalManager.getInstance();
 
   const { runningTasks, state: jobState, dispatch, ACTION_TYPES } = useJobs();
-  const { activeProject } = useProjects();
+  const { activeProject, updateTask } = useProjects();
   const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
   const isThisActiveProject = activeProject._id === project._id;
@@ -49,7 +49,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     return runningTasks[taskId] === true;
   };
 
-  const scrollToTask = async task => {
+  const scrollToTask = async (task) => {
     // If you click on task directly it should first switch the active project then scroll to task
     if (!isThisActiveProject) {
       changeActiveProject();
@@ -59,15 +59,15 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     const taskCard = document.getElementById(`task-card-${task._id}`);
     if (taskCard) {
       taskCard.scrollIntoView({
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
 
-  const clearJobOutput = room => {
+  const clearJobOutput = (room) => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
-      room
+      room,
     });
     terminalManager.clearTerminalInRoom(room);
   };
@@ -76,13 +76,17 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     dispatch({
       room,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
-      process: jobProcess
+      process: jobProcess,
     });
   };
 
   const startJob = () => {
     clearJobOutput(room);
     subscribeToTaskSocket(room, command, projectPath);
+    updateTask(project._id, command._id, {
+      ...command,
+      lastExecutedAt: new Date(),
+    });
   };
 
   const stopJob = () => {
@@ -90,11 +94,11 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     const { pid } = process;
     unsubscribeFromTaskSocket(room, pid);
     updateJobProcess(room, {
-      pid: -1
+      pid: -1,
     });
   };
 
-  const startTask = e => {
+  const startTask = (e) => {
     try {
       startJob();
     } catch (error) {
@@ -102,7 +106,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const stopTask = e => {
+  const stopTask = (e) => {
     try {
       stopJob();
     } catch (error) {
@@ -118,7 +122,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
         fill
         title={command.cmd}
         style={{
-          padding: 5
+          padding: 5,
         }}
         minimal
         onClick={() => scrollToTask(command)}
@@ -135,7 +139,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
           {command.name}
           <span
             style={{
-              marginLeft: "auto"
+              marginLeft: "auto",
             }}
             className="task-action-button-container"
             /*eslint-disable*/

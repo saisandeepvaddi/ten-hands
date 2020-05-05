@@ -22,7 +22,7 @@ export const saveProjectInDb = async (
       method: "post",
       baseURL: `http://localhost:${config.port}`,
       url: "projects",
-      data: projectData
+      data: projectData,
     });
 
     // Take data from backend so we know it's committed to database.
@@ -44,8 +44,8 @@ export const renameProjectInDb = async (
       method: "patch",
       url: `http://localhost:${config.port}/projects/${projectId}`,
       data: {
-        name: newName
-      }
+        name: newName,
+      },
     });
     const updatedProject = responseData.data;
     return updatedProject;
@@ -82,13 +82,15 @@ export const deleteTaskInDb = async (
 export const reorderTasksInDb = async (
   config: IConfig,
   projectId: string,
-  commands: IProjectCommand[]
+  commands: IProjectCommand[],
+  taskSortOrder: TASK_SORT_ORDER = "name-asc"
 ) => {
   try {
     await Axios.post(
       `http://localhost:${config.port}/projects/${projectId}/commands/reorder`,
       {
-        commands
+        commands,
+        taskSortOrder,
       }
     );
   } catch (error) {
@@ -108,7 +110,7 @@ export const saveTaskInDb = async (
       method: "post",
       baseURL: `http://localhost:${config.port}`,
       url: `projects/${activeProjectId}/commands`,
-      data: newTask
+      data: newTask,
     });
 
     const updatedProject = responseData.data;
@@ -131,7 +133,7 @@ export const updateTaskInDb = async (
       method: "put",
       baseURL: `http://localhost:${config.port}`,
       url: `projects/${activeProjectId}/commands/${taskId}`,
-      data: newTask
+      data: newTask,
     });
 
     const updatedProject = responseData.data;
@@ -148,7 +150,7 @@ export const reorderProjectsInDb = async (
 ) => {
   try {
     await Axios.post(`http://localhost:${config.port}/projects/reorder`, {
-      projectIds
+      projectIds,
     });
   } catch (error) {
     console.error("reorderProjects error:", error);
@@ -161,7 +163,7 @@ export const checkIfValidPath = async (config: IConfig, path: string) => {
     const response = await Axios.post(
       `http://localhost:${config.port}/utils/is-valid-path`,
       {
-        path
+        path,
       }
     );
     return response.data;
@@ -176,7 +178,7 @@ export const getGitRepo = async (config: IConfig, path: string) => {
     const response = await Axios.post(
       `http://localhost:${config.port}/utils/git-info`,
       {
-        path
+        path,
       }
     );
     return response.data;
