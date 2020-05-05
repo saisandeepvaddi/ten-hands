@@ -278,7 +278,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     (
       projectId: string,
       commands: IProjectCommand[],
-      taskSortOrder: TASK_SORT_ORDER = "name"
+      taskSortOrder: TASK_SORT_ORDER = "name-asc"
     ) => {
       const reorderTasksFn = async () => {
         await reorderTasksInDb(config, projectId, commands);

@@ -2,7 +2,7 @@
 
 type TaskViewStyle = "tabs" | "rows";
 
-type TASK_SORT_ORDER = "name" | "last-executed";
+type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
 
 interface IConfig {
   port: string | number;

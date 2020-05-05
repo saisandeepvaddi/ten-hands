@@ -1,7 +1,8 @@
 import React from "react";
-import { HTMLSelect, Button, Icon } from "@blueprintjs/core";
-import { useProjects } from "../shared/stores/ProjectStore";
+import { HTMLSelect, Button, Icon, Dialog } from "@blueprintjs/core";
 import { getYesterday } from "../../utils/general";
+import { useTheme } from "../shared/stores/ThemeStore";
+import CommandOrderListContainer from "./CommandOrderListContainer";
 
 interface ISorterProps {
   reorderTasks: (
@@ -14,10 +15,16 @@ interface ISorterProps {
 
 const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
   const [tasksOrder, setTasksOrder] = React.useState<TASK_SORT_ORDER>(
-    activeProject.taskSortOrder ?? "name"
+    activeProject.taskSortOrder ?? "name-asc"
   );
 
-  const sortTasksBy = (order: TASK_SORT_ORDER = "name") => {
+  const { theme } = useTheme();
+
+  const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
+    boolean
+  >(false);
+
+  const sortTasksBy = (order: TASK_SORT_ORDER = "name-asc") => {
     let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
       (command) => {
         const { lastExecutedAt } = command;
@@ -31,8 +38,14 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
       }
     );
 
-    if (order === "name") {
-      tasksToSort.sort((a, b) => (a.name < b.name ? -1 : 1));
+    if (order === "name-asc") {
+      tasksToSort.sort((a, b) =>
+        a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+      );
+    } else if (order === "name-desc") {
+      tasksToSort.sort((a, b) =>
+        a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1
+      );
     } else if (order === "last-executed") {
       tasksToSort.sort((a, b) =>
         new Date(a.lastExecutedAt).getTime() <
@@ -43,7 +56,9 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
     }
     reorderTasks(activeProject._id!, tasksToSort, tasksOrder);
   };
-
+  const handleChangeOrderModalClose = () => {
+    setCommandsOrderModalOpen(false);
+  };
   React.useEffect(() => {
     sortTasksBy(tasksOrder);
   }, [tasksOrder]);
@@ -51,7 +66,7 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
   React.useEffect(() => {
     if (activeProject.taskSortOrder !== tasksOrder) {
       if (!activeProject.taskSortOrder) {
-        setTasksOrder("name");
+        setTasksOrder("name-asc");
       } else {
         setTasksOrder(activeProject.taskSortOrder);
       }
@@ -68,8 +83,10 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
           setTasksOrder(order);
         }}
         options={[
-          { label: "Name", value: "name" },
+          { label: "Name (A-Z)", value: "name-asc" },
+          { label: "Name (Z-A)", value: "name-desc" },
           { label: "Last Executed", value: "last-executed" },
+          { label: "Custom", value: "custom" },
         ]}
       />
       <Button
@@ -82,6 +99,15 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
         title="Click to refresh task sort order."
         onClick={() => sortTasksBy(tasksOrder)}
       />
+      <Dialog
+        title="Change Tasks Order"
+        icon={"numbered-list"}
+        className={theme}
+        isOpen={commandsOrderModalOpen}
+        onClose={handleChangeOrderModalClose}
+      >
+        <CommandOrderListContainer activeProject={activeProject} />
+      </Dialog>
     </React.Fragment>
   );
 };

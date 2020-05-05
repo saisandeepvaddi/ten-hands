@@ -6,7 +6,7 @@ interface IProjectCommand {
   [name: string]: any;
 }
 
-type TASK_SORT_ORDER = "name" | "last-executed";
+type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
 
 interface IProject {
   _id: string;
