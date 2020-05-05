@@ -25,6 +25,7 @@ import { useMountedState } from "../shared/hooks";
 import ProjectMenu from "./ProjectMenu";
 import ProjectRenameDialog from "./ProjectRenameDialog";
 import { getYesterday } from "../../utils/general";
+import Sorter from "./Sorter";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -44,8 +45,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState<boolean>(
       false
     );
-
-    const [tasksOrder, setTasksOrder] = React.useState<TASK_SORT_ORDER>("name");
 
     const isMounted = useMountedState();
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
@@ -74,34 +73,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       stopAllRunningTasks,
       reorderTasks,
     } = useProjects();
-
-    const sortTasksBy = (order: TASK_SORT_ORDER = "name") => {
-      let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
-        (command) => {
-          const { lastExecutedAt } = command;
-          if (!lastExecutedAt) {
-            return {
-              ...command,
-              lastExecutedAt: getYesterday(),
-            };
-          }
-          return command;
-        }
-      );
-
-      if (order === "name") {
-        tasksToSort.sort((a, b) => (a.name < b.name ? -1 : 1));
-      } else if (order === "last-executed") {
-        tasksToSort.sort((a, b) =>
-          new Date(a.lastExecutedAt).getTime() <
-          new Date(b.lastExecutedAt).getTime()
-            ? 1
-            : -1
-        );
-      }
-      setTasksOrder(order);
-      reorderTasks(activeProject._id!, tasksToSort);
-    };
 
     const shouldDeleteProject = async (shouldDelete) => {
       try {
@@ -258,20 +229,8 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
             />
           </Navbar.Group>
           <Navbar.Group align={Alignment.LEFT}>
-            <Navbar.Divider style={{ paddingRight: 10 }} /> Sort tasks by:{" "}
-            <span style={{ paddingRight: 10 }}></span>
-            <HTMLSelect
-              value={tasksOrder}
-              defaultValue={"name"}
-              onChange={(e) => {
-                console.log(e.target.value);
-                sortTasksBy(e.target.value as TASK_SORT_ORDER);
-              }}
-              options={[
-                { label: "Name", value: "name" },
-                { label: "Last Executed", value: "last-executed" },
-              ]}
-            />
+            <Navbar.Divider style={{ paddingRight: 10 }} />
+            <Sorter activeProject={activeProject} reorderTasks={reorderTasks} />
           </Navbar.Group>
           <Navbar.Group align={Alignment.RIGHT}>
             <Button
