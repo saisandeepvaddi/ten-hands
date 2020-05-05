@@ -4,12 +4,18 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { getYesterday } from "../../utils/general";
 
 interface ISorterProps {
-  reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => any;
+  reorderTasks: (
+    projectId: string,
+    newTasks: IProjectCommand[],
+    taskSortOrder?: TASK_SORT_ORDER
+  ) => any;
   activeProject: IProject;
 }
 
 const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
-  const [tasksOrder, setTasksOrder] = React.useState<TASK_SORT_ORDER>("name");
+  const [tasksOrder, setTasksOrder] = React.useState<TASK_SORT_ORDER>(
+    activeProject.taskSortOrder ?? "name"
+  );
 
   const sortTasksBy = (order: TASK_SORT_ORDER = "name") => {
     let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
@@ -35,12 +41,22 @@ const Sorter: React.FC<ISorterProps> = ({ reorderTasks, activeProject }) => {
           : -1
       );
     }
-    reorderTasks(activeProject._id!, tasksToSort);
+    reorderTasks(activeProject._id!, tasksToSort, tasksOrder);
   };
 
   React.useEffect(() => {
     sortTasksBy(tasksOrder);
   }, [tasksOrder]);
+
+  React.useEffect(() => {
+    if (activeProject.taskSortOrder !== tasksOrder) {
+      if (!activeProject.taskSortOrder) {
+        setTasksOrder("name");
+      } else {
+        setTasksOrder(activeProject.taskSortOrder);
+      }
+    }
+  }, [activeProject]);
 
   return (
     <React.Fragment>

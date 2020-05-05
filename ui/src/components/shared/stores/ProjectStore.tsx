@@ -28,7 +28,11 @@ interface IProjectContextValue {
   deleteTask: (projectId: string, taskId: string) => any;
   addProject: (data: any) => any;
   deleteProject: (projectId: string) => any;
-  reorderTasks: (projectId: string, newTasks: IProjectCommand[]) => any;
+  reorderTasks: (
+    projectId: string,
+    newTasks: IProjectCommand[],
+    taskSortOrder?: TASK_SORT_ORDER
+  ) => any;
   loadingProjects: boolean;
   renameProject: (projectId: string, newName: string) => any;
   runAllStoppedTasks: () => void;
@@ -271,7 +275,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   );
 
   const reorderTasks = React.useCallback(
-    (projectId: string, commands: IProjectCommand[]) => {
+    (
+      projectId: string,
+      commands: IProjectCommand[],
+      taskSortOrder: TASK_SORT_ORDER = "name"
+    ) => {
       const reorderTasksFn = async () => {
         await reorderTasksInDb(config, projectId, commands);
         const currentProjectIndex = projects.findIndex(
@@ -283,6 +291,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           const updatedProject: IProject = {
             ...projectWithThisTask,
             commands,
+            taskSortOrder,
           };
           const _projects = [...projects];
           _projects.splice(currentProjectIndex, 1, updatedProject);
