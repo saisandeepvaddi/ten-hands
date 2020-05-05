@@ -8,7 +8,8 @@ import {
   InputGroup,
   Navbar,
   Popover,
-  Tooltip
+  Tooltip,
+  HTMLSelect,
 } from "@blueprintjs/core";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -23,6 +24,8 @@ import CommandOrderListContainer from "./CommandOrderListContainer";
 import { useMountedState } from "../shared/hooks";
 import ProjectMenu from "./ProjectMenu";
 import ProjectRenameDialog from "./ProjectRenameDialog";
+import { getYesterday } from "../../utils/general";
+import Sorter from "./Sorter";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -42,6 +45,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState<boolean>(
       false
     );
+
     const isMounted = useMountedState();
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
       boolean
@@ -66,10 +70,11 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       renameProject,
       projectsRunningTaskCount,
       runAllStoppedTasks,
-      stopAllRunningTasks
+      stopAllRunningTasks,
+      reorderTasks,
     } = useProjects();
 
-    const shouldDeleteProject = async shouldDelete => {
+    const shouldDeleteProject = async (shouldDelete) => {
       try {
         if (shouldDelete) {
           deleteProject(activeProject._id!);
@@ -90,7 +95,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       setRenameProjectModalOpen(false);
     };
 
-    const validateProjectName = value => {
+    const validateProjectName = (value) => {
       let error = "";
       if (!value) {
         error = "Project name cannot be empty";
@@ -103,7 +108,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       return error;
     };
 
-    const updateProjectName = async e => {
+    const updateProjectName = async (e) => {
       e.preventDefault();
       try {
         setIsRenaming(true);
@@ -222,6 +227,10 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
               }
               disabled={projectsRunningTaskCount[activeProject._id!] === 0}
             />
+          </Navbar.Group>
+          <Navbar.Group align={Alignment.LEFT}>
+            <Navbar.Divider style={{ paddingRight: 10 }} />
+            <Sorter activeProject={activeProject} reorderTasks={reorderTasks} />
           </Navbar.Group>
           <Navbar.Group align={Alignment.RIGHT}>
             <Button

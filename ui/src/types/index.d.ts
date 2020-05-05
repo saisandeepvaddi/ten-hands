@@ -2,6 +2,8 @@
 
 type TaskViewStyle = "tabs" | "rows";
 
+type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
+
 interface IConfig {
   port: string | number;
   enableTerminalTheme: boolean;
@@ -16,16 +18,18 @@ interface IMyTheme {
 
 interface IProjectCommand {
   _id: string;
-  [name: string]: string;
+  lastExecutedAt: Date;
+  [name: string]: any;
 }
 
 interface IProject {
-  _id?: string;
+  _id: string;
   name: string;
   type: string;
   path: string;
   configFile?: string;
   commands: IProjectCommand[];
+  taskSortOrder?: TASK_SORT_ORDER;
 }
 
 interface IJobAction {
