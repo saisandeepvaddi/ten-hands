@@ -14,6 +14,7 @@ const initialCommand: IProjectCommand = {
   execDir: "",
   cmd: "",
   lastExecutedAt: getYesterday(),
+  shell: "",
 };
 
 const Container = styled.div`
@@ -34,20 +35,16 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       path: "",
     });
 
-    const validateCommandPath = async (value) => {
+    const validatePath = async (value) => {
       try {
         let error = "";
-
         if (!value) {
           return "";
         }
-        console.log("value:", value);
-
         const isPathValid = await isValidPath(config, value);
 
         if (!isPathValid) {
-          error =
-            "This path doesn't exist. You can leave the path empty to run task in project's path.";
+          error = "This path doesn't exist. You can leave path empty.";
         }
 
         return error;
@@ -62,11 +59,13 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
           ...values,
           _id: uuidv4(),
         };
-        const pathError = await validateCommandPath(newCommand.execDir);
-        if (pathError) {
+        const pathError = await validatePath(newCommand.execDir);
+        const shellError = await validatePath(newCommand.shell);
+        if (pathError || shellError) {
           actions.setSubmitting(false);
           setErrors({
             path: pathError,
+            shell: shellError,
           });
           return;
         }
@@ -141,6 +140,33 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
                   type="text"
                   onChange={props.handleChange}
                   value={props.values.execDir}
+                />
+              </FormGroup>
+              <FormGroup
+                label="Shell (optional)"
+                labelFor="shell"
+                intent={errors.shell ? "danger" : "none"}
+                helperText={
+                  errors.shell ? (
+                    errors.shell
+                  ) : (
+                    <span>
+                      Absolute path to the shell. Overrides project's shell or
+                      global shell.
+                    </span>
+                  )
+                }
+              >
+                <InputGroup
+                  placeholder={
+                    navigator.platform.toLowerCase() === "win32"
+                      ? "C:\\Windows\\System32\\cmd.exe"
+                      : "/bin/sh"
+                  }
+                  id="shell"
+                  type="text"
+                  onChange={props.handleChange}
+                  value={props.values.shell}
                 />
               </FormGroup>
 
