@@ -18,6 +18,7 @@ const initialProject: IProject = {
   commands: [],
   configFile: "",
   path: "",
+  shell: "",
 };
 
 const Container = styled.div`
@@ -53,12 +54,9 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       return error;
     };
 
-    const validateProjectPath = async (value) => {
+    const validatePath = async (value) => {
       try {
         let error = "";
-        if (!value) {
-          error = "Project path cannot be empty";
-        }
 
         const isPathValid = await isValidPath(config, value);
 
@@ -150,12 +148,16 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
     const handleSubmit = async (values, actions) => {
       // console.info("values:", values);
       const nameError = validateProjectName(values.name);
-      const pathError = await validateProjectPath(values.path);
-      if (nameError || pathError) {
+      const pathError = !values.path
+        ? "Project path cannot be empty."
+        : await validatePath(values.path);
+      const shellError = await validatePath(values.shell);
+      if (nameError || pathError || shellError) {
         actions.setSubmitting(false);
         setErrors({
           name: nameError,
           path: pathError,
+          shell: shellError,
         });
         return;
       }
@@ -171,6 +173,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         setErrors({
           name: "",
           path: "",
+          shell: "",
         });
       }
     };
@@ -258,6 +261,34 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
                   }
                   onChange={handleChange}
                   value={values.path}
+                />
+              </FormGroup>
+              <FormGroup
+                label="Shell (Optional)"
+                labelFor="shell"
+                intent={errors.shell ? "danger" : "none"}
+                helperText={
+                  errors.shell ? (
+                    errors.shell
+                  ) : (
+                    <span>
+                      Absolute path to the shell. <b>Default:</b>{" "}
+                      <pre className="pre-inline">cmd.exe</pre> on Windows and{" "}
+                      <pre className="pre-inline">/bin/sh</pre> on unix.
+                    </span>
+                  )
+                }
+              >
+                <InputGroup
+                  id="shell"
+                  type="text"
+                  placeholder={
+                    navigator.platform.toLowerCase() === "win32"
+                      ? "C:\\Windows\\System32\\cmd.exe"
+                      : "/bin/sh"
+                  }
+                  onChange={handleChange}
+                  value={values.shell}
                 />
               </FormGroup>
               {/* <FormGroup
