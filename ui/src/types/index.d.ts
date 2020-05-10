@@ -9,6 +9,7 @@ interface IConfig {
   enableTerminalTheme: boolean;
   showStatusBar: boolean;
   taskViewStyle: TaskViewStyle;
+  shell: string;
 }
 
 interface IMyTheme {
@@ -19,6 +20,7 @@ interface IMyTheme {
 interface IProjectCommand {
   _id: string;
   lastExecutedAt: Date;
+  shell?: string;
   [name: string]: any;
 }
 
@@ -30,6 +32,7 @@ interface IProject {
   configFile?: string;
   commands: IProjectCommand[];
   taskSortOrder?: TASK_SORT_ORDER;
+  shell?: string;
 }
 
 interface IJobAction {

@@ -325,7 +325,6 @@ class Database {
     commands: IProjectCommand[],
     taskSortOrder: TASK_SORT_ORDER
   ): IProject {
-    console.log("taskSortOrder:", taskSortOrder);
     this.db
       .get("projects")
       .find({ _id: projectId })

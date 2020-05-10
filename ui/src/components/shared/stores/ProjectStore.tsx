@@ -80,6 +80,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     name: "",
     type: "",
     path: "",
+    shell: "",
     commands: [],
   };
 
@@ -125,7 +126,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const startJob = (command: IProjectCommand) => {
     const room = command._id;
     clearJobOutput(room);
-    subscribeToTaskSocket(room, command, activeProject.path);
+    const shell = command.shell || activeProject.shell || config.shell || "";
+    subscribeToTaskSocket(room, command, activeProject.path, shell);
     updateTask(activeProject._id, room, {
       ...command,
       lastExecutedAt: new Date(),

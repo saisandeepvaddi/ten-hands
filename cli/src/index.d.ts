@@ -8,5 +8,6 @@ interface IProject {
   type: string;
   path: string;
   configFile?: string;
+  shell?: string;
   commands: IProjectCommand[];
 }

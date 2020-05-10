@@ -6,6 +6,7 @@ import { wait } from "../shared/utilities";
 import { Button, Alignment, Icon } from "@blueprintjs/core";
 import { useSockets } from "../shared/stores/SocketStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
+import { useConfig } from "../shared/stores/ConfigStore";
 
 const TaskContainer = styled.div`
   display: flex;
@@ -42,6 +43,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   const { runningTasks, state: jobState, dispatch, ACTION_TYPES } = useJobs();
   const { activeProject, updateTask } = useProjects();
   const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+  const { config } = useConfig();
 
   const isThisActiveProject = activeProject._id === project._id;
 
@@ -82,7 +84,8 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
 
   const startJob = () => {
     clearJobOutput(room);
-    subscribeToTaskSocket(room, command, projectPath);
+    const shell = command.shell || activeProject.shell || config.shell || "";
+    subscribeToTaskSocket(room, command, projectPath, shell);
     updateTask(project._id, command._id, {
       ...command,
       lastExecutedAt: new Date(),
