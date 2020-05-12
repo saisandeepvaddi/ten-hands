@@ -10,9 +10,10 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
 import ProjectFileUpload from "./ProjectFileUpload";
+import { v4 as uuidv4 } from "uuid";
 
 const initialProject: IProject = {
-  _id: "",
+  _id: uuidv4(),
   name: "",
   type: "",
   commands: [],
@@ -151,7 +152,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       const pathError = !values.path
         ? "Project path cannot be empty."
         : await validatePath(values.path);
-      const shellError = await validatePath(values.shell);
+      const shellError = !values.shell ? "" : await validatePath(values.shell);
       if (nameError || pathError || shellError) {
         actions.setSubmitting(false);
         setErrors({

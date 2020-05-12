@@ -8,6 +8,7 @@ import {
   saveProjectInDb,
   saveTaskInDb,
   updateTaskInDb,
+  updateProjectInDb,
 } from "../API";
 import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
@@ -35,6 +36,7 @@ interface IProjectContextValue {
   ) => any;
   loadingProjects: boolean;
   renameProject: (projectId: string, newName: string) => any;
+  updateProject: (projectId: string, newProjectData: IProject) => any;
   runAllStoppedTasks: () => void;
   stopAllRunningTasks: () => void;
 }
@@ -276,6 +278,34 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     [projects, config, isMounted]
   );
 
+  const updateProject = React.useCallback(
+    (projectId: string, newProjectData: IProject) => {
+      const updateProjectFn = async () => {
+        await updateProjectInDb(config, projectId, newProjectData);
+        const currentProjectIndex = projects.findIndex(
+          (x) => x._id === projectId
+        );
+        const renamingProject = projects[currentProjectIndex];
+
+        if (renamingProject) {
+          const updatedProject: IProject = {
+            ...renamingProject,
+            ...newProjectData,
+          };
+          const _projects = [...projects];
+          _projects.splice(currentProjectIndex, 1, updatedProject);
+          if (isMounted()) {
+            setProjects(_projects);
+            setActiveProject(updatedProject);
+          }
+        }
+      };
+
+      updateProjectFn();
+    },
+    [projects, config, isMounted]
+  );
+
   const reorderTasks = React.useCallback(
     (
       projectId: string,
@@ -463,6 +493,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       deleteProject,
       reorderTasks,
       renameProject,
+      updateProject,
       runAllStoppedTasks,
       stopAllRunningTasks,
       totalRunningTaskCount,
@@ -482,6 +513,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     deleteProject,
     reorderTasks,
     renameProject,
+    updateProject,
     runAllStoppedTasks,
     stopAllRunningTasks,
     totalRunningTaskCount,

@@ -8,7 +8,8 @@ import {
   addProject,
   deleteProject,
   reorderProjects,
-  renameProject
+  renameProject,
+  updateProject,
 } from "../controllers/projects";
 
 // GET http://localhost:5010/projects
@@ -43,6 +44,8 @@ DELETE http://localhost:5010/projects/3aa49e37-b58c-443d-a87c-5b35cd8b4345
 router.delete("/:projectId", deleteProject);
 
 router.patch("/:projectId", renameProject);
+
+router.put("/:projectId", updateProject);
 
 /* Route to reorder commands in project
  It takes and replaces the commands

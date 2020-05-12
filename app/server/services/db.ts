@@ -207,6 +207,24 @@ class Database {
   }
 
   /**
+   * Rename project with projectId from database
+   *
+   * @param {string} projectId
+   * @returns {IProject[]} Updated list of projects
+   * @memberof Database
+   */
+  public updateProject(projectId: string, newProject: IProject): IProject {
+    this.db
+      .get("projects")
+      .find({ _id: projectId })
+      .assign(newProject)
+      .write();
+
+    const updatedProject = this.getProject(projectId);
+    return updatedProject;
+  }
+
+  /**
    * Get a specific project with id
    *
    * @param {string} id Project Id
