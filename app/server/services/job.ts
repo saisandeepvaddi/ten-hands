@@ -13,8 +13,10 @@ import SocketManager, { ISocketListener } from "./socket";
 class Job {
   socketManager: SocketManager;
   private room: any;
-  constructor(room: string, socketManager: SocketManager) {
+  private shell: string;
+  constructor(room: string, shell: string, socketManager: SocketManager) {
     this.room = room;
+    this.shell = shell;
     this.socketManager = socketManager;
   }
 
@@ -36,20 +38,29 @@ class Job {
 
       console.log("execPath:", execPath);
       const room = this.room;
-
-      const n = exec(job, {
+      let jobOptions: any = {
         cwd: execPath || process.cwd(),
-        maxBuffer: 100 * 1024 * 1024
-      });
+        maxBuffer: 100 * 1024 * 1024,
+      };
+
+      console.log("this.shell:", this.shell);
+
+      if (this.shell && this.shell !== "") {
+        jobOptions.shell = this.shell;
+      }
+
+      console.log("jobOptions:", jobOptions);
+
+      const n = exec(job, jobOptions);
 
       console.log(`Process started with PID: ${n.pid}`);
 
       this.socketManager.emit(`job_started`, { room, data: n });
-      n.stdout?.on("data", chunk => {
+      n.stdout?.on("data", (chunk) => {
         this.socketManager.emit(`job_output`, { room, data: chunk });
       });
 
-      n.stderr?.on("data", chunk => {
+      n.stderr?.on("data", (chunk) => {
         this.socketManager.emit(`job_error`, { room, data: chunk });
       });
 
@@ -57,7 +68,7 @@ class Job {
         this.socketManager.emit(`job_close`, {
           room,
           data: `Process with PID ${n.pid ||
-            "--"} closed with code ${code} by signal ${signal}`
+            "--"} closed with code ${code} by signal ${signal}`,
         });
       });
 
@@ -65,7 +76,7 @@ class Job {
         this.socketManager.emit(`job_exit`, {
           room,
           data: `Process with PID ${n.pid ||
-            "--"} exited with code ${code} by signal ${signal}`
+            "--"} exited with code ${code} by signal ${signal}`,
         });
       });
     } catch (error) {
@@ -103,7 +114,7 @@ export class JobManager {
     pKill(pid);
     this.socketManager.emit(`job_killed`, {
       room,
-      data: pid
+      data: pid,
     });
   }
 
@@ -118,22 +129,24 @@ export class JobManager {
       callback: ({
         command,
         room,
-        projectPath
+        projectPath,
+        shell,
       }: {
         command: IProjectCommand;
         room: string;
         projectPath: string;
+        shell: string;
       }) => {
-        const process = new Job(room, this.socketManager);
+        const process = new Job(room, shell, this.socketManager);
         process.start(command, projectPath);
-      }
+      },
     };
 
     const jobKillSubscriber: ISocketListener = {
       event: "unsubscribe",
       callback: ({ room, pid }) => {
         this.killJob(room, pid);
-      }
+      },
     };
     this.socketManager.subscribe(jobStartSubscriber);
     this.socketManager.subscribe(jobKillSubscriber);

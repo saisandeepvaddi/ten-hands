@@ -84,7 +84,6 @@ export function reorderCommands(req: Request, res: Response) {
   try {
     const { projectId } = req.params;
     const { commands, taskSortOrder } = req.body;
-    console.log("taskSortOrder:", taskSortOrder);
     if (!commands) {
       throw new Error("No commands sent");
     }

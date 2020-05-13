@@ -7,6 +7,7 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
 import UpdateCommandDrawer from "../UpdateCommandDrawer";
+import { useConfig } from "../shared/stores/ConfigStore";
 
 const Container = styled.div`
   display: flex;
@@ -61,6 +62,7 @@ const Command: React.FC<ICommandProps> = React.memo(
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
     const { activeProject, deleteTask, updateTask } = useProjects();
+    const { config } = useConfig();
 
     const deleteCommand = async () => {
       try {
@@ -89,7 +91,8 @@ const Command: React.FC<ICommandProps> = React.memo(
 
     const startJob = (room) => {
       clearJobOutput(room);
-      subscribeToTaskSocket(room, command, projectPath);
+      const shell = command.shell || activeProject.shell || config.shell || "";
+      subscribeToTaskSocket(room, command, projectPath, shell);
       updateTask(projectId, command._id, {
         ...command,
         lastExecutedAt: new Date(),

@@ -70,7 +70,7 @@ export function deleteProject(req: Request, res: Response) {
 export function renameProject(req: Request, res: Response) {
   try {
     const { projectId } = req.params;
-    const {name} = req.body;
+    const { name } = req.body;
     const project = db.renameProject(projectId, name);
     return res.status(200).send(project);
   } catch (error) {
@@ -79,7 +79,26 @@ export function renameProject(req: Request, res: Response) {
   }
 }
 
-
+/**
+ * Updates a project from database
+ *
+ * @export
+ * @param {Request} req
+ * @param {string} req.params.projectId Project Id
+ * @param {Response} res
+ * @returns
+ */
+export function updateProject(req: Request, res: Response) {
+  try {
+    const { projectId } = req.params;
+    const newProjectData = req.body;
+    const project = db.updateProject(projectId, newProjectData);
+    return res.status(200).send(project);
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(400).send({ error: error.message });
+  }
+}
 
 /**
  * Reorders project list when user updates projects order on UI

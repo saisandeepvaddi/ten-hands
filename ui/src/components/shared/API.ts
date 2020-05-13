@@ -54,6 +54,24 @@ export const renameProjectInDb = async (
     throw error;
   }
 };
+export const updateProjectInDb = async (
+  config: IConfig,
+  projectId: string,
+  newProjectData: IProject
+): Promise<IProject> => {
+  try {
+    const responseData: AxiosResponse = await Axios({
+      method: "put",
+      url: `http://localhost:${config.port}/projects/${projectId}`,
+      data: newProjectData,
+    });
+    const updatedProject = responseData.data;
+    return updatedProject;
+  } catch (error) {
+    console.log("updateProjectInDb error:", error);
+    throw error;
+  }
+};
 
 export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
   try {

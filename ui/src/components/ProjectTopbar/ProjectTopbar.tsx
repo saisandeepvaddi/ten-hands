@@ -26,6 +26,7 @@ import ProjectMenu from "./ProjectMenu";
 import ProjectRenameDialog from "./ProjectRenameDialog";
 import { getYesterday } from "../../utils/general";
 import Sorter from "./Sorter";
+import EditProjectDrawer from "../ProjectForm/EditProjectDrawer";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -58,6 +59,9 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     >(false);
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
+    const [isProjectDrawerOpen, setIsProjectDrawerOpen] = React.useState<
+      boolean
+    >(false);
     const [projectNameError, setProjectNameError] = React.useState<string>("");
     const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
     const [gitBranch, setGitBranch] = React.useState<string>("");
@@ -249,7 +253,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
                 data-testid="project-settings-button"
               />
               <ProjectMenu
-                setRenameProjectModalOpen={setRenameProjectModalOpen}
+                setIsProjectDrawerOpen={setIsProjectDrawerOpen}
                 setCommandsOrderModalOpen={setCommandsOrderModalOpen}
                 setDeleteAlertOpen={setDeleteAlertOpen}
                 activeProject={activeProject}
@@ -285,7 +289,12 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           isDrawerOpen={isDrawerOpen}
           setDrawerOpen={setDrawerOpen}
         />
-        <ProjectRenameDialog
+        <EditProjectDrawer
+          activeProject={activeProject}
+          isDrawerOpen={isProjectDrawerOpen}
+          setDrawerOpen={setIsProjectDrawerOpen}
+        />
+        {/* <ProjectRenameDialog
           activeProject={activeProject}
           theme={theme}
           renameProjectModalOpen={renameProjectModalOpen}
@@ -295,7 +304,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           setUpdatedProjectName={setUpdatedProjectName}
           updatedProjectName={updatedProjectName}
           isRenaming={isRenaming}
-        />
+        /> */}
       </React.Fragment>
     );
   }

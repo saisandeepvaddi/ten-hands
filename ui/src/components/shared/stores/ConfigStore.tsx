@@ -38,7 +38,8 @@ function ConfigProvider(props: IConfigProviderProps) {
           port,
           enableTerminalTheme: Boolean(getItem("enableTerminalTheme")) || true,
           showStatusBar: Boolean(getItem("showStatusBar")) || true,
-          taskViewStyle: (getItem("taskViewStyle") as TaskViewStyle) || "tabs"
+          taskViewStyle: (getItem("taskViewStyle") as TaskViewStyle) || "tabs",
+          shell: "",
         };
         return browserOnlyConfig;
       }
@@ -68,7 +69,7 @@ function ConfigProvider(props: IConfigProviderProps) {
     <K extends keyof IConfig, V extends IConfig[K]>(key: K, value: V) => {
       const newConfig = {
         ...config,
-        [key]: value
+        [key]: value,
       };
       setConfig(newConfig);
       //TODO: save new config

@@ -8,7 +8,7 @@ const tenHandsDir = path.join(homedir(), ".ten-hands");
 export const CONFIG_FILES = {
   configFile: path.join(tenHandsDir, "config.json"),
   dbFile: path.join(tenHandsDir, "db.json"),
-  logFile: path.join(tenHandsDir, "log.log")
+  logFile: path.join(tenHandsDir, "log.log"),
 };
 
 mkdirp.sync(tenHandsDir);
@@ -19,7 +19,8 @@ const defaultConfig: IConfig = {
   globalHotKey: "CommandOrControl+Alt+T",
   showAppRunningTrayNotification: true,
   showStatusBar: true,
-  taskViewStyle: "rows"
+  taskViewStyle: "rows",
+  shell: "",
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -56,6 +57,10 @@ const getValidConfig = (config: IConfig): IConfig => {
     ["tabs", "rows"].indexOf(config.taskViewStyle) === -1
   ) {
     _config.taskViewStyle = defaultConfig.taskViewStyle;
+  }
+
+  if (typeof config.shell !== "string") {
+    _config.shell = defaultConfig.shell;
   }
 
   return _config;

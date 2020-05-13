@@ -2,6 +2,7 @@ interface IProjectCommand {
   _id: string;
   execDir: string;
   lastExecutedAt: Date;
+  shell: string;
 
   [name: string]: any;
 }
@@ -15,6 +16,7 @@ interface IProject {
   path: string;
   commands: IProjectCommand[];
   taskSortOrder?: TASK_SORT_ORDER;
+  shell?: string;
 }
 
 declare enum JobStatus {

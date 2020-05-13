@@ -61,7 +61,6 @@ const Sorter: React.FC<ISorterProps> = React.memo(
       setCommandsOrderModalOpen(false);
     };
     React.useEffect(() => {
-      console.log("tasksOrder:", tasksOrder);
       if (tasksOrder === "custom") {
         return;
       }
