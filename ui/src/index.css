@@ -85,3 +85,8 @@ code {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.pre-inline {
+  display: inline;
+  margin: 0;
+}

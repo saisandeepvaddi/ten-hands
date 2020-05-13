@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 
 interface IProjectMenuProps {
-  setRenameProjectModalOpen: (value: React.SetStateAction<boolean>) => void;
+  setIsProjectDrawerOpen: (value: React.SetStateAction<boolean>) => void;
   setCommandsOrderModalOpen: (value: React.SetStateAction<boolean>) => void;
   setDeleteAlertOpen: (value: React.SetStateAction<boolean>) => void;
   activeProject: IProject;
@@ -12,21 +12,21 @@ interface IProjectMenuProps {
 }
 
 const ProjectMenu: React.FC<IProjectMenuProps> = ({
-  setRenameProjectModalOpen,
+  setIsProjectDrawerOpen,
   setCommandsOrderModalOpen,
   setDeleteAlertOpen,
   activeProject,
-  projectsRunningTaskCount
+  projectsRunningTaskCount,
 }) => {
   return (
     <React.Fragment>
       <Menu key="menu">
         <MenuDivider title="Edit" />
         <MenuItem
-          data-testid="rename-project-menu-item"
+          data-testid="edit-project-menu-item"
           icon="edit"
-          text="Rename Project"
-          onClick={() => setRenameProjectModalOpen(true)}
+          text="Edit Project"
+          onClick={() => setIsProjectDrawerOpen(true)}
         />
         <MenuDivider title="Layout" />
         <MenuItem

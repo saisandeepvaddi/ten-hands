@@ -15,7 +15,8 @@ interface ISocketContextValue {
   subscribeToTaskSocket: (
     room: string,
     command: IProjectCommand,
-    projectPath: string
+    projectPath: string,
+    shell?: string
   ) => void;
   _socket: any;
   unsubscribeFromTaskSocket: (room: string, pid: number) => void;
@@ -45,7 +46,7 @@ function SocketsProvider(props: ISocketProviderProps) {
     dispatch({
       room,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
-      process: jobProcess
+      process: jobProcess,
     });
   };
 
@@ -61,7 +62,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       // console.info("Socket connected to server");
     });
 
-    _socket.current.on(`job_started`, message => {
+    _socket.current.on(`job_started`, (message) => {
       const room = message.room;
       console.info(`Process started for cmd: ${room}`);
       updateJobProcess(room, message.data);
@@ -73,38 +74,38 @@ function SocketsProvider(props: ISocketProviderProps) {
         );
       }
     });
-    _socket.current.on(`job_output`, message => {
+    _socket.current.on(`job_output`, (message) => {
       const room = message.room;
       updateJob(room, message.data, true);
     });
 
-    _socket.current.on(`job_error`, message => {
+    _socket.current.on(`job_error`, (message) => {
       const room = message.room;
       console.info(`Process error in room: ${room}`);
       updateJob(room, message.data, true);
     });
-    _socket.current.on(`job_close`, message => {
+    _socket.current.on(`job_close`, (message) => {
       const room = message.room;
       console.info(`Process close in room: ${room}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
       updateJob(room, forcedChalk.bold(message.data + "\n"), false);
       updateJobProcess(room, {
-        pid: -1
+        pid: -1,
       });
     });
 
-    _socket.current.on(`job_exit`, message => {
+    _socket.current.on(`job_exit`, (message) => {
       const room = message.room;
 
       console.info(`Process exit in room: ${room}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
       updateJob(room, forcedChalk.bold(message.data + "\n"), false);
       updateJobProcess(room, {
-        pid: -1
+        pid: -1,
       });
     });
 
-    _socket.current.on(`job_killed`, message => {
+    _socket.current.on(`job_killed`, (message) => {
       const room = message.room;
 
       console.info(
@@ -119,20 +120,21 @@ function SocketsProvider(props: ISocketProviderProps) {
         false
       );
       updateJobProcess(room, {
-        pid: -1
+        pid: -1,
       });
     });
     setSocketInitialized(true);
   }, []);
 
   const subscribeToTaskSocket = React.useCallback(
-    (room, command, projectPath) => {
+    (room, command, projectPath, shell) => {
       try {
         if (_socket && _socket.current) {
           _socket.current.emit("subscribe", {
             room,
             command,
-            projectPath
+            projectPath,
+            shell,
           });
         }
       } catch (error) {
@@ -148,7 +150,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       if (_socket && _socket.current) {
         _socket.current.emit("unsubscribe", {
           room,
-          pid
+          pid,
         });
       }
     } catch (error) {
@@ -163,14 +165,14 @@ function SocketsProvider(props: ISocketProviderProps) {
       initializeSocket,
       subscribeToTaskSocket,
       _socket,
-      unsubscribeFromTaskSocket
+      unsubscribeFromTaskSocket,
     }),
     [
       isSocketInitialized,
       initializeSocket,
       subscribeToTaskSocket,
       _socket,
-      unsubscribeFromTaskSocket
+      unsubscribeFromTaskSocket,
     ]
   );
 

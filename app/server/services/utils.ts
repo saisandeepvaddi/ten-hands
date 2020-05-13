@@ -18,3 +18,29 @@ export const areTwoArraysEqual = (arrayOne: any[], arrayTwo: any[]) => {
 
   return sortedArrayOne.join("") === sortedArrayTwo.join("");
 };
+
+export const getAvailableShells = () => {
+  const os = process.platform;
+  switch (os) {
+    case "win32": {
+      return {
+        name: "cmd",
+        path: "C:\\Windows\\System32\\cmd.exe",
+      };
+    }
+
+    case "linux": {
+      return {
+        name: "bash",
+        path: "/bin/bash",
+      };
+    }
+
+    case "darwin": {
+      return null;
+    }
+
+    default:
+      return null;
+  }
+};

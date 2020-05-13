@@ -23,19 +23,19 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
     const { config } = useConfig();
 
     const initialCommand: IProjectCommand = {
-      _id: "",
       name: "",
       execDir: "",
       cmd: "",
-      ...command
+      shell: "",
+      ...command,
     };
     console.log("initialCommand:", initialCommand);
 
     const [errors, setErrors] = useState<any>({
-      path: ""
+      path: "",
     });
 
-    const validateCommandPath = async value => {
+    const validatePath = async (value) => {
       try {
         let error = "";
 
@@ -47,8 +47,7 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
         const isPathValid = await isValidPath(config, value);
 
         if (!isPathValid) {
-          error =
-            "This path doesn't exist. You can leave the path empty to run task in project's path.";
+          error = "This path doesn't exist. You can leave the path empty.";
         }
 
         return error;
@@ -61,17 +60,22 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
       try {
         const updatedCommand: IProjectCommand = {
           ...command,
-          ...values
+          ...values,
         };
         console.log("updatedCommand:", updatedCommand);
-        const pathError = await validateCommandPath(updatedCommand.execDir);
-        if (pathError) {
+
+        const pathError = await validatePath(updatedCommand.execDir);
+        const shellError = await validatePath(updatedCommand.shell);
+
+        if (pathError || shellError) {
           actions.setSubmitting(false);
           setErrors({
-            path: pathError
+            path: pathError,
+            shell: shellError,
           });
           return;
         }
+
         actions.setSubmitting(true);
         await updateTask(activeProject._id!, command._id, updatedCommand);
         actions.setSubmitting(false);
@@ -87,7 +91,7 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
         <Formik
           initialValues={initialCommand}
           onSubmit={handleSubmit}
-          render={props => (
+          render={(props) => (
             <form onSubmit={props.handleSubmit}>
               <FormGroup
                 label="Name"
@@ -145,7 +149,33 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
                   value={props.values.execDir}
                 />
               </FormGroup>
-
+              <FormGroup
+                label="Shell (optional)"
+                labelFor="shell"
+                intent={errors.shell ? "danger" : "none"}
+                helperText={
+                  errors.shell ? (
+                    errors.shell
+                  ) : (
+                    <span>
+                      Absolute path to the shell. Overrides project's shell or
+                      global shell.
+                    </span>
+                  )
+                }
+              >
+                <InputGroup
+                  placeholder={
+                    navigator.platform.toLowerCase() === "win32"
+                      ? "C:\\Windows\\System32\\cmd.exe"
+                      : "/bin/sh"
+                  }
+                  id="shell"
+                  type="text"
+                  onChange={props.handleChange}
+                  value={props.values.shell}
+                />
+              </FormGroup>
               <FormGroup>
                 <Button
                   data-testid="save-task-button"
