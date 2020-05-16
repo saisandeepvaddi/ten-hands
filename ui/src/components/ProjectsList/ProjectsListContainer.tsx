@@ -18,7 +18,8 @@ interface IProjectsListContainerProps {}
 
 const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const {
-    projects: tempProjects,
+    projects: originalProjects,
+    setProjects: setOriginalProjects,
     setActiveProject,
     activeProject,
     projectsRunningTaskCount,
@@ -41,24 +42,24 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const expandOrCollapseAllProjects = React.useCallback(
     (collapse: boolean = false) => {
       let projectTaskListOpenMap = {};
-      tempProjects.map((project) => {
+      originalProjects.map((project) => {
         projectTaskListOpenMap[project._id!] = !collapse;
       });
 
       setProjectTaskListOpenMap(projectTaskListOpenMap);
     },
-    [tempProjects]
+    [originalProjects]
   );
 
   React.useEffect(() => {
-    if (!tempProjects) {
+    if (!originalProjects) {
       return;
     }
 
-    setProjects(tempProjects);
+    setProjects(originalProjects);
 
     // expandOrCollapseAllProjects(false);
-  }, [tempProjects, expandOrCollapseAllProjects]);
+  }, [originalProjects, expandOrCollapseAllProjects]);
 
   React.useEffect(() => {
     expandOrCollapseAllProjects(false);
@@ -126,7 +127,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
           console.info("Saving new projects order");
           const projectIds = projects.map((project) => project._id!);
           await reorderProjectsInDb(config, projectIds);
-          setProjects(projects);
+          setOriginalProjects(projects);
         } catch (error) {
           console.log("Error Reordering:", error);
         }
@@ -166,8 +167,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     const activeProjectIndexAfterDrag: number = newProjects.findIndex(
       (x) => x._id === activeProject._id
     );
-    console.log("activeProjectIndexBeforeDrag:", activeProjectIndexBeforeDrag);
-    console.log("activeProjectIndexAfterDrag:", activeProjectIndexAfterDrag);
+    // console.log("activeProjectIndexBeforeDrag:", activeProjectIndexBeforeDrag);
+    // console.log("activeProjectIndexAfterDrag:", activeProjectIndexAfterDrag);
     if (activeProjectIndexBeforeDrag !== activeProjectIndexAfterDrag) {
       setSelectedItemIndex(activeProjectIndexAfterDrag);
     }
