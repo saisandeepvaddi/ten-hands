@@ -15,6 +15,7 @@ import { areTwoArraysEqual } from "./utils";
 interface IDatabase {
   projectsOrder: string[];
   projects: IProject[];
+  runningTaskCount: 0;
 }
 class Database {
   private static _instance: Database;
@@ -47,6 +48,22 @@ class Database {
    */
   public static getInstance(): Database {
     return this._instance || (this._instance = new this());
+  }
+
+  public getRunningTaskCount(): number {
+    const currentRunningTaskCount =
+      Number(this.db.get("runningTaskCount").value()) ?? 0;
+    return currentRunningTaskCount;
+  }
+
+  public increaseRunningTaskCount(): Number {
+    this.db.update("runningTaskCount", (n) => n + 1).write();
+    return this.getRunningTaskCount();
+  }
+
+  public decreaseRunningTaskCount(): Number {
+    this.db.update("runningTaskCount", (n) => Math.abs(n - 1)).write();
+    return this.getRunningTaskCount();
   }
 
   /**
