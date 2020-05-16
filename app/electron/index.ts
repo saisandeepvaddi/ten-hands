@@ -16,10 +16,11 @@ import { createTray } from "./tray";
 import { isAppQuitting, setIsAppQuitting } from "./app-state";
 import {
   registerGlobalShortcuts,
-  unregisterGlobalShortcuts
+  unregisterGlobalShortcuts,
 } from "./global-hot-keys";
 import { hideWindowToTray } from "./utils";
 import registerIPC from "./ipc";
+import db from "../server/services/db";
 
 const isWindows = process.platform === "win32";
 export let mainWindow: BrowserWindow | null;
@@ -37,8 +38,8 @@ function createWindow() {
       height: 768,
       frame: isWindows ? false : true,
       webPreferences: {
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+      },
     });
 
     if (isDev) {
@@ -57,7 +58,7 @@ function createWindow() {
       mainWindow = null;
     });
 
-    mainWindow.on("close", e => {
+    mainWindow.on("close", (e) => {
       if (!isAppQuitting()) {
         e.preventDefault();
         if (mainWindow) {
@@ -126,21 +127,27 @@ async function startApplication() {
       }
     });
 
-    app.on("before-quit", e => {
+    app.on("before-quit", (e) => {
       log.info("App before-quit");
-      const response = dialog.showMessageBoxSync({
-        type: "info",
-        title: "Warning",
-        message: "Are you sure you want to exit?",
-        detail: "Any running tasks will keep running.",
-        buttons: ["Cancel", "Exit"]
-      });
+      const runningProcesses = db.getRunningTaskCount();
+      console.log("runningProcesses:", runningProcesses);
+      if (runningProcesses > 0) {
+        const response = dialog.showMessageBoxSync({
+          type: "warning",
+          title: "Warning",
+          message: "Are you sure you want to exit?",
+          detail: `${runningProcesses} ${
+            runningProcesses === 1 ? "task is" : "tasks are"
+          } still running. Running tasks will keep running and consume resources.`,
+          buttons: ["Cancel", "Exit"],
+        });
 
-      // Cancel = 0
-      // Exit = 1
-      if (response !== 1) {
-        setIsAppQuitting(false);
-        e.preventDefault();
+        // Cancel = 0
+        // Exit = 1
+        if (response !== 1) {
+          setIsAppQuitting(false);
+          e.preventDefault();
+        }
       }
     });
 
