@@ -15,7 +15,7 @@ interface IDragDropContainerProps {
 }
 
 const Container = styled.div`
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2};
   height: 100%;
   display: flex;
@@ -28,7 +28,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
   const { projects, addProject } = useProjects();
   const { theme } = useTheme();
 
-  const handleProjectFileUpload = async file => {
+  const handleProjectFileUpload = async (file) => {
     try {
       if (hasProjectWithSameName(projects, file.name)) {
         toaster.error(
@@ -45,8 +45,8 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   const onDrop = useCallback(
-    acceptedFiles => {
-      const upload = async files => {
+    (acceptedFiles) => {
+      const upload = async (files) => {
         // Do something with the files
         for (const file of files) {
           try {
@@ -65,7 +65,8 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    noClick: true
+    noClick: true,
+    noDragEventsBubbling: true,
   });
 
   if (!isRunningInElectron()) {
@@ -76,19 +77,21 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
     );
   }
 
+  console.log("Is Drag Active: ", isDragActive);
+
   return (
     <React.Fragment>
       <Container
         theme={theme}
         className="file-drag-container h-100 w-100"
-        {...getRootProps()}
+        {...getRootProps({ className: "dropzone" })}
       >
         <div
           className="w-100 h-100"
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
           }}
         >
           {!isDragActive && children}
