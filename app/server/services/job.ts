@@ -2,7 +2,6 @@ import pKill from "tree-kill";
 import path from "path";
 import { exec } from "child_process";
 import SocketManager, { ISocketListener } from "./socket";
-import db from "./db";
 
 /**
  * Task service class.
@@ -55,7 +54,6 @@ class Job {
       const n = exec(job, jobOptions);
 
       console.log(`Process started with PID: ${n.pid}`);
-      db.increaseRunningTaskCount();
 
       this.socketManager.emit(`job_started`, { room, data: n });
       n.stdout?.on("data", (chunk) => {
@@ -67,7 +65,6 @@ class Job {
       });
 
       n.on("close", (code, signal) => {
-        db.decreaseRunningTaskCount();
         this.socketManager.emit(`job_close`, {
           room,
           data: `Process with PID ${n.pid ||

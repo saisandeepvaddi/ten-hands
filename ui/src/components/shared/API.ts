@@ -205,3 +205,21 @@ export const getGitRepo = async (config: IConfig, path: string) => {
     throw error;
   }
 };
+
+export const updateRunningTaskCountInDB = async (
+  config: IConfig,
+  count: number
+) => {
+  try {
+    const response = await Axios.put(
+      `http://localhost:${config.port}/utils/running-task-count`,
+      {
+        count,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("updateRunningTaskCountInDB error:", error);
+    throw error;
+  }
+};
