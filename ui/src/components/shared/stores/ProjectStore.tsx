@@ -9,6 +9,7 @@ import {
   saveTaskInDb,
   updateTaskInDb,
   updateProjectInDb,
+  updateRunningTaskCountInDB,
 } from "../API";
 import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
@@ -170,6 +171,16 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const [totalRunningTaskCount, setTotalRunningTaskCount] = React.useState<
     number
   >(0);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        await updateRunningTaskCountInDB(config, totalRunningTaskCount);
+      } catch (error) {
+        console.log("error updating task count:", error);
+      }
+    })();
+  }, [totalRunningTaskCount]);
 
   React.useEffect(() => {
     if (!projects) {

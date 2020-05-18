@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { existsSync } from "fs";
+import db from "../services/db";
 
 // Have to use require because it's type-definition doesn't have function that allows path
 // Do not want to update node_module's file.
@@ -18,7 +19,7 @@ export function isValidPath(req: Request, res: Response) {
   try {
     const isValid = existsSync(req.body.path);
     return res.status(200).send({
-      isValid
+      isValid,
     });
   } catch (error) {
     console.log("error:", error);
@@ -43,6 +44,28 @@ export function getGitInfo(req: Request, res: Response) {
 
     const gitInfo = getRepoInfo(path);
     return res.status(200).send(gitInfo);
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(400).send({ error: error.message });
+  }
+}
+
+/**
+ * Returns git repo info at the given path
+ *
+ * @export
+ * @param {Request} req
+ * @param {Response} res
+ * @returns
+ */
+export function updateRunningTaskCount(req: Request, res: Response) {
+  try {
+    const { count } = req.body;
+    console.log("count:", count);
+    const newRunningTaskCount = db.setRunningTaskCount(count);
+    return res
+      .status(200)
+      .send(`New Running task count: ${newRunningTaskCount}`);
   } catch (error) {
     console.log("error:", error);
     return res.status(400).send({ error: error.message });

@@ -77,7 +77,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
     );
   }
 
-  console.log("Is Drag Active: ", isDragActive);
+  // console.log("Is Drag Active: ", isDragActive);
 
   return (
     <React.Fragment>

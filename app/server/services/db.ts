@@ -66,6 +66,11 @@ class Database {
     return this.getRunningTaskCount();
   }
 
+  public setRunningTaskCount(count: number): Number {
+    this.db.set("runningTaskCount", count).write();
+    return this.getRunningTaskCount();
+  }
+
   /**
    *
    *
@@ -146,8 +151,8 @@ class Database {
     // Create IDs for commands submitted
     const commands = project.commands.map((command) => {
       return {
-        _id: uuidv4(),
         ...command,
+        _id: uuidv4(),
       };
     });
 
@@ -157,8 +162,8 @@ class Database {
     };
 
     const newProject: IProject = {
-      _id: uuidv4(),
       ...projectWithUpdatedCommands,
+      _id: uuidv4(),
     };
 
     this.db
