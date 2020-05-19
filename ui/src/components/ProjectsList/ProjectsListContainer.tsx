@@ -13,6 +13,7 @@ import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
 import { Button, Icon } from "@blueprintjs/core";
+import Search from "../Search";
 
 interface IProjectsListContainerProps {}
 
@@ -28,6 +29,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const [projectTaskListOpenMap, setProjectTaskListOpenMap] = React.useState<{
     [K: string]: boolean;
   }>({});
+
+  const [searchbarOpen, setSearchbarOpen] = React.useState<boolean>(false);
   /* tslint:disable-next-line */
   /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
@@ -180,7 +183,16 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   return (
     <React.Fragment>
-      <div className="d-flex justify-end">
+      <div className="d-flex justify-between" style={{ margin: "5px 0 5px 0" }}>
+        <Button
+          onClick={() => setSearchbarOpen(true)}
+          icon={<Icon icon="search" iconSize={10} />}
+          minimal
+          small
+          title={"Search for any task"}
+        >
+          <span className="bp3-text-disabled">Search Tasks (Ctrl + F)</span>
+        </Button>
         <Button
           onClick={() => expandOrCollapseAllProjects(false)}
           icon={<Icon icon="collapse-all" iconSize={10} />}
@@ -229,6 +241,12 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
           )}
         </Droppable>
       </DragDropContext>
+      <Search
+        searchbarOpen={searchbarOpen}
+        setSearchbarOpen={setSearchbarOpen}
+        projects={projects}
+        changeActiveProject={changeActiveProject}
+      />
     </React.Fragment>
   );
 };
