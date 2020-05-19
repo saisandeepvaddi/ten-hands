@@ -183,20 +183,22 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   return (
     <React.Fragment>
-      <div className="d-flex justify-end">
+      <div className="d-flex justify-between" style={{ margin: "5px 0 5px 0" }}>
+        <Button
+          onClick={() => setSearchbarOpen(true)}
+          icon={<Icon icon="search" iconSize={10} />}
+          minimal
+          small
+          title={"Search for any task"}
+        >
+          <span className="bp3-text-disabled">Search Tasks (Ctrl + F)</span>
+        </Button>
         <Button
           onClick={() => expandOrCollapseAllProjects(false)}
           icon={<Icon icon="collapse-all" iconSize={10} />}
           minimal
           small
           title={"Collapse all projects"}
-        />
-        <Button
-          onClick={() => setSearchbarOpen(true)}
-          icon={<Icon icon="search" iconSize={10} />}
-          minimal
-          small
-          title={"Search all projects"}
         />
       </div>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>

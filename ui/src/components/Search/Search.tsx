@@ -3,6 +3,7 @@ import { Omnibar } from "@blueprintjs/select";
 import { areCommandsEqual, getCommandSelectProps } from "./task-search";
 import { MenuItem } from "@blueprintjs/core";
 import { wait } from "../shared/utilities";
+import SearchHotKey from "../ProjectsList/SearchHotKey";
 
 interface ISearchProps {
   searchbarOpen: boolean;
@@ -21,7 +22,7 @@ const Search: React.FC<ISearchProps> = ({
 }) => {
   const onItemSelect = async (command: ISearchProjectCommand) => {
     changeActiveProject(command.projectId, command.projectIndex);
-    await wait(200);
+    await wait(300);
     const taskCard = document.getElementById(`task-card-${command._id}`);
     if (taskCard) {
       taskCard.scrollIntoView({
@@ -50,6 +51,10 @@ const Search: React.FC<ISearchProps> = ({
 
   return (
     <React.Fragment>
+      <SearchHotKey
+        searchbarOpen={searchbarOpen}
+        setSearchbarOpen={setSearchbarOpen}
+      />
       <ProjectOmnibar
         className="search-omnibar-container"
         overlayProps={{ className: "search-omnibar" }}

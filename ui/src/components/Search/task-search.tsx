@@ -68,7 +68,6 @@ export const filterCommand: ItemPredicate<ISearchProjectCommand> = (
   const normalizedName =
     command.name.toLowerCase() + "-" + command.cmd.toLowerCase();
   const normalizedQuery = query.toLowerCase();
-  console.log("_index:", _index);
 
   return normalizedName.indexOf(normalizedQuery) >= 0;
   // if (exactMatch) {
