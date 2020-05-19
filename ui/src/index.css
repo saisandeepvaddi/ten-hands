@@ -90,3 +90,20 @@ code {
   display: inline;
   margin: 0;
 }
+
+.search-omnibar {
+  position: absolute;
+  top: 200px;
+  left: calc(100% - 50%);
+}
+
+.search-omnibar ul.bp3-menu {
+  max-height: 400px;
+  overflow: auto;
+  margin-bottom: 20px !important;
+}
+
+.search-omnibar-container {
+  width: 800px;
+  transform: translateX(-50%);
+}

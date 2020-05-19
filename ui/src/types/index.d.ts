@@ -24,6 +24,11 @@ interface IProjectCommand {
   [name: string]: any;
 }
 
+interface ISearchProjectCommand extends IProjectCommand {
+  projectIndex: number;
+  projectId: string;
+  projectName: string;
+}
 interface IProject {
   _id: string;
   name: string;
