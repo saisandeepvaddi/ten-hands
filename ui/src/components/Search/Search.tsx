@@ -4,6 +4,7 @@ import { areCommandsEqual, getCommandSelectProps } from "./task-search";
 import { MenuItem } from "@blueprintjs/core";
 import { wait } from "../shared/utilities";
 import SearchHotKey from "../ProjectsList/SearchHotKey";
+import { useTheme } from "../shared/stores/ThemeStore";
 
 interface ISearchProps {
   searchbarOpen: boolean;
@@ -20,6 +21,7 @@ const Search: React.FC<ISearchProps> = ({
   projects,
   changeActiveProject,
 }) => {
+  const { theme } = useTheme();
   const onItemSelect = async (command: ISearchProjectCommand) => {
     changeActiveProject(command.projectId, command.projectIndex);
     await wait(300);
@@ -56,7 +58,7 @@ const Search: React.FC<ISearchProps> = ({
         setSearchbarOpen={setSearchbarOpen}
       />
       <ProjectOmnibar
-        className="search-omnibar-container"
+        className={`search-omnibar-container ${theme}`}
         overlayProps={{ className: "search-omnibar" }}
         {...getCommandSelectProps(allCommands)}
         isOpen={searchbarOpen}
