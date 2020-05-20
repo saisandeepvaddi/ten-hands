@@ -9,7 +9,7 @@ interface ISearchHotKeyProps {
 @HotkeysTarget
 class SearchHotKey extends Component<ISearchHotKeyProps, {}> {
   public render() {
-    return <div>Search...</div>;
+    return null;
   }
 
   public renderHotkeys() {
