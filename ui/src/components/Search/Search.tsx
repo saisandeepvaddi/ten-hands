@@ -72,4 +72,4 @@ const Search: React.FC<ISearchProps> = ({
   );
 };
 
-export default Search;
+export default React.memo(Search);
