@@ -1,7 +1,8 @@
 import React from "react";
-import { ItemPredicate, ItemRenderer } from "@blueprintjs/select";
+import { ItemRenderer, ItemListPredicate } from "@blueprintjs/select";
 import { MenuItem } from "@blueprintjs/core";
-
+import Fuse from "fuse.js";
+import { throttle } from "lodash";
 function highlightText(text: string, query: string) {
   let lastIndex = 0;
   const words = query
@@ -24,7 +25,11 @@ function highlightText(text: string, query: string) {
       tokens.push(before);
     }
     lastIndex = regexp.lastIndex;
-    tokens.push(<strong key={lastIndex}>{match[0]}</strong>);
+    tokens.push(
+      <strong key={lastIndex} style={{ color: "goldenrod" }}>
+        {match[0]}
+      </strong>
+    );
   }
   const rest = text.slice(lastIndex);
   if (rest.length > 0) {
@@ -59,22 +64,14 @@ export const renderCommand: ItemRenderer<ISearchProjectCommand> = (
   );
 };
 
-export const filterCommand: ItemPredicate<ISearchProjectCommand> = (
-  query,
-  command,
-  _index,
-  exactMatch
-) => {
-  const normalizedName =
-    command.name.toLowerCase() + "-" + command.cmd.toLowerCase();
-  const normalizedQuery = query.toLowerCase();
+const getSearchResults = throttle(function(fuse, query) {
+  const results = fuse.search(query);
+  return results.map((result) => result.item);
+}, 100);
 
-  return normalizedName.indexOf(normalizedQuery) >= 0;
-  // if (exactMatch) {
-  //   return normalizedName === normalizedQuery;
-  // } else {
-  //   return normalizedName.indexOf(normalizedQuery) >= 0;
-  // }
+export const filterCommands = (fuse, query: string) => {
+  const results = getSearchResults(fuse, query);
+  return results;
 };
 
 export function areCommandsEqual(
@@ -84,8 +81,20 @@ export function areCommandsEqual(
   return commandA._id === commandB._id;
 }
 
-export const getCommandSelectProps = (commands: ISearchProjectCommand[]) => ({
-  itemPredicate: filterCommand,
-  itemRenderer: renderCommand,
-  items: commands,
-});
+export const getCommandSelectProps = (commands: ISearchProjectCommand[]) => {
+  const fuse = new Fuse(commands, {
+    keys: [
+      { name: "projectName", weight: 1 },
+      { name: "name", weight: 2 },
+      { name: "cmd", weight: 2 },
+    ],
+    includeMatches: true,
+  });
+
+  return {
+    itemListPredicate: (query: string, commands: ISearchProjectCommand[]) =>
+      filterCommands(fuse, query),
+    itemRenderer: renderCommand,
+    items: commands,
+  };
+};

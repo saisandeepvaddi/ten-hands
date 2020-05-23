@@ -201,7 +201,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       try {
         setLoadingProjects(true);
         const receivedProjects: IProject[] = await getProjects(config);
-        if (receivedProjects.length > 0) {
+        if (receivedProjects?.length > 0) {
           setProjects(receivedProjects);
           if (activeProject._id === "") {
             setActiveProject(receivedProjects[0]);
@@ -450,7 +450,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           (x: IProject) => x._id !== projectId
         );
         setProjects(newProjects);
-        if (newProjects && newProjects.length > 0) {
+        if (newProjects && newProjects?.length > 0) {
           setActiveProject(newProjects[0]);
         } else {
           setActiveProject(initialProject);
