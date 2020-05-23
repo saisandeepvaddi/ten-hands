@@ -18,7 +18,7 @@ import {
   registerGlobalShortcuts,
   unregisterGlobalShortcuts,
 } from "./global-hot-keys";
-import { hideWindowToTray } from "./utils";
+import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
 
@@ -43,6 +43,7 @@ function createWindow() {
     });
 
     if (isDev) {
+      loadReactDevTools();
       mainWindow.webContents.openDevTools();
     }
 
