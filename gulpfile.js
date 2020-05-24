@@ -140,6 +140,7 @@ const updateCLIPackageJson = async () => {
               "shared",
               "cli.js",
               "index.js",
+              "postinstall.js",
               "server.js",
               "package.json",
               "README.md",
