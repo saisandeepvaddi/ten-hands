@@ -63,7 +63,12 @@ function createWindow() {
       if (!isAppQuitting()) {
         e.preventDefault();
         if (mainWindow) {
-          hideWindowToTray(mainWindow);
+          if (getConfig().hideToTrayOnClose) {
+            hideWindowToTray(mainWindow);
+          } else {
+            setIsAppQuitting(true);
+            app.quit();
+          }
         }
         e.returnValue = false;
       }
