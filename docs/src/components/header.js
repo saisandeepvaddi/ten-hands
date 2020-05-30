@@ -38,7 +38,16 @@ const Header = ({ siteTitle }) => (
           </div>
         </Link>
       </div>
-      <AnchorButton
+      <iframe
+        src="https://ghbtns.com/github-btn.html?user=saisandeepvaddi&repo=ten-hands&type=star&count=true&size=large"
+        frameborder="0"
+        scrolling="0"
+        width="170"
+        height="30"
+        title="GitHub"
+        style={{ marginBottom: 0 }}
+      ></iframe>
+      {/* <AnchorButton
         large
         minimal
         target="_blank"
@@ -46,7 +55,7 @@ const Header = ({ siteTitle }) => (
         href="https://github.com/saisandeepvaddi/ten-hands"
       >
         Github
-      </AnchorButton>
+      </AnchorButton> */}
     </div>
   </header>
 );
