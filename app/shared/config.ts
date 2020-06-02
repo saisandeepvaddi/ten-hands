@@ -21,6 +21,7 @@ const defaultConfig: IConfig = {
   showStatusBar: true,
   taskViewStyle: "rows",
   shell: "",
+  hideToTrayOnClose: true,
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -61,6 +62,10 @@ const getValidConfig = (config: IConfig): IConfig => {
 
   if (typeof config.shell !== "string") {
     _config.shell = defaultConfig.shell;
+  }
+
+  if (typeof config.hideToTrayOnClose !== "boolean") {
+    _config.hideToTrayOnClose = defaultConfig.hideToTrayOnClose;
   }
 
   return _config;

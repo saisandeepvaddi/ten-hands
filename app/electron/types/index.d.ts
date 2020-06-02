@@ -6,4 +6,5 @@ interface IConfig {
   showStatusBar?: boolean;
   taskViewStyle?: "tabs" | "rows";
   shell?: string;
+  hideToTrayOnClose?: boolean;
 }

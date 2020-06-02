@@ -11,16 +11,16 @@ class JobTerminal {
   private terminal: Terminal;
   private fitAddon: FitAddon;
   private options: ITerminalOptions = {
-    convertEol: true
+    convertEol: true,
   };
   private darkTheme: ITheme = {
     background: "#202B33",
-    foreground: "#F5F8FA"
+    foreground: "#F5F8FA",
   };
   private lightTheme: ITheme = {
     background: "#F5F8FA",
     foreground: "#000000",
-    selection: "#73869480"
+    selection: "#73869480",
   };
 
   private _container: HTMLDivElement = document.createElement("div");
@@ -36,6 +36,29 @@ class JobTerminal {
     this._container = container;
     this.terminal.open(container);
     this.fitAddon.fit();
+    this.terminal.element?.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      if (this.terminal.hasSelection()) {
+        const copySuccess = document.execCommand("copy");
+        if (copySuccess) {
+          this.terminal.clearSelection();
+        }
+      }
+    });
+    this.terminal.element?.addEventListener("keydown", (e) => {
+      e.preventDefault();
+
+      if (!e.ctrlKey && !e.shiftKey) {
+        return;
+      }
+
+      if (this.terminal.hasSelection() && e.key.toLowerCase() === "c") {
+        const copySuccess = document.execCommand("copy");
+        if (copySuccess) {
+          this.terminal.clearSelection();
+        }
+      }
+    });
   }
 
   public setTheme(theme: string) {

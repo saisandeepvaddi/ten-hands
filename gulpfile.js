@@ -7,27 +7,27 @@ const through2 = require("through2");
 /* DEV START TASKS */
 
 const startUIForElectron = task("yarn start:electron", {
-  cwd: path.join(__dirname, "ui")
+  cwd: path.join(__dirname, "ui"),
 });
 
 const startUIForBrowser = task("yarn start:browser", {
-  cwd: path.join(__dirname, "ui")
+  cwd: path.join(__dirname, "ui"),
 });
 
 const startBuildWatchForApp = task("yarn build:watch", {
-  cwd: path.join(__dirname, "app")
+  cwd: path.join(__dirname, "app"),
 });
 
 const startBuildWatchForCLI = task("yarn build:watch", {
-  cwd: path.join(__dirname, "cli")
+  cwd: path.join(__dirname, "cli"),
 });
 
 const startAppsForDev = task("yarn dev", {
-  cwd: path.join(__dirname, "app")
+  cwd: path.join(__dirname, "app"),
 });
 
 const startServerForBrowser = task("yarn start:server", {
-  cwd: path.join(__dirname, "app")
+  cwd: path.join(__dirname, "app"),
 });
 
 exports.startUIForElectron = startUIForElectron;
@@ -38,30 +38,30 @@ exports.startAppsForDev = startAppsForDev;
 /* BUILDING TASKS */
 
 const buildUIForBrowser = task("yarn build:browser", {
-  cwd: path.join(__dirname, "ui")
+  cwd: path.join(__dirname, "ui"),
 });
 
 const buildUIForElectron = task("yarn build:electron", {
-  cwd: path.join(__dirname, "ui")
+  cwd: path.join(__dirname, "ui"),
 });
 
 const buildServerForElectron = task("yarn build", {
-  cwd: path.join(__dirname, "app")
+  cwd: path.join(__dirname, "app"),
 });
 
 const buildDesktopAppInstallers = task("yarn build:installers", {
-  cwd: path.join(__dirname, "app")
+  cwd: path.join(__dirname, "app"),
 });
 
 const buildCLI = task("yarn build", {
-  cwd: path.join(__dirname, "cli")
+  cwd: path.join(__dirname, "cli"),
 });
 
 /* VERSIONING TASKS */
 
 const updateVersion = (type = "patch", where = "ui") =>
   task(`npm version ${type}`, {
-    cwd: path.join(__dirname, where)
+    cwd: path.join(__dirname, where),
   });
 
 /* CLEANING TASKS */
@@ -129,20 +129,22 @@ const updateCLIPackageJson = async () => {
           const newPackageJson = Object.assign(currentPackageJson, {
             main: "index.js",
             scripts: {
-              start: "node index.js"
+              start: "node index.js",
+              postinstall: "node postinstall.js",
             },
             bin: {
-              "ten-hands": "index.js"
+              "ten-hands": "index.js",
             },
             files: [
               "server",
               "shared",
               "cli.js",
               "index.js",
+              "postinstall.js",
               "server.js",
               "package.json",
-              "README.md"
-            ]
+              "README.md",
+            ],
           });
 
           file.contents = Buffer.from(JSON.stringify(newPackageJson));
@@ -153,9 +155,9 @@ const updateCLIPackageJson = async () => {
     .pipe(dest("./dist/cli"));
 };
 
-const delay = time => {
+const delay = (time) => {
   return async function wait() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, time);
     });
   };

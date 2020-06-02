@@ -1,13 +1,14 @@
 {
   "name": "ten-hands-cli",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "CLI utility for ten-hands browser version. Visit https://tenhands.app",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "postinstall": "node build/postinstall.js"
   },
   "bin": {
     "ten-hands": "build/index.js"
@@ -20,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "fix-path": "^2.1.0",
