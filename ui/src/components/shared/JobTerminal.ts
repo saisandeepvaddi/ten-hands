@@ -9,7 +9,7 @@ class JobTerminal {
   public _id: string;
   public isOpened: boolean = false;
   private terminal: Terminal;
-  private fitAddon: FitAddon;
+  public fitAddon: FitAddon;
   private options: ITerminalOptions = {
     convertEol: true,
   };
@@ -35,6 +35,7 @@ class JobTerminal {
   public attachTo(container: HTMLDivElement) {
     this._container = container;
     this.terminal.open(container);
+    // this.fitAddon.activate(this.terminal);
     this.fitAddon.fit();
     this.terminal.element?.addEventListener("contextmenu", (e) => {
       e.preventDefault();

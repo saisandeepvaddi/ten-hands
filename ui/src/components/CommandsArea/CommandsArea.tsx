@@ -6,6 +6,7 @@ import { useTheme } from "../shared/stores/ThemeStore";
 import CommandsRowView from "./CommandsRowView";
 import { useConfig } from "../shared/stores/ConfigStore";
 import CommandsTabView from "./CommandsTabView";
+import "react-resizable/css/styles.css";
 
 interface ICommandsAreaProps {
   activeProject: IProject;
