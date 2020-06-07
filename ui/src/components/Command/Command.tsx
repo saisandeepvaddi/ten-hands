@@ -194,7 +194,12 @@ const Command: React.FC<ICommandProps> = React.memo(
             >
               <div
                 className="my-terminal-container"
-                style={{ width: "100%", height: "100%", padding: 10 }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  padding: 10,
+                  marginBottom: 10,
+                }}
               >
                 <CommandOutputXterm
                   index={index}

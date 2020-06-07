@@ -6,6 +6,7 @@ import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { ResizableBox } from "react-resizable";
+import { Icon } from "@blueprintjs/core";
 
 interface ICommandProps {
   room: string;
@@ -106,6 +107,16 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
       <ResizableBox
         axis="y"
         resizeHandles={["s"]}
+        handleSize={[8, 0]}
+        handle={
+          <div className="p-relative">
+            <Icon
+              icon="drag-handle-horizontal"
+              className="p-absolute"
+              style={{ left: "50%", cursor: "ns-resize" }}
+            />
+          </div>
+        }
         width={width}
         height={height}
         onResize={(e, { size }) => {
