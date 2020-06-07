@@ -48,13 +48,15 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
       if (elRef && elRef.current) {
+        // Set default dimensions based on parent.
+        // First parent is a div from react-resize. So take grandparent.
         const parentWidth =
           elRef.current.parentElement?.parentElement?.getBoundingClientRect()
             .width ?? 800;
         const parentHeight =
           elRef.current.parentElement?.parentElement?.getBoundingClientRect()
             .height ?? 400;
-        console.log("parentWidth:parentHeight", parentWidth, parentHeight);
+
         setHeight(parentHeight);
         setWidth(parentWidth);
         if (terminal.current === null) {
