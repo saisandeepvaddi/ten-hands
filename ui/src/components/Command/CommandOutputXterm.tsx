@@ -1,12 +1,11 @@
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
-import debounce from "lodash/debounce";
+import throttle from "lodash/throttle";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useConfig } from "../shared/stores/ConfigStore";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
-import { Resizable, ResizableBox } from "react-resizable";
+import { ResizableBox } from "react-resizable";
 
 interface ICommandProps {
   room: string;
@@ -84,56 +83,35 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     }, [theme, config, index]);
 
     const handleResize = React.useCallback(
-      debounce((entries: IResizeEntry[]) => {
-        let resizeTimeout: any = null;
-        const resizeLater = () => {
-          resizeTimeout = setTimeout(() => {
-            if (terminal && terminal.current && entries.length > 0) {
-              const width: number = entries[0].contentRect.width;
-              console.log("width:", width);
-              // terminal.current.resizeTerminal(width);
-            }
-          }, 0);
-        };
-        resizeLater();
-        return () => {
-          clearTimeout(resizeTimeout);
-        };
-      }, 50),
+      throttle((height: number) => {
+        if (terminal && terminal.current) {
+          setHeight(height);
+          terminal.current.fitAddon.fit();
+        }
+      }, 100),
       [terminal]
     );
 
-    // useEffect(() => {
-    //   console.log("height, width:", height, width);
-    // }, [height, width]);
     useEffect(() => {
-      console.log("container width", containerWidth);
       setWidth(containerWidth);
-      terminal.current?.fitAddon.fit();
     }, [containerWidth]);
 
+    useEffect(() => {
+      terminal.current?.fitAddon.fit();
+    }, [width]);
+
     return (
-      // <ResizeSensor
-      //   onResize={(entries) => {
-      //     const width: number = entries[0].contentRect.width;
-      //     console.log("width:", width);
-      //   }}
-      // >
       <ResizableBox
         axis="y"
         resizeHandles={["s"]}
         width={width}
         height={height}
         onResize={(e, { size }) => {
-          // setWidth(size.width);
-          setHeight(size.height);
-          terminal.current?.fitAddon.fit();
+          handleResize(size.height);
         }}
-        // style={{ marginRight: 0 }}
       >
         <TerminalContainer ref={elRef} />
       </ResizableBox>
-      // </ResizeSensor>
     );
   }
 );

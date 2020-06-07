@@ -8,6 +8,7 @@ import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
 import UpdateCommandDrawer from "../UpdateCommandDrawer";
 import { useConfig } from "../shared/stores/ConfigStore";
+import { throttle } from "lodash";
 
 const Container = styled.div`
   display: flex;
@@ -112,6 +113,13 @@ const Command: React.FC<ICommandProps> = React.memo(
       return getJobData(jobState, room).isRunning || false;
     };
 
+    const handleSidebarResize = React.useCallback(
+      throttle((width: number) => {
+        setContainerWidth(width);
+      }, 200),
+      []
+    );
+
     return (
       <React.Fragment>
         <Container>
@@ -180,9 +188,8 @@ const Command: React.FC<ICommandProps> = React.memo(
             <ResizeSensor
               onResize={(entries) => {
                 const width: number = entries[0].contentRect.width;
-                const height: number = entries[0].contentRect.height;
-                setContainerWidth(width);
-                console.log("width:height", width, height);
+                // setContainerWidth(width);
+                handleSidebarResize(width);
               }}
             >
               <div
