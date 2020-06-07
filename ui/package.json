@@ -32,6 +32,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.23.1",
     "@blueprintjs/select": "^3.12.3",
+    "@koale/useworker": "^3.1.0",
     "@welldone-software/why-did-you-render": "^4.0.3",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",

@@ -2261,6 +2261,13 @@
   dependencies:
     core-js "^2.5.7"
 
+"@koale/useworker@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@koale/useworker/-/useworker-3.1.0.tgz#108684e36a44ae019d6c6d67b88a1cf5c8351ddd"
+  integrity sha512-i/Pyu/TieliJfM7PxBiTysBuPYuMyTT073TqtfKuQ8h4g92XatY7MY670GoDqK6YVcu9/BvKTqw4HNbMdfH+Gg==
+  dependencies:
+    dequal "^1.0.0"
+
 "@mikaelkristiansson/domready@^1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mikaelkristiansson/domready/-/domready-1.0.9.tgz#b2b85d8ac7bb2797e577050b61aeaf1b26fbd906"
@@ -6340,6 +6347,11 @@ depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+dequal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.0.tgz#41c6065e70de738541c82cdbedea5292277a017e"
+  integrity sha512-/Nd1EQbQbI9UbSHrMiKZjFLrXSnU328iQdZKPQf78XQI6C+gutkFUeoHpG5J08Ioa6HeRbRNFpSIclh1xyG0mw==
 
 des.js@^1.0.0:
   version "1.0.1"

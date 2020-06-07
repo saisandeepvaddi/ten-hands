@@ -57,10 +57,10 @@ const Sorter: React.FC<ISorterProps> = React.memo(
                 : -1
             );
           }
-          reorderTasks(activeProject._id!, tasksToSort, tasksOrder);
+          reorderTasks(activeProject._id!, tasksToSort, order);
         }, 0);
       },
-      [activeProject, reorderTasks, tasksOrder]
+      [activeProject, reorderTasks]
     );
 
     const handleChangeOrderModalClose = () => {
