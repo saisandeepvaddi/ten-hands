@@ -86,12 +86,25 @@ class JobTerminal {
     this.terminal.write(stdout);
   }
 
+  public prompt() {
+    this.terminal.write(`\r\n$ `);
+  }
+
+  public startInput() {
+    this.terminal.write("");
+    this.prompt();
+  }
+
   public clear() {
     this.terminal.clear();
   }
 
   public destroy() {
     this.terminal.dispose();
+  }
+
+  public getTerminalInstance(): Terminal {
+    return this.terminal;
   }
 }
 

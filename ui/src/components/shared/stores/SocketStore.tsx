@@ -20,6 +20,7 @@ interface ISocketContextValue {
   ) => void;
   _socket: any;
   unsubscribeFromTaskSocket: (room: string, pid: number) => void;
+  sendInputToPty: (room: string, data: string) => void;
 }
 
 interface ISocketProviderProps {
@@ -158,6 +159,19 @@ function SocketsProvider(props: ISocketProviderProps) {
       throw error;
     }
   }, []);
+  const sendInputToPty = React.useCallback((room, data) => {
+    try {
+      if (_socket && _socket.current) {
+        _socket.current.emit("input", {
+          room,
+          data,
+        });
+      }
+    } catch (error) {
+      console.error("sendInputToPty error:", error);
+      throw error;
+    }
+  }, []);
 
   const value = React.useMemo(
     () => ({
@@ -166,6 +180,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       subscribeToTaskSocket,
       _socket,
       unsubscribeFromTaskSocket,
+      sendInputToPty,
     }),
     [
       isSocketInitialized,
@@ -173,6 +188,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       subscribeToTaskSocket,
       _socket,
       unsubscribeFromTaskSocket,
+      sendInputToPty,
     ]
   );
 

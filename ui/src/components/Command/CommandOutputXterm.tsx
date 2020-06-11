@@ -12,6 +12,7 @@ interface ICommandProps {
   room: string;
   index: number;
   containerWidth: number;
+  sendInputToPty: (room: string, data: string) => void;
 }
 
 const TerminalContainer = styled.div`
@@ -21,7 +22,7 @@ const TerminalContainer = styled.div`
 `;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
-  ({ room, index, containerWidth }) => {
+  ({ room, index, containerWidth, sendInputToPty }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
@@ -65,6 +66,11 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
             room
           );
           terminal.current.attachTo(elRef.current);
+          terminal.current.startInput();
+          terminal.current.getTerminalInstance().onData((data) => {
+            // terminal.current?.updateOutput(data);
+            sendInputToPty(room, data);
+          });
         }
       }
     }, []);

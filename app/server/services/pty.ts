@@ -46,6 +46,7 @@ export class PTY {
       });
 
       this.ptyProcess.onExit(({ exitCode, signal }) => {
+        console.log("exitCode:", exitCode);
         this.socketManager.emit(`job_exit`, {
           room,
           data: `Process with PID ${this.ptyProcess.pid ||

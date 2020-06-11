@@ -56,7 +56,11 @@ function getJobData(state, room: string) {
 const Command: React.FC<ICommandProps> = React.memo(
   ({ command, projectPath, index, projectId }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+    const {
+      subscribeToTaskSocket,
+      unsubscribeFromTaskSocket,
+      sendInputToPty,
+    } = useSockets();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
     const room = command._id;
@@ -205,6 +209,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                   index={index}
                   room={room}
                   containerWidth={containerWidth}
+                  sendInputToPty={sendInputToPty}
                 />
               </div>
             </ResizeSensor>

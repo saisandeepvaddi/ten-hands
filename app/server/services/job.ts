@@ -95,10 +95,13 @@ class Job {
 export class JobManager {
   public static _instance: JobManager;
   socketManager: SocketManager;
+
+  private terminals: Map<string, PTY | Job>;
   private constructor() {}
 
   public bindSocketManager(socketManager: SocketManager) {
     this.socketManager = socketManager;
+    this.terminals = new Map();
     this.subscribeEvents();
   }
 
@@ -141,6 +144,7 @@ export class JobManager {
         // const process = new Job(room, shell, this.socketManager);
         const process = new PTY(room, shell, this.socketManager);
         process.start(command, projectPath);
+        this.terminals.set(room, process);
       },
     };
 
@@ -148,10 +152,26 @@ export class JobManager {
       event: "unsubscribe",
       callback: ({ room, pid }) => {
         this.killJob(room, pid);
+        this.terminals.delete(room);
+      },
+    };
+    const jobInputSubscriber: ISocketListener = {
+      event: "input",
+      callback: ({ room, data }) => {
+        if (!this.terminals?.has(room)) {
+          this.socketManager.emit("job_error", {
+            room,
+            data: "The process doesn't exist.",
+          });
+          return;
+        }
+        const pty: PTY = this.terminals.get(room) as PTY;
+        pty.write(data);
       },
     };
     this.socketManager.subscribe(jobStartSubscriber);
     this.socketManager.subscribe(jobKillSubscriber);
+    this.socketManager.subscribe(jobInputSubscriber);
   }
 
   /**
