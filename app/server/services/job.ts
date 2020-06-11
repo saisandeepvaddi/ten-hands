@@ -2,6 +2,7 @@ import pKill from "tree-kill";
 import path from "path";
 import { exec } from "child_process";
 import SocketManager, { ISocketListener } from "./socket";
+import { PTY } from "./pty";
 
 /**
  * Task service class.
@@ -137,7 +138,8 @@ export class JobManager {
         projectPath: string;
         shell: string;
       }) => {
-        const process = new Job(room, shell, this.socketManager);
+        // const process = new Job(room, shell, this.socketManager);
+        const process = new PTY(room, shell, this.socketManager);
         process.start(command, projectPath);
       },
     };

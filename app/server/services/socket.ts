@@ -26,10 +26,10 @@ class SocketManager {
    */
   public attachServer(server: Server) {
     const io = socketIO(server);
-    io.on("connection", socket => {
+    io.on("connection", (socket) => {
       this.socket = socket;
       console.log("Connected to socket");
-      this.subscribers.forEach(subscriber => {
+      this.subscribers.forEach((subscriber) => {
         this.socket.on(subscriber.event, subscriber.callback);
       });
     });
@@ -58,7 +58,7 @@ class SocketManager {
    */
   subscribe(subscriber: ISocketListener): void {
     const isAlreadyThere = this.subscribers.find(
-      x => x.event === subscriber.event
+      (x) => x.event === subscriber.event
     );
     if (isAlreadyThere) {
       throw new Error(
@@ -75,7 +75,7 @@ class SocketManager {
    * @memberof SocketManager
    */
   unsubscribe(event: string): void {
-    this.subscribers = this.subscribers.filter(x => x.event !== event);
+    this.subscribers = this.subscribers.filter((x) => x.event !== event);
   }
 
   /**
@@ -85,7 +85,7 @@ class SocketManager {
    * @param {*} data Data to send to client
    * @memberof SocketManager
    */
-  emit(event: string, data: any) {
+  emit(event: JobEvent, data: any) {
     this.socket.emit(event, data);
   }
 }

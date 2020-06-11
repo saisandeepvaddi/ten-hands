@@ -34,6 +34,14 @@ interface IJob {
   kill(): number;
 }
 
+type JobEvent =
+  | "job_started"
+  | "job_output"
+  | "job_error"
+  | "job_close"
+  | "job_killed"
+  | "job_exit";
+
 declare module "fix-path" {
   export default function _(): any;
 }
