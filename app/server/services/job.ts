@@ -111,10 +111,20 @@ export class JobManager {
    */
   private killJob(room: string, pid: number) {
     console.log(`Killing process: ${pid}`);
-    pKill(pid);
-    this.socketManager.emit(`job_killed`, {
-      room,
-      data: pid,
+    pKill(pid, (error) => {
+      if (error) {
+        console.error(`Error killing process: ${pid}\n ${error.message}`);
+        this.socketManager.emit(`job_error`, {
+          room,
+          data: `Error killing process: ${pid}.\n ${error.message}`,
+        });
+        return;
+      }
+
+      this.socketManager.emit(`job_killed`, {
+        room,
+        data: pid,
+      });
     });
   }
 
