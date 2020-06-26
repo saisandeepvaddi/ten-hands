@@ -16,7 +16,14 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const EmptyContainer = styled(Container)`
+const EmptyContainer = styled.div`
+  border-top: 1px solid transparent; /* To prevent margin-collapse for first child doesn't happen */
+  background: ${(props) =>
+    props.theme === Classes.DARK ? Colors.DARK_GRAY1 : Colors.LIGHT_GRAY1};
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -17,7 +17,9 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-const EmptyContainer = styled(Container)`
+const EmptyContainer = styled.div`
+  height: calc(100% - 50px);
+  overflow: auto;
   display: flex;
   justify-content: center;
   align-items: center;
