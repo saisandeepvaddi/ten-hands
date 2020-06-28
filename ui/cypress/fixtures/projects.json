@@ -1,7 +1,7 @@
 [
   {
     "_id": "94d2e4cb-59d7-41fe-b4e7-ea9c3f6aa10c",
-    "name": "ten-hands-website",
+    "name": "project 1",
     "type": "nodejs",
     "commands": [
       {
@@ -67,7 +67,7 @@
   },
   {
     "_id": "c8b50690-39e9-466c-9bba-8222348d4f91",
-    "name": "gallery-master",
+    "name": "project 2",
     "type": "nodejs",
     "commands": [
       {
@@ -140,7 +140,7 @@
   },
   {
     "_id": "15e36b9b-5b67-4a2a-b2cc-8302a1b573e7",
-    "name": "wasm-playground",
+    "name": "project 3",
     "type": "nodejs",
     "commands": [
       {

@@ -47,6 +47,24 @@ export const getFakePackageJson = (project = getFakeProjects(1)[0]) => {
   return packageJson;
 };
 
+export const getProjectFromPackageJson = (projectJson) => {
+  let i = 100;
+  return {
+    _id: i++,
+    name: projectJson.name,
+    path: "D:\\",
+    commands: Object.keys(projectJson.scripts).map((key) => ({
+      _id: i++,
+      name: key,
+      cmd: "npm run " + key,
+      execDir: "",
+      lastExecutedAt: Date.now(),
+    })),
+    taskSortOrder: "name-asc",
+    shell: "",
+  };
+};
+
 export const getFakeProjects = (n = 5) => {
   const projects = [];
 

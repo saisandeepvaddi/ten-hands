@@ -1,0 +1,7 @@
+{
+  "name": "fake project.json",
+  "scripts": {
+    "start": "node start.js",
+    "test": "node test.js"
+  }
+}
