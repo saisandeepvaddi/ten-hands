@@ -51,10 +51,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
       if (elRef && elRef.current) {
         // Set default dimensions based on parent.
         // First parent is a div from react-resize. So take grandparent.
-        const parentWidth =
+        const parentWidth: number =
           elRef.current.parentElement?.parentElement?.getBoundingClientRect()
             .width ?? 800;
-        const parentHeight =
+        const parentHeight: number =
           elRef.current.parentElement?.parentElement?.getBoundingClientRect()
             .height ?? 400;
 

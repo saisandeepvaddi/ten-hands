@@ -8,25 +8,39 @@ describe("Test Project Add/Remove", () => {
     cy.route({
       method: "GET",
       url: "/projects",
-      response: fakeProjects
+      response: fakeProjects,
     });
     cy.route({
       method: "DELETE",
       url: "/projects",
-      response: {}
+      response: {},
+    });
+  });
+  it.only("Shows all projects on sidebar", () => {
+    cy.findByTestId("project-list-container").then((subject) => {
+      cy.findAllByTestId("project-name", { container: subject }).then(
+        (projectNameEls) => {
+          const projectNames = Array.from(projectNameEls).map(
+            (span) => span.textContent
+          );
+          fakeProjects.forEach((project) =>
+            expect(projectNames).to.contain(project.name)
+          );
+        }
+      );
     });
   });
   it("Tests new project upload", () => {
-    cy.getByTestId("new-project-button").click();
+    cy.findByTestId("new-project-button").click();
     cy.wait(1000);
     const fakeProject = getFakeProjects(1)[0];
-    cy.getByTestId("new-project-form").then(subject => {
+    cy.findByTestId("new-project-form").then((subject) => {
       const fileName = "package.json";
       const fileContent = getFakePackageJson(fakeProject);
       cy.get("#configFile").upload({
         fileContent: JSON.stringify(fileContent),
         fileName,
-        mimeType: "application/json"
+        mimeType: "application/json",
       });
 
       cy.wait(500);
@@ -43,11 +57,11 @@ describe("Test Project Add/Remove", () => {
       cy.route({
         method: "POST",
         url: "/projects",
-        response: fakeProject
+        response: fakeProject,
       });
 
-      cy.getAllByTestId("new-project-task-row", { container: subject }).then(
-        taskRows => {
+      cy.findAllByTestId("new-project-task-row", { container: subject }).then(
+        (taskRows) => {
           const scriptKeys = Object.keys(fileContent.scripts);
           const scriptValues = Object.values(fileContent.scripts);
           Array.from(taskRows).forEach((row, i) => {
@@ -57,22 +71,25 @@ describe("Test Project Add/Remove", () => {
         }
       );
 
-      cy.getByTestId("save-project-button").click();
+      cy.findByTestId("save-project-button").click();
     });
 
     cy.wait(2000);
 
-    cy.getAllByTestId("project-name").then(sidebarProjectnames => {
+    cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
       const oneWithAddedProjectName = Array.from(sidebarProjectnames).filter(
-        x => x.textContent === fakeProject.name
+        (x) => x.textContent === fakeProject.name
       );
       console.log("oneWithAddedProjectName:", oneWithAddedProjectName);
       expect(oneWithAddedProjectName).to.have.length(1);
     });
-    cy.getByTestId("active-project-name").should("have.text", fakeProject.name);
+    cy.findByTestId("active-project-name").should(
+      "have.text",
+      fakeProject.name
+    );
   });
 
-  it.only("Renames a project", () => {
+  it("Renames a project", () => {
     cy.wait(2000);
     const firstProject = fakeProjects[0];
     let updatedName = firstProject.name + "-updated";
@@ -82,50 +99,50 @@ describe("Test Project Add/Remove", () => {
       url: "/projects",
       response: {
         ...firstProject,
-        name: updatedName
-      }
+        name: updatedName,
+      },
     });
-    cy.getByTestId("project-settings-button").click();
-    cy.getByTestId("rename-project-menu-item").click();
+    cy.findByTestId("project-settings-button").click();
+    cy.findByTestId("rename-project-menu-item").click();
     cy.getByText(`Rename project: ${firstProject.name}`).should("exist");
-    cy.getByTestId("updated-project-name").type(firstProject.name);
-    cy.getByTestId("rename-project-form").submit();
+    cy.findByTestId("updated-project-name").type(firstProject.name);
+    cy.findByTestId("rename-project-form").submit();
     cy.getByText(/project name already exists/i).should("exist");
-    cy.getByTestId("updated-project-name")
+    cy.findByTestId("updated-project-name")
       .clear()
       .type(updatedName);
-    cy.getByTestId("rename-project-form").submit();
+    cy.findByTestId("rename-project-form").submit();
     cy.wait(2000);
-    cy.getByTestId("active-project-name").should("have.text", updatedName);
+    cy.findByTestId("active-project-name").should("have.text", updatedName);
   });
 
   it("Removes project", () => {
     const secondProject = fakeProjects[1];
-    cy.getAllByTestId("project-name").then(sidebarProjectnames => {
+    cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
       const projectSidebarItem = cy.wrap(
         Array.from(sidebarProjectnames).filter(
-          x => x.textContent === secondProject.name
+          (x) => x.textContent === secondProject.name
         )
       );
       projectSidebarItem.click();
     });
 
-    cy.getByTestId("project-settings-button").click();
-    cy.getByTestId("delete-project-menu-item").click();
-    cy.getByTestId("delete-project-warning").should(
+    cy.findByTestId("project-settings-button").click();
+    cy.findByTestId("delete-project-menu-item").click();
+    cy.findByTestId("delete-project-warning").should(
       "have.text",
       `Are you sure you want to delete project ${secondProject.name}?`
     );
     cy.getByText(/yes, delete/i).click();
     cy.wait(2000);
 
-    cy.getAllByTestId("project-name").then(sidebarProjectnames => {
+    cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
       const oneWithRemovedProjectName = Array.from(sidebarProjectnames).filter(
-        x => x.textContent === secondProject.name
+        (x) => x.textContent === secondProject.name
       );
       expect(oneWithRemovedProjectName).to.have.length(0);
     });
-    cy.getByTestId("active-project-name").should(
+    cy.findByTestId("active-project-name").should(
       "not.have.text",
       secondProject.name
     );
@@ -137,12 +154,12 @@ describe("Test Project Add/Remove", () => {
     cy.route({
       method: "GET",
       url: "/projects",
-      response: fakeProjects
+      response: fakeProjects,
     });
 
     while (projectsCount-- > 0) {
-      cy.getByTestId("project-settings-button").click();
-      cy.getByTestId("delete-project-menu-item").click();
+      cy.findByTestId("project-settings-button").click();
+      cy.findByTestId("delete-project-menu-item").click();
       cy.getByText(/yes, delete/i).click();
       cy.wait(2000);
     }

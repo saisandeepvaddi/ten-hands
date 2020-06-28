@@ -19,7 +19,7 @@ const ProjectsList = React.memo(() => {
   }
 
   return (
-    <Container>
+    <Container data-testid="project-list-container">
       <ProjectsListContainer />
     </Container>
   );
