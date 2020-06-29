@@ -49,7 +49,7 @@ describe("Test Projects", () => {
     });
   });
 
-  it.only("Tests new project upload", () => {
+  it.skip("Tests new project upload with package.json", () => {
     cy.findByTestId("new-project-button").click();
     cy.wait(1000);
     const fileContent = require("../fixtures/test-package.json");
@@ -108,5 +108,46 @@ describe("Test Projects", () => {
       "have.text",
       createdProject.name
     );
+  });
+  it.only("Add new project with form fill", () => {
+    cy.findByTestId("new-project-button").click();
+    cy.wait(1000);
+    const fileContent = require("../fixtures/test-package.json");
+    const createdProject = getProjectFromPackageJson({
+      name: "New Project Added By Typing",
+      scripts: {},
+    });
+    cy.findByTestId("new-project-form").then((subject) => {
+      cy.wait(500);
+
+      cy.findByLabelText(/project name/i, { container: subject }).type(
+        "New Project Added By Typing"
+      );
+
+      cy.findByLabelText(/project path/i, { container: subject }).type("D:\\");
+
+      cy.route({
+        method: "POST",
+        url: "/projects",
+        response: createdProject,
+      });
+
+      cy.findByTestId("save-project-button").click();
+    });
+
+    cy.wait(2000);
+
+    cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
+      const oneWithAddedProjectName = Array.from(sidebarProjectnames).filter(
+        (x) => x.textContent === createdProject.name
+      );
+      expect(oneWithAddedProjectName).to.have.length(1);
+    });
+    cy.findByTestId("active-project-name").should(
+      "have.text",
+      createdProject.name
+    );
+
+    cy.findByText(/add a task using/i).should("exist");
   });
 });
