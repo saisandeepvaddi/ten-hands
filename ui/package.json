@@ -13,7 +13,7 @@
     "build:browser": "react-scripts build",
     "test:electron": "react-app-rewired test",
     "cypress:open": "./node_modules/.bin/cypress open",
-    "cypress:run": "./node_modules/.bin/cypress run"
+    "cypress:run": "./node_modules/.bin/cypress run --spec ./cypress/integration/refactor.spec.js"
   },
   "author": {
     "name": "Sai Sandeep Vaddi",
