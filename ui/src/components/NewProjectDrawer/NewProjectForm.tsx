@@ -12,7 +12,7 @@ import NewProjectCommands from "./NewProjectCommands";
 import ProjectFileUpload from "./ProjectFileUpload";
 import { v4 as uuidv4 } from "uuid";
 
-const initialProject: IProject = {
+const emptyProject: IProject = {
   _id: uuidv4(),
   name: "",
   type: "",
@@ -33,6 +33,9 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
   ({ setDrawerOpen }) => {
+    const [initialProject, setInitialProject] = useState<IProject>(
+      emptyProject
+    );
     const [configFileName, setConfigFileName] = useState("");
     const { projects, addProject } = useProjects();
     const { config } = useConfig();
@@ -166,6 +169,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       try {
         actions.setSubmitting(true);
         await addProject(values);
+        actions.resetForm();
         setDrawerOpen(false);
       } catch (error) {
         console.error(error);

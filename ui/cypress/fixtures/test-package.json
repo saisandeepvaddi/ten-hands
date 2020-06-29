@@ -1,7 +1,7 @@
 {
   "name": "fake project.json",
   "scripts": {
-    "start": "node start.js",
+    "start": "node ./dummy-file.js",
     "test": "node test.js"
   }
 }

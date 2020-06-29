@@ -4,7 +4,7 @@ const {
   getProjectFromPackageJson,
 } = require("../support/generate");
 
-describe("Test Projects", () => {
+describe("When no projects exist", () => {
   let projects;
   before(() => {
     cy.clock();
@@ -13,7 +13,7 @@ describe("Test Projects", () => {
     cy.route({
       method: "GET",
       url: "/projects",
-      response: "fixture:projects.json",
+      response: [],
     });
 
     // Reload here to replace actual projects from my FS with proejct fixture stub
@@ -22,34 +22,7 @@ describe("Test Projects", () => {
       projects = projectsFromFixtures;
     });
   });
-
-  it("Shows all projects on sidebar", () => {
-    cy.findByTestId("project-list-container").then((subject) => {
-      cy.findAllByTestId("project-name", { container: subject }).then(
-        (projectNameEls) => {
-          const projectNamesOnUI = Array.from(projectNameEls).map(
-            (el) => el.textContent
-          );
-          const projectNamesFromFixture = projects.map(
-            (project) => project.name
-          );
-          expect(projectNamesOnUI.sort()).to.deep.equal(
-            projectNamesFromFixture.sort()
-          );
-        }
-      );
-    });
-  });
-
-  it("Verifies first project to be default active project", () => {
-    cy.findAllByTestId("project-name").then((projectNames) => {
-      cy.findByTestId("active-project-name")
-        .should("have.text", projectNames.get(0).textContent)
-        .log();
-    });
-  });
-
-  it.skip("Tests new project upload with package.json", () => {
+  it("Tests new project upload with package.json", () => {
     cy.findByTestId("new-project-button").click();
     cy.wait(1000);
     const fileContent = require("../fixtures/test-package.json");
@@ -109,7 +82,7 @@ describe("Test Projects", () => {
       createdProject.name
     );
   });
-  it.only("Add new project with form fill", () => {
+  it("Add new project with form fill", () => {
     cy.findByTestId("new-project-button").click();
     cy.wait(1000);
     const fileContent = require("../fixtures/test-package.json");
@@ -126,6 +99,7 @@ describe("Test Projects", () => {
 
       cy.findByLabelText(/project path/i, { container: subject }).type("D:\\");
 
+      cy.server();
       cy.route({
         method: "POST",
         url: "/projects",
@@ -149,5 +123,76 @@ describe("Test Projects", () => {
     );
 
     cy.findByText(/add a task using/i).should("exist");
+  });
+
+  it("Does not allow new project with existing name", () => {
+    cy.findByTestId("new-project-button").click();
+    cy.wait(1000);
+    const fileContent = require("../fixtures/test-package.json");
+
+    cy.findByTestId("new-project-form").then((subject) => {
+      cy.wait(500);
+
+      cy.findByLabelText(/project name/i, { container: subject }).type(
+        "New Project Added by Typing"
+      );
+
+      cy.findByLabelText(/project path/i, { container: subject }).type("D:\\");
+
+      cy.server();
+      cy.route({
+        method: "POST",
+        url: "/projects",
+        response: {},
+      });
+
+      cy.findByTestId("save-project-button").click();
+    });
+
+    cy.findByText(/project name already exists/i).should("exist");
+  });
+});
+describe("When projects exist", () => {
+  let projects;
+  before(() => {
+    cy.clock();
+    cy.visit("/");
+    cy.server();
+    cy.route({
+      method: "GET",
+      url: "/projects",
+      response: "fixture:projects.json",
+    });
+
+    // Reload here to replace actual projects from my FS with proejct fixture stub
+    cy.reload();
+    cy.fixture("projects").then((projectsFromFixtures) => {
+      projects = projectsFromFixtures;
+    });
+  });
+  it("Shows all projects on sidebar", () => {
+    cy.findByTestId("project-list-container").then((subject) => {
+      cy.findAllByTestId("project-name", { container: subject }).then(
+        (projectNameEls) => {
+          const projectNamesOnUI = Array.from(projectNameEls).map(
+            (el) => el.textContent
+          );
+          const projectNamesFromFixture = projects.map(
+            (project) => project.name
+          );
+          expect(projectNamesOnUI.sort()).to.deep.equal(
+            projectNamesFromFixture.sort()
+          );
+        }
+      );
+    });
+  });
+
+  it("Verifies first project to be default active project", () => {
+    cy.findAllByTestId("project-name").then((projectNames) => {
+      cy.findByTestId("active-project-name")
+        .should("have.text", projectNames.get(0).textContent)
+        .log();
+    });
   });
 });
