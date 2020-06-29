@@ -1,69 +1,64 @@
-import { getFakeProjects, getFakePackageJson } from "../support/generate";
+const {
+  getFakeProjects,
+  getFakePackageJson,
+  getProjectFromPackageJson,
+} = require("../support/generate");
 
-describe("Test Project Add/Remove", () => {
-  const fakeProjects = getFakeProjects(5);
+describe("When no projects exist", () => {
+  let projects;
   before(() => {
+    cy.clock();
     cy.visit("/");
     cy.server();
     cy.route({
       method: "GET",
       url: "/projects",
-      response: fakeProjects,
+      response: [],
     });
-    cy.route({
-      method: "DELETE",
-      url: "/projects",
-      response: {},
-    });
-  });
-  it.only("Shows all projects on sidebar", () => {
-    cy.findByTestId("project-list-container").then((subject) => {
-      cy.findAllByTestId("project-name", { container: subject }).then(
-        (projectNameEls) => {
-          const projectNames = Array.from(projectNameEls).map(
-            (span) => span.textContent
-          );
-          fakeProjects.forEach((project) =>
-            expect(projectNames).to.contain(project.name)
-          );
-        }
-      );
+
+    // Reload here to replace actual projects from my FS with proejct fixture stub
+    cy.reload();
+    cy.fixture("projects").then((projectsFromFixtures) => {
+      projects = projectsFromFixtures;
     });
   });
-  it("Tests new project upload", () => {
+  it("Tests new project upload with package.json", () => {
     cy.findByTestId("new-project-button").click();
     cy.wait(1000);
-    const fakeProject = getFakeProjects(1)[0];
+    const fileContent = require("../fixtures/test-package.json");
+    const createdProject = getProjectFromPackageJson(fileContent);
     cy.findByTestId("new-project-form").then((subject) => {
-      const fileName = "package.json";
-      const fileContent = getFakePackageJson(fakeProject);
-      cy.get("#configFile").upload({
-        fileContent: JSON.stringify(fileContent),
-        fileName,
-        mimeType: "application/json",
-      });
+      // const fileName = "package.json";
+      // cy.get("input#configFile").attachFile({
+      //   fileContent: JSON.stringify(fileContent),
+      //   fileName,
+      //   mimeType: "application/json",
+      // });
+      cy.get("input#configFile").attachFile("test-package.json");
+      // const fileContent = getFakePackageJson(fakeProject);
 
+      console.log("createdProject:", createdProject);
       cy.wait(500);
 
-      cy.getByLabelText(/project name/i, { container: subject }).should(
+      cy.findByLabelText(/project name/i, { container: subject }).should(
         "have.value",
-        fileContent.name
+        createdProject.name
       );
-      cy.getByLabelText(/project type/i, { container: subject }).should(
-        "have.value",
-        "nodejs"
+
+      cy.findByLabelText(/project path/i, { container: subject }).type(
+        createdProject.path
       );
 
       cy.route({
         method: "POST",
         url: "/projects",
-        response: fakeProject,
+        response: createdProject,
       });
 
       cy.findAllByTestId("new-project-task-row", { container: subject }).then(
         (taskRows) => {
-          const scriptKeys = Object.keys(fileContent.scripts);
-          const scriptValues = Object.values(fileContent.scripts);
+          const scriptKeys = createdProject.commands.map((c) => c.name);
+          const scriptValues = createdProject.commands.map((c) => c.cmd);
           Array.from(taskRows).forEach((row, i) => {
             expect(row).to.contain(scriptKeys[i]);
             expect(row).to.contain(scriptValues[i]);
@@ -78,92 +73,126 @@ describe("Test Project Add/Remove", () => {
 
     cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
       const oneWithAddedProjectName = Array.from(sidebarProjectnames).filter(
-        (x) => x.textContent === fakeProject.name
+        (x) => x.textContent === createdProject.name
       );
-      console.log("oneWithAddedProjectName:", oneWithAddedProjectName);
       expect(oneWithAddedProjectName).to.have.length(1);
     });
     cy.findByTestId("active-project-name").should(
       "have.text",
-      fakeProject.name
+      createdProject.name
     );
   });
-
-  it("Renames a project", () => {
-    cy.wait(2000);
-    const firstProject = fakeProjects[0];
-    let updatedName = firstProject.name + "-updated";
-
-    cy.route({
-      method: "PATCH",
-      url: "/projects",
-      response: {
-        ...firstProject,
-        name: updatedName,
-      },
+  it("Add new project with form fill", () => {
+    cy.findByTestId("new-project-button").click();
+    cy.wait(1000);
+    const fileContent = require("../fixtures/test-package.json");
+    const createdProject = getProjectFromPackageJson({
+      name: "New Project Added By Typing",
+      scripts: {},
     });
-    cy.findByTestId("project-settings-button").click();
-    cy.findByTestId("rename-project-menu-item").click();
-    cy.getByText(`Rename project: ${firstProject.name}`).should("exist");
-    cy.findByTestId("updated-project-name").type(firstProject.name);
-    cy.findByTestId("rename-project-form").submit();
-    cy.getByText(/project name already exists/i).should("exist");
-    cy.findByTestId("updated-project-name")
-      .clear()
-      .type(updatedName);
-    cy.findByTestId("rename-project-form").submit();
-    cy.wait(2000);
-    cy.findByTestId("active-project-name").should("have.text", updatedName);
-  });
+    cy.findByTestId("new-project-form").then((subject) => {
+      cy.wait(500);
 
-  it("Removes project", () => {
-    const secondProject = fakeProjects[1];
-    cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
-      const projectSidebarItem = cy.wrap(
-        Array.from(sidebarProjectnames).filter(
-          (x) => x.textContent === secondProject.name
-        )
+      cy.findByLabelText(/project name/i, { container: subject }).type(
+        "New Project Added By Typing"
       );
-      projectSidebarItem.click();
+
+      cy.findByLabelText(/project path/i, { container: subject }).type("D:\\");
+
+      cy.server();
+      cy.route({
+        method: "POST",
+        url: "/projects",
+        response: createdProject,
+      });
+
+      cy.findByTestId("save-project-button").click();
     });
 
-    cy.findByTestId("project-settings-button").click();
-    cy.findByTestId("delete-project-menu-item").click();
-    cy.findByTestId("delete-project-warning").should(
-      "have.text",
-      `Are you sure you want to delete project ${secondProject.name}?`
-    );
-    cy.getByText(/yes, delete/i).click();
     cy.wait(2000);
 
     cy.findAllByTestId("project-name").then((sidebarProjectnames) => {
-      const oneWithRemovedProjectName = Array.from(sidebarProjectnames).filter(
-        (x) => x.textContent === secondProject.name
+      const oneWithAddedProjectName = Array.from(sidebarProjectnames).filter(
+        (x) => x.textContent === createdProject.name
       );
-      expect(oneWithRemovedProjectName).to.have.length(0);
+      expect(oneWithAddedProjectName).to.have.length(1);
     });
     cy.findByTestId("active-project-name").should(
-      "not.have.text",
-      secondProject.name
+      "have.text",
+      createdProject.name
     );
+
+    cy.findByText(/add a task using/i).should("exist");
   });
 
-  it("Deletes all projects", () => {
-    let projectsCount = 2;
-    const fakeProjects = getFakeProjects(projectsCount);
+  it("Does not allow new project with existing name", () => {
+    cy.findByTestId("new-project-button").click();
+    cy.wait(1000);
+    const fileContent = require("../fixtures/test-package.json");
+
+    cy.findByTestId("new-project-form").then((subject) => {
+      cy.wait(500);
+
+      cy.findByLabelText(/project name/i, { container: subject }).type(
+        "New Project Added by Typing"
+      );
+
+      cy.findByLabelText(/project path/i, { container: subject }).type("D:\\");
+
+      cy.server();
+      cy.route({
+        method: "POST",
+        url: "/projects",
+        response: {},
+      });
+
+      cy.findByTestId("save-project-button").click();
+    });
+
+    cy.findByText(/project name already exists/i).should("exist");
+  });
+});
+describe("When projects exist", () => {
+  let projects;
+  before(() => {
+    cy.clock();
+    cy.visit("/");
+    cy.server();
     cy.route({
       method: "GET",
       url: "/projects",
-      response: fakeProjects,
+      response: "fixture:projects.json",
     });
 
-    while (projectsCount-- > 0) {
-      cy.findByTestId("project-settings-button").click();
-      cy.findByTestId("delete-project-menu-item").click();
-      cy.getByText(/yes, delete/i).click();
-      cy.wait(2000);
-    }
+    // Reload here to replace actual projects from my FS with proejct fixture stub
+    cy.reload();
+    cy.fixture("projects").then((projectsFromFixtures) => {
+      projects = projectsFromFixtures;
+    });
+  });
+  it("Shows all projects on sidebar", () => {
+    cy.findByTestId("project-list-container").then((subject) => {
+      cy.findAllByTestId("project-name", { container: subject }).then(
+        (projectNameEls) => {
+          const projectNamesOnUI = Array.from(projectNameEls).map(
+            (el) => el.textContent
+          );
+          const projectNamesFromFixture = projects.map(
+            (project) => project.name
+          );
+          expect(projectNamesOnUI.sort()).to.deep.equal(
+            projectNamesFromFixture.sort()
+          );
+        }
+      );
+    });
+  });
 
-    cy.queryByTestId("no-projects-message").should("exist");
+  it("Verifies first project to be default active project", () => {
+    cy.findAllByTestId("project-name").then((projectNames) => {
+      cy.findByTestId("active-project-name")
+        .should("have.text", projectNames.get(0).textContent)
+        .log();
+    });
   });
 });
