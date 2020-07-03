@@ -85,7 +85,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
           initialValues={initialCommand}
           onSubmit={handleSubmit}
           render={(props) => (
-            <form onSubmit={props.handleSubmit}>
+            <form onSubmit={props.handleSubmit} data-testid="new-task-form">
               <FormGroup
                 label="Name"
                 labelFor="name"
