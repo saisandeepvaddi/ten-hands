@@ -7,5 +7,5 @@ export const isRunningInElectron = () => {
 
 export const openInExplorer = (projectPath) => {
   const { shell } = require("electron");
-  shell.openItem(projectPath);
+  shell.openPath(projectPath);
 };
