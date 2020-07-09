@@ -1,15 +1,17 @@
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
-import debounce from "lodash/debounce";
-import React, { useEffect } from "react";
+import throttle from "lodash/throttle";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useConfig } from "../shared/stores/ConfigStore";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
+import { ResizableBox } from "react-resizable";
+import { Icon } from "@blueprintjs/core";
 
 interface ICommandProps {
   room: string;
   index: number;
+  containerWidth: number;
 }
 
 const TerminalContainer = styled.div`
@@ -19,13 +21,14 @@ const TerminalContainer = styled.div`
 `;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
-  ({ room, index }) => {
+  ({ room, index, containerWidth }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
     const currentTheme = React.useRef<any>(null);
     const themeTimeout = React.useRef<any>(null);
-    // const terminalAttached = React.useRef<boolean>(false);
+    const [height, setHeight] = useState<number>(400);
+    const [width, setWidth] = useState<number>(800);
     const { config } = useConfig();
 
     const setTheme = () => {
@@ -46,6 +49,17 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
       if (elRef && elRef.current) {
+        // Set default dimensions based on parent.
+        // First parent is a div from react-resize. So take grandparent.
+        const parentWidth: number =
+          elRef.current.parentElement?.parentElement?.getBoundingClientRect()
+            .width ?? 800;
+        const parentHeight: number =
+          elRef.current.parentElement?.parentElement?.getBoundingClientRect()
+            .height ?? 400;
+
+        setHeight(parentHeight);
+        setWidth(parentWidth);
         if (terminal.current === null) {
           terminal.current = JobTerminalManager.getInstance().createJobTerminal(
             room
@@ -72,28 +86,45 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     }, [theme, config, index]);
 
     const handleResize = React.useCallback(
-      debounce((entries: IResizeEntry[]) => {
-        let resizeTimeout: any = null;
-        const resizeLater = () => {
-          resizeTimeout = setTimeout(() => {
-            if (terminal && terminal.current && entries.length > 0) {
-              const width: number = entries[0].contentRect.width;
-              terminal.current.resizeTerminal(width);
-            }
-          }, 0);
-        };
-        resizeLater();
-        return () => {
-          clearTimeout(resizeTimeout);
-        };
-      }, 50),
+      throttle((height: number) => {
+        if (terminal && terminal.current) {
+          setHeight(height);
+          terminal.current.fitAddon.fit();
+        }
+      }, 100),
       [terminal]
     );
 
+    useEffect(() => {
+      setWidth(containerWidth);
+    }, [containerWidth]);
+
+    useEffect(() => {
+      terminal.current?.fitAddon.fit();
+    }, [width]);
+
     return (
-      <ResizeSensor onResize={handleResize}>
+      <ResizableBox
+        axis="y"
+        resizeHandles={["s"]}
+        handleSize={[8, 0]}
+        handle={
+          <div className="p-relative">
+            <Icon
+              icon="drag-handle-horizontal"
+              className="p-absolute"
+              style={{ left: "50%", cursor: "ns-resize" }}
+            />
+          </div>
+        }
+        width={width}
+        height={height}
+        onResize={(e, { size }) => {
+          handleResize(size.height);
+        }}
+      >
         <TerminalContainer ref={elRef} />
-      </ResizeSensor>
+      </ResizableBox>
     );
   }
 );

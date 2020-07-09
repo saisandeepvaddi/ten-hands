@@ -107,3 +107,7 @@ code {
   width: 800px;
   transform: translateX(-50%);
 }
+
+/* .react-resizable {
+  margin: 0 !important;
+} */

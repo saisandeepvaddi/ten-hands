@@ -16,18 +16,18 @@ jest.mock("socket.io-client", () => {
     }),
     emit: jest.fn().mockImplementation((event, data) => {
       // console.log(`mock emit with event: ${event}`);
-    })
+    }),
   };
 
   return {
     __esModule: true,
-    default: jest.fn(_ => socket)
+    default: jest.fn((_) => socket),
   };
 });
 
 jest.mock("../utils/storage", () => {
   return {
-    getItem: jest.fn(key => {
+    getItem: jest.fn((key) => {
       switch (key) {
         case "port": {
           return 5010;
@@ -48,33 +48,33 @@ jest.mock("../utils/storage", () => {
     }),
     setItem: jest.fn((key, value) => {
       return true;
-    })
+    }),
   };
 });
 
 // jest.mock("../components/shared/API");
 
 export const commandBuilder = build("Command").fields({
-  _id: fake(f => f.random.uuid()),
-  name: fake(f => f.random.word()),
-  cmd: fake(f => f.random.words()),
-  execDir: ""
+  _id: fake((f) => f.random.uuid()),
+  name: fake((f) => f.random.word()),
+  cmd: fake((f) => f.random.words()),
+  execDir: "",
 });
 
 export const projectBuilder = build("Project").fields({
-  _id: fake(f => f.random.uuid()),
-  name: fake(f => f.random.word()),
-  path: fake(f => f.fake("D:\\{{random.word}}\\{{random.word}}")),
-  commands: arrayOf(commandBuilder, Math.ceil(Math.random() * 5 + 0))
+  _id: fake((f) => f.random.uuid()),
+  name: fake((f) => f.random.word()),
+  path: fake((f) => f.fake("D:\\{{random.word}}\\{{random.word}}")),
+  commands: arrayOf(commandBuilder, Math.ceil(Math.random() * 5 + 0)),
 });
 
 export const packageJsonBuilder = build("PackageJSON").fields({
-  name: fake(f => f.random.word()),
+  name: fake((f) => f.random.word()),
   version: "1.0.0",
   scripts: {
     start: "npm run start",
-    test: "yarn test"
-  }
+    test: "yarn test",
+  },
 });
 
 export const getFakePackageJson = () => {
@@ -98,11 +98,11 @@ const AllTheProviders = ({ children }) => {
   return (
     <ConfigProvider>
       <ThemeProvider>
-        <ProjectsProvider>
-          <JobsProvider>
-            <SocketsProvider>{children}</SocketsProvider>
-          </JobsProvider>
-        </ProjectsProvider>
+        <JobsProvider>
+          <SocketsProvider>
+            <ProjectsProvider>{children}</ProjectsProvider>
+          </SocketsProvider>
+        </JobsProvider>
       </ThemeProvider>
     </ConfigProvider>
   );
@@ -110,6 +110,7 @@ const AllTheProviders = ({ children }) => {
 
 const customRender = async (ui, options?) => {
   try {
+    // return render(ui, { wrapper: AllTheProviders, ...options });
     let utils: any = null;
     await act(async () => {
       utils = render(ui, { wrapper: AllTheProviders, ...options });

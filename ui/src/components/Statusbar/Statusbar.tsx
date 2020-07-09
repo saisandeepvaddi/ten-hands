@@ -9,13 +9,13 @@ import {
   Popover,
   Menu,
   MenuItem,
-  Tag
+  Tag,
 } from "@blueprintjs/core";
 // import { useConfig } from "../shared/stores/ConfigStore";
 import { isRunningInElectron } from "../../utils/electron";
 
 const Container = styled.div`
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   z-index: 9999;
   width: 100%;
@@ -34,7 +34,7 @@ const Statusbar: React.FC<IStatusbarProps> = () => {
   const {
     totalRunningTaskCount,
     activeProject,
-    projectsRunningTaskCount
+    projectsRunningTaskCount,
   } = useProjects();
   const [isUpdateAvailable, setIsUpdateAvailable] = React.useState<boolean>(
     false
@@ -67,7 +67,7 @@ const Statusbar: React.FC<IStatusbarProps> = () => {
     }
   };
 
-  const openDownloadsPage = e => {
+  const openDownloadsPage = (e) => {
     try {
       e.preventDefault();
       e.stopPropagation();
@@ -89,7 +89,7 @@ const Statusbar: React.FC<IStatusbarProps> = () => {
   return (
     <React.Fragment>
       <Container theme={theme}>
-        <div className="left">
+        <div className="left" data-testid="total-running-task-count">
           {isRunningInElectron() && isUpdateAvailable && (
             <Button
               data-testid="notifications-button"
@@ -112,7 +112,7 @@ const Statusbar: React.FC<IStatusbarProps> = () => {
             Switch Terminal View
           </Button> */}
         </div>
-        <div className="right">
+        <div className="right" data-testid="project-running-task-count">
           Tasks running in this project: {activeProjectRunningTaskCount ?? 0}
         </div>
       </Container>

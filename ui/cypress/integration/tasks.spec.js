@@ -1,140 +1,130 @@
-import { getFakeProjects, getFakePackageJson } from "../support/generate";
+const {
+  getFakeProjects,
+  getFakePackageJson,
+  getProjectFromPackageJson,
+} = require("../support/generate");
 
-describe("Test Project Add/Remove", () => {
-  const fakeProjects = getFakeProjects(5);
-
+describe("When no tasks in the project", () => {
+  let project;
   before(() => {
+    cy.clearLocalStorage();
+    cy.clock();
     cy.visit("/");
     cy.server();
-    cy.route({
-      method: "GET",
-      url: "/projects",
-      response: fakeProjects
-    });
-    cy.route({
-      method: "DELETE",
-      url: "/projects",
-      response: {}
+    cy.route("POST", "/utils/git-info", {});
+    cy.fixture("task-test-project").then((p) => {
+      project = p;
+      cy.route({
+        method: "GET",
+        url: "/projects",
+        response: [project],
+      });
+      cy.reload();
     });
   });
 
-  it("Adds a new task", () => {
-    const fakeTaskName = "random";
-    const fakeTaskCmd = "npm run random";
+  it("Checks whether project is active", () => {
+    cy.findByTestId("active-project-name").should("have.text", project.name);
+  });
+  it("Should have all tasks from the project in the project window", () => {
+    const taskNames = project.commands.map((t) => t.name);
+    taskNames.sort();
+    cy.findAllByTestId("command-name").then((taskNameEls) => {
+      expect(taskNames.length).to.equal(taskNameEls.length);
+      Array.from(taskNameEls).forEach((el, i) => {
+        expect(el.textContent).to.equal(taskNames[i]);
+      });
+    });
+  });
+  it("Should run the first task", () => {
+    const firstTask = project.commands[0];
+    // Uncomment this to see task output in xterm canvas
+    // cy.clock().invoke("restore");
+    const firstStartButton = null;
+    const firstStopButton = null;
+
+    // Cannot read the content of the xtermjs canvas.
+    // So, let's just test if start button, stop button worked
+    // The dummy-file.js has a timer which runs for 5 seconds.
+    // So see if the buttons worked. And we can check the task output visually manually.
+    // Also verify the task count on status bar
+    cy.findByTestId("total-running-task-count").should(
+      "have.text",
+      "Total running tasks: 0"
+    );
+    cy.get(`#task-card-${firstTask._id}`).then((taskCard) => {
+      cy.findByTestId("start-task-button", { container: taskCard }).click();
+
+      // cy.findByTestId("start-task-button", { container: taskCard }).should(
+      //   "be.disabled"
+      // );
+      // cy.findByTestId("stop-task-button", { container: taskCard }).should(
+      //   "not.be.disabled"
+      // );
+      cy.findByTestId("total-running-task-count").should(
+        "have.text",
+        "Total running tasks: 1"
+      );
+      cy.findByTestId("project-running-task-count").should(
+        "have.text",
+        "Tasks running in this project: 1"
+      );
+      cy.wait(5000);
+      // cy.findByTestId("start-task-button", { container: taskCard }).should(
+      //   "not.be.disabled"
+      // );
+      // cy.findByTestId("stop-task-button", { container: taskCard }).should(
+      //   "be.disabled"
+      // );
+      cy.findByTestId("total-running-task-count").should(
+        "have.text",
+        "Total running tasks: 0"
+      );
+      cy.findByTestId("project-running-task-count").should(
+        "have.text",
+        "Tasks running in this project: 0"
+      );
+    });
+    cy.wait(1000);
+
+    // cy.clock();
+  });
+  it("Adds new task", () => {
+    cy.findByRole("button", { name: /New Task/i }).click();
+    let taskName = "Best task in the workd";
+    let task = "node dummy-file.js";
+    cy.server();
     cy.route({
       method: "POST",
-      url: ".*?/commands",
-      response: {}
+      url: `/projects/${project._id}/commands`,
+      response: { _id: "best-task-id", name: taskName },
     });
-    cy.route({
-      method: "GET",
-      url: "/projects",
-      response: fakeProjects.map((project, i) => {
-        if (i > 0) {
-          return project;
-        }
-        const updatedProject = {
-          ...project,
-          commands: [
-            ...project.commands,
-            {
-              _id: "some-random-id",
-              name: fakeTaskName,
-              cmd: fakeTaskCmd
-            }
-          ]
-        };
-        return updatedProject;
-      })
+    cy.findByTestId("new-task-form").within((form) => {
+      cy.findByLabelText(/Name/).type(taskName);
+      cy.findByLabelText(/Task/).type(task);
+      cy.wrap(form).submit();
     });
-    cy.wait(500);
-    cy.getByTestId("new-task-button").click();
-    cy.getByLabelText(/name/i).type(fakeTaskName);
-    cy.getByLabelText(/task/i).type(fakeTaskCmd);
-    cy.getByText(/save task/i).click();
-    cy.wait(2000);
-    cy.getByText(fakeTaskName).should("exist");
-    cy.getByText(fakeTaskName)
-      .scrollIntoView({ easing: "linear" })
-      .should("be.visible");
-  });
-});
+    cy.wait(1000);
 
-// This test is only to verify visually that terminal actually printing stuff on play stop buttons.
-// For that we need real interaction with backend.
-// Make sure you add project folder of 'ten-hands' to the UI before running this suite.
-describe.skip("Tests using real project - no stubs", () => {
-  before(() => {
-    cy.visit("/");
-    cy.get(".Pane1").then(sidebar => {
-      cy.getByText("ten-hands", { container: sidebar })
-        .click()
-        .wait(2000);
+    cy.findAllByTestId("command-name").then((allCommandEls) => {
+      const names = Array.from(allCommandEls).map((cmd) => cmd.textContent);
+      expect(names).to.contain(taskName);
     });
   });
-
-  it("Checks New Task UI", () => {
-    cy.getByText("New Task")
-      .click()
-      .get(".bp3-drawer")
-      .then(drawer => {
-        cy.getByText("Add Task", { container: drawer }).should("exist");
-        cy.getByText("Name", { container: drawer }).should("exist");
-        cy.getByText("Path", { container: drawer }).should("exist");
-        cy.getByText("Task", { container: drawer }).should("exist");
-        cy.getByText("Save Task", { container: drawer }).should("exist");
-      });
-  });
-
-  it("Adds a task", () => {
-    cy.getByLabelText(/name/i).type("Test Task");
-    cy.getByLabelText(/task/i).type("node dummy-file.js");
-    cy.getByTestId("save-task-button").click();
-    cy.wait(2000);
-    cy.getByText("Test Task").should("exist");
-    cy.getByText("node dummy-file.js").should("exist");
-    cy.getByText("node dummy-file.js")
-      .scrollIntoView({ easing: "linear" })
-      .should("be.visible");
-  });
-
-  it("Runs a task", () => {
-    cy.getByText("Test Task")
-      .scrollIntoView({ easing: "linear" })
-      .closest(".bp3-card")
-      .then(card => {
-        cy.getByTestId(/stop-task-button/i, { container: card }).should(
-          "be.disabled"
-        );
-        cy.getByTestId(/start-task-button/i, { container: card }).click();
-        cy.getByTestId(/stop-task-button/i, { container: card }).should(
-          "not.be.disabled"
-        );
-        cy.wait(8000); // By that time dummy task is disabled
-        cy.getByTestId(/start-task-button/i, { container: card }).should(
-          "not.be.disabled"
-        );
-        cy.getByTestId(/stop-task-button/i, { container: card }).should(
-          "be.disabled"
-        );
-      });
-  });
-
-  after(() => {
-    // Delete the added task in the end
-
-    cy.getByText("node dummy-file.js")
-      .scrollIntoView({ easing: "linear" })
-      .should("be.visible");
-
-    cy.getByText("Test Task")
-      .closest(".bp3-card")
-      .then(card => {
-        cy.getByTitle("Delete Task", { container: card });
-      })
-      .click()
-      .wait(1000);
-
-    cy.queryByText("node dummy-file.js").should("not.exist");
+  it("Checks delete task", () => {
+    const firstStartButton = null;
+    const firstStopButton = null;
+    const tasks = project.commands;
+    tasks.sort();
+    const taskNames = tasks.map((t) => t.name);
+    const firstTask = tasks[0];
+    const secondTask = tasks[1];
+    cy.get(`#task-card-${firstTask._id}`).should("exist");
+    cy.get(`#task-card-${secondTask._id}`).should("exist");
+    cy.get(`#task-card-${firstTask._id}`)
+      .find("[data-testid='delete-task-button']")
+      .click();
+    cy.get(`#task-card-${firstTask._id}`).should("not.exist");
+    cy.get(`#task-card-${secondTask._id}`).should("exist");
   });
 });

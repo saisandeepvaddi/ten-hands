@@ -17,7 +17,7 @@ const AppLayout = React.memo(() => {
   const { config } = useConfig();
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
-  const statusbarHeight = config.showStatusBar ? "30px" : "0px";
+  const statusbarHeight = config?.showStatusBar ? "30px" : "0px";
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -28,7 +28,7 @@ const AppLayout = React.memo(() => {
     }
   }, []);
 
-  if (!isSocketInitialized) {
+  if (!isSocketInitialized || !config) {
     return null;
   }
 

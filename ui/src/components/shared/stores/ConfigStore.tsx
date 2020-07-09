@@ -32,7 +32,13 @@ function ConfigProvider(props: IConfigProviderProps) {
           return serverConfig;
         }
       } else {
-        const port = getItem("port") || window.location.port || 5010;
+        let port: string | number =
+          getItem("port") || window.location.port || 5010;
+
+        console.log("port:", port);
+        if (process.env.NODE_ENV !== "production") {
+          port = 5010;
+        }
         setItem("port", port);
         const browserOnlyConfig: IConfig = {
           port,

@@ -25,38 +25,44 @@ const Sorter: React.FC<ISorterProps> = React.memo(
       boolean
     >(false);
 
-    const sortTasksBy = (order: TASK_SORT_ORDER = "name-asc") => {
-      let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
-        (command) => {
-          const { lastExecutedAt } = command;
-          if (!lastExecutedAt) {
-            return {
-              ...command,
-              lastExecutedAt: getYesterday(),
-            };
-          }
-          return command;
-        }
-      );
+    const sortTasksBy = React.useCallback(
+      (order: TASK_SORT_ORDER = "name-asc") => {
+        setTimeout(() => {
+          let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
+            (command) => {
+              const { lastExecutedAt } = command;
+              if (!lastExecutedAt) {
+                return {
+                  ...command,
+                  lastExecutedAt: getYesterday(),
+                };
+              }
+              return command;
+            }
+          );
 
-      if (order === "name-asc") {
-        tasksToSort.sort((a, b) =>
-          a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-        );
-      } else if (order === "name-desc") {
-        tasksToSort.sort((a, b) =>
-          a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1
-        );
-      } else if (order === "last-executed") {
-        tasksToSort.sort((a, b) =>
-          new Date(a.lastExecutedAt).getTime() <
-          new Date(b.lastExecutedAt).getTime()
-            ? 1
-            : -1
-        );
-      }
-      reorderTasks(activeProject._id!, tasksToSort, tasksOrder);
-    };
+          if (order === "name-asc") {
+            tasksToSort.sort((a, b) =>
+              a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+            );
+          } else if (order === "name-desc") {
+            tasksToSort.sort((a, b) =>
+              a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1
+            );
+          } else if (order === "last-executed") {
+            tasksToSort.sort((a, b) =>
+              new Date(a.lastExecutedAt).getTime() <
+              new Date(b.lastExecutedAt).getTime()
+                ? 1
+                : -1
+            );
+          }
+          reorderTasks(activeProject._id!, tasksToSort, order);
+        }, 0);
+      },
+      [activeProject, reorderTasks]
+    );
+
     const handleChangeOrderModalClose = () => {
       setCommandsOrderModalOpen(false);
     };

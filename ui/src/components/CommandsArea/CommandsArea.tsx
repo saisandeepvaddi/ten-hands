@@ -6,6 +6,7 @@ import { useTheme } from "../shared/stores/ThemeStore";
 import CommandsRowView from "./CommandsRowView";
 import { useConfig } from "../shared/stores/ConfigStore";
 import CommandsTabView from "./CommandsTabView";
+import "react-resizable/css/styles.css";
 
 interface ICommandsAreaProps {
   activeProject: IProject;
@@ -16,7 +17,9 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-const EmptyContainer = styled(Container)`
+const EmptyContainer = styled.div`
+  height: calc(100% - 50px);
+  overflow: auto;
   display: flex;
   justify-content: center;
   align-items: center;

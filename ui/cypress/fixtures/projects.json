@@ -1,0 +1,572 @@
+[
+  {
+    "_id": "94d2e4cb-59d7-41fe-b4e7-ea9c3f6aa10c",
+    "name": "project 1",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "f3f36ba2-f44b-40cc-b57e-aa61938c9621",
+        "name": "yarn install",
+        "execDir": "",
+        "cmd": "yarn install",
+        "lastExecutedAt": "2020-05-04T06:32:10.812Z"
+      },
+      {
+        "_id": "1bf3958c-0653-4dda-994c-b26385d1a72a",
+        "name": "test",
+        "cmd": "yarn test",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T06:32:10.812Z"
+      },
+      {
+        "_id": "cac177fd-fffe-4c99-9cd4-ff9491e1afa8",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T18:44:20.485Z"
+      },
+      {
+        "_id": "37283eb2-50a5-4f40-a7e6-504b8c8bd7fc",
+        "name": "serve",
+        "cmd": "yarn serve",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T06:32:10.812Z"
+      },
+      {
+        "_id": "f5c45ada-d4c6-4859-bb1e-48ab8e1cc319",
+        "name": "format",
+        "cmd": "yarn format",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T06:32:10.812Z"
+      },
+      {
+        "_id": "d89f4e2e-9639-4bcf-bcbd-c4936d449053",
+        "name": "develop",
+        "cmd": "yarn develop",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T18:43:25.257Z"
+      },
+      {
+        "_id": "c6694ae2-7483-4a82-a53f-ceb396470950",
+        "name": "clean",
+        "cmd": "yarn clean",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T18:41:42.536Z"
+      },
+      {
+        "_id": "5e11c649-d68a-45c0-835d-41aba2490bfc",
+        "name": "build",
+        "cmd": "yarn build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T06:32:10.812Z"
+      }
+    ],
+    "configFile": "package.json",
+    "path": "D:\\Programming\\ten-hands\\docs",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "c8b50690-39e9-466c-9bba-8222348d4f91",
+    "name": "project 2",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "349700ac-9e85-447f-af2d-84218815e576",
+        "name": "build:chrome",
+        "cmd": "yarn build:chrome",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "e78c8536-6503-46ff-8610-82d1b9543054",
+        "name": "build:edge",
+        "cmd": "yarn build:edge",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "f192014e-12de-4315-b0e1-f10747710bbc",
+        "name": "build:firefox",
+        "cmd": "yarn build:firefox",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "dc582298-0613-44fb-85fd-accb61684fb6",
+        "name": "build:opera",
+        "cmd": "yarn build:opera",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "37831467-233c-42c5-8970-0b904f9fee8e",
+        "name": "dev:chrome",
+        "cmd": "yarn dev:chrome",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "1b4fd8ad-8073-4a11-b7dc-32ebced17d2e",
+        "name": "dev:edge",
+        "cmd": "yarn dev:edge",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "bc2bc72c-d1a1-4f7d-9f51-ba492d7047d9",
+        "name": "dev:firefox",
+        "cmd": "yarn dev:firefox",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "0cd2ca8f-c95b-4bbe-a997-44b7f3d18a87",
+        "name": "dev:opera",
+        "cmd": "yarn dev:opera",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      },
+      {
+        "_id": "8ebec2e5-a1a3-4a93-8c3e-bf41ad4eb3d5",
+        "name": "lint",
+        "cmd": "yarn lint",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:11.658Z"
+      }
+    ],
+    "path": "D:\\Programming\\gallery-master",
+    "configFile": "package.json",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "15e36b9b-5b67-4a2a-b2cc-8302a1b573e7",
+    "name": "project 3",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "41fd7608-a590-4321-82c6-e3c8a1ded86b",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:08.420Z"
+      }
+    ],
+    "path": "D:\\Playground\\wasm\\wasm-playground",
+    "configFile": "package.json",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "e5300c61-c319-47b2-affe-67f52a54d843",
+    "name": "just-enough-logger",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "049018ac-497f-455d-a519-64333ddaaaef",
+        "name": "build",
+        "cmd": "npm run build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:02.171Z"
+      },
+      {
+        "_id": "0226df26-5280-44bb-b581-258265ad3fbc",
+        "name": "lint",
+        "cmd": "npm run lint",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:02.171Z"
+      },
+      {
+        "_id": "225643b0-5b1f-476c-b0ae-9a8f2e9361df",
+        "name": "start",
+        "cmd": "npm run start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:02.170Z"
+      },
+      {
+        "_id": "452e8e50-29e9-4660-8891-53ad9d6945f1",
+        "name": "test",
+        "cmd": "npm run test",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:02.171Z"
+      }
+    ],
+    "path": "D:\\Programming\\just-enough-logger",
+    "configFile": "package.json",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "d270dadf-440f-4212-8bbf-244aeeffc8ab",
+    "name": "saisandeepvaddi.com",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "c5615e80-6b49-4a32-836f-d994e648a3fe",
+        "name": "build",
+        "cmd": "yarn build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      },
+      {
+        "_id": "fa89b73a-4b15-476b-b33e-37276217a482",
+        "name": "clean",
+        "cmd": "yarn clean",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      },
+      {
+        "_id": "17bb4936-f0b7-42e0-91a4-deac316b7e8e",
+        "name": "develop",
+        "cmd": "yarn develop",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      },
+      {
+        "_id": "9672c365-93b0-4c7f-b8c8-dcdd9d73c1d1",
+        "name": "format",
+        "cmd": "yarn format",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      },
+      {
+        "_id": "c70d82e1-af08-4157-bbcc-be2841749f87",
+        "name": "serve",
+        "cmd": "yarn serve",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      },
+      {
+        "_id": "5975e56d-cc05-4e2c-a6df-ce60a9405862",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:47:28.111Z"
+      }
+    ],
+    "path": "D:\\Programming\\my-personal-website",
+    "configFile": "package.json",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "1d42b6d7-badc-40cd-a39b-69eff6ec90f8",
+    "name": "Random Project",
+    "type": "",
+    "commands": [
+      {
+        "_id": "0210eb15-187f-479d-bb79-37493be96dd8",
+        "name": "List C Drive",
+        "execDir": "",
+        "cmd": "dir /p",
+        "lastExecutedAt": "2020-05-18T07:05:20.945Z"
+      }
+    ],
+    "configFile": "",
+    "path": "C:",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "58114a94-c8ad-4e4d-90d6-77807f0f4663",
+    "name": "react-csv-utils",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "3a0993d8-54d7-4656-a737-68e7a53962a6",
+        "name": "build",
+        "cmd": "yarn build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:38.030Z"
+      },
+      {
+        "_id": "f65b5867-1bda-47c2-95fe-480fc4ab9c78",
+        "name": "lint",
+        "cmd": "yarn lint",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:38.030Z"
+      },
+      {
+        "_id": "2fe5f710-e046-46f1-9891-4aad26d3a4e1",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:38.030Z"
+      },
+      {
+        "_id": "4bfffc21-8943-41ca-b8b5-c1addcfe9315",
+        "name": "test",
+        "cmd": "yarn test",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:38.030Z"
+      }
+    ],
+    "path": "D:\\Programming\\react-csv-utils",
+    "configFile": "package.json",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "f80df05d-d033-407c-b949-3ac105982d42",
+    "name": "react-csv-utils-example",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "f4c38ab6-c6f5-44ee-ac0e-2fff48606a15",
+        "name": "build",
+        "cmd": "yarn build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:31.773Z"
+      },
+      {
+        "_id": "680a748f-fd27-4f71-952f-62ec9ac15b08",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:46:31.773Z"
+      }
+    ],
+    "path": "D:\\Programming\\react-csv-utils\\example",
+    "configFile": "package.json"
+  },
+  {
+    "_id": "336f421c-1cac-4c25-8dbf-4beb6418ac7e",
+    "name": "gkchain-website-node",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "b3093e23-3954-423c-94aa-d623de914e1c",
+        "name": "mongodb-local",
+        "cmd": "npm run mongodb-local",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-29T02:41:47.326Z"
+      },
+      {
+        "_id": "f4aa6fd9-af2f-4104-bf02-4c740d1631a8",
+        "name": "start:dev",
+        "cmd": "npm run start:dev",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-29T03:20:37.272Z"
+      },
+      {
+        "_id": "1135e1f7-add6-4cad-9598-0b4f35af5319",
+        "name": "build",
+        "cmd": "npm run build",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-18T07:11:41.978Z"
+      },
+      {
+        "_id": "2586eedc-d1ac-4279-ab3a-6419d32c0c73",
+        "name": "build:dev",
+        "cmd": "npm run build:dev",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-18T07:11:41.978Z"
+      }
+    ],
+    "path": "D:\\Office\\gkchain-website-node",
+    "configFile": "package.json",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "ae2785fb-6290-441f-876f-c2cd26787eb7",
+    "name": "test-project-2",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "bb29cc0e-ddfd-4736-9177-050889d1194c",
+        "name": "long running",
+        "cmd": "yarn long-running",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-21T02:36:28.166Z"
+      },
+      {
+        "_id": "a896fda0-a9f2-4bf5-94e1-6c64273a9641",
+        "name": "two",
+        "cmd": "yarn two",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-21T02:34:17.468Z",
+        "shell": "C:\\Program Files\\Git\\bin\\bash.exe"
+      },
+      {
+        "_id": "dd9a2c58-e56f-47d1-97f8-92d73927016d",
+        "name": "one",
+        "cmd": "yarn one",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-11T04:17:40.525Z",
+        "shell": ""
+      }
+    ],
+    "path": "D:\\Programming\\test-project",
+    "configFile": "package.json",
+    "taskSortOrder": "last-executed",
+    "shell": ""
+  },
+  {
+    "_id": "6f60aee6-e724-4579-b3e7-800ee1db3790",
+    "name": "GateKeeper Hub",
+    "type": "",
+    "commands": [
+      {
+        "_id": "7b1dca8e-2af5-4e31-90a5-d8414f062d01",
+        "name": "Backend",
+        "execDir": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web",
+        "cmd": "dotnet run",
+        "lastExecutedAt": "2020-06-24T18:21:22.851Z"
+      },
+      {
+        "_id": "e49cacbb-9c7d-4172-b160-153384a12e06",
+        "name": "yarn start",
+        "execDir": "",
+        "cmd": "yarn start",
+        "lastExecutedAt": "2020-06-25T19:35:13.385Z"
+      },
+      {
+        "_id": "6f25850d-a854-442b-b622-cd9896206c86",
+        "name": "yarn start:demo",
+        "execDir": "",
+        "cmd": "yarn start:demo",
+        "lastExecutedAt": "2020-05-04T05:28:53.644Z"
+      }
+    ],
+    "configFile": "",
+    "path": "D:\\Office\\GateKeeper.Hub\\GatekeeperEnterprise.Web\\ClientApp",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "2c3423c6-1b13-4d63-a75b-dc8cae4b5f0c",
+    "name": "GK Extension",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "9cfcb54d-85d3-42c8-8492-b433954c1098",
+        "name": "dev:chrome",
+        "cmd": "yarn dev:chrome",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-21T17:57:29.427Z"
+      }
+    ],
+    "path": "D:\\Office\\ChromeExtension",
+    "configFile": "package.json",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "d7d7fddf-e7c1-43ab-bfdb-0b4ad98ef677",
+    "name": "gatekeeper-pricing-table",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "9d00505c-7a3a-4786-ad62-de6094d4e26e",
+        "name": "start",
+        "cmd": "yarn start",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-04T05:45:15.405Z"
+      }
+    ],
+    "path": "D:\\Office\\gatekeeper-pricing-table",
+    "configFile": "package.json",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "055023aa-15fb-4726-872f-193362ea5166",
+    "name": "portal-2.0",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "cfe19ec3-f23f-4059-a7c2-21b765cea789",
+        "name": "mongodb-local",
+        "cmd": "npm run mongodb-local",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-23T18:43:23.764Z"
+      },
+      {
+        "_id": "499b8468-f665-4f02-ae98-dee728dfce7f",
+        "name": "Start Dev",
+        "cmd": "npm run start:next",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-23T19:51:49.610Z"
+      },
+      {
+        "_id": "9b7931fa-13fd-435b-a5b1-4f581afec8fe",
+        "name": "Build Prod",
+        "execDir": "",
+        "cmd": "npm run build:next",
+        "lastExecutedAt": "2020-06-17T18:47:39.826Z"
+      },
+      {
+        "_id": "60479bb7-0e42-4a4f-822a-e4d97499c0cc",
+        "name": "Start Prod",
+        "execDir": "",
+        "cmd": "npm run start:prod",
+        "lastExecutedAt": "2020-06-17T18:49:28.583Z"
+      },
+      {
+        "_id": "5fc96465-db8c-4c65-a8e3-30dfc2fa2c86",
+        "name": "ngrok",
+        "execDir": "",
+        "cmd": "ngrok http 8000 --subdomain gkportaltest",
+        "lastExecutedAt": "2020-06-15T17:47:24.499Z"
+      }
+    ],
+    "configFile": "package.json",
+    "path": "D:\\Office\\gkchain-website-node-next",
+    "taskSortOrder": "custom"
+  },
+  {
+    "_id": "51890e05-9d9d-48ab-a27c-59e6a6d6c249",
+    "name": "Test3",
+    "type": "",
+    "commands": [
+      {
+        "_id": "0da1ea44-7001-4c22-b780-d53528e1b20c",
+        "name": "list dir",
+        "execDir": "",
+        "cmd": "dir /p",
+        "lastExecutedAt": "2020-05-12T19:08:27.302Z",
+        "shell": ""
+      }
+    ],
+    "configFile": "",
+    "path": "D:\\",
+    "shell": "",
+    "taskSortOrder": "name-asc"
+  },
+  {
+    "_id": "7673cc61-b7ac-4d93-a3a6-17374a17df7b",
+    "name": "bmark",
+    "type": "nodejs",
+    "commands": [
+      {
+        "_id": "aa4822c4-3a3a-4428-a4d0-16ba94d524e9",
+        "name": "dev:web",
+        "cmd": "yarn dev:web",
+        "execDir": "",
+        "lastExecutedAt": "2020-06-02T04:06:21.223Z"
+      },
+      {
+        "_id": "e0480fd9-e23d-443a-9327-071436f00f0d",
+        "name": "build:web",
+        "cmd": "yarn build:web",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T01:29:54.046Z"
+      },
+      {
+        "_id": "f57cd719-4430-4432-839c-b0092a8a0371",
+        "name": "start:web",
+        "cmd": "yarn start:web",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T01:29:54.046Z"
+      },
+      {
+        "_id": "da8956d6-e318-4101-9d48-c27578c0b0b5",
+        "name": "lint",
+        "cmd": "yarn lint",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T01:29:54.046Z"
+      },
+      {
+        "_id": "6f42fb45-9a81-4431-a117-649168fef463",
+        "name": "lint:fix",
+        "cmd": "yarn lint:fix",
+        "execDir": "",
+        "lastExecutedAt": "2020-05-30T01:29:54.046Z"
+      }
+    ],
+    "path": "D:\\Programming\\bmark",
+    "configFile": "package.json",
+    "taskSortOrder": "custom"
+  }
+]

@@ -6,7 +6,7 @@ describe("Tests App top-most ui", () => {
     cy.server();
   });
 
-  it("Checks if topbar loaded", () => {
+  it.only("Checks if topbar loaded", () => {
     cy.get(".bp3-fixed-top > .bp3-align-left > .bp3-navbar-heading").should(
       "have.text",
       "Ten Hands"
@@ -25,23 +25,23 @@ describe("Tests App top-most ui", () => {
     cy.route({
       method: "GET",
       url: "/projects",
-      response: fakeProjects
+      response: fakeProjects,
     });
     cy.wait(200);
 
-    cy.getByText(fakeProjects[1].name).then(el => {
+    cy.getByText(fakeProjects[1].name).then((el) => {
       const coords = el[0].getBoundingClientRect();
       cy.wrap(el)
         .trigger("click")
         .trigger("mousedown", {
           button: 0,
           clientX: coords.x,
-          clientY: coords.y
+          clientY: coords.y,
         })
         .trigger("mousemove", {
           button: 0,
           clientX: coords.x,
-          clientY: coords.y + 50
+          clientY: coords.y + 50,
         })
         .trigger("mouseup", { force: true });
     });

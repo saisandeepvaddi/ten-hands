@@ -1,15 +1,26 @@
 import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
+import { WebglAddon } from "xterm-addon-webgl";
+import { WebLinksAddon } from "xterm-addon-web-links";
 
 // tslint:disable-next-line: no-submodule-imports
 import "xterm/css/xterm.css";
+import { isRunningInElectron } from "../../utils/electron";
+
+function webLinksOnLinkClick(_event: MouseEvent, uri: string) {
+  if (isRunningInElectron()) {
+    require("electron").shell.openExternal(uri);
+  }
+}
 
 class JobTerminal {
   public _id: string;
   public isOpened: boolean = false;
   private terminal: Terminal;
-  private fitAddon: FitAddon;
+  public fitAddon: FitAddon;
+  public webglAddon: WebglAddon;
+  public webLinksAddon: WebLinksAddon;
   private options: ITerminalOptions = {
     convertEol: true,
   };
@@ -29,13 +40,20 @@ class JobTerminal {
     this._id = _id;
     this.terminal = new Terminal(this.options);
     this.fitAddon = new FitAddon();
+    this.webglAddon = new WebglAddon();
+    this.webLinksAddon = new WebLinksAddon(webLinksOnLinkClick);
+
     this.terminal.loadAddon(this.fitAddon);
+    this.terminal.loadAddon(this.webLinksAddon);
   }
 
   public attachTo(container: HTMLDivElement) {
     this._container = container;
     this.terminal.open(container);
+    this.terminal.loadAddon(this.webglAddon);
+    // this.fitAddon.activate(this.terminal);
     this.fitAddon.fit();
+
     this.terminal.element?.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       if (this.terminal.hasSelection()) {

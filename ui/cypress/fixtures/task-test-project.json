@@ -1,0 +1,24 @@
+{
+  "_id": "15e36b9b-5b67-4a2a-b2cc-8302a1b573e7",
+  "name": "project 3",
+  "type": "nodejs",
+  "commands": [
+    {
+      "_id": "41fd7608-a590-4321-82c6-e3c8a1ded86b",
+      "name": "start",
+      "cmd": "node dummy-file.js",
+      "execDir": "",
+      "lastExecutedAt": "2020-05-04T05:47:08.420Z"
+    },
+    {
+      "_id": "41fd7608-a590-4321-82c6-e3c8a1ded86a",
+      "name": "start 2",
+      "cmd": "node dummy-file.js",
+      "execDir": "",
+      "lastExecutedAt": "2020-05-04T05:47:08.420Z"
+    }
+  ],
+  "path": "D:\\Programming\\ten-hands\\ui\\cypress\\fixtures",
+  "configFile": "package.json",
+  "taskSortOrder": "name-asc"
+}

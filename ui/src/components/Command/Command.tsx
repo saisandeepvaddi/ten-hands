@@ -1,5 +1,5 @@
-import { Button, Collapse, H5 } from "@blueprintjs/core";
-import React from "react";
+import { Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/stores/JobStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
@@ -8,6 +8,7 @@ import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
 import UpdateCommandDrawer from "../UpdateCommandDrawer";
 import { useConfig } from "../shared/stores/ConfigStore";
+import { throttle } from "lodash";
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,7 @@ const Command: React.FC<ICommandProps> = React.memo(
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
     const { activeProject, deleteTask, updateTask } = useProjects();
     const { config } = useConfig();
-
+    const [containerWidth, setContainerWidth] = useState<number>(0);
     const deleteCommand = async () => {
       try {
         await deleteTask(activeProject._id!, room);
@@ -111,6 +112,13 @@ const Command: React.FC<ICommandProps> = React.memo(
     const isProcessRunning = (): boolean => {
       return getJobData(jobState, room).isRunning || false;
     };
+
+    const handleSidebarResize = React.useCallback(
+      throttle((width: number) => {
+        setContainerWidth(width);
+      }, 200),
+      []
+    );
 
     return (
       <React.Fragment>
@@ -166,6 +174,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                 onClick={deleteCommand}
                 icon="trash"
                 minimal={true}
+                data-testid="delete-task-button"
                 title={
                   isProcessRunning()
                     ? "Cannot delete while task is running."
@@ -177,9 +186,29 @@ const Command: React.FC<ICommandProps> = React.memo(
             </CommandOutputButtonsContainer>
           </CommandHeader>
           <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
-            <div style={{ width: "100%", height: "100%", padding: 10 }}>
-              <CommandOutputXterm index={index} room={room} />
-            </div>
+            <ResizeSensor
+              onResize={(entries) => {
+                const width: number = entries[0].contentRect.width;
+                // setContainerWidth(width);
+                handleSidebarResize(width);
+              }}
+            >
+              <div
+                className="my-terminal-container"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  padding: 10,
+                  marginBottom: 10,
+                }}
+              >
+                <CommandOutputXterm
+                  index={index}
+                  room={room}
+                  containerWidth={containerWidth}
+                />
+              </div>
+            </ResizeSensor>
           </Collapse>
         </Container>
         <UpdateCommandDrawer
