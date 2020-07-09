@@ -1,8 +1,9 @@
 variables:
-  node_version: "10.x"
+  node_version: "12.x"
 
 trigger:
   - releases
+pr: none
 
 jobs:
   - job: Windows
