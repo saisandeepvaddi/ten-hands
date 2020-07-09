@@ -6,7 +6,7 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start:electron": "cross-env PORT=3010 react-app-rewired start",
+    "start:electron": "cross-env PORT=3010 BROWSER='none' react-app-rewired start",
     "start:browser": "react-scripts start",
     "test": "react-scripts test",
     "build:electron": "react-app-rewired build",
