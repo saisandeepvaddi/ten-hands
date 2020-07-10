@@ -58,7 +58,6 @@
   "devDependencies": {
     "@blueprintjs/tslint-config": "^2.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
-    "@testing-library/cypress": "^6.0.0",
     "@testing-library/dom": "^7.18.1",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
@@ -70,9 +69,6 @@
     "@types/styled-components": "^4.4.2",
     "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
-    "cypress": "^4.9.0",
-    "cypress-file-upload": "^4.0.7",
-    "eslint-plugin-cypress": "^2.11.1",
     "jest-axe": "^3.4.0",
     "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.5",
@@ -82,5 +78,11 @@
     "tslint": "^6.0.0",
     "tslint-react-hooks": "^2.2.1",
     "typescript": "^3.9.5"
+  },
+  "optionalDependencies": {
+    "@testing-library/cypress": "^6.0.0",
+    "cypress": "^4.9.0",
+    "cypress-file-upload": "^4.0.7",
+    "eslint-plugin-cypress": "^2.11.1"
   }
 }
