@@ -28,7 +28,9 @@ Please visit website to see intro video.
 
 # Downloads
 
-Downloads are available in `releases` section if you just want to download and run.
+Downloads are available in `releases` section if you just want to download and run. 
+
+If you want to get latest updates, you can click on _"Azure Pipelines"_ badge above to download latest builds from CI. These may have small bugs. But, please create an issue if you find any.
 
 # Installing browser version
 
