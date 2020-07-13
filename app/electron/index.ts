@@ -42,11 +42,6 @@ function createWindow() {
       },
     });
 
-    if (isDev) {
-      loadReactDevTools();
-      mainWindow.webContents.openDevTools();
-    }
-
     const uiUrl = isDev
       ? "http://localhost:3010"
       : `file://${path.join(__dirname, "../ui/index.html")}`;
@@ -54,6 +49,10 @@ function createWindow() {
     log.info("uiUrl:" + uiUrl);
     mainWindow.loadURL(uiUrl);
 
+    if (isDev) {
+      loadReactDevTools();
+      // mainWindow.webContents.openDevTools();
+    }
     mainWindow.on("closed", () => {
       log.info("Window Closing");
       mainWindow = null;
