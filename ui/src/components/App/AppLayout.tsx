@@ -43,7 +43,15 @@ const AppLayout = React.memo(() => {
           )}
         </Space.Top>
         <Space.Fill>
-          <Space.LeftResizable size="25%" minimumSize={100} maximumSize={400}>
+          <Space.LeftResizable
+            size="25%"
+            minimumSize={100}
+            maximumSize={400}
+            onResizeEnd={(newSize) => {
+              // This doesn't run
+              console.log("newSize: ", newSize);
+            }}
+          >
             <Sidebar />
           </Space.LeftResizable>
           <Space.Fill>
