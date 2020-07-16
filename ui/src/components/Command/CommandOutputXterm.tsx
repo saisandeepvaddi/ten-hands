@@ -64,7 +64,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
           terminal.current = JobTerminalManager.getInstance().createJobTerminal(
             room
           );
-          terminal.current.attachTo(elRef.current);
+          terminal.current.attachTo(
+            elRef.current,
+            config.terminalRenderer ?? "canvas"
+          );
         }
       }
     }, []);

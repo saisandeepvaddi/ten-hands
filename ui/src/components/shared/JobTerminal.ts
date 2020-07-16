@@ -19,7 +19,6 @@ class JobTerminal {
   public isOpened: boolean = false;
   private terminal: Terminal;
   public fitAddon: FitAddon;
-  public webglAddon: WebglAddon;
   public webLinksAddon: WebLinksAddon;
   private options: ITerminalOptions = {
     convertEol: true,
@@ -40,18 +39,23 @@ class JobTerminal {
     this._id = _id;
     this.terminal = new Terminal(this.options);
     this.fitAddon = new FitAddon();
-    this.webglAddon = new WebglAddon();
     this.webLinksAddon = new WebLinksAddon(webLinksOnLinkClick);
 
     this.terminal.loadAddon(this.fitAddon);
     this.terminal.loadAddon(this.webLinksAddon);
   }
 
-  public attachTo(container: HTMLDivElement) {
+  public attachTo(
+    container: HTMLDivElement,
+    renderer: "canvas" | "webgl" = "canvas"
+  ) {
     this._container = container;
     this.terminal.open(container);
-    this.terminal.loadAddon(this.webglAddon);
-    // this.fitAddon.activate(this.terminal);
+
+    if (renderer === "webgl") {
+      this.terminal.loadAddon(new WebglAddon());
+    }
+
     this.fitAddon.fit();
 
     this.terminal.element?.addEventListener("contextmenu", (e) => {
