@@ -10,6 +10,7 @@ interface IConfig {
   showStatusBar: boolean;
   taskViewStyle: TaskViewStyle;
   shell: string;
+  terminalRenderer?: "canvas" | "webgl";
 }
 
 interface IMyTheme {

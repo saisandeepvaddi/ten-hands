@@ -6,6 +6,7 @@ unhandled();
 
 const path = require("path");
 const isDev = require("electron-is-dev");
+import windowStateKeeper from "electron-window-state";
 
 import { startServer } from "../server";
 import { createMenu, getMenu } from "./menu";
@@ -33,9 +34,15 @@ const singleInstanceLock = app.requestSingleInstanceLock();
 
 function createWindow() {
   try {
+    let mainWindowState = windowStateKeeper({
+      defaultWidth: 1366,
+      defaultHeight: 768,
+    });
     mainWindow = new BrowserWindow({
-      width: 1366,
-      height: 768,
+      width: mainWindowState.width,
+      height: mainWindowState.height,
+      x: mainWindowState.x,
+      y: mainWindowState.y,
       frame: isWindows ? false : true,
       webPreferences: {
         nodeIntegration: true,
@@ -72,6 +79,8 @@ function createWindow() {
         e.returnValue = false;
       }
     });
+
+    mainWindowState.manage(mainWindow);
 
     return mainWindow;
   } catch (error) {

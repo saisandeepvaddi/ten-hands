@@ -7,4 +7,5 @@ interface IConfig {
   taskViewStyle?: "tabs" | "rows";
   shell?: string;
   hideToTrayOnClose?: boolean;
+  terminalRenderer?: "canvas" | "webgl";
 }

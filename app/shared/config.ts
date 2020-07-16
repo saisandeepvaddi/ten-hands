@@ -22,6 +22,7 @@ const defaultConfig: IConfig = {
   taskViewStyle: "rows",
   shell: "",
   hideToTrayOnClose: true,
+  terminalRenderer: "canvas",
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -66,6 +67,13 @@ const getValidConfig = (config: IConfig): IConfig => {
 
   if (typeof config.hideToTrayOnClose !== "boolean") {
     _config.hideToTrayOnClose = defaultConfig.hideToTrayOnClose;
+  }
+
+  if (
+    typeof config.terminalRenderer !== "string" ||
+    ["canvas", "webgl"].indexOf(config.terminalRenderer) === -1
+  ) {
+    _config.terminalRenderer = defaultConfig.terminalRenderer;
   }
 
   return _config;
