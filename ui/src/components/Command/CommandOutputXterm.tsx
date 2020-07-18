@@ -12,16 +12,18 @@ interface ICommandProps {
   room: string;
   index: number;
   containerWidth: number;
+  isTaskRunning: boolean;
 }
 
 const TerminalContainer = styled.div`
   width: 100%;
   height: 100%;
   white-space: pre-wrap;
+  overflow: auto;
 `;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
-  ({ room, index, containerWidth }) => {
+  ({ room, index, containerWidth, isTaskRunning }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
@@ -126,7 +128,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
           handleResize(size.height);
         }}
       >
-        <TerminalContainer ref={elRef} />
+        <TerminalContainer
+          ref={elRef}
+          style={{ overscrollBehavior: isTaskRunning ? "contain" : "auto" }}
+        />
       </ResizableBox>
     );
   }
