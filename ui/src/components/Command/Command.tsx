@@ -206,7 +206,6 @@ const Command: React.FC<ICommandProps> = React.memo(
                   index={index}
                   room={room}
                   containerWidth={containerWidth}
-                  isTaskRunning={isProcessRunning()}
                 />
               </div>
             </ResizeSensor>
