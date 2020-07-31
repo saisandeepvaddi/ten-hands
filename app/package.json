@@ -1,7 +1,7 @@
 {
   "name": "ten-hands-app",
   "description": "One place to run your command-line tasks",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "private": true,
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "author": {
