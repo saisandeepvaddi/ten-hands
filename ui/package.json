@@ -1,6 +1,6 @@
 {
   "name": "ten-hands-ui",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "description": "One place to run your command-line tasks",
   "private": true,
   "homepage": "./",
@@ -50,7 +50,7 @@
     "socket.io-client": "^2.3.0",
     "styled-components": "^5.0.1",
     "uuid": "^3.4.0",
-    "xterm": "^4.7.0",
+    "xterm": "^4.8.1",
     "xterm-addon-fit": "^0.4.0",
     "xterm-addon-web-links": "^0.4.0",
     "xterm-addon-webgl": "^0.8.0"
