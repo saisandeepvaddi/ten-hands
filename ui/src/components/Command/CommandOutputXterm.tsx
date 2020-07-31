@@ -18,8 +18,6 @@ const TerminalContainer = styled.div`
   width: 100%;
   height: 100%;
   white-space: pre-wrap;
-  overflow: auto;
-  overscroll-behavior: contain;
 `;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
