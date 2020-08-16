@@ -8,4 +8,5 @@ interface IConfig {
   shell?: string;
   hideToTrayOnClose?: boolean;
   terminalRenderer?: "canvas" | "webgl";
+  showTaskCountBadge?: boolean;
 }

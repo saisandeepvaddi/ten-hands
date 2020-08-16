@@ -16,6 +16,7 @@ import { useMountedState } from "../hooks";
 import { useJobs } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
 import { useSockets } from "./SocketStore";
+import { isRunningInElectron } from "../../../utils/electron";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -176,6 +177,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     (async () => {
       try {
         await updateRunningTaskCountInDB(config, totalRunningTaskCount);
+        if (isRunningInElectron()) {
+          const { ipcRenderer } = require("electron");
+          ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
+        }
       } catch (error) {
         console.log("error updating task count:", error);
       }

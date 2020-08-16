@@ -23,6 +23,7 @@ const defaultConfig: IConfig = {
   shell: "",
   hideToTrayOnClose: true,
   terminalRenderer: "canvas",
+  showTaskCountBadge: true,
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -74,6 +75,10 @@ const getValidConfig = (config: IConfig): IConfig => {
     ["canvas", "webgl"].indexOf(config.terminalRenderer) === -1
   ) {
     _config.terminalRenderer = defaultConfig.terminalRenderer;
+  }
+
+  if (typeof config.showTaskCountBadge !== "boolean") {
+    _config.showTaskCountBadge = defaultConfig.showTaskCountBadge;
   }
 
   return _config;
