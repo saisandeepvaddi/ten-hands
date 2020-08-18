@@ -120,10 +120,9 @@ async function startApplication() {
       }
       if (mainWindow) {
         createTray(mainWindow);
+        registerIPC(mainWindow);
       }
     });
-
-    registerIPC();
 
     app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
