@@ -126,22 +126,27 @@ const Command: React.FC<ICommandProps> = React.memo(
           <CommandHeader>
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>
-              <Button
-                data-testid="start-task-button"
-                icon="play"
-                intent="success"
-                minimal={true}
-                disabled={isProcessRunning()}
-                onClick={() => startJob(room)}
-              />
-              <Button
-                data-testid="stop-task-button"
-                intent="danger"
-                icon="stop"
-                minimal={true}
-                disabled={!isProcessRunning()}
-                onClick={() => stopJob(room)}
-              />
+              {isProcessRunning() ? (
+                <Button
+                  data-testid="stop-task-button"
+                  intent="danger"
+                  icon="stop"
+                  minimal
+                  disabled={!isProcessRunning()}
+                  text="Stop"
+                  onClick={() => stopJob(room)}
+                />
+              ) : (
+                <Button
+                  data-testid="start-task-button"
+                  icon="play"
+                  intent="success"
+                  minimal
+                  disabled={isProcessRunning()}
+                  text="Start"
+                  onClick={() => startJob(room)}
+                />
+              )}
             </CommandTitleActions>
             <span
               data-testid="command-cmd"

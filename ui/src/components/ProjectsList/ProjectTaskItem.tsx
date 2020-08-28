@@ -154,14 +154,18 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
                 className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
                 title="Stop task"
                 onClick={stopTask}
-              />
+              >
+                Stop
+              </a>
             ) : (
               <a
                 type="button"
                 className="bp3-button bp3-minimal bp3-intent-success bp3-icon-play"
                 title="Start task"
                 onClick={startTask}
-              />
+              >
+                Start
+              </a>
               /*eslint-enable*/
             )}
           </span>

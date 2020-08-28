@@ -1,6 +1,6 @@
 {
   "name": "ten-hands-ui",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "One place to run your command-line tasks",
   "private": true,
   "homepage": "./",
@@ -13,7 +13,8 @@
     "build:browser": "react-scripts build",
     "test:electron": "react-app-rewired test",
     "cypress:open": "./node_modules/.bin/cypress open",
-    "cypress:run": "./node_modules/.bin/cypress run"
+    "cypress:run": "./node_modules/.bin/cypress run",
+    "lint": "eslint . --ext .js,.ts,.tsx"
   },
   "author": {
     "name": "Sai Sandeep Vaddi",
@@ -30,8 +31,8 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@blueprintjs/core": "^3.23.1",
-    "@blueprintjs/select": "^3.12.3",
+    "@blueprintjs/core": "^3.31.0",
+    "@blueprintjs/select": "^3.13.7",
     "@koale/useworker": "^3.1.0",
     "@welldone-software/why-did-you-render": "^4.0.3",
     "axios": "^0.19.2",
@@ -58,6 +59,7 @@
   "devDependencies": {
     "@blueprintjs/tslint-config": "^2.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
+    "@saisandeepvaddi/eslint-config-typescript": "^1.0.0",
     "@testing-library/dom": "^7.18.1",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
