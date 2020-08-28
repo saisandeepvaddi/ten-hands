@@ -30,12 +30,12 @@ export class Badge {
     if (!ctx) {
       return;
     }
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "#CC1757";
     ctx.beginPath();
     ctx.arc(8, 8, 8, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = "6px sans-serif;";
+    ctx.font = "normal bolder 11px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "white";
