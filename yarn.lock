@@ -2804,6 +2804,13 @@
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.3.29.tgz#7f2ad7ec55f914482fc9b1ec4bb1ae6028d46066"
   integrity sha1-fyrX7FX5FEgvybHsS7GuYCjUYGY=
 
+"@types/morgan@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.9.1.tgz#6457872df95647c1dbc6b3741e8146b71ece74bf"
+  integrity sha512-2j5IKrgJpEP6xw/uiVb2Xfga0W0sSVD9JP9t7EZLvpBENdB0OKgcnoKS8IsjNeNnZ/86robdZ61Orl0QCFGOXg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*":
   version "13.1.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.1.2.tgz#fe94285bf5e0782e1a9e5a8c482b1c34465fa385"
@@ -4301,6 +4308,13 @@ base@^0.11.1:
     isobject "^3.0.1"
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
+
+basic-auth@~2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
+  dependencies:
+    safe-buffer "5.1.2"
 
 batch@0.6.1:
   version "0.6.1"
@@ -6703,6 +6717,11 @@ depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+depd@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
+  integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
 dequal@^1.0.0:
   version "1.0.0"
@@ -12050,10 +12069,10 @@ just-debounce@^1.0.0:
   resolved "https://registry.yarnpkg.com/just-debounce/-/just-debounce-1.0.0.tgz#87fccfaeffc0b68cd19d55f6722943f929ea35ea"
   integrity sha1-h/zPrv/AtozRnVX2cilD+SnqNeo=
 
-just-enough-logger@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/just-enough-logger/-/just-enough-logger-1.0.3.tgz#5afb611894a397cfd22938d39451fc85cd8fd874"
-  integrity sha512-SB54Fc22RWKl8qXXMALn4ufJIaWzVJeocfOzRcduaWfhzcZW6IZ/rErQrXZMhYHR9U8f8FwAUjSV3z2OX9jehg==
+just-enough-logger@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/just-enough-logger/-/just-enough-logger-1.0.4.tgz#a055cb7fcf9b777575448438818c6c9d3052d468"
+  integrity sha512-AjfM3knQn3hNBO3ch+F03msIg8QsvcdAv+Gg1kbR1E7j78kU1HY99oi/ZpFX67TlWKSsoWkNOE1Up6q9fhyiDA==
   dependencies:
     colors "^1.4.0"
 
@@ -13227,6 +13246,17 @@ moment@2.26.0:
   version "2.26.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
   integrity sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
+
+morgan@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"
+  integrity sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==
+  dependencies:
+    basic-auth "~2.0.1"
+    debug "2.6.9"
+    depd "~2.0.0"
+    on-finished "~2.3.0"
+    on-headers "~1.0.2"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
