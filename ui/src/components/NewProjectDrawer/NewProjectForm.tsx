@@ -103,9 +103,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       (filePath, fileData, setFieldValue) => {
         try {
           if (isRunningInElectron()) {
-            const path = require("path");
-            const fileName = path.basename(filePath);
-            const projectPath = path.dirname(filePath);
+            const fileName = window.electronPreload.getPathBasename(filePath);
+            const projectPath = window.electronPreload.getPathDirname(filePath);
             const tenHandsFile: ITenHandsFile = {
               name: fileName,
               path: projectPath,

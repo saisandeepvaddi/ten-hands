@@ -25,8 +25,7 @@ function ConfigProvider(props: IConfigProviderProps) {
   const [config, setConfig] = React.useState(() => {
     try {
       if (isRunningInElectron()) {
-        const { ipcRenderer } = require("electron");
-        const serverConfig = ipcRenderer.sendSync(`get-config`);
+        const serverConfig = window.electronPreload.getServerConfig();
         console.log("serverConfig:", serverConfig);
         if (serverConfig) {
           return serverConfig;
@@ -53,23 +52,6 @@ function ConfigProvider(props: IConfigProviderProps) {
       console.error(`Error getting config.`);
     }
   });
-
-  React.useEffect(() => {
-    if (!isRunningInElectron()) {
-      return;
-    }
-
-    const { ipcRenderer } = require("electron");
-    ipcRenderer.on(`config-changed`, (e, newConfig) => {
-      console.log("Config file updated:", newConfig);
-      setConfig(newConfig);
-    });
-    return () => {
-      ipcRenderer.removeListener(`config-changed`, () => {
-        console.log(`config-changed listener removed`);
-      });
-    };
-  }, []);
 
   const changeConfigOption = React.useCallback(
     <K extends keyof IConfig, V extends IConfig[K]>(key: K, value: V) => {

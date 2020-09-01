@@ -56,12 +56,38 @@ interface IStateAction {
   state: Record<string, unknown>;
 }
 
-interface Window {
-  tenHands: any;
-}
-
 interface ITenHandsFile {
   name: string;
   path?: string;
   data: string | ArrayBuffer | null;
+}
+
+export interface IElectronPreload {
+  openExternal: any;
+  hasYarnLock: any;
+  openInExplorer: any;
+  displayAppMenu: any;
+  isMaximized: any;
+  minimizeWindow: any;
+  maximizeWindow: any;
+  unmaximizeWindow: any;
+  maxUnmaxWindow: any;
+  closeWindow: any;
+  isWindowMaximized: any;
+  getPathBasename: any;
+  getPathDirname: any;
+  readFileAsync: any;
+  getServerConfig: any;
+  initializeElectronFunctions: any;
+  getConfigFileFromDialog: any;
+  updateTaskCount: any;
+  getAppUpdates: any;
+  openAppMenu: any;
+}
+
+declare global {
+  interface Window {
+    tenHands: any;
+    electronPreload: IElectronPreload;
+  }
 }

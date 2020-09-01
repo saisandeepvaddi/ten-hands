@@ -6,6 +6,5 @@ export const isRunningInElectron = () => {
 };
 
 export const openInExplorer = (projectPath) => {
-  const { shell } = require("electron");
-  shell.openPath(projectPath);
+  window.electronPreload.openInExplorer(projectPath);
 };

@@ -20,28 +20,14 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(
     const openUploadDialog = () => {
       if (isRunningInElectron()) {
         try {
-          const { dialog } = require("electron").remote;
-          dialog
-            .showOpenDialog({
-              filters: [{ name: "package.json", extensions: ["json"] }],
-            })
-            .then(({ filePaths }) => {
-              const configFilePath: string | undefined =
-                filePaths && filePaths.length > 0 ? filePaths[0] : undefined;
-              if (configFilePath === undefined) {
-                console.log("No file uploaded");
-                return null;
+          window.electronPreload
+            .getConfigFileFromDialog()
+            .then((configFileInfo) => {
+              if (!configFileInfo) {
+                throw new Error("Error reading file.");
               }
-              require("fs").readFile(
-                configFilePath,
-                "utf-8",
-                (err, fileData) => {
-                  if (err) {
-                    throw new Error("Error reading config file");
-                  }
-                  onConfigFileUpload(configFilePath, fileData);
-                }
-              );
+              const { configFilePath, fileData } = configFileInfo;
+              onConfigFileUpload(configFilePath, fileData);
             });
         } catch (error) {
           console.log("error:", error);

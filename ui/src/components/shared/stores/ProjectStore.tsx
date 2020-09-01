@@ -55,12 +55,15 @@ function getJobData(state, room: string) {
 const getRunningTasksCountForProjects = (
   projects: IProject[],
   runningTasks: any
-): { runningTasksPerProject: object; totalRunningTaskCount: number } => {
+): {
+  runningTasksPerProject: Record<string, number>;
+  totalRunningTaskCount: number;
+} => {
   const runningTasksPerProject = {};
   let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
     const { commands, _id } = project;
-    let runningCount: number = 0;
+    let runningCount = 0;
     commands.forEach((command: IProjectCommand) => {
       const { _id } = command;
       if (runningTasks[_id]) {
@@ -178,8 +181,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       try {
         await updateRunningTaskCountInDB(config, totalRunningTaskCount);
         if (isRunningInElectron()) {
-          const { ipcRenderer } = require("electron");
-          ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
+          window.electronPreload.updateTaskCount(totalRunningTaskCount);
         }
       } catch (error) {
         console.log("error updating task count:", error);
@@ -423,7 +425,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     [projects, config]
   );
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   const addProject = React.useCallback(
     (projectData: any) => {
       const addProjectFn = async () => {

@@ -22,6 +22,7 @@ import {
 import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
+import { join } from "path";
 
 const isWindows = process.platform === "win32";
 export let mainWindow: BrowserWindow | null;
@@ -45,7 +46,8 @@ function createWindow() {
       y: mainWindowState.y,
       frame: isWindows ? false : true,
       webPreferences: {
-        nodeIntegration: true,
+        nodeIntegration: false,
+        preload: join(__dirname, "preload.js"),
       },
     });
 

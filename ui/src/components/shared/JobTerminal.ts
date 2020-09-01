@@ -10,13 +10,13 @@ import { isRunningInElectron } from "../../utils/electron";
 
 function webLinksOnLinkClick(_event: MouseEvent, uri: string) {
   if (isRunningInElectron()) {
-    require("electron").shell.openExternal(uri);
+    window.electronPreload.openExternal(uri);
   }
 }
 
 class JobTerminal {
   public _id: string;
-  public isOpened: boolean = false;
+  public isOpened = false;
   private terminal: Terminal;
   public fitAddon: FitAddon;
   public webLinksAddon: WebLinksAddon;

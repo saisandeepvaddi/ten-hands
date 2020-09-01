@@ -14,7 +14,7 @@ const MenuContainer = styled.div`
   display: flex;
   height: 30px;
   width: 100%;
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   justify-content: space-between;
 
@@ -59,19 +59,9 @@ const MenuContainer = styled.div`
 type TMinMaxIconType = "duplicate" | "square";
 
 const DesktopMenu = () => {
-  // Importing electron here so that code doesn't give compilation error when running in browser
-  const { remote, ipcRenderer } = require("electron");
-  const currentWindow = remote.getCurrentWindow();
-  const startingIcon: TMinMaxIconType = currentWindow.isMaximized()
+  const startingIcon: TMinMaxIconType = window.electronPreload.isWindowMaximized()
     ? "duplicate"
     : "square";
-
-  const openAppMenu = e => {
-    ipcRenderer.send(`display-app-menu`, {
-      x: e.x,
-      y: e.y
-    });
-  };
 
   const { theme, setTheme } = useTheme();
   const [maximizeIcon, setMaximizeIcon] = React.useState<TMinMaxIconType>(
@@ -88,8 +78,8 @@ const DesktopMenu = () => {
           className="menu-button"
           icon="menu"
           minimal={true}
-          onContextMenu={openAppMenu}
-          onClick={openAppMenu}
+          onContextMenu={window.electronPreload.openAppMenu}
+          onClick={window.electronPreload.openAppMenu}
         />
         <span className="title">Ten Hands</span>
       </span>
@@ -120,7 +110,7 @@ const DesktopMenu = () => {
           minimal={true}
           className="window-button minimize-button"
           onClick={() => {
-            currentWindow.isMinimizable() && currentWindow.minimize();
+            window.electronPreload.minimizeWindow();
           }}
         >
           <Icon icon="minus" />
@@ -131,14 +121,14 @@ const DesktopMenu = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
           onClick={() => {
-            if (currentWindow.isMaximized()) {
-              currentWindow.unmaximize();
+            if (window.electronPreload.isMaximized()) {
+              window.electronPreload.unmaximizeWindow();
               setMaximizeIcon("square");
             } else {
-              currentWindow.maximize();
+              window.electronPreload.maximizeWindow();
               setMaximizeIcon("duplicate");
             }
           }}
@@ -152,7 +142,7 @@ const DesktopMenu = () => {
           onMouseOver={() => setIsCloseButtonMinimal(false)}
           onMouseOut={() => setIsCloseButtonMinimal(true)}
           onClick={() => {
-            remote.getCurrentWindow().close();
+            window.electronPreload.closeWindow();
           }}
         >
           <Icon icon="cross" />

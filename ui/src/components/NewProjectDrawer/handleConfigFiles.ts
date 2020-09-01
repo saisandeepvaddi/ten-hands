@@ -43,9 +43,7 @@ const nodeConfigFileParser = (file: ITenHandsFile): IProject | null => {
 
     if (isRunningInElectron()) {
       try {
-        const fs = require("fs");
-        const path = require("path");
-        if (fs.existsSync(path.join(file.path, "yarn.lock"))) {
+        if (window.electronPreload.hasYarnLock(file.path)) {
           console.log(
             "yarn.lock exists at file path. Using yarn to run scripts."
           );
