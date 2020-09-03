@@ -121,18 +121,6 @@ const ProjectForm: React.FC<IProjectFormProps> = ({
             {...getFieldProps("shell")}
           />
         </FormGroup>
-        {/* <FormGroup
-                            label="Project Type"
-                            labelFor="type"
-                            helperText="Will be auto-filled if it can be determined from package.json."
-                        >
-                            <HTMLSelect fill={true} id="type" onChange={handleChange} value={values.type}>
-                                <option value="">Select Project Type</option>
-                                <option value="nodejs">NodeJS</option>
-                                <option value="other">Other</option>
-                            </HTMLSelect>
-                        </FormGroup> */}
-
         <FormGroup>
           <Button
             data-testid="save-project-button"
