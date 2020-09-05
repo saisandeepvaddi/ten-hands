@@ -24,7 +24,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   itemIndex,
   projectRunningTaskCount,
   projectTaskListOpenMap,
-  updateProjectTaskListOpen
+  updateProjectTaskListOpen,
 }) => {
   const { theme } = useTheme();
   const { activeProject } = useProjects();
@@ -70,7 +70,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
             : "inherit",
           background: isThisActiveProject
             ? "rgba(19, 124, 189, 0.2)"
-            : "inherit"
+            : "inherit",
         }}
         title={project.path}
       >
@@ -94,7 +94,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
       <div className="w-100">
         <Collapse isOpen={isTaskListOpen} keepChildrenMounted={true}>
           <div style={{ paddingLeft: 20 }}>
-            {project.commands.map(command => (
+            {project.commands.map((command) => (
               <ProjectTaskItem
                 key={command._id}
                 command={command}

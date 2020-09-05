@@ -1,6 +1,6 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-
-import { BrowserWindow, ipcMain, app, dialog } from "electron";
+import * as SentryElectron from "@sentry/electron";
+import { BrowserWindow, ipcMain, app, dialog, crashReporter } from "electron";
 const unhandled = require("electron-unhandled");
 unhandled();
 
@@ -22,6 +22,19 @@ import {
 import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
+
+SentryElectron.init({
+  dsn:
+    "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+});
+
+crashReporter.start({
+  companyName: "ten-hands",
+  productName: "ten-hands",
+  ignoreSystemCrashHandler: true,
+  submitURL:
+    "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+});
 
 const isWindows = process.platform === "win32";
 export let mainWindow: BrowserWindow | null;
@@ -79,11 +92,11 @@ function createWindow() {
     });
 
     mainWindowState.manage(mainWindow);
-
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
     log.error("createWindow Error: " + error.message);
+    SentryElectron.captureException(error);
   }
 }
 
@@ -96,6 +109,7 @@ async function startApplication() {
     } catch (error) {
       console.log("error:", error);
       log.error("failed to start server: " + error.message);
+      SentryElectron.captureException(error);
     }
 
     app.on("ready", () => {
@@ -107,6 +121,7 @@ async function startApplication() {
         } catch (error) {
           console.log("error:", error);
           log.error("app.ready error: " + error.message);
+          SentryElectron.captureException(error);
         }
       }
       if (mainWindow) {

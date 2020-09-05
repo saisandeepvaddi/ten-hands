@@ -34,6 +34,8 @@
     "@blueprintjs/core": "^3.31.0",
     "@blueprintjs/select": "^3.13.7",
     "@koale/useworker": "^3.1.0",
+    "@sentry/react": "^5.22.3",
+    "@sentry/tracing": "^5.22.3",
     "@welldone-software/why-did-you-render": "^4.0.3",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",

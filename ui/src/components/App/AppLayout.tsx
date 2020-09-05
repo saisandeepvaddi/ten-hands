@@ -19,7 +19,6 @@ const AppLayout = React.memo(() => {
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
   const statusbarHeight = config?.showStatusBar ? "30px" : "0px";
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     try {
       initializeSocket();
