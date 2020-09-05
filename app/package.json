@@ -11,6 +11,9 @@
   },
   "license": "MIT",
   "main": "./build/electron/index.js",
+  "engines": {
+    "node": ">=12.15.0"
+  },
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
@@ -21,7 +24,8 @@
     "build:installers": "rm -rf ./dist && ./node_modules/.bin/electron-builder --publish never",
     "electron-only": "./node_modules/.bin/electron ./build/electron/index.js",
     "test:server": "jest --watch",
-    "test:electron": "jest --testPathPattern=\".*/electron/__tests__/.*\\.test.ts\""
+    "test:electron": "jest --testPathPattern=\".*/electron/__tests__/.*\\.test.ts\"",
+    "lint": "eslint --ext .ts ./"
   },
   "repository": {
     "type": "git",
@@ -69,6 +73,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@saisandeepvaddi/eslint-config-typescript": "^1.0.0",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.16.1",
     "@types/jest": "^24.0.18",
@@ -81,8 +86,10 @@
     "electron": "9.1.0",
     "electron-builder": "^22.7.0",
     "electron-react-devtools": "^0.5.3",
+    "eslint-plugin-node": "^11.1.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
     "nodemon": "^1.18.11",
+    "prettier": "^2.1.1",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",

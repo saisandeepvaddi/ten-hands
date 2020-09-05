@@ -13,6 +13,15 @@ Sentry.init({
     "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
+  beforeSend(event) {
+    // Modify the event here
+    if (event.user) {
+      // Don't send user's email address
+      delete event.user.email;
+      delete event.user.ip_address;
+    }
+    return event;
+  },
 });
 
 if (process.env.NODE_ENV === "development") {

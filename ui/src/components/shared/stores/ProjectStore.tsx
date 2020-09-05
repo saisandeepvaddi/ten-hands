@@ -55,12 +55,15 @@ function getJobData(state, room: string) {
 const getRunningTasksCountForProjects = (
   projects: IProject[],
   runningTasks: any
-): { runningTasksPerProject: object; totalRunningTaskCount: number } => {
+): {
+  runningTasksPerProject: Record<string, number>;
+  totalRunningTaskCount: number;
+} => {
   const runningTasksPerProject = {};
   let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
     const { commands, _id } = project;
-    let runningCount: number = 0;
+    let runningCount = 0;
     commands.forEach((command: IProjectCommand) => {
       const { _id } = command;
       if (runningTasks[_id]) {
@@ -68,7 +71,7 @@ const getRunningTasksCountForProjects = (
         totalRunningTaskCount++;
       }
     });
-    runningTasksPerProject[_id!] = runningCount;
+    runningTasksPerProject[_id] = runningCount;
   });
 
   return { runningTasksPerProject, totalRunningTaskCount };
@@ -423,7 +426,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     [projects, config]
   );
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   const addProject = React.useCallback(
     (projectData: any) => {
       const addProjectFn = async () => {

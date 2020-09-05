@@ -24,6 +24,15 @@ SentryNode.init({
     new Tracing.Integrations.Express({ app }),
   ],
   tracesSampleRate: __DEV__ ? 1.0 : 0.5,
+  beforeSend(event) {
+    // Modify the event here
+    if (event.user) {
+      // Don't send user's email address
+      delete event.user.email;
+      delete event.user.ip_address;
+    }
+    return event;
+  },
 });
 
 app.use(bodyParser.json());

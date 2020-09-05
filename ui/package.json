@@ -16,6 +16,9 @@
     "cypress:run": "./node_modules/.bin/cypress run",
     "lint": "eslint . --ext .js,.ts,.tsx"
   },
+  "engines": {
+    "node": ">=12.15.0"
+  },
   "author": {
     "name": "Sai Sandeep Vaddi",
     "email": "saisandeepvaddi@gmail.com",
