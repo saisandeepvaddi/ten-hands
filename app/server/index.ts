@@ -4,6 +4,7 @@ import { JobManager } from "./services/job";
 import { getConfig } from "../shared/config";
 import SocketManager from "./services/socket";
 import fixPath from "fix-path";
+import { captureException } from "@sentry/node";
 
 /**
  * Starts Node server for ten-hands project.
@@ -34,8 +35,9 @@ export async function startServer() {
         );
         res(true);
       });
-    } catch (err) {
-      rej(err);
+    } catch (error) {
+      captureException(error);
+      rej(error);
     }
   });
 }

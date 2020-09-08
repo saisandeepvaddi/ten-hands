@@ -1,4 +1,5 @@
 import { Button } from "@blueprintjs/core";
+import { captureException } from "@sentry/react";
 import React from "react";
 import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
@@ -45,6 +46,7 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(
             });
         } catch (error) {
           console.log("error:", error);
+          captureException(error);
           return null;
         }
       }

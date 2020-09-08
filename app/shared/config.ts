@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
 import { homedir } from "os";
+import { captureException } from "@sentry/node";
 
 export const CONFIG_FILES_DIR = path.join(homedir(), ".ten-hands");
 
@@ -100,6 +101,7 @@ export const getConfig = (): IConfig => {
     console.log(
       "Config file not found. Creating default config file and database file at ~/.ten-hands/"
     );
+    captureException(error);
     return defaultConfig;
   }
 };

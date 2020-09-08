@@ -31,7 +31,12 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Sentry.ErrorBoundary fallback={"An error has occured"}>
+    <App />
+  </Sentry.ErrorBoundary>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

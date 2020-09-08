@@ -85,7 +85,7 @@ function createWindow() {
       mainWindow = null;
     });
 
-    mainWindow.on("close", e => {
+    mainWindow.on("close", (e) => {
       if (!isAppQuitting()) {
         e.preventDefault();
         if (mainWindow) {
@@ -111,8 +111,6 @@ function createWindow() {
 
 async function startApplication() {
   try {
-    const config: IConfig = getConfig();
-
     try {
       await startServer();
     } catch (error) {
@@ -155,7 +153,7 @@ async function startApplication() {
       }
     });
 
-    app.on("before-quit", e => {
+    app.on("before-quit", (e) => {
       const runningProcesses = db.getRunningTaskCount();
       console.log("runningProcesses:", runningProcesses);
       if (runningProcesses > 0) {
@@ -199,6 +197,7 @@ async function startApplication() {
   } catch (error) {
     console.log("error:", error);
     log.error("startApplication error: " + error.message);
+    SentryElectron.captureException(error);
   }
 }
 

@@ -9,6 +9,7 @@ import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
+import { captureException } from "@sentry/react";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 
@@ -23,6 +24,7 @@ const AppLayout = React.memo(() => {
     try {
       initializeSocket();
     } catch (error) {
+      captureException(error);
       console.error(`Error at starting socket`, error);
     }
   }, []);
@@ -46,7 +48,7 @@ const AppLayout = React.memo(() => {
             size="25%"
             minimumSize={100}
             maximumSize={400}
-            onResizeEnd={(newSize) => {
+            onResizeEnd={newSize => {
               // This doesn't run
               console.log("newSize: ", newSize);
             }}
