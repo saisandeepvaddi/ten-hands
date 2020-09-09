@@ -2,6 +2,7 @@ import { ipcMain, shell, BrowserWindow } from "electron";
 import { getConfig } from "../shared/config";
 import { getAppUpdate } from "./updates";
 import { Badge } from "./badge/badge";
+import { captureException } from "@sentry/electron";
 
 export default function registerIPC(mainWindow: BrowserWindow) {
   let badge = new Badge(mainWindow);
@@ -13,7 +14,8 @@ export default function registerIPC(mainWindow: BrowserWindow) {
     try {
       e.returnValue = await getAppUpdate();
     } catch (error) {
-      console.log("error:", error);
+      console.error("error:", error);
+      captureException(error);
       e.returnValue = null;
     }
   });

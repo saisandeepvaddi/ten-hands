@@ -9,6 +9,7 @@ import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
 import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
+import { captureException } from "@sentry/react";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 
@@ -19,11 +20,11 @@ const AppLayout = React.memo(() => {
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
   const statusbarHeight = config?.showStatusBar ? "30px" : "0px";
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     try {
       initializeSocket();
     } catch (error) {
+      captureException(error);
       console.error(`Error at starting socket`, error);
     }
   }, []);
@@ -47,7 +48,7 @@ const AppLayout = React.memo(() => {
             size="25%"
             minimumSize={100}
             maximumSize={400}
-            onResizeEnd={(newSize) => {
+            onResizeEnd={newSize => {
               // This doesn't run
               console.log("newSize: ", newSize);
             }}

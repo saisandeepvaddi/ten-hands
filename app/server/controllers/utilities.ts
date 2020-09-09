@@ -61,7 +61,6 @@ export function getGitInfo(req: Request, res: Response) {
 export function updateRunningTaskCount(req: Request, res: Response) {
   try {
     const { count } = req.body;
-    console.log("count:", count);
     const newRunningTaskCount = db.setRunningTaskCount(count);
     return res
       .status(200)

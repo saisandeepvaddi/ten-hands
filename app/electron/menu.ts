@@ -7,6 +7,7 @@ import {
 } from "./updates";
 import { MenuItem, dialog } from "electron";
 import { log } from "./logger";
+import { captureException } from "@sentry/electron";
 
 const { app, Menu, shell } = require("electron");
 
@@ -64,6 +65,7 @@ const helpMenu: MenuItem = new MenuItem({
         } catch (error) {
           showUnableToCheckUpdatesMessage();
           log.error("check for updates error: " + error.message);
+          captureException(error);
         }
       },
     },

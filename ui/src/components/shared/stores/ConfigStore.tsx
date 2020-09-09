@@ -1,3 +1,4 @@
+import { captureException } from "@sentry/react";
 import React from "react";
 
 import { isRunningInElectron } from "../../../utils/electron";
@@ -51,6 +52,7 @@ function ConfigProvider(props: IConfigProviderProps) {
       }
     } catch (error) {
       console.error(`Error getting config.`);
+      captureException(error);
     }
   });
 

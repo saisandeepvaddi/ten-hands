@@ -1,6 +1,6 @@
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-
-import { BrowserWindow, ipcMain, app, dialog } from "electron";
+import * as SentryElectron from "@sentry/electron";
+import { BrowserWindow, ipcMain, app, dialog, crashReporter } from "electron";
 const unhandled = require("electron-unhandled");
 unhandled();
 
@@ -22,6 +22,28 @@ import {
 import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
+
+SentryElectron.init({
+  dsn:
+    "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+  beforeSend(event) {
+    // Modify the event here
+    if (event.user) {
+      // Don't send user's email address
+      delete event.user.email;
+      delete event.user.ip_address;
+    }
+    return event;
+  },
+});
+
+crashReporter.start({
+  companyName: "ten-hands",
+  productName: "ten-hands",
+  ignoreSystemCrashHandler: true,
+  submitURL:
+    "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+});
 
 const isWindows = process.platform === "win32";
 export let mainWindow: BrowserWindow | null;
@@ -53,7 +75,6 @@ function createWindow() {
       ? "http://localhost:3010"
       : `file://${path.join(__dirname, "../ui/index.html")}`;
 
-    log.info("uiUrl:" + uiUrl);
     mainWindow.loadURL(uiUrl);
 
     if (isDev) {
@@ -61,7 +82,6 @@ function createWindow() {
       // mainWindow.webContents.openDevTools();
     }
     mainWindow.on("closed", () => {
-      log.info("Window Closing");
       mainWindow = null;
     });
 
@@ -81,41 +101,34 @@ function createWindow() {
     });
 
     mainWindowState.manage(mainWindow);
-
     return mainWindow;
   } catch (error) {
     console.log("error:", error);
     log.error("createWindow Error: " + error.message);
+    SentryElectron.captureException(error);
   }
 }
 
 async function startApplication() {
   try {
-    const config: IConfig = getConfig();
-    console.log("config:", config);
-    log.info(`config: ${JSON.stringify(config)}`);
-
     try {
       await startServer();
     } catch (error) {
       console.log("error:", error);
       log.error("failed to start server: " + error.message);
+      SentryElectron.captureException(error);
     }
 
-    log.info("Server Started");
-
     app.on("ready", () => {
-      log.info("app.on.ready called");
       createWindow();
       registerGlobalShortcuts();
-      log.info("Window Created in app.ready");
       if (!isWindows) {
         try {
-          log.info("Creating Menu");
           createMenu();
         } catch (error) {
           console.log("error:", error);
           log.error("app.ready error: " + error.message);
+          SentryElectron.captureException(error);
         }
       }
       if (mainWindow) {
@@ -141,7 +154,6 @@ async function startApplication() {
     });
 
     app.on("before-quit", (e) => {
-      log.info("App before-quit");
       const runningProcesses = db.getRunningTaskCount();
       console.log("runningProcesses:", runningProcesses);
       if (runningProcesses > 0) {
@@ -170,7 +182,6 @@ async function startApplication() {
 
     app.on("activate", () => {
       if (mainWindow === null) {
-        log.info("app.on.activate");
         createWindow();
       }
     });
@@ -186,6 +197,7 @@ async function startApplication() {
   } catch (error) {
     console.log("error:", error);
     log.error("startApplication error: " + error.message);
+    SentryElectron.captureException(error);
   }
 }
 

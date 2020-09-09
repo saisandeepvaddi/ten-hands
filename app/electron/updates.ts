@@ -77,9 +77,10 @@ export const getAppUpdate = async (
   );
 
   if (!currentVersionRelease) {
-    throw new Error(
+    console.info(
       "Unable to find updates. Please check releases section of https://github.com/saisandeepvaddi/ten-hands"
     );
+    return null;
   }
 
   let latestVersion = currentVersionRelease;

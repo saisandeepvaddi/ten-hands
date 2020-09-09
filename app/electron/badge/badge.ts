@@ -3,6 +3,7 @@
  * Based on https://github.com/ThreadKM/electron-windows-badge
  */
 
+import { captureException } from "@sentry/electron";
 import { nativeImage, BrowserWindow, app } from "electron";
 
 export class Badge {
@@ -60,22 +61,27 @@ export class Badge {
       this.window.setOverlayIcon(null, "No tasks running.");
       return;
     }
-    this.generate(count).then((dataURL: string) => {
-      if (!dataURL) {
-        this.window.setOverlayIcon(null, "Total running tasks.");
-        return;
-      }
+    this.generate(count)
+      ?.then((dataURL: string) => {
+        if (!dataURL) {
+          this.window.setOverlayIcon(null, "Total running tasks.");
+          return;
+        }
 
-      const image = nativeImage.createFromDataURL(dataURL);
+        const image = nativeImage.createFromDataURL(dataURL);
 
-      if (!image) {
-        return;
-      }
+        if (!image) {
+          return;
+        }
 
-      this.window.setOverlayIcon(
-        image,
-        "Badge to display count of running tasks."
-      );
-    });
+        this.window.setOverlayIcon(
+          image,
+          "Badge to display count of running tasks."
+        );
+      })
+      .catch((error) => {
+        console.error("error setting task count badge:", error);
+        captureException(error);
+      });
   }
 }
