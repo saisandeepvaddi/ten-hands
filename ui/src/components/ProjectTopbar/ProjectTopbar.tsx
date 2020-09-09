@@ -3,30 +3,24 @@ import {
   Alignment,
   Button,
   Dialog,
-  FormGroup,
   Icon,
-  InputGroup,
   Navbar,
   Popover,
   Tooltip,
-  HTMLSelect,
 } from "@blueprintjs/core";
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { isRunningInElectron, openInExplorer } from "../../utils/electron";
-import { hasProjectWithSameName } from "../../utils/projects";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { getGitRepo } from "../shared/API";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
-import { useMountedState } from "../shared/hooks";
 import ProjectMenu from "./ProjectMenu";
-import ProjectRenameDialog from "./ProjectRenameDialog";
-import { getYesterday } from "../../utils/general";
 import Sorter from "./Sorter";
 import EditProjectDrawer from "../ProjectForm/EditProjectDrawer";
+import { useQuery } from "react-query";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -47,14 +41,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       false
     );
 
-    const isMounted = useMountedState();
     const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
-      boolean
-    >(false);
-    const [updatedProjectName, setUpdatedProjectName] = React.useState<string>(
-      ""
-    );
-    const [renameProjectModalOpen, setRenameProjectModalOpen] = React.useState<
       boolean
     >(false);
     const { theme } = useTheme();
@@ -62,16 +49,17 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const [isProjectDrawerOpen, setIsProjectDrawerOpen] = React.useState<
       boolean
     >(false);
-    const [projectNameError, setProjectNameError] = React.useState<string>("");
-    const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
-    const [gitBranch, setGitBranch] = React.useState<string>("");
+
     const { config } = useConfig();
-    let checkBranchTimerRef = React.useRef<number>();
+
+    const gitInfo = useQuery(
+      ["gitBranch", config, activeProject],
+      (key, config: IConfig, activeProject: IProject) =>
+        getGitRepo(config, activeProject.path)
+    );
 
     const {
       deleteProject,
-      projects,
-      renameProject,
       projectsRunningTaskCount,
       runAllStoppedTasks,
       stopAllRunningTasks,
@@ -81,7 +69,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const shouldDeleteProject = async (shouldDelete) => {
       try {
         if (shouldDelete) {
-          deleteProject(activeProject._id!);
+          deleteProject(activeProject._id);
           setDeleteAlertOpen(false);
         }
       } catch (error) {
@@ -92,83 +80,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
     const handleChangeOrderModalClose = () => {
       setCommandsOrderModalOpen(false);
     };
-
-    const handleRenameProjectModalClose = () => {
-      setProjectNameError("");
-      setUpdatedProjectName("");
-      setRenameProjectModalOpen(false);
-    };
-
-    const validateProjectName = (value) => {
-      let error = "";
-      if (!value) {
-        error = "Project name cannot be empty";
-      }
-
-      if (hasProjectWithSameName(projects, value)) {
-        error = "Project name already exists";
-      }
-
-      return error;
-    };
-
-    const updateProjectName = async (e) => {
-      e.preventDefault();
-      try {
-        setIsRenaming(true);
-
-        const projectNameError = validateProjectName(updatedProjectName);
-
-        if (projectNameError) {
-          setProjectNameError(projectNameError);
-          return;
-        }
-
-        await renameProject(activeProject._id!, updatedProjectName);
-
-        handleRenameProjectModalClose();
-      } catch (error) {
-        console.log("error:", error);
-        if (isMounted()) {
-          setProjectNameError(error.message);
-        }
-      } finally {
-        if (isMounted()) {
-          setIsRenaming(false);
-        }
-      }
-    };
-
-    let updateGitBranch = React.useCallback(() => {
-      (async () => {
-        try {
-          const projectPath = activeProject.path;
-          const gitInfo = await getGitRepo(config, projectPath);
-          if (isMounted()) {
-            setGitBranch(gitInfo.branch || "");
-          }
-        } catch (error) {
-          console.log("getGitInfo error:", error);
-          if (isMounted()) {
-            setGitBranch("");
-          }
-        }
-      })();
-    }, [activeProject, isMounted, config]);
-
-    useEffect(() => {
-      updateGitBranch();
-
-      checkBranchTimerRef.current = setInterval(() => {
-        updateGitBranch();
-      }, 2000);
-
-      return () => {
-        if (checkBranchTimerRef.current) {
-          clearInterval(checkBranchTimerRef.current);
-        }
-      };
-    }, [activeProject, updateGitBranch]);
 
     return (
       <React.Fragment>
@@ -188,11 +99,15 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
               </Tooltip>
             ) : null}
             <Navbar.Heading data-testid="active-project-git-branch">
-              {gitBranch ? (
+              {gitInfo?.data?.branch ? (
                 <GitBranchContainer>
                   <Navbar.Divider style={{ paddingRight: 10 }} />{" "}
                   <Icon icon="git-branch" />
-                  {<span className="git-branch-name">{gitBranch}</span>}
+                  {
+                    <span className="git-branch-name">
+                      {gitInfo?.data?.branch}
+                    </span>
+                  }
                 </GitBranchContainer>
               ) : null}
             </Navbar.Heading>
@@ -207,13 +122,13 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
               minimal={true}
               data-testid="run-all-stopped-tasks"
               title={
-                projectsRunningTaskCount[activeProject._id!] ===
+                projectsRunningTaskCount[activeProject._id] ===
                 activeProject.commands.length
                   ? "All the tasks in the project are already running."
                   : "Runs all stopped tasks in this project."
               }
               disabled={
-                projectsRunningTaskCount[activeProject._id!] ===
+                projectsRunningTaskCount[activeProject._id] ===
                 activeProject.commands.length
               }
             />
@@ -225,11 +140,11 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
               minimal={true}
               data-testid="stop-all-running-tasks"
               title={
-                projectsRunningTaskCount[activeProject._id!] === 0
+                projectsRunningTaskCount[activeProject._id] === 0
                   ? "No tasks are running in the project."
                   : "Stops all running tasks in this project."
               }
-              disabled={projectsRunningTaskCount[activeProject._id!] === 0}
+              disabled={projectsRunningTaskCount[activeProject._id] === 0}
             />
           </Navbar.Group>
           <Navbar.Group align={Alignment.LEFT}>
@@ -294,17 +209,6 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
           isDrawerOpen={isProjectDrawerOpen}
           setDrawerOpen={setIsProjectDrawerOpen}
         />
-        {/* <ProjectRenameDialog
-          activeProject={activeProject}
-          theme={theme}
-          renameProjectModalOpen={renameProjectModalOpen}
-          handleRenameProjectModalClose={handleRenameProjectModalClose}
-          updateProjectName={updateProjectName}
-          projectNameError={projectNameError}
-          setUpdatedProjectName={setUpdatedProjectName}
-          updatedProjectName={updatedProjectName}
-          isRenaming={isRenaming}
-        /> */}
       </React.Fragment>
     );
   }

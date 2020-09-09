@@ -45,7 +45,7 @@ interface IJobAction {
   room: string;
   type: ACTION_TYPES;
   stdout?: string;
-  state?: object;
+  state?: Record<string, unknown>;
   isRunning?: boolean;
   socketId?: string;
   process?: any;
@@ -53,7 +53,7 @@ interface IJobAction {
 
 interface IStateAction {
   type: ACTION_TYPES;
-  state: object;
+  state: Record<string, unknown>;
 }
 
 interface Window {

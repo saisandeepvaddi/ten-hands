@@ -28,7 +28,7 @@ Please visit website to see intro video.
 
 # Downloads
 
-Downloads are available in `releases` section if you just want to download and run. 
+Downloads are available in `releases` section if you just want to download and run.
 
 If you want to get latest updates, you can click on _"Azure Pipelines"_ badge above to download latest builds from CI. These may have small bugs. But, please create an issue if you find any.
 
@@ -78,3 +78,7 @@ Check [CONTRIBUTING](/CONTRIBUTING.md) for project setup and folder structure de
 # License
 
 [MIT](/LICENSE) - Sai Sandeep Vaddi
+
+# Thank you
+
+Thank you [Sentry](https://sentry.io) for supporting this Open Source project with their [Sentry for Open Source](https://sentry.io/for/open-source/) initiative.

@@ -16,6 +16,9 @@
     "cypress:run": "./node_modules/.bin/cypress run",
     "lint": "eslint . --ext .js,.ts,.tsx"
   },
+  "engines": {
+    "node": ">=12.15.0"
+  },
   "author": {
     "name": "Sai Sandeep Vaddi",
     "email": "saisandeepvaddi@gmail.com",
@@ -34,6 +37,8 @@
     "@blueprintjs/core": "^3.31.0",
     "@blueprintjs/select": "^3.13.7",
     "@koale/useworker": "^3.1.0",
+    "@sentry/react": "^5.22.3",
+    "@sentry/tracing": "^5.22.3",
     "@welldone-software/why-did-you-render": "^4.0.3",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
@@ -45,6 +50,8 @@
     "react-beautiful-dnd": "^11.0.5",
     "react-dom": "^16.12.0",
     "react-dropzone": "^11.0.1",
+    "react-query": "^2.12.1",
+    "react-query-devtools": "^2.4.4",
     "react-resizable": "^1.10.1",
     "react-scripts": "^3.3.1",
     "react-spaces": "^0.1.25",
@@ -71,6 +78,7 @@
     "@types/styled-components": "^4.4.2",
     "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
+    "eslint": "^7.7.0",
     "jest-axe": "^3.4.0",
     "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.5",

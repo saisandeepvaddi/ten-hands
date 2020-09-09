@@ -2,16 +2,17 @@ import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
 import { homedir } from "os";
+import { captureException } from "@sentry/node";
 
-const tenHandsDir = path.join(homedir(), ".ten-hands");
+export const CONFIG_FILES_DIR = path.join(homedir(), ".ten-hands");
 
 export const CONFIG_FILES = {
-  configFile: path.join(tenHandsDir, "config.json"),
-  dbFile: path.join(tenHandsDir, "db.json"),
-  logFile: path.join(tenHandsDir, "log.log"),
+  configFile: path.join(CONFIG_FILES_DIR, "config.json"),
+  dbFile: path.join(CONFIG_FILES_DIR, "db.json"),
+  logFile: path.join(CONFIG_FILES_DIR, "log.log"),
 };
 
-mkdirp.sync(tenHandsDir);
+mkdirp.sync(CONFIG_FILES_DIR);
 
 const defaultConfig: IConfig = {
   port: 5010,
@@ -100,6 +101,7 @@ export const getConfig = (): IConfig => {
     console.log(
       "Config file not found. Creating default config file and database file at ~/.ten-hands/"
     );
+    captureException(error);
     return defaultConfig;
   }
 };

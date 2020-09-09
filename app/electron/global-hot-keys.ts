@@ -2,6 +2,7 @@ import { getConfig } from "../shared/config";
 import { globalShortcut, BrowserWindow } from "electron";
 import { getMainWindow } from ".";
 import { openAndFocusWindow, hideWindowToTray } from "./utils";
+import { captureException } from "@sentry/electron";
 
 const config: IConfig = getConfig();
 
@@ -32,6 +33,7 @@ export const registerGlobalShortcuts = () => {
       }
     }
   } catch (error) {
+    captureException(error);
     console.log("Unable to register global hot key: ", error.message);
   }
 };

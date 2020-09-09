@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactQueryDevtools } from "react-query-devtools";
 import { ThemeProvider } from "../shared/stores/ThemeStore";
 
 // To disable no-submodule-imports, but tslint:disable:no-submodule-imports not working
@@ -17,17 +18,20 @@ import AppLayout from "./AppLayout";
 
 const App = () => {
   return (
-    <ConfigProvider>
-      <ThemeProvider>
-        <JobsProvider>
-          <SocketsProvider>
-            <ProjectsProvider>
-              <AppLayout />
-            </ProjectsProvider>
-          </SocketsProvider>
-        </JobsProvider>
-      </ThemeProvider>
-    </ConfigProvider>
+    <React.Fragment>
+      <ConfigProvider>
+        <ThemeProvider>
+          <JobsProvider>
+            <SocketsProvider>
+              <ProjectsProvider>
+                <AppLayout />
+              </ProjectsProvider>
+            </SocketsProvider>
+          </JobsProvider>
+        </ThemeProvider>
+      </ConfigProvider>
+      <ReactQueryDevtools />
+    </React.Fragment>
   );
 };
 

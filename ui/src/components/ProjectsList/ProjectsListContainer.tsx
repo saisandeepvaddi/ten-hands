@@ -14,6 +14,7 @@ import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
 import { Button, Icon } from "@blueprintjs/core";
 import Search from "../Search";
+import { captureException } from "@sentry/react";
 
 interface IProjectsListContainerProps {}
 
@@ -45,7 +46,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const expandOrCollapseAllProjects = React.useCallback(
     (collapse: boolean = false) => {
       let projectTaskListOpenMap = {};
-      originalProjects.map((project) => {
+      originalProjects.map(project => {
         projectTaskListOpenMap[project._id!] = !collapse;
       });
 
@@ -81,7 +82,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const changeActiveProject = React.useCallback(
     (projectId, index: number) => {
       const activeProjectWithId = projects.find(
-        (project) => project._id === projectId
+        project => project._id === projectId
       );
       if (activeProjectWithId) {
         setActiveProject(activeProjectWithId);
@@ -105,7 +106,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     // So that, we can move animated blue background only if active project changed position.
     const newProjects = [...projects];
     const activeProjectIndex: number =
-      newProjects.findIndex((x) => x._id === activeProject._id) || 0;
+      newProjects.findIndex(x => x._id === activeProject._id) || 0;
 
     setActiveProjectIndexBeforeDrag(activeProjectIndex);
   };
@@ -114,7 +115,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   React.useEffect(() => {
     const newProjects = [...projects];
     const newActiveProjectIndex: number = newProjects.findIndex(
-      (x) => x._id === activeProject._id
+      x => x._id === activeProject._id
     );
     if (activeProjectIndexBeforeDrag !== newActiveProjectIndex) {
       setSelectedItemIndex(newActiveProjectIndex);
@@ -128,10 +129,11 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
       const save = async (projects: IProject[]) => {
         try {
           console.info("Saving new projects order");
-          const projectIds = projects.map((project) => project._id!);
+          const projectIds = projects.map(project => project._id!);
           await reorderProjectsInDb(config, projectIds);
           setOriginalProjects(projects);
         } catch (error) {
+          captureException(error);
           console.log("Error Reordering:", error);
         }
       };
@@ -168,7 +170,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
     // Check if activeProject is moved
     const activeProjectIndexAfterDrag: number = newProjects.findIndex(
-      (x) => x._id === activeProject._id
+      x => x._id === activeProject._id
     );
     // console.log("activeProjectIndexBeforeDrag:", activeProjectIndexBeforeDrag);
     // console.log("activeProjectIndexAfterDrag:", activeProjectIndexAfterDrag);
