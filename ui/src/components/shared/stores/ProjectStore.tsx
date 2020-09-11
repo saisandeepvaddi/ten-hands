@@ -18,7 +18,7 @@ import JobTerminalManager from "../JobTerminalManager";
 import { useSockets } from "./SocketStore";
 import { isRunningInElectron } from "../../../utils/electron";
 import { useRecoilState } from "recoil";
-import { activeProjectAtom } from "../state/atoms";
+import { activeProjectAtom, projectsAtom } from "../state/atoms";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -105,9 +105,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
   const { config } = useConfig();
-  // const [activeProject, setActiveProject] = React.useState(initialProject);
   const [activeProject, setActiveProject] = useRecoilState(activeProjectAtom);
-  const [projects, setProjects] = React.useState<IProject[]>([]);
+  const [projects, setProjects] = useRecoilState(projectsAtom);
   const [loadingProjects, setLoadingProjects] = React.useState(true);
   const [
     projectsRunningTaskCount,

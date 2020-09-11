@@ -14,7 +14,7 @@ export const activeProjectAtom = atom<IProject>({
   },
 });
 
-export const projectsAtom = atom({
+export const projectsAtom = atom<IProject[]>({
   key: "projects",
   default: [],
 });
