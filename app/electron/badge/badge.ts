@@ -5,6 +5,7 @@
 
 import { captureException } from "@sentry/electron";
 import { nativeImage, BrowserWindow, app } from "electron";
+import { logger } from "../logger";
 
 export class Badge {
   ctx: CanvasRenderingContext2D | null;
@@ -80,7 +81,10 @@ export class Badge {
         );
       })
       .catch((error) => {
-        console.error("error setting task count badge:", error);
+        logger.error(
+          `error setting task count badge: ${JSON.stringify(error)}`
+        );
+
         captureException(error);
       });
   }

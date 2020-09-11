@@ -6,7 +6,7 @@ import {
   showUnableToCheckUpdatesMessage,
 } from "./updates";
 import { MenuItem, dialog } from "electron";
-import { log } from "./logger";
+import { logger } from "./logger";
 import { captureException } from "@sentry/electron";
 
 const { app, Menu, shell } = require("electron");
@@ -56,7 +56,7 @@ const helpMenu: MenuItem = new MenuItem({
       async click() {
         try {
           const update = await getAppUpdate();
-          log.info("Update: " + JSON.stringify(update));
+          logger.info("Update: " + JSON.stringify(update));
           if (update && !update.prerelease) {
             showUpdateAvailableMessage();
           } else {
@@ -64,7 +64,7 @@ const helpMenu: MenuItem = new MenuItem({
           }
         } catch (error) {
           showUnableToCheckUpdatesMessage();
-          log.error("check for updates error: " + error.message);
+          logger.error("check for updates error: " + error.message);
           captureException(error);
         }
       },
