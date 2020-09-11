@@ -15,21 +15,24 @@ import { ProjectsProvider } from "../shared/stores/ProjectStore";
 import { SocketsProvider } from "../shared/stores/SocketStore";
 import "./App.css";
 import AppLayout from "./AppLayout";
+import { RecoilRoot } from "recoil";
 
 const App = () => {
   return (
     <React.Fragment>
-      <ConfigProvider>
-        <ThemeProvider>
-          <JobsProvider>
-            <SocketsProvider>
-              <ProjectsProvider>
-                <AppLayout />
-              </ProjectsProvider>
-            </SocketsProvider>
-          </JobsProvider>
-        </ThemeProvider>
-      </ConfigProvider>
+      <RecoilRoot>
+        <ConfigProvider>
+          <ThemeProvider>
+            <JobsProvider>
+              <SocketsProvider>
+                <ProjectsProvider>
+                  <AppLayout />
+                </ProjectsProvider>
+              </SocketsProvider>
+            </JobsProvider>
+          </ThemeProvider>
+        </ConfigProvider>
+      </RecoilRoot>
       <ReactQueryDevtools />
     </React.Fragment>
   );
