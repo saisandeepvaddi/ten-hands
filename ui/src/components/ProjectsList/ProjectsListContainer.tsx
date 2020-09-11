@@ -66,7 +66,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   }, [originalProjects, expandOrCollapseAllProjects]);
 
   React.useEffect(() => {
-    expandOrCollapseAllProjects(false);
+    expandOrCollapseAllProjects(true);
   }, []);
 
   const updateProjectTaskListOpen = React.useCallback(

@@ -2,12 +2,12 @@ import { Logger } from "just-enough-logger";
 import { CONFIG_FILES, CONFIG_FILES_DIR } from "../shared/config";
 import { join } from "path";
 
-export const log = new Logger({
+export const logger = new Logger({
   transports: ["file", "console"],
   file: CONFIG_FILES.logFile,
 });
 
-export const stream = log.getLogStream();
+export const stream = logger.getLogStream();
 
 export const devLogger = new Logger({
   transports: ["file", "console"],

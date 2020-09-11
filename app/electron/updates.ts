@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { dialog, shell, app } from "electron";
 import readPkg from "read-pkg";
-import { log } from "./logger";
+import { logger } from "./logger";
 
 const isDev = require("electron-is-dev");
 interface IRelease {
@@ -60,7 +60,7 @@ export const getAppUpdate = async (
     ? _appVersion
     : "v" + _appVersion;
 
-  log.info("App Version: " + appVersion);
+  logger.info("App Version: " + appVersion);
 
   const githubReleases = await Axios.get(
     "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases"
