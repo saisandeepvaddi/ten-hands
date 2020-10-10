@@ -10,8 +10,10 @@ import DesktopMenu from "./DesktopMenu";
 import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
 import { captureException } from "@sentry/react";
+import { getItem, setItem } from "../../utils/storage";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
+const savedSiderSize = Number(getItem("sider-width"));
 
 const AppLayout = React.memo(() => {
   const { theme } = useTheme();
@@ -19,6 +21,9 @@ const AppLayout = React.memo(() => {
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
   const statusbarHeight = config?.showStatusBar ? "30px" : "0px";
+  const [size, setSize] = React.useState<number>(() => {
+    return !savedSiderSize || savedSiderSize === 0 ? 200 : savedSiderSize;
+  });
 
   useEffect(() => {
     try {
@@ -45,12 +50,12 @@ const AppLayout = React.memo(() => {
         </Space.Top>
         <Space.Fill>
           <Space.LeftResizable
-            size="25%"
+            size={size}
             minimumSize={100}
             maximumSize={400}
             onResizeEnd={newSize => {
-              // This doesn't run
-              console.log("newSize: ", newSize);
+              setItem("sider-width", newSize);
+              setSize(newSize);
             }}
           >
             <Sidebar />
