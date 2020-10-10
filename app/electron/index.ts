@@ -11,7 +11,7 @@ import windowStateKeeper from "electron-window-state";
 import { startServer } from "../server";
 import { createMenu, getMenu } from "./menu";
 import { getConfig } from "../shared/config";
-import { log } from "./logger";
+import { logger } from "./logger";
 
 import { createTray } from "./tray";
 import { isAppQuitting, setIsAppQuitting } from "./app-state";
@@ -103,8 +103,7 @@ function createWindow() {
     mainWindowState.manage(mainWindow);
     return mainWindow;
   } catch (error) {
-    console.log("error:", error);
-    log.error("createWindow Error: " + error.message);
+    logger.error("createWindow Error: " + error.message);
     SentryElectron.captureException(error);
   }
 }
@@ -115,7 +114,7 @@ async function startApplication() {
       await startServer();
     } catch (error) {
       console.log("error:", error);
-      log.error("failed to start server: " + error.message);
+      logger.error("failed to start server: " + error.message);
       SentryElectron.captureException(error);
     }
 
@@ -127,7 +126,7 @@ async function startApplication() {
           createMenu();
         } catch (error) {
           console.log("error:", error);
-          log.error("app.ready error: " + error.message);
+          logger.error("app.ready error: " + error.message);
           SentryElectron.captureException(error);
         }
       }
@@ -139,7 +138,7 @@ async function startApplication() {
 
     app.on("second-instance", () => {
       console.log("Requesting second instance. Deny it");
-      log.warn("Requesting second instance. Deny it");
+      logger.warn("Requesting second instance. Deny it");
 
       // Someone tried to run a second instance, we should focus our window.
       if (mainWindow) {
@@ -196,7 +195,7 @@ async function startApplication() {
     });
   } catch (error) {
     console.log("error:", error);
-    log.error("startApplication error: " + error.message);
+    logger.error("startApplication error: " + error.message);
     SentryElectron.captureException(error);
   }
 }
@@ -204,9 +203,9 @@ async function startApplication() {
 /* Makes app a single instance application */
 if (!singleInstanceLock) {
   app.quit();
-  log.error("Quitting instance because of single instance lock.");
+  logger.error("Quitting instance because of single instance lock.");
 } else {
   console.log("starting app");
-  log.info("Starting app");
+  logger.info("Starting app");
   startApplication();
 }

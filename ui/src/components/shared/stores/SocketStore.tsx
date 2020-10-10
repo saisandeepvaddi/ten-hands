@@ -20,6 +20,13 @@ interface ISocketContextValue {
   ) => void;
   _socket: any;
   unsubscribeFromTaskSocket: (room: string, pid: number) => void;
+  restartTask: (
+    room: string,
+    pid: number,
+    command: IProjectCommand,
+    projectPath: string,
+    shell?: string
+  ) => void;
 }
 
 interface ISocketProviderProps {
@@ -62,7 +69,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       // console.info("Socket connected to server");
     });
 
-    _socket.current.on(`job_started`, (message) => {
+    _socket.current.on(`job_started`, message => {
       const room = message.room;
       console.info(`Process started for cmd: ${room}`);
       updateJobProcess(room, message.data);
@@ -74,17 +81,17 @@ function SocketsProvider(props: ISocketProviderProps) {
         );
       }
     });
-    _socket.current.on(`job_output`, (message) => {
+    _socket.current.on(`job_output`, message => {
       const room = message.room;
       updateJob(room, message.data, true);
     });
 
-    _socket.current.on(`job_error`, (message) => {
+    _socket.current.on(`job_error`, message => {
       const room = message.room;
       console.info(`Process error in room: ${room}`);
       updateJob(room, message.data, true);
     });
-    _socket.current.on(`job_close`, (message) => {
+    _socket.current.on(`job_close`, message => {
       const room = message.room;
       console.info(`Process close in room: ${room}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
@@ -94,7 +101,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       });
     });
 
-    _socket.current.on(`job_exit`, (message) => {
+    _socket.current.on(`job_exit`, message => {
       const room = message.room;
 
       console.info(`Process exit in room: ${room}`);
@@ -105,7 +112,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       });
     });
 
-    _socket.current.on(`job_killed`, (message) => {
+    _socket.current.on(`job_killed`, message => {
       const room = message.room;
 
       console.info(
@@ -159,6 +166,26 @@ function SocketsProvider(props: ISocketProviderProps) {
     }
   }, []);
 
+  const restartTask = React.useCallback(
+    (room, pid, command, projectPath, shell) => {
+      try {
+        if (_socket && _socket.current) {
+          _socket.current.emit("restart", {
+            room,
+            pid,
+            command,
+            projectPath,
+            shell,
+          });
+        }
+      } catch (error) {
+        console.error("subscribeToTaskSocket error:", error);
+        throw error;
+      }
+    },
+    []
+  );
+
   const value = React.useMemo(
     () => ({
       isSocketInitialized,
@@ -166,6 +193,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       subscribeToTaskSocket,
       _socket,
       unsubscribeFromTaskSocket,
+      restartTask,
     }),
     [
       isSocketInitialized,
@@ -173,6 +201,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       subscribeToTaskSocket,
       _socket,
       unsubscribeFromTaskSocket,
+      restartTask,
     ]
   );
 

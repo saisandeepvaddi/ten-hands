@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import styled from "styled-components";
 import { wait } from "../shared/utilities";
-import { Button, Alignment, Icon } from "@blueprintjs/core";
+import {
+  Button,
+  Alignment,
+  Icon,
+  Popover,
+  PopoverInteractionKind,
+} from "@blueprintjs/core";
 import { useSockets } from "../shared/stores/SocketStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useConfig } from "../shared/stores/ConfigStore";
@@ -38,11 +44,17 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
 }) => {
   const room = command._id;
   const projectPath = project.path;
+  const projectId = project._id;
   const terminalManager = JobTerminalManager.getInstance();
+  const actionButtonContainerRef = useRef<HTMLSpanElement>(null);
 
   const { runningTasks, state: jobState, dispatch, ACTION_TYPES } = useJobs();
   const { activeProject, updateTask } = useProjects();
-  const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+  const {
+    subscribeToTaskSocket,
+    unsubscribeFromTaskSocket,
+    restartTask,
+  } = useSockets();
   const { config } = useConfig();
 
   const isThisActiveProject = activeProject._id === project._id;
@@ -51,7 +63,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     return runningTasks[taskId] === true;
   };
 
-  const scrollToTask = async (task) => {
+  const scrollToTask = async task => {
     // If you click on task directly it should first switch the active project then scroll to task
     if (!isThisActiveProject) {
       changeActiveProject();
@@ -66,7 +78,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const clearJobOutput = (room) => {
+  const clearJobOutput = room => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
       room,
@@ -101,7 +113,22 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     });
   };
 
-  const startTask = (e) => {
+  const restartJob = room => {
+    const shell = command.shell || activeProject.shell || config.shell || "";
+    const process = getJobData(jobState, room).process;
+    const { pid } = process;
+    restartTask(room, pid, command, projectPath, shell);
+    updateJobProcess(room, {
+      pid: -1,
+    });
+    clearJobOutput(room);
+    updateTask(projectId, command._id, {
+      ...command,
+      lastExecutedAt: new Date(),
+    });
+  };
+
+  const startTask = e => {
     try {
       startJob();
     } catch (error) {
@@ -109,11 +136,19 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const stopTask = (e) => {
+  const stopTask = e => {
     try {
       stopJob();
     } catch (error) {
       console.log(`stopTask error: `, error);
+    }
+  };
+
+  const restart = e => {
+    try {
+      restartJob(room);
+    } catch (error) {
+      console.log(`restart error: `, error);
     }
   };
 
@@ -145,18 +180,36 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
               marginLeft: "auto",
             }}
             className="task-action-button-container"
+            ref={actionButtonContainerRef}
             /*eslint-disable*/
           >
             {isTaskRunning(command._id) ? (
               // Using anchor tag instead of Button to avoid blueprintjs warning about nested buttons
-              <a
-                type="button"
-                className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
-                title="Stop task"
-                onClick={stopTask}
+              <Popover
+                position="right"
+                interactionKind={PopoverInteractionKind.HOVER}
+                hoverOpenDelay={0}
+                content={
+                  <a
+                    type="button"
+                    className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-play"
+                    title={`Restart '${command.name}' task`}
+                    onClick={restart}
+                  >
+                    Restart
+                  </a>
+                }
+                className="restart-popover"
               >
-                Stop
-              </a>
+                <a
+                  type="button"
+                  className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
+                  title="Stop task"
+                  onClick={stopTask}
+                >
+                  Stop
+                </a>
+              </Popover>
             ) : (
               <a
                 type="button"

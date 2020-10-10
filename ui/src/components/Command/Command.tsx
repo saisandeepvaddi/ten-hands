@@ -1,4 +1,11 @@
-import { Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
+import {
+  Button,
+  Collapse,
+  H5,
+  Popover,
+  PopoverInteractionKind,
+  ResizeSensor,
+} from "@blueprintjs/core";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/stores/JobStore";
@@ -56,9 +63,12 @@ function getJobData(state, room: string) {
 const Command: React.FC<ICommandProps> = React.memo(
   ({ command, projectPath, index, projectId }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
-    const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
+    const {
+      subscribeToTaskSocket,
+      unsubscribeFromTaskSocket,
+      restartTask,
+    } = useSockets();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
-
     const room = command._id;
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
@@ -82,7 +92,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const clearJobOutput = (room) => {
+    const clearJobOutput = room => {
       dispatch({
         type: ACTION_TYPES.CLEAR_OUTPUT,
         room,
@@ -90,7 +100,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       terminalManager.clearTerminalInRoom(room);
     };
 
-    const startJob = (room) => {
+    const startJob = room => {
       clearJobOutput(room);
       const shell = command.shell || activeProject.shell || config.shell || "";
       subscribeToTaskSocket(room, command, projectPath, shell);
@@ -100,12 +110,27 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const stopJob = (room) => {
+    const stopJob = room => {
       const process = getJobData(jobState, room).process;
       const { pid } = process;
       unsubscribeFromTaskSocket(room, pid);
       updateJobProcess(room, {
         pid: -1,
+      });
+    };
+
+    const restartJob = room => {
+      const shell = command.shell || activeProject.shell || config.shell || "";
+      const process = getJobData(jobState, room).process;
+      const { pid } = process;
+      restartTask(room, pid, command, projectPath, shell);
+      updateJobProcess(room, {
+        pid: -1,
+      });
+      clearJobOutput(room);
+      updateTask(projectId, command._id, {
+        ...command,
+        lastExecutedAt: new Date(),
       });
     };
 
@@ -127,15 +152,32 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>
               {isProcessRunning() ? (
-                <Button
-                  data-testid="stop-task-button"
-                  intent="danger"
-                  icon="stop"
-                  minimal
-                  disabled={!isProcessRunning()}
-                  text="Stop"
-                  onClick={() => stopJob(room)}
-                />
+                <Popover
+                  position="right"
+                  interactionKind={PopoverInteractionKind.HOVER}
+                  hoverOpenDelay={0}
+                  content={
+                    <Button
+                      data-testid="restart-task-button"
+                      intent="primary"
+                      icon="refresh"
+                      minimal
+                      disabled={!isProcessRunning()}
+                      text={"Restart"}
+                      onClick={() => restartJob(room)}
+                    />
+                  }
+                >
+                  <Button
+                    data-testid="stop-task-button"
+                    intent="danger"
+                    icon="stop"
+                    minimal
+                    disabled={!isProcessRunning()}
+                    text={"Stop"}
+                    onClick={() => stopJob(room)}
+                  />
+                </Popover>
               ) : (
                 <Button
                   data-testid="start-task-button"
@@ -143,7 +185,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                   intent="success"
                   minimal
                   disabled={isProcessRunning()}
-                  text="Start"
+                  text={"Start"}
                   onClick={() => startJob(room)}
                 />
               )}
@@ -192,7 +234,7 @@ const Command: React.FC<ICommandProps> = React.memo(
           </CommandHeader>
           <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
             <ResizeSensor
-              onResize={(entries) => {
+              onResize={entries => {
                 const width: number = entries[0].contentRect.width;
                 // setContainerWidth(width);
                 handleSidebarResize(width);
