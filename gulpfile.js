@@ -30,10 +30,15 @@ const startServerForBrowser = task("yarn start:server", {
   cwd: path.join(__dirname, "app"),
 });
 
+const startExtensionForChromeDev = task("yarn dev:chrome", {
+  cwd: path.join(__dirname, "extension"),
+});
+
 exports.startUIForElectron = startUIForElectron;
 exports.startUIForBrowser = startUIForBrowser;
 exports.startBuildWatchForApp = startBuildWatchForApp;
 exports.startAppsForDev = startAppsForDev;
+exports.startExtensionForChromeDev = startExtensionForChromeDev;
 
 /* BUILDING TASKS */
 
@@ -55,6 +60,10 @@ const buildDesktopAppInstallers = task("yarn build:installers", {
 
 const buildCLI = task("yarn build", {
   cwd: path.join(__dirname, "cli"),
+});
+
+const buildExtensionChrome = task("yarn build:chrome", {
+  cwd: path.join(__dirname, "ExtensionChrome"),
 });
 
 /* VERSIONING TASKS */
@@ -180,6 +189,8 @@ exports.startServer = series(
 );
 
 exports.startCLI = series(startBuildWatchForCLI);
+
+exports.startChromeExtension = series(startExtensionForChromeDev);
 
 /* BUILD TASKS */
 exports.buildDesktop = series(
