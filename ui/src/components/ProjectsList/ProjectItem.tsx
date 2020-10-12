@@ -92,7 +92,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
         )}
       </Item>
       <div className="w-100">
-        <Collapse isOpen={isTaskListOpen} keepChildrenMounted={true}>
+        <Collapse isOpen={isTaskListOpen}>
           <div style={{ paddingLeft: 20 }}>
             {project.commands.map(command => (
               <ProjectTaskItem
