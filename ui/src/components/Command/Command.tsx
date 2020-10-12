@@ -1,11 +1,4 @@
-import {
-  Button,
-  Collapse,
-  H5,
-  Popover,
-  PopoverInteractionKind,
-  ResizeSensor,
-} from "@blueprintjs/core";
+import { Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/stores/JobStore";
@@ -152,22 +145,23 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>
               {isProcessRunning() ? (
-                <Popover
-                  position="right"
-                  interactionKind={PopoverInteractionKind.HOVER}
-                  hoverOpenDelay={0}
-                  content={
-                    <Button
-                      data-testid="restart-task-button"
-                      intent="primary"
-                      icon="refresh"
-                      minimal
-                      disabled={!isProcessRunning()}
-                      text={"Restart"}
-                      onClick={() => restartJob(room)}
-                    />
-                  }
-                >
+                // <Popover
+                //   position="right"
+                //   interactionKind={PopoverInteractionKind.HOVER}
+                //   hoverOpenDelay={0}
+                //   content={
+                //     <Button
+                //       data-testid="restart-task-button"
+                //       intent="primary"
+                //       icon="refresh"
+                //       minimal
+                //       disabled={!isProcessRunning()}
+                //       text={"Restart"}
+                //       onClick={() => restartJob(room)}
+                //     />
+                //   }
+                // >
+                <React.Fragment>
                   <Button
                     data-testid="stop-task-button"
                     intent="danger"
@@ -177,8 +171,18 @@ const Command: React.FC<ICommandProps> = React.memo(
                     text={"Stop"}
                     onClick={() => stopJob(room)}
                   />
-                </Popover>
+                  <Button
+                    data-testid="restart-task-button"
+                    intent="primary"
+                    icon="refresh"
+                    minimal
+                    disabled={!isProcessRunning()}
+                    text={"Restart"}
+                    onClick={() => restartJob(room)}
+                  />
+                </React.Fragment>
               ) : (
+                // </Popover>
                 <Button
                   data-testid="start-task-button"
                   icon="play"
