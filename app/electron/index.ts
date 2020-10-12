@@ -70,6 +70,7 @@ function createWindow() {
       frame: isWindows ? false : true,
       webPreferences: {
         nodeIntegration: true,
+        enableRemoteModule: true,
       },
     });
 
