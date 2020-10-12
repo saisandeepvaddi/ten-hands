@@ -11,6 +11,7 @@ interface IConfig {
   taskViewStyle: TaskViewStyle;
   shell: string;
   terminalRenderer?: "canvas" | "webgl";
+  sendErrorReports?: boolean;
 }
 
 interface IMyTheme {

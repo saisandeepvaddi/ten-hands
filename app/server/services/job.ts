@@ -14,6 +14,7 @@ class Job {
   socketManager: SocketManager;
   private room: any;
   private shell: string;
+  private pid: number;
   constructor(room: string, shell: string, socketManager: SocketManager) {
     this.room = room;
     this.shell = shell;
@@ -43,15 +44,12 @@ class Job {
         maxBuffer: 100 * 1024 * 1024,
       };
 
-      console.log("this.shell:", this.shell);
-
       if (this.shell && this.shell !== "") {
         jobOptions.shell = this.shell;
       }
 
-      console.log("jobOptions:", jobOptions);
-
       const n = exec(job, jobOptions);
+      this.pid = n.pid;
 
       console.log(`Process started with PID: ${n.pid}`);
 
@@ -67,21 +65,27 @@ class Job {
       n.on("close", (code, signal) => {
         this.socketManager.emit(`job_close`, {
           room,
-          data: `Process with PID ${n.pid ||
-            "--"} closed with code ${code} by signal ${signal}`,
+          data: `Process with PID ${
+            n.pid || "--"
+          } closed with code ${code} by signal ${signal}`,
         });
       });
 
       n.on("exit", (code, signal) => {
         this.socketManager.emit(`job_exit`, {
           room,
-          data: `Process with PID ${n.pid ||
-            "--"} exited with code ${code} by signal ${signal}`,
+          data: `Process with PID ${
+            n.pid || "--"
+          } exited with code ${code} by signal ${signal}`,
         });
       });
     } catch (error) {
       console.log(`Big Catch: ${error.message}`);
     }
+  }
+
+  public getPID() {
+    return this.pid;
   }
 }
 
@@ -109,21 +113,26 @@ export class JobManager {
    * @param {*} pid Process Id of the task. (Created by OS)
    * @memberof JobManager
    */
-  private killJob(room: string, pid: number) {
+  private killJob(room: string, pid: number): Promise<boolean> {
     console.log(`Killing process: ${pid}`);
-    pKill(pid, (error) => {
-      if (error) {
-        console.error(`Error killing process: ${pid}\n ${error.message}`);
-        this.socketManager.emit(`job_error`, {
-          room,
-          data: `Error killing process: ${pid}.\n ${error.message}`,
-        });
-        return;
-      }
+    return new Promise((resolve, reject) => {
+      pKill(pid, (error) => {
+        if (error) {
+          console.error(`Error killing process: ${pid}\n ${error.message}`);
+          this.socketManager.emit(`job_error`, {
+            room,
+            data: `Error killing process: ${pid}.\n ${error.message}`,
+          });
 
-      this.socketManager.emit(`job_killed`, {
-        room,
-        data: pid,
+          return reject(error);
+        }
+
+        this.socketManager.emit(`job_killed`, {
+          room,
+          data: pid,
+        });
+
+        return resolve(true);
       });
     });
   }
@@ -158,8 +167,45 @@ export class JobManager {
         this.killJob(room, pid);
       },
     };
+
+    const jobRestartSubscriber: ISocketListener = {
+      event: "restart",
+      callback: ({
+        command,
+        room,
+        pid,
+        projectPath,
+        shell,
+      }: {
+        command: IProjectCommand;
+        room: string;
+        pid: number;
+        projectPath: string;
+        shell: string;
+      }) => {
+        console.log(`Restart: ${room}, pid: ${pid}`);
+
+        this.killJob(room, pid)
+          .then((isKilled) => {
+            if (!isKilled) {
+              throw new Error(`Did not kill pid: ${pid}`);
+            }
+
+            console.log(`Killed: ${room}, pid: ${pid}`);
+
+            const process = new Job(room, shell, this.socketManager);
+            process.start(command, projectPath);
+            console.log(`Started: ${room}, pid: ${process.getPID()}`);
+          })
+          .catch((_error) => {
+            console.error(`Failed to kill pid: ${pid}`);
+          });
+      },
+    };
+
     this.socketManager.subscribe(jobStartSubscriber);
     this.socketManager.subscribe(jobKillSubscriber);
+    this.socketManager.subscribe(jobRestartSubscriber);
   }
 
   /**

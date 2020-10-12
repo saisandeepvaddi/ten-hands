@@ -9,4 +9,5 @@ interface IConfig {
   hideToTrayOnClose?: boolean;
   terminalRenderer?: "canvas" | "webgl";
   showTaskCountBadge?: boolean;
+  sendErrorReports?: boolean;
 }

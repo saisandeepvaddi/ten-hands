@@ -17,6 +17,8 @@ import { useJobs } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
 import { useSockets } from "./SocketStore";
 import { isRunningInElectron } from "../../../utils/electron";
+import { useRecoilState } from "recoil";
+import { activeProjectAtom, projectsAtom } from "../state/atoms";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -103,15 +105,15 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
   const { config } = useConfig();
-  const [activeProject, setActiveProject] = React.useState(initialProject);
-  const [projects, setProjects] = React.useState<IProject[]>([]);
+  const [activeProject, setActiveProject] = useRecoilState(activeProjectAtom);
+  const [projects, setProjects] = useRecoilState(projectsAtom);
   const [loadingProjects, setLoadingProjects] = React.useState(true);
   const [
     projectsRunningTaskCount,
     setProjectsRunningTaskCount,
   ] = React.useState<any>({});
 
-  const clearJobOutput = (room) => {
+  const clearJobOutput = room => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
       room,
@@ -216,7 +218,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           } else {
             // Commands order might be changed.
             const newActiveProject = receivedProjects.find(
-              (project) => project._id === activeProject._id
+              project => project._id === activeProject._id
             );
 
             // If the project was deleted
@@ -245,7 +247,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const deleteTaskFn = async () => {
         await deleteTaskInDb(config, projectId, taskId);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          x => x._id === projectId
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
@@ -274,7 +276,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const renameProjectFn = async () => {
         await renameProjectInDb(config, projectId, newName);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          x => x._id === projectId
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -302,7 +304,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const updateProjectFn = async () => {
         await updateProjectInDb(config, projectId, newProjectData);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          x => x._id === projectId
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -334,7 +336,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const reorderTasksFn = async () => {
         await reorderTasksInDb(config, projectId, commands, taskSortOrder);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          x => x._id === projectId
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
@@ -361,7 +363,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await saveTaskInDb(config, projectId, task);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectId
+            x => x._id === projectId
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
@@ -390,12 +392,12 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await updateTaskInDb(config, projectId, taskId, task);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectId
+            x => x._id === projectId
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
             const taskIndex = projectWithThisTask.commands.findIndex(
-              (task) => task._id === taskId
+              task => task._id === taskId
             );
 
             if (taskIndex < 0) {
@@ -471,7 +473,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
   const runAllStoppedTasks = () => {
     const commandsInProject = activeProject.commands;
-    commandsInProject.forEach((command) => {
+    commandsInProject.forEach(command => {
       if (!isTaskRunning(command._id)) {
         startTask(command);
       }
@@ -480,7 +482,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
   const stopAllRunningTasks = React.useCallback(() => {
     const commandsInProject = activeProject.commands;
-    commandsInProject.forEach((command) => {
+    commandsInProject.forEach(command => {
       if (isTaskRunning(command._id)) {
         stopTask(command);
       }

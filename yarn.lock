@@ -16778,10 +16778,10 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-react-spaces@^0.1.25:
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/react-spaces/-/react-spaces-0.1.25.tgz#b69180c207ceb136fe0b851d79f6098d47ee78f2"
-  integrity sha512-OXboYD983NhwJQc/YsT/x/iHIpU1p8EFld4vqFPuJQUDhqaCoakwlctpRzQc8AtZ6Ugd/t2aUWyi9gmyOQEw9Q==
+react-spaces@^0.1.26:
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/react-spaces/-/react-spaces-0.1.26.tgz#e88170ee3967b0c3fd82c89492ff4e69217f1699"
+  integrity sha512-lOA48zSEO+2WyndcFFQ5Oh5IBmv3HBK6W/OtKyGvYTwsF09spyn0CMlwJZSCRyz2ar7EeJxAPXRR1PBupnDEAA==
   dependencies:
     css-element-queries "^1.2.1"
 
@@ -16970,6 +16970,11 @@ rechoir@^0.6.2:
   integrity sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=
   dependencies:
     resolve "^1.1.6"
+
+recoil@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/recoil/-/recoil-0.0.10.tgz#679ab22306f559f8a63c46fd5ff5241539f9248f"
+  integrity sha512-+9gRqehw3yKETmoZbhSnWu4GO10HDb5xYf1CjLF1oXGK2uT6GX5Lu9mfTXwjxV/jXxEKx8MIRUUbgPxvbJ8SEw==
 
 recursive-readdir@2.2.1:
   version "2.2.1"
