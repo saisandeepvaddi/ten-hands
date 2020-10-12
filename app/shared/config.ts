@@ -25,6 +25,7 @@ const defaultConfig: IConfig = {
   hideToTrayOnClose: true,
   terminalRenderer: "canvas",
   showTaskCountBadge: true,
+  sendErrorReports: true,
 };
 
 /* If user accidentally updates config file with invalid values, send default */
@@ -80,6 +81,10 @@ const getValidConfig = (config: IConfig): IConfig => {
 
   if (typeof config.showTaskCountBadge !== "boolean") {
     _config.showTaskCountBadge = defaultConfig.showTaskCountBadge;
+  }
+
+  if (typeof config.sendErrorReports !== "boolean") {
+    _config.sendErrorReports = defaultConfig.sendErrorReports;
   }
 
   return _config;

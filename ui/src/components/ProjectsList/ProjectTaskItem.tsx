@@ -192,7 +192,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
                 content={
                   <a
                     type="button"
-                    className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-play"
+                    className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-refresh"
                     title={`Restart '${command.name}' task`}
                     onClick={restart}
                   >

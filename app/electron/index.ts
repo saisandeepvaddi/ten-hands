@@ -23,19 +23,21 @@ import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
 
-SentryElectron.init({
-  dsn:
-    "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
-  beforeSend(event) {
-    // Modify the event here
-    if (event.user) {
-      // Don't send user's email address
-      delete event.user.email;
-      delete event.user.ip_address;
-    }
-    return event;
-  },
-});
+if (getConfig().sendErrorReports) {
+  SentryElectron.init({
+    dsn:
+      "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+    beforeSend(event) {
+      // Modify the event here
+      if (event.user) {
+        // Don't send user's email address
+        delete event.user.email;
+        delete event.user.ip_address;
+      }
+      return event;
+    },
+  });
+}
 
 crashReporter.start({
   companyName: "ten-hands",
