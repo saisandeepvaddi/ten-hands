@@ -3,16 +3,12 @@ import { useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import styled from "styled-components";
 import { wait } from "../shared/utilities";
-import {
-  Button,
-  Alignment,
-  Icon,
-  Popover,
-  PopoverInteractionKind,
-} from "@blueprintjs/core";
+import { Button, Alignment, Icon } from "@blueprintjs/core";
 import { useSockets } from "../shared/stores/SocketStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useConfig } from "../shared/stores/ConfigStore";
+import { useRecoilValue } from "recoil";
+import { siderWidthAtom } from "../shared/state/layout";
 
 const TaskContainer = styled.div`
   display: flex;
@@ -56,6 +52,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     restartTask,
   } = useSockets();
   const { config } = useConfig();
+  const siderWidth = useRecoilValue(siderWidthAtom);
 
   const isThisActiveProject = activeProject._id === project._id;
 
@@ -185,39 +182,36 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
           >
             {isTaskRunning(command._id) ? (
               // Using anchor tag instead of Button to avoid blueprintjs warning about nested buttons
-              <Popover
-                position="right"
-                interactionKind={PopoverInteractionKind.HOVER}
-                hoverOpenDelay={0}
-                content={
-                  <a
-                    type="button"
-                    className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-play"
-                    title={`Restart '${command.name}' task`}
-                    onClick={restart}
-                  >
-                    Restart
-                  </a>
-                }
-                className="restart-popover"
-              >
+
+              <React.Fragment>
+                <a
+                  type="button"
+                  className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-refresh"
+                  title={`Restart '${command.name}' task`}
+                  onClick={restart}
+                  style={{
+                    marginRight: siderWidth < 400 ? "15px" : "",
+                  }}
+                >
+                  {siderWidth > 400 ? "Restart" : null}
+                </a>
                 <a
                   type="button"
                   className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
-                  title="Stop task"
+                  title={`Stop '${command.name}' task`}
                   onClick={stopTask}
                 >
-                  Stop
+                  {siderWidth > 400 ? "Stop" : null}
                 </a>
-              </Popover>
+              </React.Fragment>
             ) : (
               <a
                 type="button"
                 className="bp3-button bp3-minimal bp3-intent-success bp3-icon-play"
-                title="Start task"
+                title={`Start '${command.name}' task`}
                 onClick={startTask}
               >
-                Start
+                {siderWidth > 400 ? "Start" : null}
               </a>
               /*eslint-enable*/
             )}
