@@ -193,9 +193,13 @@ export class JobManager {
 
             console.log(`Killed: ${room}, pid: ${pid}`);
 
-            const process = new Job(room, shell, this.socketManager);
-            process.start(command, projectPath);
-            console.log(`Started: ${room}, pid: ${process.getPID()}`);
+            // Temporarily add delay as I've seen restart task button on sidebar not syncing state and leaving dangling processes which I had to kill from Task Manager.
+            //TODO: Improve process state management
+            setTimeout(() => {
+              const process = new Job(room, shell, this.socketManager);
+              process.start(command, projectPath);
+              console.log(`Started: ${room}, pid: ${process.getPID()}`);
+            }, 100);
           })
           .catch((_error) => {
             console.error(`Failed to kill pid: ${pid}`);
