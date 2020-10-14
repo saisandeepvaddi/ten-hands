@@ -1,7 +1,7 @@
 {
-  "name": "web-extension-starter",
+  "name": "ten-hands-extension",
   "version": "2.0.0",
-  "description": "Web extension starter using react and typescript",
+  "description": "Web extension companion to Ten Hands desktop app.",
   "private": true,
   "repository": "https://github.com/saisandeepvaddi/web-extension-starter.git",
   "author": "Sai Sandeep Vaddi",
@@ -26,6 +26,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-query": "^2.23.1",
+    "recoil": "^0.0.13",
     "webext-base-css": "^1.2.0",
     "webextension-polyfill-ts": "^0.20.0"
   },
