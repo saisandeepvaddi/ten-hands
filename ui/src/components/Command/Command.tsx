@@ -1,4 +1,4 @@
-import { Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
+import { Alert, Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useJobs } from "../shared/stores/JobStore";
@@ -9,6 +9,7 @@ import CommandOutputXterm from "./CommandOutputXterm";
 import UpdateCommandDrawer from "../UpdateCommandDrawer";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { throttle } from "lodash";
+import { useTheme } from "../shared/stores/ThemeStore";
 
 const Container = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ function getJobData(state, room: string) {
 const Command: React.FC<ICommandProps> = React.memo(
   ({ command, projectPath, index, projectId }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
+    const { theme } = useTheme();
     const {
       subscribeToTaskSocket,
       unsubscribeFromTaskSocket,
@@ -68,6 +70,9 @@ const Command: React.FC<ICommandProps> = React.memo(
     const { activeProject, deleteTask, updateTask } = useProjects();
     const { config } = useConfig();
     const [containerWidth, setContainerWidth] = useState<number>(0);
+    const [isDeleteAlertOpen, setIsDeleteAlertOpen] = React.useState<boolean>(
+      false
+    );
     const deleteCommand = async () => {
       try {
         await deleteTask(activeProject._id!, room);
@@ -222,7 +227,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                 title={isOutputOpen ? "Hide Output" : "Show Output"}
               />
               <Button
-                onClick={deleteCommand}
+                onClick={() => setIsDeleteAlertOpen(true)}
                 icon="trash"
                 minimal={true}
                 data-testid="delete-task-button"
@@ -267,6 +272,20 @@ const Command: React.FC<ICommandProps> = React.memo(
           setDrawerOpen={setDrawerOpen}
           command={command}
         />
+        <Alert
+          cancelButtonText="Cancel"
+          confirmButtonText="Yes, Delete"
+          className={theme}
+          icon="trash"
+          intent="danger"
+          isOpen={isDeleteAlertOpen}
+          onCancel={() => setIsDeleteAlertOpen(false)}
+          onConfirm={() => deleteCommand()}
+        >
+          <p data-testid="delete-task-warning">
+            Are you sure you want to delete task <b>{command.name}</b>?
+          </p>
+        </Alert>
       </React.Fragment>
     );
   }
