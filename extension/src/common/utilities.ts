@@ -35,10 +35,14 @@ export function isFunction(x: any) {
 }
 
 export function arrayHasValues(checkArray: any[]) {
-  return checkArray.filter((value: any) => value && typeof value !== "undefined");
+  return checkArray.filter(
+    (value: any) => value && typeof value !== "undefined"
+  );
 }
 
-export function shallowQueryParams(source: { [x: string]: string | number | boolean; }) {
+export function shallowQueryParams(source: {
+  [x: string]: string | number | boolean;
+}) {
   const array = [];
   for (const key in source) {
     if (source[key]) {
@@ -59,8 +63,13 @@ export function randomEntry(array: string | any[]) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-export function throttle(this: any, callback: { apply: (arg0: any, arg1: any) => void; }, wait: number, context = this) {
-  let timeout: NodeJS.Timeout | null = null;
+export function throttle(
+  this: any,
+  callback: { apply: (arg0: any, arg1: any) => void },
+  wait: number,
+  context = this
+) {
+  let timeout: NodeJS.Timeout | number | null = null;
   let callbackArgs: any[] | null = null;
 
   const later = () => {

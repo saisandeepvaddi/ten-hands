@@ -16,7 +16,7 @@ const manifestInput = require("./src/manifest");
 
 const viewsPath = path.join(__dirname, "views");
 const sourcePath = path.join(__dirname, "src");
-const destPath = path.join(__dirname, "extension");
+const destPath = path.join(__dirname, "dist");
 const nodeEnv = process.env.NODE_ENV || "development";
 const targetBrowser = process.env.TARGET_BROWSER;
 const manifest = wextManifest[targetBrowser](manifestInput);
@@ -37,7 +37,7 @@ const extensionReloaderPlugin =
         this.apply = () => {};
       };
 
-const getExtensionFileType = (browser) => {
+const getExtensionFileType = browser => {
   if (browser === "opera") {
     return "crx";
   }
@@ -116,10 +116,10 @@ module.exports = {
     // delete previous build files
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
-        path.join(process.cwd(), `extension/${targetBrowser}`),
+        path.join(process.cwd(), `dist/${targetBrowser}`),
         path.join(
           process.cwd(),
-          `extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
+          `dist/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
         ),
       ],
       cleanStaleWebpackAssets: false,

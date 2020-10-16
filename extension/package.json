@@ -1,7 +1,7 @@
 {
-  "name": "web-extension-starter",
+  "name": "ten-hands-extension",
   "version": "2.0.0",
-  "description": "Web extension starter using react and typescript",
+  "description": "Web extension companion to Ten Hands desktop app.",
   "private": true,
   "repository": "https://github.com/saisandeepvaddi/web-extension-starter.git",
   "author": "Sai Sandeep Vaddi",
@@ -26,6 +26,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-query": "^2.23.1",
+    "recoil": "^0.0.13",
+    "styled-components": "^5.2.0",
     "webext-base-css": "^1.2.0",
     "webextension-polyfill-ts": "^0.20.0"
   },
@@ -41,6 +43,7 @@
     "@saisandeepvaddi/eslint-config-typescript": "^1.0.2",
     "@types/react": "^16.9.52",
     "@types/react-dom": "^16.9.8",
+    "@types/styled-components": "^5.1.4",
     "@types/webpack": "^4.41.22",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
