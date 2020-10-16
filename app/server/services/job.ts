@@ -132,7 +132,9 @@ export class JobManager {
           data: pid,
         });
 
-        return resolve(true);
+        setTimeout(() => {
+          return resolve(true);
+        });
       });
     });
   }
@@ -199,7 +201,7 @@ export class JobManager {
               const process = new Job(room, shell, this.socketManager);
               process.start(command, projectPath);
               console.log(`Started: ${room}, pid: ${process.getPID()}`);
-            }, 100);
+            }, 500);
           })
           .catch((_error) => {
             console.error(`Failed to kill pid: ${pid}`);
