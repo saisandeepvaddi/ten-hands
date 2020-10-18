@@ -1,5 +1,7 @@
-import socketIO, { Socket } from "socket.io";
+import socketIO, { Namespace, Socket } from "socket.io";
 import { Server } from "http";
+
+type SocketSource = "/desktop" | "/chrome-ext";
 
 export interface ISocketListener {
   readonly event: string;
@@ -16,6 +18,8 @@ class SocketManager {
   socket: Socket;
   io: SocketIO.Server;
   subscribers: ISocketListener[] = [];
+  connectedNSPs: string[] = [];
+  nspMap: Map<string, Namespace> = new Map();
 
   /**
    * Attaches http server to socket.io instance.
@@ -25,12 +29,24 @@ class SocketManager {
    * @memberof SocketManager
    */
   public attachServer(server: Server) {
-    const io = socketIO(server);
-    io.on("connection", socket => {
+    const io = socketIO(server).of(/^\/(desktop|chrome-ext)$/);
+    io.on("connection", (socket) => {
       this.socket = socket;
-      console.log("Connected to socket");
-      this.subscribers.forEach(subscriber => {
+      if (!this.connectedNSPs.includes(socket.nsp.name)) {
+        this.connectedNSPs.push(socket.nsp.name);
+      }
+
+      const namespace = socket.nsp;
+      const nspName = namespace.name;
+      console.log(`Connected to socket with nsp: ${nspName}.`);
+      this.nspMap.set(nspName, socket.nsp);
+
+      this.subscribers.forEach((subscriber) => {
         this.socket.on(subscriber.event, subscriber.callback);
+      });
+      socket.on("disconnect", () => {
+        console.log(`Disconnected ${socket.nsp.name}.`);
+        this.nspMap.delete(socket.nsp.name);
       });
     });
 
@@ -58,7 +74,7 @@ class SocketManager {
    */
   subscribe(subscriber: ISocketListener): void {
     const isAlreadyThere = this.subscribers.find(
-      x => x.event === subscriber.event
+      (x) => x.event === subscriber.event
     );
     if (isAlreadyThere) {
       throw new Error(
@@ -75,7 +91,7 @@ class SocketManager {
    * @memberof SocketManager
    */
   unsubscribe(event: string): void {
-    this.subscribers = this.subscribers.filter(x => x.event !== event);
+    this.subscribers = this.subscribers.filter((x) => x.event !== event);
   }
 
   /**
@@ -86,7 +102,9 @@ class SocketManager {
    * @memberof SocketManager
    */
   emit(event: string, data: any) {
-    this.socket.emit(event, data);
+    for (let [name, nsp] of this.nspMap) {
+      nsp.emit(event, data);
+    }
   }
 }
 

@@ -53,7 +53,7 @@ function SocketsProvider(props: ISocketProviderProps) {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   const initializeSocket = React.useCallback(() => {
-    _socket.current = io(`http://localhost:${config.port}`);
+    _socket.current = io(`http://localhost:${config.port}/chrome-ext`);
 
     if (isSocketInitialized) {
       return;
