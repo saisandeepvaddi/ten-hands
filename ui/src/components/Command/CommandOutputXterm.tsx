@@ -9,7 +9,7 @@ import { ResizableBox } from "react-resizable";
 import { Icon } from "@blueprintjs/core";
 
 interface ICommandProps {
-  room: string;
+  taskID: string;
   index: number;
   containerWidth: number;
 }
@@ -21,7 +21,7 @@ const TerminalContainer = styled.div`
 `;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
-  ({ room, index, containerWidth }) => {
+  ({ taskID, index, containerWidth }) => {
     const elRef = React.useRef<HTMLDivElement>(null);
     const terminal = React.useRef<JobTerminal | null>(null);
     const { theme } = useTheme();
@@ -62,7 +62,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
         setWidth(parentWidth);
         if (terminal.current === null) {
           terminal.current = JobTerminalManager.getInstance().createJobTerminal(
-            room
+            taskID
           );
           terminal.current.attachTo(
             elRef.current,

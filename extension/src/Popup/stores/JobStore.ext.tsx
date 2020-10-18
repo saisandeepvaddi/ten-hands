@@ -19,8 +19,8 @@ enum ACTION_TYPES {
 export let roomSocketState = {};
 
 const initializeRoomSocketState = (state) => {
-  Object.keys(state).forEach((room) => {
-    roomSocketState[room] = false;
+  Object.keys(state).forEach((taskID) => {
+    roomSocketState[taskID] = false;
   });
 };
 
@@ -42,25 +42,25 @@ export const jobsReducer = (
 ): object => {
   switch (action.type) {
     case ACTION_TYPES.UPDATE_JOB: {
-      const { room, stdout, isRunning } = action;
-      const newStdout = state[room] ? stdout : "";
+      const { taskID, stdout, isRunning } = action;
+      const newStdout = state[taskID] ? stdout : "";
       return {
         ...state,
-        [room]: {
-          ...state[room],
+        [taskID]: {
+          ...state[taskID],
           stdout: newStdout,
           isRunning,
         },
       };
     }
     case ACTION_TYPES.UPDATE_JOB_PROCESS: {
-      const { room, process } = action;
+      const { taskID, process } = action;
       const pid = process && process.pid ? process.pid : -1;
 
       const newState = {
         ...state,
-        [room]: {
-          ...state[room],
+        [taskID]: {
+          ...state[taskID],
           isRunning: pid === -1 ? false : true,
           process,
         },
@@ -69,12 +69,12 @@ export const jobsReducer = (
       return newState;
     }
     case ACTION_TYPES.CLEAR_OUTPUT: {
-      const room = action.room;
+      const taskID = action.taskID;
 
       return {
         ...state,
-        [room]: {
-          ...state[room],
+        [taskID]: {
+          ...state[taskID],
           stdout: "",
         },
       };
@@ -138,7 +138,7 @@ function JobsProvider(props: IJobsProviderProps) {
         if (storedState) {
           dispatch({
             type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
-            room: "none",
+            taskID: "none",
             state: storedState,
           });
           initializeRoomSocketState(storedState);

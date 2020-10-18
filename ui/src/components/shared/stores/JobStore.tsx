@@ -4,7 +4,7 @@ import React from "react";
 import { useMountedState } from "../hooks";
 
 localforage.config({
-  name: "ten-hands"
+  name: "ten-hands",
 });
 
 // Reducer that saves state of jobs output
@@ -13,14 +13,14 @@ enum ACTION_TYPES {
   UPDATE_JOB,
   CLEAR_OUTPUT,
   RESTORE_STATE_FROM_STORAGE,
-  UPDATE_JOB_PROCESS
+  UPDATE_JOB_PROCESS,
 }
 
 export let roomSocketState = {};
 
 const initializeRoomSocketState = state => {
-  Object.keys(state).forEach(room => {
-    roomSocketState[room] = false;
+  Object.keys(state).forEach(taskID => {
+    roomSocketState[taskID] = false;
   });
 };
 
@@ -42,41 +42,41 @@ export const jobsReducer = (
 ): object => {
   switch (action.type) {
     case ACTION_TYPES.UPDATE_JOB: {
-      const { room, stdout, isRunning } = action;
-      const newStdout = state[room] ? stdout : "";
+      const { taskID, stdout, isRunning } = action;
+      const newStdout = state[taskID] ? stdout : "";
       return {
         ...state,
-        [room]: {
-          ...state[room],
+        [taskID]: {
+          ...state[taskID],
           stdout: newStdout,
-          isRunning
-        }
+          isRunning,
+        },
       };
     }
     case ACTION_TYPES.UPDATE_JOB_PROCESS: {
-      const { room, process } = action;
+      const { taskID, process } = action;
       const pid = process && process.pid ? process.pid : -1;
 
       const newState = {
         ...state,
-        [room]: {
-          ...state[room],
+        [taskID]: {
+          ...state[taskID],
           isRunning: pid === -1 ? false : true,
-          process
-        }
+          process,
+        },
       };
       updateData(newState);
       return newState;
     }
     case ACTION_TYPES.CLEAR_OUTPUT: {
-      const room = action.room;
+      const taskID = action.taskID;
 
       return {
         ...state,
-        [room]: {
-          ...state[room],
-          stdout: ""
-        }
+        [taskID]: {
+          ...state[taskID],
+          stdout: "",
+        },
       };
     }
     case ACTION_TYPES.RESTORE_STATE_FROM_STORAGE: {
@@ -141,8 +141,8 @@ function JobsProvider(props: IJobsProviderProps) {
         if (storedState) {
           dispatch({
             type: ACTION_TYPES.RESTORE_STATE_FROM_STORAGE,
-            room: "none",
-            state: storedState
+            taskID: "none",
+            state: storedState,
           });
           initializeRoomSocketState(storedState);
         }
@@ -158,7 +158,7 @@ function JobsProvider(props: IJobsProviderProps) {
       state,
       dispatch,
       runningTasks,
-      isTaskRunning
+      isTaskRunning,
     };
   }, [state, dispatch, runningTasks, isTaskRunning]);
   return <JobsContext.Provider value={value} {...props} />;

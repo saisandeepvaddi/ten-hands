@@ -39,8 +39,8 @@ interface ICommandProps {
   command: IProjectCommand;
 }
 
-function getJobData(state, room: string) {
-  return state[room] || "";
+function getJobData(state, taskID: string) {
+  return state[taskID] || "";
 }
 
 const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
@@ -51,47 +51,47 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
   } = useSockets();
   const [] = React.useState<boolean>(false);
   const activeProject = useRecoilValue(activeProjectAtom);
-  const room = command._id;
+  const taskID = command._id;
   const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
 
   const { config } = useConfig();
   const [] = useState<number>(0);
   const [] = React.useState<boolean>(false);
 
-  const updateJobProcess = (room, jobProcess) => {
+  const updateJobProcess = (taskID, jobProcess) => {
     dispatch({
-      room,
+      taskID,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
       process: jobProcess,
     });
   };
 
-  const startJob = (room) => {
+  const startJob = (taskID) => {
     const shell = command.shell || activeProject.shell || config.shell || "";
-    subscribeToTaskSocket(room, command, activeProject.path, shell);
+    subscribeToTaskSocket(taskID, command, activeProject.path, shell);
   };
 
-  const stopJob = (room) => {
-    const process = getJobData(jobState, room).process;
+  const stopJob = (taskID) => {
+    const process = getJobData(jobState, taskID).process;
     const { pid } = process;
-    unsubscribeFromTaskSocket(room, pid);
-    updateJobProcess(room, {
+    unsubscribeFromTaskSocket(taskID, pid);
+    updateJobProcess(taskID, {
       pid: -1,
     });
   };
 
-  const restartJob = (room) => {
+  const restartJob = (taskID) => {
     const shell = command.shell || activeProject.shell || config.shell || "";
-    const process = getJobData(jobState, room).process;
+    const process = getJobData(jobState, taskID).process;
     const { pid } = process;
-    restartTask(room, pid, command, activeProject.path, shell);
-    updateJobProcess(room, {
+    restartTask(taskID, pid, command, activeProject.path, shell);
+    updateJobProcess(taskID, {
       pid: -1,
     });
   };
 
   const isProcessRunning = (): boolean => {
-    return getJobData(jobState, room).isRunning || false;
+    return getJobData(jobState, taskID).isRunning || false;
   };
 
   return (
@@ -112,7 +112,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
                     minimal
                     disabled={!isProcessRunning()}
                     text={"Stop"}
-                    onClick={() => stopJob(room)}
+                    onClick={() => stopJob(taskID)}
                   />
                   <Button
                     data-testid="restart-task-button"
@@ -121,7 +121,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
                     minimal
                     disabled={!isProcessRunning()}
                     text={"Restart"}
-                    onClick={() => restartJob(room)}
+                    onClick={() => restartJob(taskID)}
                   />
                 </React.Fragment>
               ) : (
@@ -133,7 +133,7 @@ const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
                   minimal
                   disabled={isProcessRunning()}
                   text={"Start"}
-                  onClick={() => startJob(room)}
+                  onClick={() => startJob(taskID)}
                 />
               )}
             </div>

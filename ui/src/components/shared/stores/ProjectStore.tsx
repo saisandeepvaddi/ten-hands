@@ -50,8 +50,8 @@ interface IProjectsProviderProps {
   children: React.ReactNode;
 }
 
-function getJobData(state, room: string) {
-  return state[room] || "";
+function getJobData(state, taskID: string) {
+  return state[taskID] || "";
 }
 
 const getRunningTasksCountForProjects = (
@@ -113,18 +113,18 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     setProjectsRunningTaskCount,
   ] = React.useState<any>({});
 
-  const clearJobOutput = room => {
+  const clearJobOutput = taskID => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
-      room,
+      taskID,
     });
-    terminalManager.clearTerminalInRoom(room);
+    terminalManager.clearTerminalInRoom(taskID);
   };
 
   const updateJobProcess = React.useCallback(
-    (room, jobProcess) => {
+    (taskID, jobProcess) => {
       dispatch({
-        room,
+        taskID,
         type: ACTION_TYPES.UPDATE_JOB_PROCESS,
         process: jobProcess,
       });
@@ -133,11 +133,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   );
 
   const startJob = (command: IProjectCommand) => {
-    const room = command._id;
-    clearJobOutput(room);
+    const taskID = command._id;
+    clearJobOutput(taskID);
     const shell = command.shell || activeProject.shell || config.shell || "";
-    subscribeToTaskSocket(room, command, activeProject.path, shell);
-    updateTask(activeProject._id, room, {
+    subscribeToTaskSocket(taskID, command, activeProject.path, shell);
+    updateTask(activeProject._id, taskID, {
       ...command,
       lastExecutedAt: new Date(),
     });
@@ -145,11 +145,11 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
   const stopJob = React.useCallback(
     (command: IProjectCommand) => {
-      const room = command._id;
-      const process = getJobData(jobState, room).process;
+      const taskID = command._id;
+      const process = getJobData(jobState, taskID).process;
       const { pid } = process;
-      unsubscribeFromTaskSocket(room, pid);
-      updateJobProcess(room, {
+      unsubscribeFromTaskSocket(taskID, pid);
+      updateJobProcess(taskID, {
         pid: -1,
       });
     },
