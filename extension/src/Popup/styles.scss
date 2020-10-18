@@ -1,7 +1,109 @@
 @import "../styles/reset";
 
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+html {
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.full-div {
+  overflow: auto;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-100 > .bp3-tab-list {
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+
+.bp3-dark .command-output::-webkit-scrollbar-thumb {
+  background-color: #182026;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+.bp3-dark ::-webkit-scrollbar-thumb {
+  background-color: #bfccd654;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202b335d;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
+}
+
+pre {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.all-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button:focus {
+  outline: none;
+}
+
+.color-white {
+  color: #ffffff;
 }

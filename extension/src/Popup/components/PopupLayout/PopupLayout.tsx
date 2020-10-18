@@ -6,6 +6,7 @@ import { DataService } from "../../../common/DataService";
 import { projectsAtom } from "../../stores/projects.atom";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
+import { Colors } from "@blueprintjs/core";
 
 const Container = styled.div`
   height: 500px;
@@ -17,6 +18,7 @@ const Container = styled.div`
     border-right: 1px solid #e2e2e2;
     overflow: auto;
   }
+  background: ${Colors.DARK_GRAY3};
 `;
 
 const PopupLayout = () => {

@@ -60,7 +60,7 @@ function SocketsProvider(props: ISocketProviderProps) {
     }
 
     _socket.current.on(`connect`, () => {
-      // console.info("Socket connected to server");
+      console.info("Socket connected to server");
     });
 
     _socket.current.on(`job_started`, (message) => {

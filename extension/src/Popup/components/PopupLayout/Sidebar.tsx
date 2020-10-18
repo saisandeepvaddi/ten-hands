@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { activeProjectIDAtom, projectsAtom } from "../../stores/projects.atom";
 import styled from "styled-components";
 
@@ -14,23 +14,36 @@ export const Item = styled.div`
 
 const Sidebar = () => {
   const projects = useRecoilValue(projectsAtom);
-  const updateActiveProject = useSetRecoilState(activeProjectIDAtom);
+  const [activeProjectId, updateActiveProjectID] = useRecoilState(
+    activeProjectIDAtom
+  );
 
   return (
-    <React.Fragment>
-      {projects.map((project) => (
-        <Item
-          key={project._id}
-          onClick={() => {
-            updateActiveProject(project._id);
-          }}
-          className="truncate"
-          title={project.name}
-        >
-          {project.name}
-        </Item>
-      ))}
-    </React.Fragment>
+    <div>
+      {projects.map((project, i) => {
+        const isActiveProject =
+          (activeProjectId === null && i === 0) ||
+          project._id === activeProjectId;
+        return (
+          <Item
+            key={project._id}
+            onClick={() => {
+              updateActiveProjectID(project._id);
+            }}
+            className="truncate"
+            title={project.name}
+            style={{
+              color: isActiveProject ? "#48aff0" : "inherit",
+              background: isActiveProject
+                ? "rgba(19, 124, 189, 0.2)"
+                : "inherit",
+            }}
+          >
+            {project.name}
+          </Item>
+        );
+      })}
+    </div>
   );
 };
 

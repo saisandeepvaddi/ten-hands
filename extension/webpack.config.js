@@ -37,7 +37,7 @@ const extensionReloaderPlugin =
         this.apply = () => {};
       };
 
-const getExtensionFileType = browser => {
+const getExtensionFileType = (browser) => {
   if (browser === "opera") {
     return "crx";
   }
@@ -62,6 +62,7 @@ module.exports = {
   output: {
     filename: "js/[name].bundle.js",
     path: path.join(destPath, targetBrowser),
+    publicPath: "/",
   },
 
   resolve: {
@@ -70,6 +71,7 @@ module.exports = {
       "webextension-polyfill-ts": path.resolve(
         path.join(__dirname, "node_modules", "webextension-polyfill-ts")
       ),
+      // process: path.resolve(path.join(__dirname, "node_modules", "process")),
     },
   },
 
@@ -106,6 +108,26 @@ module.exports = {
           "sass-loader", // Takes the Sass/SCSS file and compiles to the CSS
         ],
       },
+      {
+        test: /\.(ttf|eot|svg)$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "fonts/[hash].[ext]",
+          },
+        },
+      },
+      {
+        test: /\.(woff|woff2)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            name: "fonts/[hash].[ext]",
+            limit: 5000,
+            mimetype: "application/font-woff",
+          },
+        },
+      },
     ],
   },
 
@@ -113,6 +135,10 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin(),
     // environmental variables
     new webpack.EnvironmentPlugin(["NODE_ENV", "TARGET_BROWSER"]),
+    new webpack.DefinePlugin({
+      "process.env": "{}",
+      global: {},
+    }),
     // delete previous build files
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
