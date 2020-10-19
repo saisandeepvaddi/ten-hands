@@ -72,3 +72,8 @@ interface ITenHandsFile {
   path?: string;
   data: string | ArrayBuffer | null;
 }
+
+declare module "*.png" {
+  const value: any;
+  export default value;
+}

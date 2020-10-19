@@ -19,11 +19,7 @@ const Popup = () => {
     return null;
   }
 
-  return (
-    <div>
-      <PopupLayout />
-    </div>
-  );
+  return <PopupLayout />;
 };
 
 export default Popup;

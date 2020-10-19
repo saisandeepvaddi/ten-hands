@@ -7,8 +7,9 @@ import { projectsAtom } from "../../stores/projects.atom";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
 import { Colors, Icon, Spinner } from "@blueprintjs/core";
+import TenHandsLogo from "../../../assets/icons/favicon-48.png";
 
-const Container = styled.div`
+const MainContainer = styled.div`
   height: 500px;
   width: 600px;
   display: grid;
@@ -28,6 +29,16 @@ const StatusContainer = styled.div<{ statusType: string }>`
   display: grid;
   place-items: center;
   padding: 20px;
+`;
+
+const TitleBar = styled.div`
+  height: 35px;
+  width: 100%;
+  background-color: ${Colors.DARK_GRAY1};
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 `;
 
 const PopupLayout = () => {
@@ -79,14 +90,25 @@ const PopupLayout = () => {
   }
 
   return (
-    <Container>
-      <div className="sidebar">
-        <Sidebar />
-      </div>
-      <div className="main">
-        <Main />
-      </div>
-    </Container>
+    <React.Fragment>
+      <TitleBar>
+        <span style={{ display: "flex", alignItems: "center" }}>
+          <img src={TenHandsLogo} style={{ height: 20, paddingRight: 10 }} />
+          Ten Hands
+        </span>
+        <span title={"Work in progress"}>
+          <Icon icon="cog" iconSize={Icon.SIZE_STANDARD} />
+        </span>
+      </TitleBar>
+      <MainContainer>
+        <div className="sidebar">
+          <Sidebar />
+        </div>
+        <div className="main">
+          <Main />
+        </div>
+      </MainContainer>
+    </React.Fragment>
   );
 };
 
