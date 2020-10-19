@@ -5,7 +5,6 @@ import { IMessage } from "../types";
 export class BackgroundScript {
   requests = new Map();
 
-
   _handleTest = async () => {
     // Use arrow function
     try {
@@ -16,11 +15,9 @@ export class BackgroundScript {
     }
   };
 
-  
   registerMessengerRequests() {
     // Map requests from CS, Popup to background here.
     this.requests.set(Messages.TEST, this._handleTest);
-    
   }
 
   listenForMessages() {
