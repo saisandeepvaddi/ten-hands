@@ -34,6 +34,7 @@
     "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
     "morgan": "^1.10.0",
+    "pm2": "^4.5.0",
     "read-pkg": "^5.2.0",
     "serve-handler": "^6.1.2",
     "socket.io": "^2.2.0",
@@ -41,6 +42,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/node": "^12.7.11"
+    "@types/node": "^12.7.11",
+    "typescript": "^4.0.3"
   }
 }
