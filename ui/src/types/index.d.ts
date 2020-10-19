@@ -43,7 +43,7 @@ interface IProject {
 }
 
 interface IJobAction {
-  room: string;
+  taskID: string;
   type: ACTION_TYPES;
   stdout?: string;
   state?: Record<string, unknown>;

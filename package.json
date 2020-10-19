@@ -1,6 +1,6 @@
 {
   "name": "ten-hands",
-  "version": "2.10.0",
+  "version": "2.10.2",
   "main": "index.js",
   "private": true,
   "scripts": {

@@ -49,7 +49,7 @@ interface IProject {
 }
 
 interface IJobAction {
-  room: string;
+  taskID: string;
   type: ACTION_TYPES;
   stdout?: string;
   state?: Record<string, unknown>;
@@ -71,4 +71,9 @@ interface ITenHandsFile {
   name: string;
   path?: string;
   data: string | ArrayBuffer | null;
+}
+
+declare module "*.png" {
+  const value: any;
+  export default value;
 }

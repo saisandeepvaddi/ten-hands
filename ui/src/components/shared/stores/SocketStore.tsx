@@ -13,15 +13,15 @@ interface ISocketContextValue {
   isSocketInitialized: boolean;
   initializeSocket: () => void;
   subscribeToTaskSocket: (
-    room: string,
+    taskID: string,
     command: IProjectCommand,
     projectPath: string,
     shell?: string
   ) => void;
   _socket: any;
-  unsubscribeFromTaskSocket: (room: string, pid: number) => void;
+  unsubscribeFromTaskSocket: (taskID: string, pid: number) => void;
   restartTask: (
-    room: string,
+    taskID: string,
     pid: number,
     command: IProjectCommand,
     projectPath: string,
@@ -45,13 +45,13 @@ function SocketsProvider(props: ISocketProviderProps) {
   const terminalManager = JobTerminalManager.getInstance();
   const _socket = React.useRef<any>();
 
-  const updateJob = (room, stdout, isRunning) => {
-    terminalManager.updateOutputInRoom(room, stdout);
+  const updateJob = (taskID, stdout, isRunning) => {
+    terminalManager.updateOutputInRoom(taskID, stdout);
   };
 
-  const updateJobProcess = (room, jobProcess) => {
+  const updateJobProcess = (taskID, jobProcess) => {
     dispatch({
-      room,
+      taskID,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
       process: jobProcess,
     });
@@ -59,7 +59,7 @@ function SocketsProvider(props: ISocketProviderProps) {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   const initializeSocket = React.useCallback(() => {
-    _socket.current = io(`http://localhost:${config.port}`);
+    _socket.current = io(`http://localhost:${config.port}/desktop`);
 
     if (isSocketInitialized) {
       return;
@@ -70,63 +70,63 @@ function SocketsProvider(props: ISocketProviderProps) {
     });
 
     _socket.current.on(`job_started`, message => {
-      const room = message.room;
-      console.info(`Process started for cmd: ${room}`);
-      updateJobProcess(room, message.data);
+      const taskID = message.taskID;
+      console.info(`Process started for cmd: ${taskID}`);
+      updateJobProcess(taskID, message.data);
       if (message.data.pid) {
         updateJob(
-          room,
+          taskID,
           `--Process started with PID: ${message.data.pid}--\n\n`,
           true
         );
       }
     });
     _socket.current.on(`job_output`, message => {
-      const room = message.room;
-      updateJob(room, message.data, true);
+      const taskID = message.taskID;
+      updateJob(taskID, message.data, true);
     });
 
     _socket.current.on(`job_error`, message => {
-      const room = message.room;
-      console.info(`Process error in room: ${room}`);
-      updateJob(room, message.data, true);
+      const taskID = message.taskID;
+      console.info(`Process error in taskID: ${taskID}`);
+      updateJob(taskID, message.data, true);
     });
     _socket.current.on(`job_close`, message => {
-      const room = message.room;
-      console.info(`Process close in room: ${room}`);
+      const taskID = message.taskID;
+      console.info(`Process close in taskID: ${taskID}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
-      updateJob(room, forcedChalk.bold(message.data + "\n"), false);
-      updateJobProcess(room, {
+      updateJob(taskID, forcedChalk.bold(message.data + "\n"), false);
+      updateJobProcess(taskID, {
         pid: -1,
       });
     });
 
     _socket.current.on(`job_exit`, message => {
-      const room = message.room;
+      const taskID = message.taskID;
 
-      console.info(`Process exit in room: ${room}`);
+      console.info(`Process exit in taskID: ${taskID}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
-      updateJob(room, forcedChalk.bold(message.data + "\n"), false);
-      updateJobProcess(room, {
+      updateJob(taskID, forcedChalk.bold(message.data + "\n"), false);
+      updateJobProcess(taskID, {
         pid: -1,
       });
     });
 
     _socket.current.on(`job_killed`, message => {
-      const room = message.room;
+      const taskID = message.taskID;
 
       console.info(
-        `Process killed in room: ${room}; killed process id: ${message.data}`
+        `Process killed in taskID: ${taskID}; killed process id: ${message.data}`
       );
 
       updateJob(
-        room,
+        taskID,
         forcedChalk.bold.redBright(
           `process with id ${message.data} killed by user.\n`
         ),
         false
       );
-      updateJobProcess(room, {
+      updateJobProcess(taskID, {
         pid: -1,
       });
     });
@@ -134,11 +134,11 @@ function SocketsProvider(props: ISocketProviderProps) {
   }, []);
 
   const subscribeToTaskSocket = React.useCallback(
-    (room, command, projectPath, shell) => {
+    (taskID, command, projectPath, shell) => {
       try {
         if (_socket && _socket.current) {
           _socket.current.emit("subscribe", {
-            room,
+            taskID,
             command,
             projectPath,
             shell,
@@ -152,11 +152,11 @@ function SocketsProvider(props: ISocketProviderProps) {
     []
   );
 
-  const unsubscribeFromTaskSocket = React.useCallback((room, pid) => {
+  const unsubscribeFromTaskSocket = React.useCallback((taskID, pid) => {
     try {
       if (_socket && _socket.current) {
         _socket.current.emit("unsubscribe", {
-          room,
+          taskID,
           pid,
         });
       }
@@ -167,11 +167,11 @@ function SocketsProvider(props: ISocketProviderProps) {
   }, []);
 
   const restartTask = React.useCallback(
-    (room, pid, command, projectPath, shell) => {
+    (taskID, pid, command, projectPath, shell) => {
       try {
         if (_socket && _socket.current) {
           _socket.current.emit("restart", {
-            room,
+            taskID,
             pid,
             command,
             projectPath,

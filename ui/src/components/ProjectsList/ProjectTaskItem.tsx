@@ -29,8 +29,8 @@ interface IProjectTaskItemProps {
   changeActiveProject: () => any;
 }
 
-function getJobData(state, room: string) {
-  return state[room] || "";
+function getJobData(state, taskID: string) {
+  return state[taskID] || "";
 }
 
 const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
@@ -38,7 +38,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   project,
   changeActiveProject,
 }) => {
-  const room = command._id;
+  const taskID = command._id;
   const projectPath = project.path;
   const projectId = project._id;
   const terminalManager = JobTerminalManager.getInstance();
@@ -75,26 +75,26 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const clearJobOutput = room => {
+  const clearJobOutput = taskID => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
-      room,
+      taskID,
     });
-    terminalManager.clearTerminalInRoom(room);
+    terminalManager.clearTerminalInRoom(taskID);
   };
 
-  const updateJobProcess = (room, jobProcess) => {
+  const updateJobProcess = (taskID, jobProcess) => {
     dispatch({
-      room,
+      taskID,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
       process: jobProcess,
     });
   };
 
   const startJob = () => {
-    clearJobOutput(room);
+    clearJobOutput(taskID);
     const shell = command.shell || activeProject.shell || config.shell || "";
-    subscribeToTaskSocket(room, command, projectPath, shell);
+    subscribeToTaskSocket(taskID, command, projectPath, shell);
     updateTask(project._id, command._id, {
       ...command,
       lastExecutedAt: new Date(),
@@ -102,23 +102,23 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   };
 
   const stopJob = () => {
-    const process = getJobData(jobState, room).process;
+    const process = getJobData(jobState, taskID).process;
     const { pid } = process;
-    unsubscribeFromTaskSocket(room, pid);
-    updateJobProcess(room, {
+    unsubscribeFromTaskSocket(taskID, pid);
+    updateJobProcess(taskID, {
       pid: -1,
     });
   };
 
-  const restartJob = room => {
+  const restartJob = taskID => {
     const shell = command.shell || activeProject.shell || config.shell || "";
-    const process = getJobData(jobState, room).process;
+    const process = getJobData(jobState, taskID).process;
     const { pid } = process;
-    restartTask(room, pid, command, projectPath, shell);
-    updateJobProcess(room, {
+    restartTask(taskID, pid, command, projectPath, shell);
+    updateJobProcess(taskID, {
       pid: -1,
     });
-    clearJobOutput(room);
+    clearJobOutput(taskID);
     updateTask(projectId, command._id, {
       ...command,
       lastExecutedAt: new Date(),
@@ -143,7 +143,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
 
   const restart = e => {
     try {
-      restartJob(room);
+      restartJob(taskID);
     } catch (error) {
       console.log(`restart error: `, error);
     }
