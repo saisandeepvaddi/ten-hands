@@ -75,10 +75,6 @@ You have to restart the app when you change configuration.
 
 Check [CONTRIBUTING](/CONTRIBUTING.md) for project setup and folder structure details. Please use issue tracker for any kind of bugs/suggestions/discussions.
 
-# License
-
-[MIT](/LICENSE) - Sai Sandeep Vaddi
-
 # Thank you
 
 Thank you [Sentry](https://sentry.io) for supporting this Open Source project with their [Sentry for Open Source](https://sentry.io/for/open-source/) initiative.
