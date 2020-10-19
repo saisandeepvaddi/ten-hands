@@ -1,6 +1,6 @@
 {
   "name": "ten-hands-cli",
-  "version": "2.10.0",
+  "version": "2.10.2",
   "description": "CLI utility for ten-hands browser version. Visit https://tenhands.app",
   "homepage": "https://github.com/saisandeepvaddi/ten-hands",
   "main": "build/index.js",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@sentry/node": "^5.26.0",
     "@sentry/tracing": "^5.26.0",
+    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "chalk": "^4.0.0",
     "cors": "^2.8.5",
@@ -32,6 +33,7 @@
     "lowdb": "^1.0.0",
     "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
+    "morgan": "^1.10.0",
     "read-pkg": "^5.2.0",
     "serve-handler": "^6.1.2",
     "socket.io": "^2.2.0",
