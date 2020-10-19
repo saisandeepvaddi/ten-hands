@@ -23,8 +23,13 @@ const startProcess = (script) => {
           {
             script,
             name: "ten-hands",
+            exec_mode: "cluster",
+            max_restarts: 1,
+            instances: 1,
           },
           (err, apps) => {
+            pm2.disconnect();
+
             if (err) {
               throw err;
             }
@@ -32,13 +37,13 @@ const startProcess = (script) => {
             const pid = apps[0]?.pid;
 
             console.log(`${name} started with pid: ${pid}`);
-            pm2.disconnect();
           }
         );
       } else {
         console.error(
           `Ten Hands is already running with PID: ${existingProcess.pid}`
         );
+        pm2.disconnect();
       }
     });
   });
@@ -47,10 +52,8 @@ const startProcess = (script) => {
 export const startServer = async () => {
   try {
     let serverPath = resolve(__dirname, "server", "start.js");
-    // execSync(`node ${serverPath}`, { stdio: "inherit" });
     startProcess(serverPath);
   } catch (error) {
-    // console.log("error:", error);
     console.error("Error starting server: ", error.message);
   }
 };
@@ -68,5 +71,6 @@ export const stopServer = async () => {
   } catch (error) {
     console.log("error:", error);
     console.error("Error stopping server: ", error.message);
+    pm2.disconnect();
   }
 };
