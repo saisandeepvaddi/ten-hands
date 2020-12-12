@@ -71,6 +71,7 @@ function createWindow() {
       webPreferences: {
         nodeIntegration: true,
         enableRemoteModule: true,
+        webSecurity: isDev ? false : true,
       },
     });
 
@@ -82,7 +83,7 @@ function createWindow() {
 
     if (isDev) {
       loadReactDevTools();
-      // mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools();
     }
     mainWindow.on("closed", () => {
       mainWindow = null;
@@ -210,5 +211,6 @@ if (!singleInstanceLock) {
 } else {
   console.log("starting app");
   logger.info("Starting app");
+  app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
   startApplication();
 }

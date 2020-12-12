@@ -107,27 +107,27 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     }, [width]);
 
     return (
-      <ResizableBox
-        axis="y"
-        resizeHandles={["s"]}
-        handleSize={[8, 0]}
-        handle={
-          <div className="p-relative">
-            <Icon
-              icon="drag-handle-horizontal"
-              className="p-absolute"
-              style={{ left: "50%", cursor: "ns-resize" }}
-            />
-          </div>
-        }
-        width={width}
-        height={height}
-        onResize={(e, { size }) => {
-          handleResize(size.height);
-        }}
-      >
-        <TerminalContainer ref={elRef} />
-      </ResizableBox>
+      // <ResizableBox
+      //   axis="y"
+      //   resizeHandles={["s"]}
+      //   handleSize={[8, 0]}
+      //   handle={
+      //     <div className="p-relative">
+      //       <Icon
+      //         icon="drag-handle-horizontal"
+      //         className="p-absolute"
+      //         style={{ left: "50%", cursor: "ns-resize" }}
+      //       />
+      //     </div>
+      //   }
+      //   width={width}
+      //   height={height}
+      //   onResize={(e, { size }) => {
+      //     handleResize(size.height);
+      //   }}
+      // >
+      <TerminalContainer ref={elRef} />
+      // </ResizableBox>
     );
   }
 );

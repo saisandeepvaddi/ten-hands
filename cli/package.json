@@ -26,7 +26,7 @@
     "body-parser": "^1.19.0",
     "chalk": "^4.0.0",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "fix-path": "^2.1.0",
     "git-repo-info": "^2.1.0",
     "just-enough-logger": "^1.0.1",
