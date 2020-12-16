@@ -83,7 +83,7 @@ function createWindow() {
 
     if (isDev) {
       loadReactDevTools();
-      mainWindow.webContents.openDevTools();
+      //mainWindow.webContents.openDevTools();
     }
     mainWindow.on("closed", () => {
       mainWindow = null;

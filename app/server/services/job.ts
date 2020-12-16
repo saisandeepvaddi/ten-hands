@@ -1,4 +1,4 @@
-import pKill from "tree-kill";
+import fkill from "fkill";
 import path from "path";
 import { exec } from "child_process";
 import SocketManager, { ISocketListener } from "./socket";
@@ -113,30 +113,37 @@ export class JobManager {
    * @param {*} pid Process Id of the task. (Created by OS)
    * @memberof JobManager
    */
-  private killJob(taskID: string, pid: number): Promise<boolean> {
+  private async killJob(taskID: string, pid: number): Promise<boolean> {
     console.log(`Killing process: ${pid}`);
-    return new Promise((resolve, reject) => {
-      pKill(pid, (error) => {
-        if (error) {
-          console.error(`Error killing process: ${pid}\n ${error.message}`);
-          this.socketManager.emit(`job_error`, {
-            taskID,
-            data: `Error killing process: ${pid}.\n ${error.message}`,
-          });
-
-          return reject(error);
-        }
-
-        this.socketManager.emit(`job_killed`, {
-          taskID,
-          data: pid,
-        });
-
-        setTimeout(() => {
-          return resolve(true);
-        });
+    try {
+      await fkill(pid, {
+        force: true,
       });
-    });
+
+      this.socketManager.emit(`job_killed`, {
+        taskID,
+        data: pid,
+      });
+
+      return true;
+    } catch (error) {
+      console.error(`Error killing process: ${pid}\n ${error.message}`);
+      this.socketManager.emit(`job_error`, {
+        taskID,
+        data: `Error killing process: ${pid}.\n ${error.message}`,
+      });
+      return false;
+    }
+    // return new Promise((resolve, reject) => {
+    // pKill(pid, (error) => {
+    //   if (error) {
+    //     return reject(error);
+    //   }
+    //   setTimeout(() => {
+    //     return resolve(true);
+    //   });
+    // });
+    // });
   }
 
   /**
@@ -187,25 +194,20 @@ export class JobManager {
       }) => {
         console.log(`Restart: ${taskID}, pid: ${pid}`);
 
-        this.killJob(taskID, pid)
-          .then((isKilled) => {
-            if (!isKilled) {
-              throw new Error(`Did not kill pid: ${pid}`);
-            }
+        this.killJob(taskID, pid).then((isKilled) => {
+          if (!isKilled) {
+            throw new Error(`Did not kill pid: ${pid}`);
+          }
 
-            console.log(`Killed: ${taskID}, pid: ${pid}`);
+          console.log(`Killed: ${taskID}, pid: ${pid}`);
 
-            // Temporarily add delay as I've seen restart task button on sidebar not syncing state and leaving dangling processes which I had to kill from Task Manager.
-            //TODO: Improve process state management
-            setTimeout(() => {
-              const process = new Job(taskID, shell, this.socketManager);
-              process.start(command, projectPath);
-              console.log(`Started: ${taskID}, pid: ${process.getPID()}`);
-            }, 500);
-          })
-          .catch((_error) => {
-            console.error(`Failed to kill pid: ${pid}`);
-          });
+          // Add delay as I've seen restart task button on sidebar not syncing state and leaving dangling processes which I had to kill from Task Manager.
+          setTimeout(() => {
+            const process = new Job(taskID, shell, this.socketManager);
+            process.start(command, projectPath);
+            console.log(`Started: ${taskID}, pid: ${process.getPID()}`);
+          }, 1000);
+        });
       },
     };
 
