@@ -22,7 +22,7 @@
   "author": {
     "name": "Sai Sandeep Vaddi",
     "email": "saisandeepvaddi@gmail.com",
-    "url": "https://svaddi.dev"
+    "url": "https://saisandeepvaddi.com"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,9 +46,9 @@
     "fuse.js": "^6.0.0",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
-    "react": "^17.0.1",
+    "react": "16.14.0",
     "react-beautiful-dnd": "^11.0.5",
-    "react-dom": "^17.0.1",
+    "react-dom": "16.14.0",
     "react-dropzone": "^11.0.1",
     "react-error-boundary": "^3.1.0",
     "react-query": "^2.12.1",
@@ -58,7 +58,7 @@
     "react-spaces": "^0.1.26",
     "recoil": "^0.0.10",
     "socket.io-client": "^3.0.4",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.2.1",
     "uuid": "^3.4.0",
     "xterm": "^4.8.1",
     "xterm-addon-fit": "^0.4.0",
@@ -77,7 +77,7 @@
     "@types/react": "^17.0.0",
     "@types/react-beautiful-dnd": "^11.0.2",
     "@types/react-dom": "^17.0.0",
-    "@types/styled-components": "^4.4.2",
+    "@types/styled-components": "^5.1.5",
     "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
     "eslint": "^7.7.0",

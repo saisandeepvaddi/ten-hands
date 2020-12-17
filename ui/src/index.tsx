@@ -6,12 +6,12 @@ import App from "./components/App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
-if (process.env.NODE_ENV === "development") {
-  const whyDidYouRender = require("@welldone-software/why-did-you-render");
-  whyDidYouRender(React, {
-    include: [/^CommandOutputXterm/],
-  });
-}
+// if (process.env.NODE_ENV === "development") {
+//   const whyDidYouRender = require("@welldone-software/why-did-you-render");
+//   whyDidYouRender(React, {
+//     include: [/^CommandOutputXterm/],
+//   });
+// }
 
 ReactDOM.render(
   <Sentry.ErrorBoundary fallback={"An error has occured"}>
