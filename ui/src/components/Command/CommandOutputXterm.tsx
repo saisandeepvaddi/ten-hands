@@ -5,13 +5,14 @@ import { useConfig } from "../shared/stores/ConfigStore";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
-import { ResizableBox } from "react-resizable";
 import { Icon } from "@blueprintjs/core";
+import Resizable from "./Resizable";
+import { motion, MotionValue, useMotionValue } from "framer-motion";
 
 interface ICommandProps {
   taskID: string;
   index: number;
-  containerWidth: number;
+  containerWidth: MotionValue;
 }
 
 const TerminalContainer = styled.div`
@@ -27,8 +28,10 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     const { theme } = useTheme();
     const currentTheme = React.useRef<any>(null);
     const themeTimeout = React.useRef<any>(null);
-    const [height, setHeight] = useState<number>(400);
-    const [width, setWidth] = useState<number>(800);
+    // const [height, setHeight] = useState<number>(400);
+    // const [width, setWidth] = useState<number>(800);
+    const height = useMotionValue(400);
+    const width = useMotionValue(800);
     const { config } = useConfig();
 
     const setTheme = () => {
@@ -58,8 +61,8 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
           elRef.current.parentElement?.parentElement?.getBoundingClientRect()
             .height ?? 400;
 
-        setHeight(parentHeight);
-        setWidth(parentWidth);
+        height.set(parentHeight);
+        containerWidth.set(parentWidth);
         if (terminal.current === null) {
           terminal.current = JobTerminalManager.getInstance().createJobTerminal(
             taskID
@@ -88,46 +91,41 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
       };
     }, [theme, config, index]);
 
-    const handleResize = React.useCallback(
-      throttle((height: number) => {
-        if (terminal && terminal.current) {
-          setHeight(height);
-          terminal.current.fitAddon.fit();
-        }
-      }, 100),
-      [terminal]
+    const handleResize = React.useCallback(() => {
+      if (!terminal || !terminal.current) {
+        return;
+      }
+      // Fit in next callstack. fitAddon calculations are not keeping up with resize speed.
+      setTimeout(() => {
+        terminal.current?.fitAddon.fit();
+      }, 0);
+    }, []);
+
+    // For some reason, the width set by ResizeSensor on parent doesn't work if not throttled
+    const handleResizeThrottled = React.useCallback(
+      throttle(handleResize, 50),
+      []
     );
 
     useEffect(() => {
-      setWidth(containerWidth);
-    }, [containerWidth]);
-
-    useEffect(() => {
-      terminal.current?.fitAddon.fit();
-    }, [width]);
+      return containerWidth.onChange(() => {
+        handleResizeThrottled();
+      });
+    }, []);
 
     return (
-      <ResizableBox
-        axis="y"
-        resizeHandles={["s"]}
-        handleSize={[8, 0]}
-        handle={
-          <div className="p-relative">
-            <Icon
-              icon="drag-handle-horizontal"
-              className="p-absolute"
-              style={{ left: "50%", cursor: "ns-resize" }}
-            />
-          </div>
-        }
-        width={width}
-        height={height}
-        onResize={(e, { size }) => {
-          handleResize(size.height);
-        }}
-      >
-        <TerminalContainer ref={elRef} />
-      </ResizableBox>
+      <Resizable onResize={handleResize} width={containerWidth} height={height}>
+        <motion.div
+          layout
+          ref={elRef}
+          style={{
+            marginTop: 10,
+            width: "100%",
+            height: "100%",
+            whiteSpace: "pre-wrap",
+          }}
+        />
+      </Resizable>
     );
   }
 );
