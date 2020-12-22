@@ -59,7 +59,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     (collapse: boolean = false) => {
       let projectTaskListOpenMap = {};
       originalProjects.map(project => {
-        projectTaskListOpenMap[project._id!] = !collapse;
+        projectTaskListOpenMap[project._id!] = collapse;
       });
 
       setProjectTaskListOpenMap(projectTaskListOpenMap);
@@ -78,7 +78,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   }, [originalProjects, expandOrCollapseAllProjects]);
 
   React.useEffect(() => {
-    expandOrCollapseAllProjects(true);
+    expandOrCollapseAllProjects(false);
   }, []);
 
   const updateProjectTaskListOpen = React.useCallback(
