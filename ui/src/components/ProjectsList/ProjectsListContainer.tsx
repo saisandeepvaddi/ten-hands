@@ -15,6 +15,18 @@ import ProjectItem from "./ProjectItem";
 import { Button, Icon } from "@blueprintjs/core";
 import Search from "../Search";
 import { captureException } from "@sentry/react";
+import styled from "styled-components";
+
+const ListContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 10px;
+  margin-bottom: 15px;
+  &:hover {
+    overflow: auto;
+  }
+`;
 
 interface IProjectsListContainerProps {}
 
@@ -192,6 +204,12 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
           minimal
           small
           title={"Search for any task"}
+          style={{
+            width: "100%",
+            paddingLeft: 20,
+            display: "flex",
+            justifyContent: "flex-start",
+          }}
         >
           <span className="bp3-text-disabled">Search Tasks (Ctrl + F)</span>
         </Button>
@@ -203,46 +221,48 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
           title={"Collapse all projects"}
         />
       </div>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <Droppable droppableId={"project-list-droppable"}>
-          {(droppableProvided: DroppableProvided) => (
-            <Container
-              ref={droppableProvided.innerRef}
-              {...droppableProvided.droppableProps}
-            >
-              {/* <TabSwitchAnimator
-                style={{
-                  transform: `translateY(${selectedItemIndex * 40}px)`
-                }}
-              /> */}
-              {projects.map((project: IProject, index: number) => {
-                return (
-                  <Draggable
-                    draggableId={project._id!}
-                    index={index}
-                    key={project._id}
-                  >
-                    {(draggableProvided: DraggableProvided) => (
-                      <ProjectItem
-                        project={project}
-                        draggableProvided={draggableProvided}
-                        changeActiveProject={changeActiveProject}
-                        itemIndex={index}
-                        projectRunningTaskCount={
-                          projectsRunningTaskCount[project._id!]
-                        }
-                        projectTaskListOpenMap={projectTaskListOpenMap}
-                        updateProjectTaskListOpen={updateProjectTaskListOpen}
-                      />
-                    )}
-                  </Draggable>
-                );
-              })}
-              {droppableProvided.placeholder}
-            </Container>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <ListContainer>
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+          <Droppable droppableId={"project-list-droppable"}>
+            {(droppableProvided: DroppableProvided) => (
+              <Container
+                ref={droppableProvided.innerRef}
+                {...droppableProvided.droppableProps}
+              >
+                {/* <TabSwitchAnimator
+                  style={{
+                    transform: `translateY(${selectedItemIndex * 40}px)`
+                  }}
+                /> */}
+                {projects.map((project: IProject, index: number) => {
+                  return (
+                    <Draggable
+                      draggableId={project._id!}
+                      index={index}
+                      key={project._id}
+                    >
+                      {(draggableProvided: DraggableProvided) => (
+                        <ProjectItem
+                          project={project}
+                          draggableProvided={draggableProvided}
+                          changeActiveProject={changeActiveProject}
+                          itemIndex={index}
+                          projectRunningTaskCount={
+                            projectsRunningTaskCount[project._id!]
+                          }
+                          projectTaskListOpenMap={projectTaskListOpenMap}
+                          updateProjectTaskListOpen={updateProjectTaskListOpen}
+                        />
+                      )}
+                    </Draggable>
+                  );
+                })}
+                {droppableProvided.placeholder}
+              </Container>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </ListContainer>
       <Search
         searchbarOpen={searchbarOpen}
         setSearchbarOpen={setSearchbarOpen}

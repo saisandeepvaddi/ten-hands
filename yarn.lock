@@ -2322,10 +2322,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@saisandeepvaddi/eslint-config-typescript@^1.0.0", "@saisandeepvaddi/eslint-config-typescript@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@saisandeepvaddi/eslint-config-typescript/-/eslint-config-typescript-1.0.2.tgz#57ef6e3bb7a2452ab0f546fb89d61759c8cd5d6d"
-  integrity sha512-iROsoMyN8OuJ902aTqdebcR6qd7ec/xq2/PDTPT1vWcPtNT5e6iGAs7eAbx8bBWNsyfJAxP1lgVNQl7vaGholQ==
+"@saisandeepvaddi/eslint-config-typescript@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@saisandeepvaddi/eslint-config-typescript/-/eslint-config-typescript-1.0.4.tgz#92f125f1e1f5b6d3a8725399130bc6b49d8cdf57"
+  integrity sha512-vesLC/GrB4mSnpEO/NNYLj3MVc/owX5VoBcLNsj5wIyac1WybMQjITB3j2lTkOuBqpLPAbVl4Res2yMTffg+Bw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^3.10.1"
     "@typescript-eslint/parser" "^3.10.1"

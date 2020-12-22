@@ -73,7 +73,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@saisandeepvaddi/eslint-config-typescript": "^1.0.2",
+    "@saisandeepvaddi/eslint-config-typescript": "^1.0.4",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.9",
     "@types/jest": "^26.0.19",

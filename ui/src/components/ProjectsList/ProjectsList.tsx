@@ -9,9 +9,6 @@ const Container = styled.div`
   width: 100%;
   overflow: hidden;
   margin-bottom: 15px;
-  &:hover {
-    overflow: auto;
-  }
 `;
 
 const ProjectsList = React.memo(() => {

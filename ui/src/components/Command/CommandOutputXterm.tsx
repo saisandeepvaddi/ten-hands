@@ -1,11 +1,9 @@
 import throttle from "lodash/throttle";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect } from "react";
 import { useConfig } from "../shared/stores/ConfigStore";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
-import { Icon } from "@blueprintjs/core";
 import Resizable from "./Resizable";
 import { motion, MotionValue, useMotionValue } from "framer-motion";
 
@@ -14,12 +12,6 @@ interface ICommandProps {
   index: number;
   containerWidth: MotionValue;
 }
-
-const TerminalContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  white-space: pre-wrap;
-`;
 
 const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
   ({ taskID, index, containerWidth }) => {
@@ -31,7 +23,6 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     // const [height, setHeight] = useState<number>(400);
     // const [width, setWidth] = useState<number>(800);
     const height = useMotionValue(400);
-    const width = useMotionValue(800);
     const { config } = useConfig();
 
     const setTheme = () => {
