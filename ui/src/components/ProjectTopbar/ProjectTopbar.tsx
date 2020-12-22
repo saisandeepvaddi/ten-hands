@@ -66,7 +66,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       reorderTasks,
     } = useProjects();
 
-    const shouldDeleteProject = async (shouldDelete) => {
+    const shouldDeleteProject = async shouldDelete => {
       try {
         if (shouldDelete) {
           deleteProject(activeProject._id);
@@ -99,7 +99,9 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
               </Tooltip>
             ) : null}
             <Navbar.Heading data-testid="active-project-git-branch">
-              {gitInfo?.data?.branch ? (
+              {gitInfo?.isLoading ? (
+                "loading..."
+              ) : gitInfo?.data?.branch ? (
                 <GitBranchContainer>
                   <Navbar.Divider style={{ paddingRight: 10 }} />{" "}
                   <Icon icon="git-branch" />
