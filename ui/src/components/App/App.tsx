@@ -1,5 +1,6 @@
 import React from "react";
-import { ReactQueryDevtools } from "react-query-devtools";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClientProvider, QueryClient } from "react-query";
 import { ThemeProvider } from "../shared/stores/ThemeStore";
 
 // To disable no-submodule-imports, but tslint:disable:no-submodule-imports not working
@@ -17,9 +18,11 @@ import "./App.css";
 import AppLayout from "./AppLayout";
 import { RecoilRoot } from "recoil";
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
-    <React.Fragment>
+    <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <ConfigProvider>
           <ThemeProvider>
@@ -34,7 +37,7 @@ const App = () => {
         </ConfigProvider>
       </RecoilRoot>
       <ReactQueryDevtools />
-    </React.Fragment>
+    </QueryClientProvider>
   );
 };
 

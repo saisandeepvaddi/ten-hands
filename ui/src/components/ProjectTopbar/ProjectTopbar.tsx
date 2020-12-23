@@ -52,10 +52,8 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
 
     const { config } = useConfig();
 
-    const gitInfo = useQuery(
-      ["gitBranch", config, activeProject],
-      (key, config: IConfig, activeProject: IProject) =>
-        getGitRepo(config, activeProject.path)
+    const gitInfo = useQuery(["gitBranch", config, activeProject], () =>
+      getGitRepo(config, activeProject.path)
     );
 
     const {
