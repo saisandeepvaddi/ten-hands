@@ -1,6 +1,10 @@
-import socketIO, { Namespace, Socket } from "socket.io";
+import {
+  default as socketIO,
+  Namespace,
+  Server as SocketIOServer,
+  Socket,
+} from "socket.io";
 import { Server } from "http";
-
 type SocketSource = "/desktop" | "/chrome-ext";
 
 export interface ISocketListener {
@@ -16,7 +20,7 @@ export interface ISocketListener {
 class SocketManager {
   private static _instance: SocketManager;
   socket: Socket;
-  io: SocketIO.Server;
+  io: SocketIOServer;
   subscribers: ISocketListener[] = [];
   connectedNSPs: string[] = [];
   nspMap: Map<string, Namespace> = new Map();
@@ -29,8 +33,18 @@ class SocketManager {
    * @memberof SocketManager
    */
   public attachServer(server: Server) {
-    const io = socketIO(server).of(/^\/(desktop|chrome-ext)$/);
-    io.on("connection", (socket) => {
+    const ioServer = new SocketIOServer(server, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
+        credentials: true,
+      },
+    });
+
+    const io = ioServer.of(/^\/(desktop|chrome-ext)$/);
+    io.on("connection", (socket: Socket) => {
+      console.log(`Socket: ${socket.nsp.name} connected.`);
+
       this.socket = socket;
       if (!this.connectedNSPs.includes(socket.nsp.name)) {
         this.connectedNSPs.push(socket.nsp.name);

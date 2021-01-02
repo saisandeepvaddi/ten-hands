@@ -30,10 +30,9 @@ const EmptyContainer = styled.div`
   }
 `;
 
-const CommandsArea: React.SFC<ICommandsAreaProps> = React.memo(
+const CommandsArea: React.FC<ICommandsAreaProps> = React.memo(
   ({ activeProject }) => {
     const commands: IProjectCommand[] = activeProject.commands;
-    const { config } = useConfig();
     const { theme } = useTheme();
 
     if (commands.length === 0) {

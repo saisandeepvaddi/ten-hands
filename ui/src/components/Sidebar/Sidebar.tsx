@@ -19,7 +19,7 @@ const Sidebar = React.memo(() => {
         text="New Project"
         className="truncate"
         large={true}
-        style={{ width: "100%" }}
+        style={{ margin: "0 10px" }}
         onClick={() => setDrawerOpen(true)}
       />
       {projects.length > 0 && <ProjectsList />}

@@ -10,11 +10,13 @@ import UpdateCommandDrawer from "../UpdateCommandDrawer";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { throttle } from "lodash";
 import { useTheme } from "../shared/stores/ThemeStore";
+import { useMotionValue } from "framer-motion";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  /* overflow: auto;
+  overflow-y: hidden; */
 `;
 
 const CommandTitleActions = styled.div`
@@ -69,7 +71,8 @@ const Command: React.FC<ICommandProps> = React.memo(
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
     const { activeProject, deleteTask, updateTask } = useProjects();
     const { config } = useConfig();
-    const [containerWidth, setContainerWidth] = useState<number>(0);
+    // const [containerWidth, setContainerWidth] = useState<number>(0);
+    const containerWidth = useMotionValue(0);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = React.useState<boolean>(
       false
     );
@@ -90,7 +93,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const clearJobOutput = taskID => {
+    const clearJobOutput = (taskID) => {
       dispatch({
         type: ACTION_TYPES.CLEAR_OUTPUT,
         taskID,
@@ -98,7 +101,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       terminalManager.clearTerminalInRoom(taskID);
     };
 
-    const startJob = taskID => {
+    const startJob = (taskID) => {
       clearJobOutput(taskID);
       const shell = command.shell || activeProject.shell || config.shell || "";
       subscribeToTaskSocket(taskID, command, projectPath, shell);
@@ -108,7 +111,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const stopJob = taskID => {
+    const stopJob = (taskID) => {
       const process = getJobData(jobState, taskID).process;
       const { pid } = process;
       unsubscribeFromTaskSocket(taskID, pid);
@@ -117,7 +120,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const restartJob = taskID => {
+    const restartJob = (taskID) => {
       const shell = command.shell || activeProject.shell || config.shell || "";
       const process = getJobData(jobState, taskID).process;
       const { pid } = process;
@@ -136,12 +139,12 @@ const Command: React.FC<ICommandProps> = React.memo(
       return getJobData(jobState, taskID).isRunning || false;
     };
 
-    const handleSidebarResize = React.useCallback(
-      throttle((width: number) => {
-        setContainerWidth(width);
-      }, 200),
-      []
-    );
+    // const handleSidebarResize = React.useCallback(
+    //   throttle((width: number) => {
+    //     setContainerWidth(width);
+    //   }, 200),
+    //   []
+    // );
 
     return (
       <React.Fragment>
@@ -243,13 +246,14 @@ const Command: React.FC<ICommandProps> = React.memo(
           </CommandHeader>
           <Collapse isOpen={isOutputOpen} keepChildrenMounted={true}>
             <ResizeSensor
-              onResize={entries => {
+              onResize={(entries) => {
                 const width: number = entries[0].contentRect.width;
                 // setContainerWidth(width);
-                handleSidebarResize(width);
+                // handleSidebarResize(width);
+                containerWidth.set(width);
               }}
             >
-              <div
+              {/* <div
                 className="my-terminal-container"
                 style={{
                   width: "100%",
@@ -257,13 +261,13 @@ const Command: React.FC<ICommandProps> = React.memo(
                   padding: 10,
                   marginBottom: 10,
                 }}
-              >
-                <CommandOutputXterm
-                  index={index}
-                  taskID={taskID}
-                  containerWidth={containerWidth}
-                />
-              </div>
+              > */}
+              <CommandOutputXterm
+                index={index}
+                taskID={taskID}
+                containerWidth={containerWidth}
+              />
+              {/* </div> */}
             </ResizeSensor>
           </Collapse>
         </Container>

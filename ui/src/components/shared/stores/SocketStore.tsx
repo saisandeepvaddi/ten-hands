@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import React from "react";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import { useConfig } from "./ConfigStore";
 import { useJobs } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
@@ -59,7 +59,10 @@ function SocketsProvider(props: ISocketProviderProps) {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   const initializeSocket = React.useCallback(() => {
-    _socket.current = io(`http://localhost:${config.port}/desktop`);
+    const socketURL = `http://localhost:${config.port}/desktop`;
+    _socket.current = io(socketURL, {
+      withCredentials: true,
+    });
 
     if (isSocketInitialized) {
       return;
@@ -69,7 +72,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       // console.info("Socket connected to server");
     });
 
-    _socket.current.on(`job_started`, message => {
+    _socket.current.on(`job_started`, (message) => {
       const taskID = message.taskID;
       console.info(`Process started for cmd: ${taskID}`);
       updateJobProcess(taskID, message.data);
@@ -81,17 +84,17 @@ function SocketsProvider(props: ISocketProviderProps) {
         );
       }
     });
-    _socket.current.on(`job_output`, message => {
+    _socket.current.on(`job_output`, (message) => {
       const taskID = message.taskID;
       updateJob(taskID, message.data, true);
     });
 
-    _socket.current.on(`job_error`, message => {
+    _socket.current.on(`job_error`, (message) => {
       const taskID = message.taskID;
       console.info(`Process error in taskID: ${taskID}`);
       updateJob(taskID, message.data, true);
     });
-    _socket.current.on(`job_close`, message => {
+    _socket.current.on(`job_close`, (message) => {
       const taskID = message.taskID;
       console.info(`Process close in taskID: ${taskID}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
@@ -101,7 +104,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       });
     });
 
-    _socket.current.on(`job_exit`, message => {
+    _socket.current.on(`job_exit`, (message) => {
       const taskID = message.taskID;
 
       console.info(`Process exit in taskID: ${taskID}`);
@@ -112,7 +115,7 @@ function SocketsProvider(props: ISocketProviderProps) {
       });
     });
 
-    _socket.current.on(`job_killed`, message => {
+    _socket.current.on(`job_killed`, (message) => {
       const taskID = message.taskID;
 
       console.info(

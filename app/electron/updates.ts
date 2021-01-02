@@ -61,10 +61,15 @@ export const getAppUpdate = async (
     : "v" + _appVersion;
 
   logger.info("App Version: " + appVersion);
-
-  const githubReleases = await Axios.get(
-    "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases"
-  );
+  let githubReleases;
+  try {
+    githubReleases = await Axios.get(
+      "https://api.github.com/repos/saisandeepvaddi/ten-hands/releases"
+    );
+  } catch (error) {
+    console.error("error: ", error.response.data);
+    return null;
+  }
 
   const releaseDetails = githubReleases.data.map((release: IRelease) => {
     const { prerelease, published_at, tag_name } = release;

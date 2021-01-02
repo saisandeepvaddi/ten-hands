@@ -20,7 +20,7 @@ const CommandsRowView: React.FC<ICommandsRowViewProps> = ({
             id={`task-card-${command._id}`}
             key={command._id}
             elevation={Elevation.ONE}
-            style={{ margin: 20, padding: 15 }}
+            style={{ margin: 20, padding: "15px 15px 10px 15px" }}
           >
             <Command
               index={index}
