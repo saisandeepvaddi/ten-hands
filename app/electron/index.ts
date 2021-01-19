@@ -1,11 +1,5 @@
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 import * as SentryElectron from "@sentry/electron";
 import { BrowserWindow, ipcMain, app, dialog, crashReporter } from "electron";
-const unhandled = require("electron-unhandled");
-unhandled();
-
-const path = require("path");
-const isDev = require("electron-is-dev");
 import windowStateKeeper from "electron-window-state";
 
 import { startServer } from "../server";
@@ -22,6 +16,12 @@ import {
 import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
 import db from "../server/services/db";
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+const unhandled = require("electron-unhandled");
+unhandled();
+
+const path = require("path");
+const isDev = require("electron-is-dev");
 
 if (getConfig().sendErrorReports) {
   SentryElectron.init({
@@ -58,7 +58,7 @@ const singleInstanceLock = app.requestSingleInstanceLock();
 
 function createWindow() {
   try {
-    let mainWindowState = windowStateKeeper({
+    const mainWindowState = windowStateKeeper({
       defaultWidth: 1366,
       defaultHeight: 768,
     });
@@ -82,8 +82,8 @@ function createWindow() {
     mainWindow.loadURL(uiUrl);
 
     if (isDev) {
-      loadReactDevTools();
-      //mainWindow.webContents.openDevTools();
+      // loadReactDevTools();
+      mainWindow.webContents.openDevTools();
     }
     mainWindow.on("closed", () => {
       mainWindow = null;

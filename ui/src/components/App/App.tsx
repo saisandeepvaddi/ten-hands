@@ -17,27 +17,33 @@ import { SocketsProvider } from "../shared/stores/SocketStore";
 import "./App.css";
 import AppLayout from "./AppLayout";
 import { RecoilRoot } from "recoil";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../shared/ErrorFallback";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <RecoilRoot>
-        <ConfigProvider>
-          <ThemeProvider>
-            <JobsProvider>
-              <SocketsProvider>
-                <ProjectsProvider>
-                  <AppLayout />
-                </ProjectsProvider>
-              </SocketsProvider>
-            </JobsProvider>
-          </ThemeProvider>
-        </ConfigProvider>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider>
+            <ThemeProvider>
+              <JobsProvider>
+                <SocketsProvider>
+                  <ProjectsProvider>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <AppLayout />
+                    </React.Suspense>
+                  </ProjectsProvider>
+                </SocketsProvider>
+              </JobsProvider>
+            </ThemeProvider>
+          </ConfigProvider>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
       </RecoilRoot>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
