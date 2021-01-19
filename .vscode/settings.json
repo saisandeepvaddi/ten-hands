@@ -1,3 +1,6 @@
 {
-  "eslint.enable": true
+  "eslint.format.enable": true,
+  "eslint.workingDirectories": [
+    "app", "cli", "docs", "extension", "ui"
+  ]
 }

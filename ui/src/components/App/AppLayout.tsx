@@ -35,7 +35,7 @@ const AppLayout = React.memo(() => {
   }, []);
 
   const updateSiderWidthAtom = React.useCallback(
-    debounce(newSize => {
+    debounce((newSize) => {
       setSiderWidth(newSize);
     }, 200),
     []
@@ -60,7 +60,7 @@ const AppLayout = React.memo(() => {
             size={siderWidth ?? 300}
             minimumSize={100}
             maximumSize={600}
-            onResizeEnd={newSize => {
+            onResizeEnd={(newSize) => {
               // Save siderWidth in global so that we can use to show small/large icons in siderbar
               updateSiderWidthAtom(newSize);
               setItem("sider-width", newSize);
