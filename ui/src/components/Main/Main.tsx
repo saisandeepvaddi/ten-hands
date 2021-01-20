@@ -1,8 +1,10 @@
 import { Classes, Colors, Spinner } from "@blueprintjs/core";
 import React from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import CommandsArea from "../CommandsArea";
 import ProjectTopbar from "../ProjectTopbar";
+import { activeProjectAtom } from "../shared/state/atoms";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 
@@ -36,7 +38,8 @@ const EmptyContainer = styled.div`
 
 const Main = React.memo(() => {
   const { theme } = useTheme();
-  const { activeProject, loadingProjects, projects } = useProjects();
+  const { loadingProjects, projects } = useProjects();
+  const activeProject = useRecoilValue(activeProjectAtom);
 
   if (loadingProjects) {
     return (

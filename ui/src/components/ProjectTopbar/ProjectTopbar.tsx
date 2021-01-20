@@ -13,7 +13,6 @@ import styled from "styled-components";
 import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import NewCommandDrawer from "../NewCommandDrawer";
 import { getGitRepo } from "../shared/API";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";

@@ -152,22 +152,6 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>
               {isProcessRunning() ? (
-                // <Popover
-                //   position="right"
-                //   interactionKind={PopoverInteractionKind.HOVER}
-                //   hoverOpenDelay={0}
-                //   content={
-                //     <Button
-                //       data-testid="restart-task-button"
-                //       intent="primary"
-                //       icon="refresh"
-                //       minimal
-                //       disabled={!isProcessRunning()}
-                //       text={"Restart"}
-                //       onClick={() => restartJob(taskID)}
-                //     />
-                //   }
-                // >
                 <React.Fragment>
                   <Button
                     data-testid="stop-task-button"
@@ -252,21 +236,11 @@ const Command: React.FC<ICommandProps> = React.memo(
                 containerWidth.set(width);
               }}
             >
-              {/* <div
-                className="my-terminal-container"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  padding: 10,
-                  marginBottom: 10,
-                }}
-              > */}
               <CommandOutputXterm
                 index={index}
                 taskID={taskID}
                 containerWidth={containerWidth}
               />
-              {/* </div> */}
             </ResizeSensor>
           </Collapse>
         </Container>
