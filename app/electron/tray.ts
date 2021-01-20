@@ -4,7 +4,7 @@ import {
   app,
   BrowserWindow,
   nativeImage,
-  NativeImage
+  NativeImage,
 } from "electron";
 import path from "path";
 import { setIsAppQuitting } from "./app-state";
@@ -26,15 +26,15 @@ export function createTray(mainWindow: BrowserWindow): Tray {
       label: "Show",
       click() {
         openAndFocusWindow(mainWindow);
-      }
+      },
     },
     {
       label: "Quit",
       click() {
         setIsAppQuitting(true);
         app.quit();
-      }
-    }
+      },
+    },
   ]);
 
   tray.on("double-click", () => openAndFocusWindow(mainWindow));

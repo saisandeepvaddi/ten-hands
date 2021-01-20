@@ -51,7 +51,7 @@ const startProcess = (script) => {
 
 export const startServer = async () => {
   try {
-    let serverPath = resolve(__dirname, "server", "start.js");
+    const serverPath = resolve(__dirname, "server", "start.js");
     startProcess(serverPath);
   } catch (error) {
     console.error("Error starting server: ", error.message);

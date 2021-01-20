@@ -9,7 +9,7 @@ export function startJob(req: Request, res: Response) {
     const command = db.getProjectCommand(projectId, commandId);
 
     return res.status(200).send({
-      data: command
+      data: command,
     });
   } catch (error) {
     console.log("error:", error);

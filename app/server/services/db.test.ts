@@ -1,6 +1,6 @@
 describe("Test DB Service", () => {
   let _db = null;
-  let ENV_BEFORE_TESTS = process.env.NODE_ENV;
+  const ENV_BEFORE_TESTS = process.env.NODE_ENV;
 
   beforeAll(() => {
     process.env.NODE_ENV = "test";

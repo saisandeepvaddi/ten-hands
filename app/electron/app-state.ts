@@ -1,4 +1,4 @@
-let isQuitting: boolean = false;
+let isQuitting = false;
 
 export function setIsAppQuitting(isAppQuitting: boolean) {
   isQuitting = isAppQuitting;

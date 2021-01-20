@@ -5,7 +5,7 @@ import { Badge } from "./badge/badge";
 import { captureException } from "@sentry/electron";
 
 export default function registerIPC(mainWindow: BrowserWindow) {
-  let badge = new Badge(mainWindow);
+  const badge = new Badge(mainWindow);
   ipcMain.on(`get-config`, (e) => {
     e.returnValue = getConfig();
   });

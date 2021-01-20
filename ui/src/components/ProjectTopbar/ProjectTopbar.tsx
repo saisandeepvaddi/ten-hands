@@ -41,14 +41,16 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       false
     );
 
-    const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
-      boolean
-    >(false);
+    const [
+      commandsOrderModalOpen,
+      setCommandsOrderModalOpen,
+    ] = React.useState<boolean>(false);
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
-    const [isProjectDrawerOpen, setIsProjectDrawerOpen] = React.useState<
-      boolean
-    >(false);
+    const [
+      isProjectDrawerOpen,
+      setIsProjectDrawerOpen,
+    ] = React.useState<boolean>(false);
 
     const { config } = useConfig();
 
@@ -64,7 +66,7 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       reorderTasks,
     } = useProjects();
 
-    const shouldDeleteProject = async shouldDelete => {
+    const shouldDeleteProject = async (shouldDelete) => {
       try {
         if (shouldDelete) {
           deleteProject(activeProject._id);

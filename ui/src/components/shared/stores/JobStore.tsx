@@ -16,15 +16,15 @@ enum ACTION_TYPES {
   UPDATE_JOB_PROCESS,
 }
 
-export let roomSocketState = {};
+export const roomSocketState = {};
 
-const initializeRoomSocketState = state => {
-  Object.keys(state).forEach(taskID => {
+const initializeRoomSocketState = (state) => {
+  Object.keys(state).forEach((taskID) => {
     roomSocketState[taskID] = false;
   });
 };
 
-const updateData = throttle(async data => {
+const updateData = throttle(async (data) => {
   try {
     if (Object.keys(data).length > 0) {
       await localforage.setItem("state", data);
@@ -125,7 +125,7 @@ function JobsProvider(props: IJobsProviderProps) {
 
     const newTaskStatus = {};
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       newTaskStatus[key] = (state[key] && state[key].isRunning) || false;
     });
 

@@ -14,7 +14,7 @@ import { captureException } from "@sentry/node";
  * @returns
  */
 export async function startServer() {
-  return new Promise(async (res, rej) => {
+  return new Promise((res, rej) => {
     try {
       // To fix /bin/sh: npm: command not found in macOS
       fixPath();

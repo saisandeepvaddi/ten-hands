@@ -7,7 +7,7 @@ function highlightText(text: string, query: string) {
   let lastIndex = 0;
   const words = query
     .split(/\s+/)
-    .filter(word => word.length > 0)
+    .filter((word) => word.length > 0)
     .map(escapeRegExpChars);
   if (words.length === 0) {
     return [text];
@@ -64,9 +64,9 @@ export const renderCommand: ItemRenderer<ISearchProjectCommand> = (
   );
 };
 
-const getSearchResults = throttle(function(fuse, query) {
+const getSearchResults = throttle(function (fuse, query) {
   const results = fuse.search(query);
-  return results.map(result => result.item);
+  return results.map((result) => result.item);
 }, 100);
 
 export const filterCommands = (fuse, query: string) => {

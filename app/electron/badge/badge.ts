@@ -14,13 +14,13 @@ export class Badge {
     this.window = window;
   }
 
-  generate(count: number = 0) {
+  generate(count = 0) {
     return this.window.webContents.executeJavaScript(
       `window.createBadge = function ${this.createBadge}; window.createBadge(${count});`
     );
   }
 
-  public createBadge(count: number = 0) {
+  public createBadge(count = 0) {
     if (count === 0) {
       return null;
     }

@@ -1,12 +1,12 @@
 import express from "express";
-const router = express.Router({ mergeParams: true });
 
 import {
   addCommand,
   updateCommand,
   removeCommand,
-  reorderCommands
+  reorderCommands,
 } from "../controllers/commands";
+const router = express.Router({ mergeParams: true });
 
 /* 
 Self Note: Use this to do REST Testing in REST Client extension in VSCode

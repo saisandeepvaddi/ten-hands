@@ -1,7 +1,7 @@
 import express from "express";
-const router = express.Router({ mergeParams: true });
 
 import { startJob } from "../controllers/jobs";
+const router = express.Router({ mergeParams: true });
 
 /* 
 Self Note: Use this to do REST Testing in REST Client extension in VSCode

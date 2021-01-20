@@ -16,7 +16,7 @@ enum ACTION_TYPES {
   UPDATE_JOB_PROCESS,
 }
 
-export let roomSocketState = {};
+export const roomSocketState = {};
 
 const initializeRoomSocketState = (state) => {
   Object.keys(state).forEach((taskID) => {

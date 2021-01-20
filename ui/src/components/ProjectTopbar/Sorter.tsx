@@ -21,25 +21,26 @@ const Sorter: React.FC<ISorterProps> = React.memo(
 
     const { theme } = useTheme();
 
-    const [commandsOrderModalOpen, setCommandsOrderModalOpen] = React.useState<
-      boolean
-    >(false);
+    const [
+      commandsOrderModalOpen,
+      setCommandsOrderModalOpen,
+    ] = React.useState<boolean>(false);
 
     const sortTasksBy = React.useCallback(
       (order: TASK_SORT_ORDER = "name-asc") => {
         setTimeout(() => {
-          let tasksToSort: IProjectCommand[] = [...activeProject.commands].map(
-            (command) => {
-              const { lastExecutedAt } = command;
-              if (!lastExecutedAt) {
-                return {
-                  ...command,
-                  lastExecutedAt: getYesterday(),
-                };
-              }
-              return command;
+          const tasksToSort: IProjectCommand[] = [
+            ...activeProject.commands,
+          ].map((command) => {
+            const { lastExecutedAt } = command;
+            if (!lastExecutedAt) {
+              return {
+                ...command,
+                lastExecutedAt: getYesterday(),
+              };
             }
-          );
+            return command;
+          });
 
           if (order === "name-asc") {
             tasksToSort.sort((a, b) =>

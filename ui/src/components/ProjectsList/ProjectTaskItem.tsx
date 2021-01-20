@@ -60,7 +60,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     return runningTasks[taskId] === true;
   };
 
-  const scrollToTask = async task => {
+  const scrollToTask = async (task) => {
     // If you click on task directly it should first switch the active project then scroll to task
     if (!isThisActiveProject) {
       changeActiveProject();
@@ -75,7 +75,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const clearJobOutput = taskID => {
+  const clearJobOutput = (taskID) => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
       taskID,
@@ -110,7 +110,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     });
   };
 
-  const restartJob = taskID => {
+  const restartJob = (taskID) => {
     const shell = command.shell || activeProject.shell || config.shell || "";
     const process = getJobData(jobState, taskID).process;
     const { pid } = process;
@@ -125,7 +125,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     });
   };
 
-  const startTask = e => {
+  const startTask = (e) => {
     try {
       startJob();
     } catch (error) {
@@ -133,7 +133,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const stopTask = e => {
+  const stopTask = (e) => {
     try {
       stopJob();
     } catch (error) {
@@ -141,7 +141,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const restart = e => {
+  const restart = (e) => {
     try {
       restartJob(taskID);
     } catch (error) {

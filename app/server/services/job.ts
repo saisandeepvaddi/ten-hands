@@ -39,7 +39,7 @@ class Job {
 
       console.log("execPath:", execPath);
       const taskID = this.taskID;
-      let jobOptions: any = {
+      const jobOptions: any = {
         cwd: execPath || process.cwd(),
         maxBuffer: 100 * 1024 * 1024,
       };

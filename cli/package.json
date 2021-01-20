@@ -18,6 +18,11 @@
     "package.json",
     "README.md"
   ],
+  "eslintConfig": {
+    "env": {
+      "node": true
+    }
+  },
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^5.26.0",

@@ -14,7 +14,7 @@ function Resizable({ children, onResize, width, height }) {
     });
   }, []);
   const handleDrag = React.useCallback((event, info) => {
-    let newHeight = height.get() + info.delta.y;
+    const newHeight = height.get() + info.delta.y;
     const h = clamp(newHeight, 200, 900);
     height.set(h);
   }, []);

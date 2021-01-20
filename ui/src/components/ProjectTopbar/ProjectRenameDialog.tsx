@@ -22,7 +22,7 @@ const ProjectRenameDialog: React.FC<IProjectRenameDialogProps> = ({
   projectNameError,
   setUpdatedProjectName,
   updatedProjectName,
-  isRenaming
+  isRenaming,
 }) => {
   return (
     <Dialog
@@ -48,7 +48,7 @@ const ProjectRenameDialog: React.FC<IProjectRenameDialogProps> = ({
             type="text"
             required={true}
             data-testid="updated-project-name"
-            onChange={e => setUpdatedProjectName(e.target.value)}
+            onChange={(e) => setUpdatedProjectName(e.target.value)}
             value={updatedProjectName}
           />
         </FormGroup>

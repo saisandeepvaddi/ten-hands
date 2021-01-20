@@ -3,7 +3,6 @@ export enum Messages {
   TEST,
 }
 
-
 class Messenger {
   static sendMessageAsync(type: Messages, data = null) {
     return browser.runtime.sendMessage({ type, data }).then((response) => {

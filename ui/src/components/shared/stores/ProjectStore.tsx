@@ -113,7 +113,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     setProjectsRunningTaskCount,
   ] = React.useState<any>({});
 
-  const clearJobOutput = taskID => {
+  const clearJobOutput = (taskID) => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
       taskID,
@@ -174,9 +174,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     },
     [stopJob]
   );
-  const [totalRunningTaskCount, setTotalRunningTaskCount] = React.useState<
-    number
-  >(0);
+  const [
+    totalRunningTaskCount,
+    setTotalRunningTaskCount,
+  ] = React.useState<number>(0);
 
   React.useEffect(() => {
     (async () => {
@@ -218,7 +219,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           } else {
             // Commands order might be changed.
             const newActiveProject = receivedProjects.find(
-              project => project._id === activeProject._id
+              (project) => project._id === activeProject._id
             );
 
             // If the project was deleted
@@ -247,7 +248,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const deleteTaskFn = async () => {
         await deleteTaskInDb(config, projectId, taskId);
         const currentProjectIndex = projects.findIndex(
-          x => x._id === projectId
+          (x) => x._id === projectId
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
@@ -276,7 +277,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const renameProjectFn = async () => {
         await renameProjectInDb(config, projectId, newName);
         const currentProjectIndex = projects.findIndex(
-          x => x._id === projectId
+          (x) => x._id === projectId
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -304,7 +305,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const updateProjectFn = async () => {
         await updateProjectInDb(config, projectId, newProjectData);
         const currentProjectIndex = projects.findIndex(
-          x => x._id === projectId
+          (x) => x._id === projectId
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -336,7 +337,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const reorderTasksFn = async () => {
         await reorderTasksInDb(config, projectId, commands, taskSortOrder);
         const currentProjectIndex = projects.findIndex(
-          x => x._id === projectId
+          (x) => x._id === projectId
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
@@ -363,7 +364,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await saveTaskInDb(config, projectId, task);
           const currentProjectIndex = projects.findIndex(
-            x => x._id === projectId
+            (x) => x._id === projectId
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
@@ -392,12 +393,12 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await updateTaskInDb(config, projectId, taskId, task);
           const currentProjectIndex = projects.findIndex(
-            x => x._id === projectId
+            (x) => x._id === projectId
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
             const taskIndex = projectWithThisTask.commands.findIndex(
-              task => task._id === taskId
+              (task) => task._id === taskId
             );
 
             if (taskIndex < 0) {
@@ -473,7 +474,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
   const runAllStoppedTasks = () => {
     const commandsInProject = activeProject.commands;
-    commandsInProject.forEach(command => {
+    commandsInProject.forEach((command) => {
       if (!isTaskRunning(command._id)) {
         startTask(command);
       }
@@ -482,7 +483,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
   const stopAllRunningTasks = React.useCallback(() => {
     const commandsInProject = activeProject.commands;
-    commandsInProject.forEach(command => {
+    commandsInProject.forEach((command) => {
       if (isTaskRunning(command._id)) {
         stopTask(command);
       }
