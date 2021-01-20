@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.yarn/
+.pnp.js
+packages/
+app/node_modules/
+cli/node_modules/
+docs/node_modules/
+extension/node_modules/
+ui/node_modules/
+**/*/node_modules/

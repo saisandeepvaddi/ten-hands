@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { activeProjectIDAtom, projectsAtom } from "../../stores/projects.atom";
 import styled from "styled-components";
 

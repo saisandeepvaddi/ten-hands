@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
-import { useJobs } from "../shared/stores/JobStore";
+import { useJobs, ACTION_TYPES } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import styled from "styled-components";
 import { wait } from "../shared/utilities";
 import { Button, Alignment, Icon } from "@blueprintjs/core";
 import { useSockets } from "../shared/stores/SocketStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useRecoilValue } from "recoil";
 import { siderWidthAtom } from "../shared/state/layout";
+import { configAtom } from "../shared/state/atoms";
 
 const TaskContainer = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ interface IProjectTaskItemProps {
   changeActiveProject: () => any;
 }
 
-function getJobData(state, taskID: string) {
+function getJobData(state: Record<any, any>, taskID: string) {
   return state[taskID] || "";
 }
 
@@ -44,14 +44,15 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   const terminalManager = JobTerminalManager.getInstance();
   const actionButtonContainerRef = useRef<HTMLSpanElement>(null);
 
-  const { runningTasks, state: jobState, dispatch, ACTION_TYPES } = useJobs();
+  const { runningTasks, state: jobState, dispatch } = useJobs();
   const { activeProject, updateTask } = useProjects();
   const {
     subscribeToTaskSocket,
     unsubscribeFromTaskSocket,
     restartTask,
   } = useSockets();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
   const siderWidth = useRecoilValue(siderWidthAtom);
 
   const isThisActiveProject = activeProject._id === project._id;
@@ -60,7 +61,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     return runningTasks[taskId] === true;
   };
 
-  const scrollToTask = async task => {
+  const scrollToTask = async (task: IProjectCommand) => {
     // If you click on task directly it should first switch the active project then scroll to task
     if (!isThisActiveProject) {
       changeActiveProject();
@@ -75,7 +76,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const clearJobOutput = taskID => {
+  const clearJobOutput = () => {
     dispatch({
       type: ACTION_TYPES.CLEAR_OUTPUT,
       taskID,
@@ -83,7 +84,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     terminalManager.clearTerminalInRoom(taskID);
   };
 
-  const updateJobProcess = (taskID, jobProcess) => {
+  const updateJobProcess = (jobProcess: { pid: number }) => {
     dispatch({
       taskID,
       type: ACTION_TYPES.UPDATE_JOB_PROCESS,
@@ -92,7 +93,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
   };
 
   const startJob = () => {
-    clearJobOutput(taskID);
+    clearJobOutput();
     const shell = command.shell || activeProject.shell || config.shell || "";
     subscribeToTaskSocket(taskID, command, projectPath, shell);
     updateTask(project._id, command._id, {
@@ -105,27 +106,27 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     const process = getJobData(jobState, taskID).process;
     const { pid } = process;
     unsubscribeFromTaskSocket(taskID, pid);
-    updateJobProcess(taskID, {
+    updateJobProcess({
       pid: -1,
     });
   };
 
-  const restartJob = taskID => {
+  const restartJob = () => {
     const shell = command.shell || activeProject.shell || config.shell || "";
     const process = getJobData(jobState, taskID).process;
     const { pid } = process;
     restartTask(taskID, pid, command, projectPath, shell);
-    updateJobProcess(taskID, {
+    updateJobProcess({
       pid: -1,
     });
-    clearJobOutput(taskID);
+    clearJobOutput();
     updateTask(projectId, command._id, {
       ...command,
       lastExecutedAt: new Date(),
     });
   };
 
-  const startTask = e => {
+  const startTask = () => {
     try {
       startJob();
     } catch (error) {
@@ -133,7 +134,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const stopTask = e => {
+  const stopTask = () => {
     try {
       stopJob();
     } catch (error) {
@@ -141,9 +142,9 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     }
   };
 
-  const restart = e => {
+  const restart = () => {
     try {
-      restartJob(taskID);
+      restartJob();
     } catch (error) {
       console.log(`restart error: `, error);
     }
@@ -178,7 +179,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
             }}
             className="task-action-button-container"
             ref={actionButtonContainerRef}
-            /*eslint-disable*/
+            /*eslint-disable */
           >
             {isTaskRunning(command._id) ? (
               // Using anchor tag instead of Button to avoid blueprintjs warning about nested buttons
@@ -186,6 +187,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
               <React.Fragment>
                 <a
                   type="button"
+                  role="button"
                   className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-refresh"
                   title={`Restart '${command.name}' task`}
                   onClick={restart}
@@ -197,6 +199,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
                 </a>
                 <a
                   type="button"
+                  role="button"
                   className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
                   title={`Stop '${command.name}' task`}
                   onClick={stopTask}
@@ -206,6 +209,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
               </React.Fragment>
             ) : (
               <a
+                role="button"
                 type="button"
                 className="bp3-button bp3-minimal bp3-intent-success bp3-icon-play"
                 title={`Start '${command.name}' task`}

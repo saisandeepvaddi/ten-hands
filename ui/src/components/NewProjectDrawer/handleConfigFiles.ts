@@ -103,10 +103,14 @@ const getProjectData = (file: ITenHandsFile): IProject | null => {
   return null;
 };
 
-export default (file: ITenHandsFile): IProject | null => {
+const extractProjectDataFromConfigFile = (
+  file: ITenHandsFile
+): IProject | null => {
   if (file.data !== null) {
     const project = getProjectData(file);
     return project;
   }
   return null;
 };
+
+export default extractProjectDataFromConfigFile;

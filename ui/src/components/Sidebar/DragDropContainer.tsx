@@ -15,7 +15,7 @@ interface IDragDropContainerProps {
 }
 
 const Container = styled.div`
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? Colors.DARK_GRAY2 : Colors.LIGHT_GRAY2};
   height: 100%;
   display: flex;
@@ -30,7 +30,7 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
   const { projects, addProject } = useProjects();
   const { theme } = useTheme();
 
-  const handleProjectFileUpload = async file => {
+  const handleProjectFileUpload = async (file) => {
     try {
       if (hasProjectWithSameName(projects, file.name)) {
         toaster.error(
@@ -47,8 +47,8 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   const onDrop = useCallback(
-    acceptedFiles => {
-      const upload = async files => {
+    (acceptedFiles) => {
+      const upload = async (files) => {
         // Do something with the files
         for (const file of files) {
           try {

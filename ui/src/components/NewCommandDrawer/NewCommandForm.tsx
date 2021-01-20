@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { isValidPath } from "../../utils/node";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { getYesterday } from "../../utils/general";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const initialCommand: IProjectCommand = {
   _id: "",
@@ -29,7 +30,8 @@ interface INewProjectFormProps {
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
   ({ setDrawerOpen }) => {
     const { activeProject, addTask } = useProjects();
-    const { config } = useConfig();
+    // const { config } = useConfig();
+    const config = useRecoilValue(configAtom);
 
     const [errors, setErrors] = useState<any>({
       path: "",
@@ -70,7 +72,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
           return;
         }
         actions.setSubmitting(true);
-        await addTask(activeProject._id!, newCommand);
+        await addTask(activeProject._id, newCommand);
         actions.setSubmitting(false);
         setDrawerOpen(false);
       } catch (error) {
@@ -98,6 +100,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
                   type="text"
                   onChange={props.handleChange}
                   value={props.values.name}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                 />
               </FormGroup>
@@ -151,8 +154,8 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
                     errors.shell
                   ) : (
                     <span>
-                      Absolute path to the shell. Overrides project's shell or
-                      global shell.
+                      Absolute path to the shell. Overrides project&apos;s shell
+                      or global shell.
                     </span>
                   )
                 }

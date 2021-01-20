@@ -14,7 +14,9 @@
     "start:cli": "./node_modules/.bin/gulp startCLI",
     "bump-version:major": "./node_modules/.bin/gulp updateMajorVersion",
     "bump-version:minor": "./node_modules/.bin/gulp updateMinorVersion",
-    "bump-version:patch": "./node_modules/.bin/gulp updatePatchVersion"
+    "bump-version:patch": "./node_modules/.bin/gulp updatePatchVersion",
+    "lint": "./node_modules/.bin/eslint . --ext .ts,.tsx",
+    "lint:fix": "./node_modules/.bin/eslint . --ext .ts,.tsx --fix"
   },
   "tenHands": {
     "path": "D:\\Programming\\ten-hands"
@@ -38,9 +40,21 @@
   },
   "homepage": "https://github.com/saisandeepvaddi/ten-hands#readme",
   "devDependencies": {
+    "@saisandeepvaddi/eslint-config-typescript": "^1.1.5",
+    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.14.0",
     "del": "^4.1.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "gulp": "^4.0.2",
     "gulp-execa": "^0.5.5",
+    "prettier": "^2.2.1",
     "through2": "^3.0.1"
   }
 }

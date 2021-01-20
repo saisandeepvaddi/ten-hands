@@ -43,11 +43,11 @@ const ProjectMenu: React.FC<IProjectMenuProps> = ({
           intent="danger"
           onClick={() => setDeleteAlertOpen(true)}
           title={
-            projectsRunningTaskCount[activeProject._id!] > 0
+            projectsRunningTaskCount[activeProject._id] > 0
               ? "Cannot delete project while tasks are running."
               : undefined
           }
-          disabled={projectsRunningTaskCount[activeProject._id!] > 0}
+          disabled={projectsRunningTaskCount[activeProject._id] > 0}
         />
       </Menu>
     </React.Fragment>

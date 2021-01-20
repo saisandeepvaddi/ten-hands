@@ -39,7 +39,7 @@ class Job {
 
       console.log("execPath:", execPath);
       const taskID = this.taskID;
-      let jobOptions: any = {
+      const jobOptions: any = {
         cwd: execPath || process.cwd(),
         maxBuffer: 100 * 1024 * 1024,
       };
@@ -98,6 +98,7 @@ class Job {
 export class JobManager {
   public static _instance: JobManager;
   socketManager: SocketManager;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   public bindSocketManager(socketManager: SocketManager) {

@@ -1,7 +1,7 @@
-let isQuitting: boolean = false;
+let isQuitting = false;
 
-export function setIsAppQuitting(isAppQuitting: boolean) {
-  isQuitting = isAppQuitting;
+export function setIsAppQuitting(quitting: boolean) {
+  isQuitting = quitting;
 }
 
 export function isAppQuitting(): boolean {

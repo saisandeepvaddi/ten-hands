@@ -12,16 +12,16 @@ const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = Re
     const { reorderTasks } = useProjects();
     const [commands, setCommands] = React.useState(activeProject.commands);
 
-    const saveNewCommandsOrder = (commands: IProjectCommand[]) => {
-      const save = async (commands: IProjectCommand[]) => {
+    const saveNewCommandsOrder = (reorderedCommands: IProjectCommand[]) => {
+      const save = async (commandsWithNewOrder: IProjectCommand[]) => {
         try {
           console.info("Saving new commands order");
-          reorderTasks(activeProject._id!, commands, "custom");
+          reorderTasks(activeProject._id, commandsWithNewOrder, "custom");
         } catch (error) {
           console.log("Error Reordering:", error);
         }
       };
-      save(commands);
+      save(reorderedCommands);
     };
 
     if (commands.length === 0) {
@@ -53,7 +53,7 @@ const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = Re
 
     return (
       <DragDropContext onDragEnd={onDragEnd}>
-        <CommandsOrderList commands={commands} projectId={activeProject._id!} />
+        <CommandsOrderList commands={commands} projectId={activeProject._id} />
       </DragDropContext>
     );
   }

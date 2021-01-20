@@ -1,15 +1,6 @@
-import * as dom from "@testing-library/dom";
 import React from "react";
-import {
-  cleanup,
-  fireEvent,
-  getFakePackageJson,
-  getFakeProjects,
-  render,
-  wait,
-} from "../../utils/test-utils";
+import { render } from "../../utils/test-utils";
 import AppLayout from "../App/AppLayout";
-import * as ajaxCalls from "../shared/API";
 
 // Since AppLayout component is a container for the appLayout, this suite is kind of works like integration.
 describe.only("App basic use cases integration tests using AppLayout Component", () => {

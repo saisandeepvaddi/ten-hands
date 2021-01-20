@@ -45,7 +45,7 @@ const TitleBar = styled.div`
 const PopupLayout = () => {
   const updateProjectsInRecoil = useSetRecoilState(projectsAtom);
 
-  const { data, isLoading, isError, error } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     "projects",
     DataService.getProjects,
     {
@@ -58,7 +58,7 @@ const PopupLayout = () => {
       return;
     }
     updateProjectsInRecoil(data);
-  }, [data, isError, isLoading]);
+  }, [data, isError, isLoading, updateProjectsInRecoil]);
 
   if (isError) {
     return (
@@ -94,7 +94,11 @@ const PopupLayout = () => {
     <React.Fragment>
       <TitleBar>
         <span style={{ display: "flex", alignItems: "center" }}>
-          <img src={TenHandsLogo} style={{ height: 20, paddingRight: 10 }} />
+          <img
+            src={TenHandsLogo}
+            style={{ height: 20, paddingRight: 10 }}
+            alt="Ten Hands Logo"
+          />
           Ten Hands
         </span>
         <span title={"Work in progress"}>

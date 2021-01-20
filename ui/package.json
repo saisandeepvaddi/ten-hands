@@ -6,8 +6,8 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start:electron": "cross-env PORT=3010 BROWSER='none' react-app-rewired start",
-    "start:browser": "react-scripts start",
+    "start:electron": "cross-env PORT=3010 SKIP_PREFLIGHT_CHECK=true BROWSER='none' react-app-rewired start",
+    "start:browser": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "test": "react-scripts test",
     "build:electron": "react-app-rewired build",
     "build:browser": "react-scripts build",
@@ -23,9 +23,6 @@
     "name": "Sai Sandeep Vaddi",
     "email": "saisandeepvaddi@gmail.com",
     "url": "https://saisandeepvaddi.com"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -57,7 +54,7 @@
     "react-resizable": "^1.11.0",
     "react-scripts": "^3.3.1",
     "react-spaces": "^0.1.26",
-    "recoil": "^0.0.10",
+    "recoil": "^0.1.2",
     "socket.io-client": "^3.0.4",
     "styled-components": "^5.2.1",
     "uuid": "^3.4.0",
@@ -69,7 +66,6 @@
   "devDependencies": {
     "@blueprintjs/tslint-config": "^2.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
-    "@saisandeepvaddi/eslint-config-typescript": "^1.0.4",
     "@testing-library/dom": "^7.18.1",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
@@ -81,7 +77,6 @@
     "@types/styled-components": "^5.1.5",
     "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
-    "eslint": "^7.7.0",
     "jest-axe": "^3.4.0",
     "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.5",

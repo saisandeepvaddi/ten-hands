@@ -7,19 +7,20 @@ import Sidebar from "../Sidebar";
 import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
-import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
 import { captureException } from "@sentry/react";
 import { setItem } from "../../utils/storage";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { siderWidthAtom } from "../shared/state/layout";
 import debounce from "lodash/debounce";
+import { configAtom } from "../shared/state/atoms";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 
 const AppLayout = React.memo(() => {
   const { theme } = useTheme();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
   const statusbarHeight = config?.showStatusBar ? "30px" : "0px";
@@ -32,13 +33,15 @@ const AppLayout = React.memo(() => {
       captureException(error);
       console.error(`Error at starting socket`, error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateSiderWidthAtom = React.useCallback(
-    debounce(newSize => {
+    debounce((newSize) => {
       setSiderWidth(newSize);
     }, 200),
-    []
+    [setSiderWidth]
   );
 
   if (!isSocketInitialized || !config) {
@@ -60,7 +63,7 @@ const AppLayout = React.memo(() => {
             size={siderWidth ?? 300}
             minimumSize={100}
             maximumSize={600}
-            onResizeEnd={newSize => {
+            onResizeEnd={(newSize) => {
               // Save siderWidth in global so that we can use to show small/large icons in siderbar
               updateSiderWidthAtom(newSize);
               setItem("sider-width", newSize);
