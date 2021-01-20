@@ -4,15 +4,6 @@ type TaskViewStyle = "tabs" | "rows";
 
 type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
 
-// interface IConfig {
-//   port: string | number;
-//   enableTerminalTheme: boolean;
-//   showStatusBar: boolean;
-//   taskViewStyle: TaskViewStyle;
-//   shell: string;
-//   terminalRenderer?: "canvas" | "webgl";
-//   sendErrorReports?: boolean;
-// }
 interface IConfig {
   port: string | number;
   enableTerminalTheme?: boolean;

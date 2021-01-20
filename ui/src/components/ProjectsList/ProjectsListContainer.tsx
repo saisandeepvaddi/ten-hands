@@ -40,19 +40,25 @@ const ProjectsListContainer: React.FC = () => {
 
   const [projectTaskListOpenMap, setProjectTaskListOpenMap] = React.useState<{
     [K: string]: boolean;
-  }>({});
+  }>(() => {
+    const initProjectTaskListOpenMap = {};
+    originalProjects.forEach((project) => {
+      initProjectTaskListOpenMap[project._id] = false;
+    });
+
+    return initProjectTaskListOpenMap;
+  });
 
   const [searchbarOpen, setSearchbarOpen] = React.useState<boolean>(false);
-  /* tslint:disable-next-line */
+
   /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
-  const [projects, setProjects] = React.useState<any>([]);
+  const [projects, setProjects] = React.useState<any>(originalProjects ?? []);
   const [
     activeProjectIndexBeforeDrag,
     setActiveProjectIndexBeforeDrag,
   ] = React.useState<number>(0);
 
-  // const { config } = useConfig();
   const config = useRecoilValue(configAtom);
 
   const expandOrCollapseAllProjects = React.useCallback(
@@ -66,20 +72,6 @@ const ProjectsListContainer: React.FC = () => {
     },
     [originalProjects]
   );
-
-  React.useEffect(() => {
-    if (!originalProjects) {
-      return;
-    }
-
-    setProjects(originalProjects);
-
-    // expandOrCollapseAllProjects(false);
-  }, [originalProjects, expandOrCollapseAllProjects]);
-
-  React.useEffect(() => {
-    expandOrCollapseAllProjects(false);
-  }, [expandOrCollapseAllProjects]);
 
   const updateProjectTaskListOpen = React.useCallback(
     (projectId, shouldOpen) => {

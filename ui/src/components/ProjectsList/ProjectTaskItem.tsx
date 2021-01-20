@@ -179,7 +179,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
             }}
             className="task-action-button-container"
             ref={actionButtonContainerRef}
-            /*eslint-disable*/
+            /*eslint-disable */
           >
             {isTaskRunning(command._id) ? (
               // Using anchor tag instead of Button to avoid blueprintjs warning about nested buttons
@@ -187,6 +187,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
               <React.Fragment>
                 <a
                   type="button"
+                  role="button"
                   className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-refresh"
                   title={`Restart '${command.name}' task`}
                   onClick={restart}
@@ -198,6 +199,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
                 </a>
                 <a
                   type="button"
+                  role="button"
                   className="bp3-button bp3-minimal bp3-intent-danger bp3-icon-stop"
                   title={`Stop '${command.name}' task`}
                   onClick={stopTask}
@@ -207,6 +209,7 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
               </React.Fragment>
             ) : (
               <a
+                role="button"
                 type="button"
                 className="bp3-button bp3-minimal bp3-intent-success bp3-icon-play"
                 title={`Start '${command.name}' task`}
