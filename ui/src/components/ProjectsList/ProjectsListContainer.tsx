@@ -16,6 +16,8 @@ import { Button, Icon } from "@blueprintjs/core";
 import Search from "../Search";
 import { captureException } from "@sentry/react";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const ListContainer = styled.div`
   height: 100%;
@@ -53,7 +55,8 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     setActiveProjectIndexBeforeDrag,
   ] = React.useState<number>(0);
 
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
 
   const expandOrCollapseAllProjects = React.useCallback(
     (collapse = false) => {

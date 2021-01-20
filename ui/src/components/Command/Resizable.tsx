@@ -19,6 +19,8 @@ function Resizable({ children, onResize, width, height }) {
     height.set(h);
   }, []);
 
+  // return <div>{children}</div>;
+
   return (
     <div>
       <motion.div
@@ -27,7 +29,6 @@ function Resizable({ children, onResize, width, height }) {
           width,
           cursor: isDragging ? "row-resize" : "",
         }}
-        layout
       >
         {children}
       </motion.div>

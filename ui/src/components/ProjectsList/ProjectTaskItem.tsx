@@ -9,6 +9,7 @@ import JobTerminalManager from "../shared/JobTerminalManager";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useRecoilValue } from "recoil";
 import { siderWidthAtom } from "../shared/state/layout";
+import { configAtom } from "../shared/state/atoms";
 
 const TaskContainer = styled.div`
   display: flex;
@@ -51,7 +52,8 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
     unsubscribeFromTaskSocket,
     restartTask,
   } = useSockets();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
   const siderWidth = useRecoilValue(siderWidthAtom);
 
   const isThisActiveProject = activeProject._id === project._id;

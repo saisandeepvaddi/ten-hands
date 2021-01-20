@@ -3,6 +3,8 @@ import EditProjectForm from "./EditProjectForm";
 import { validateEditProjectForm } from "./project-form-validators";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useConfig } from "../shared/stores/ConfigStore";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 interface IEditProjectFormContainerProps {
   activeProject: IProject;
@@ -14,7 +16,8 @@ const EditProjectFormContainer: React.FC<IEditProjectFormContainerProps> = ({
   setDrawerOpen,
 }) => {
   const { projects, updateProject } = useProjects();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
 
   const initialValues: IProject = {
     ...activeProject,

@@ -11,6 +11,8 @@ import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
 import ProjectFileUpload from "./ProjectFileUpload";
 import { v4 as uuidv4 } from "uuid";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const emptyProject: IProject = {
   _id: uuidv4(),
@@ -33,12 +35,13 @@ interface INewProjectFormProps {
 
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
   ({ setDrawerOpen }) => {
-    const [initialProject, setInitialProject] = useState<IProject>(
-      emptyProject
-    );
+    // const [initialProject, setInitialProject] = useState<IProject>(
+    //   emptyProject
+    // );
     const [configFileName, setConfigFileName] = useState("");
     const { projects, addProject } = useProjects();
-    const { config } = useConfig();
+    // const { config } = useConfig();
+    const config = useRecoilValue(configAtom);
 
     const [errors, setErrors] = useState<any>({
       name: "",
@@ -186,7 +189,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
     return (
       <Container>
         <Formik
-          initialValues={initialProject}
+          initialValues={emptyProject}
           onSubmit={handleSubmit}
           render={({
             handleSubmit,

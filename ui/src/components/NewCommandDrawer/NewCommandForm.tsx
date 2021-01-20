@@ -7,6 +7,8 @@ import { isValidPath } from "../../utils/node";
 import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { getYesterday } from "../../utils/general";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const initialCommand: IProjectCommand = {
   _id: "",
@@ -29,7 +31,8 @@ interface INewProjectFormProps {
 const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
   ({ setDrawerOpen }) => {
     const { activeProject, addTask } = useProjects();
-    const { config } = useConfig();
+    // const { config } = useConfig();
+    const config = useRecoilValue(configAtom);
 
     const [errors, setErrors] = useState<any>({
       path: "",

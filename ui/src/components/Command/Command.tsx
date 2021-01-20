@@ -11,6 +11,8 @@ import { useConfig } from "../shared/stores/ConfigStore";
 import { throttle } from "lodash";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { useMotionValue } from "framer-motion";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -70,7 +72,8 @@ const Command: React.FC<ICommandProps> = React.memo(
     const terminalManager = JobTerminalManager.getInstance();
     const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
     const { activeProject, deleteTask, updateTask } = useProjects();
-    const { config } = useConfig();
+    // const { config } = useConfig();
+    const config = useRecoilValue(configAtom);
     // const [containerWidth, setContainerWidth] = useState<number>(0);
     const containerWidth = useMotionValue(0);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = React.useState<boolean>(

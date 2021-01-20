@@ -4,6 +4,8 @@ import { io } from "socket.io-client";
 import { useConfig } from "./ConfigStore";
 import { useJobs } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../state/atoms";
 
 // see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
 const options: any = { enabled: true, level: 3 };
@@ -41,11 +43,12 @@ export const SocketsContext = React.createContext<
 function SocketsProvider(props: ISocketProviderProps) {
   const [isSocketInitialized, setSocketInitialized] = React.useState(false);
   const { dispatch, ACTION_TYPES } = useJobs();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
   const terminalManager = JobTerminalManager.getInstance();
   const _socket = React.useRef<any>();
 
-  const updateJob = (taskID, stdout, isRunning) => {
+  const updateJob = (taskID, stdout) => {
     terminalManager.updateOutputInRoom(taskID, stdout);
   };
 
@@ -62,6 +65,7 @@ function SocketsProvider(props: ISocketProviderProps) {
     const socketURL = `http://localhost:${config.port}/desktop`;
     _socket.current = io(socketURL, {
       withCredentials: true,
+      reconnectionAttempts: 2,
     });
 
     if (isSocketInitialized) {

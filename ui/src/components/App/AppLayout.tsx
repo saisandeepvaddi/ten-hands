@@ -11,15 +11,17 @@ import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
 import { captureException } from "@sentry/react";
 import { setItem } from "../../utils/storage";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { siderWidthAtom } from "../shared/state/layout";
 import debounce from "lodash/debounce";
+import { configAtom } from "../shared/state/atoms";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 
 const AppLayout = React.memo(() => {
   const { theme } = useTheme();
-  const { config } = useConfig();
+  // const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
   const { isSocketInitialized, initializeSocket } = useSockets();
   const topbarHeight = isRunningInElectron() && isWindows ? "30px" : "50px";
   const statusbarHeight = config?.showStatusBar ? "30px" : "0px";

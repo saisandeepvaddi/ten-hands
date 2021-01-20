@@ -21,6 +21,8 @@ import ProjectMenu from "./ProjectMenu";
 import Sorter from "./Sorter";
 import EditProjectDrawer from "../ProjectForm/EditProjectDrawer";
 import { useQuery } from "react-query";
+import { configAtom } from "../shared/state/atoms";
+import { useRecoilValue } from "recoil";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -52,7 +54,8 @@ const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
       setIsProjectDrawerOpen,
     ] = React.useState<boolean>(false);
 
-    const { config } = useConfig();
+    // const { config } = useConfig();
+    const config = useRecoilValue(configAtom);
 
     const gitInfo = useQuery(["gitBranch", config, activeProject], () =>
       getGitRepo(config, activeProject.path)

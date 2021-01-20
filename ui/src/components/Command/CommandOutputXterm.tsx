@@ -5,7 +5,9 @@ import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";
 import Resizable from "./Resizable";
-import { motion, MotionValue, useMotionValue } from "framer-motion";
+import { MotionValue, useMotionValue } from "framer-motion";
+import { configAtom } from "../shared/state/atoms";
+import { useRecoilValue } from "recoil";
 
 interface ICommandProps {
   taskID: string;
@@ -23,7 +25,9 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
     // const [height, setHeight] = useState<number>(400);
     // const [width, setWidth] = useState<number>(800);
     const height = useMotionValue(400);
-    const { config } = useConfig();
+    // const { config } = useConfig();
+
+    const config = useRecoilValue(configAtom);
 
     const setTheme = () => {
       if (terminal && terminal.current) {
@@ -106,8 +110,7 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
 
     return (
       <Resizable onResize={handleResize} width={containerWidth} height={height}>
-        <motion.div
-          layout
+        <div
           ref={elRef}
           style={{
             marginTop: 10,
