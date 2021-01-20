@@ -58,7 +58,7 @@ const Sorter: React.FC<ISorterProps> = React.memo(
                 : -1
             );
           }
-          reorderTasks(activeProject._id!, tasksToSort, order);
+          reorderTasks(activeProject._id, tasksToSort, order);
         }, 0);
       },
       [activeProject, reorderTasks]
@@ -72,6 +72,7 @@ const Sorter: React.FC<ISorterProps> = React.memo(
         return;
       }
       sortTasksBy(tasksOrder);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasksOrder]);
 
     React.useEffect(() => {
@@ -85,6 +86,7 @@ const Sorter: React.FC<ISorterProps> = React.memo(
           setTasksOrder(activeProject.taskSortOrder);
         }
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeProject]);
 
     return (

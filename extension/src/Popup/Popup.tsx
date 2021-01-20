@@ -13,6 +13,7 @@ const Popup = () => {
     } catch (error) {
       console.error("error: ", error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!isSocketInitialized || !config) {

@@ -129,7 +129,7 @@ class Database {
       [id: string]: IProject;
     } = {};
 
-    projects.map((project) => {
+    projects.forEach((project) => {
       projectsMap[project._id] = project;
     });
 
@@ -281,6 +281,7 @@ class Database {
     commandId: string,
     command: IProjectCommand
   ): IProject {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...otherCommandProps } = command;
     this.db
       .get("projects")

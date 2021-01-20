@@ -1,8 +1,7 @@
 import chalk from "chalk";
 import React from "react";
 import { io } from "socket.io-client";
-import { useConfig } from "./ConfigStore";
-import { useJobs } from "./JobStore";
+import { useJobs, ACTION_TYPES } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
 import { useRecoilValue } from "recoil";
 import { configAtom } from "../state/atoms";
@@ -42,7 +41,7 @@ export const SocketsContext = React.createContext<
 
 function SocketsProvider(props: ISocketProviderProps) {
   const [isSocketInitialized, setSocketInitialized] = React.useState(false);
-  const { dispatch, ACTION_TYPES } = useJobs();
+  const { dispatch } = useJobs();
   // const { config } = useConfig();
   const config = useRecoilValue(configAtom);
   const terminalManager = JobTerminalManager.getInstance();
@@ -83,26 +82,25 @@ function SocketsProvider(props: ISocketProviderProps) {
       if (message.data.pid) {
         updateJob(
           taskID,
-          `--Process started with PID: ${message.data.pid}--\n\n`,
-          true
+          `--Process started with PID: ${message.data.pid}--\n\n`
         );
       }
     });
     _socket.current.on(`job_output`, (message) => {
       const taskID = message.taskID;
-      updateJob(taskID, message.data, true);
+      updateJob(taskID, message.data);
     });
 
     _socket.current.on(`job_error`, (message) => {
       const taskID = message.taskID;
       console.info(`Process error in taskID: ${taskID}`);
-      updateJob(taskID, message.data, true);
+      updateJob(taskID, message.data);
     });
     _socket.current.on(`job_close`, (message) => {
       const taskID = message.taskID;
       console.info(`Process close in taskID: ${taskID}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
-      updateJob(taskID, forcedChalk.bold(message.data + "\n"), false);
+      updateJob(taskID, forcedChalk.bold(message.data + "\n"));
       updateJobProcess(taskID, {
         pid: -1,
       });
@@ -113,7 +111,7 @@ function SocketsProvider(props: ISocketProviderProps) {
 
       console.info(`Process exit in taskID: ${taskID}`);
       // Add extra empty line. Otherwise, the terminal clear will retain last line.
-      updateJob(taskID, forcedChalk.bold(message.data + "\n"), false);
+      updateJob(taskID, forcedChalk.bold(message.data + "\n"));
       updateJobProcess(taskID, {
         pid: -1,
       });
@@ -130,8 +128,7 @@ function SocketsProvider(props: ISocketProviderProps) {
         taskID,
         forcedChalk.bold.redBright(
           `process with id ${message.data} killed by user.\n`
-        ),
-        false
+        )
       );
       updateJobProcess(taskID, {
         pid: -1,

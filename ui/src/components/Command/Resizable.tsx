@@ -9,15 +9,19 @@ function Resizable({ children, onResize, width, height }) {
   const onResizeFn = React.useRef<any>(onResize);
 
   useEffect(() => {
-    height.onChange(() => {
+    return height.onChange(() => {
       onResizeFn.current?.();
     });
-  }, []);
-  const handleDrag = React.useCallback((event, info) => {
-    const newHeight = height.get() + info.delta.y;
-    const h = clamp(newHeight, 200, 900);
-    height.set(h);
-  }, []);
+  }, [height]);
+
+  const handleDrag = React.useCallback(
+    (event, info) => {
+      const newHeight = height.get() + info.delta.y;
+      const h = clamp(newHeight, 200, 900);
+      height.set(h);
+    },
+    [height]
+  );
 
   // return <div>{children}</div>;
 

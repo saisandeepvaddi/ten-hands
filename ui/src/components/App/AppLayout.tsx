@@ -7,7 +7,6 @@ import Sidebar from "../Sidebar";
 import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
-import { useConfig } from "../shared/stores/ConfigStore";
 import * as Space from "react-spaces";
 import { captureException } from "@sentry/react";
 import { setItem } from "../../utils/storage";
@@ -34,13 +33,15 @@ const AppLayout = React.memo(() => {
       captureException(error);
       console.error(`Error at starting socket`, error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateSiderWidthAtom = React.useCallback(
     debounce((newSize) => {
       setSiderWidth(newSize);
     }, 200),
-    []
+    [setSiderWidth]
   );
 
   if (!isSocketInitialized || !config) {

@@ -9,9 +9,9 @@ const startProcess = (script) => {
       process.exit(2);
     }
 
-    pm2.list((err, list) => {
-      if (err) {
-        throw err;
+    pm2.list((error, list) => {
+      if (error) {
+        throw error;
       }
 
       const existingProcess = list.find(
@@ -27,11 +27,11 @@ const startProcess = (script) => {
             max_restarts: 1,
             instances: 1,
           },
-          (err, apps) => {
+          (startError, apps) => {
             pm2.disconnect();
 
-            if (err) {
-              throw err;
+            if (startError) {
+              throw startError;
             }
             const name = apps[0]?.pm2_env?.name;
             const pid = apps[0]?.pid;

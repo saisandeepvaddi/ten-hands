@@ -76,7 +76,7 @@ export const getDraggedFiles = (dragContainer) => {
     dragContainer.addEventListener("drop", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      const files = Array.prototype.slice.call(e.dataTransfer!.files);
+      const files = Array.prototype.slice.call(e.dataTransfer?.files);
       resolve(files);
     });
   });

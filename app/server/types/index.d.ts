@@ -1,10 +1,10 @@
 interface IProjectCommand {
   _id: string;
+  name: string;
+  cmd: string;
   execDir: string;
   lastExecutedAt: Date;
-  shell: string;
-
-  [name: string]: any;
+  shell?: string;
 }
 
 type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";

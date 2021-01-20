@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { isRunningInElectron } from "../../utils/electron";
 import { isValidPath } from "../../utils/node";
 import { hasProjectWithSameName } from "../../utils/projects";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
@@ -152,7 +151,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
     }, []);
 
     // const { fileName, values, handleChange, onProjectFileChange } = props;
-    const handleSubmit = async (values, actions) => {
+    const submitProject = async (values, actions) => {
       // console.info("values:", values);
       const nameError = validateProjectName(values.name);
       const pathError = !values.path
@@ -190,7 +189,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       <Container>
         <Formik
           initialValues={emptyProject}
-          onSubmit={handleSubmit}
+          onSubmit={submitProject}
           render={({
             handleSubmit,
             handleChange,

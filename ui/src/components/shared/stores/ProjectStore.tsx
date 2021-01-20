@@ -11,9 +11,8 @@ import {
   updateProjectInDb,
   updateRunningTaskCountInDB,
 } from "../API";
-import { useConfig } from "./ConfigStore";
 import { useMountedState } from "../hooks";
-import { useJobs } from "./JobStore";
+import { useJobs, ACTION_TYPES } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
 import { useSockets } from "./SocketStore";
 import { isRunningInElectron } from "../../../utils/electron";
@@ -64,16 +63,16 @@ const getRunningTasksCountForProjects = (
   const runningTasksPerProject = {};
   let totalRunningTaskCount = 0;
   projects.forEach((project: IProject) => {
-    const { commands, _id } = project;
+    const { commands, _id: projectID } = project;
     let runningCount = 0;
     commands.forEach((command: IProjectCommand) => {
-      const { _id } = command;
-      if (runningTasks[_id]) {
+      const { _id: commandID } = command;
+      if (runningTasks[commandID]) {
         runningCount++;
         totalRunningTaskCount++;
       }
     });
-    runningTasksPerProject[_id] = runningCount;
+    runningTasksPerProject[projectID] = runningCount;
   });
 
   return { runningTasksPerProject, totalRunningTaskCount };
@@ -84,23 +83,20 @@ export const ProjectContext = React.createContext<
 >(undefined);
 
 function ProjectsProvider(props: IProjectsProviderProps) {
-  const initialProject: IProject = {
-    _id: "",
-    name: "",
-    type: "",
-    path: "",
-    shell: "",
-    commands: [],
-  };
+  const initialProject = React.useMemo<IProject>(
+    () => ({
+      _id: "",
+      name: "",
+      type: "",
+      path: "",
+      shell: "",
+      commands: [],
+    }),
+    []
+  );
 
   const isMounted = useMountedState();
-  const {
-    runningTasks,
-    state: jobState,
-    dispatch,
-    ACTION_TYPES,
-    isTaskRunning,
-  } = useJobs();
+  const { runningTasks, state: jobState, dispatch, isTaskRunning } = useJobs();
   const terminalManager = JobTerminalManager.getInstance();
   const { subscribeToTaskSocket, unsubscribeFromTaskSocket } = useSockets();
 
@@ -114,13 +110,16 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     setProjectsRunningTaskCount,
   ] = React.useState<any>({});
 
-  const clearJobOutput = (taskID) => {
-    dispatch({
-      type: ACTION_TYPES.CLEAR_OUTPUT,
-      taskID,
-    });
-    terminalManager.clearTerminalInRoom(taskID);
-  };
+  const clearJobOutput = React.useCallback(
+    (taskID) => {
+      dispatch({
+        type: ACTION_TYPES.CLEAR_OUTPUT,
+        taskID,
+      });
+      terminalManager.clearTerminalInRoom(taskID);
+    },
+    [dispatch, terminalManager]
+  );
 
   const updateJobProcess = React.useCallback(
     (taskID, jobProcess) => {
@@ -130,19 +129,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         process: jobProcess,
       });
     },
-    [dispatch, ACTION_TYPES]
+    [dispatch]
   );
-
-  const startJob = (command: IProjectCommand) => {
-    const taskID = command._id;
-    clearJobOutput(taskID);
-    const shell = command.shell || activeProject.shell || config.shell || "";
-    subscribeToTaskSocket(taskID, command, activeProject.path, shell);
-    updateTask(activeProject._id, taskID, {
-      ...command,
-      lastExecutedAt: new Date(),
-    });
-  };
 
   const stopJob = React.useCallback(
     (command: IProjectCommand) => {
@@ -156,14 +144,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     },
     [jobState, updateJobProcess, unsubscribeFromTaskSocket]
   );
-
-  const startTask = (command: IProjectCommand) => {
-    try {
-      startJob(command);
-    } catch (error) {
-      console.log(`startTask error: `, error);
-    }
-  };
 
   const stopTask = React.useCallback(
     (command: IProjectCommand) => {
@@ -179,34 +159,6 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     totalRunningTaskCount,
     setTotalRunningTaskCount,
   ] = React.useState<number>(0);
-
-  React.useEffect(() => {
-    (async () => {
-      try {
-        await updateRunningTaskCountInDB(config, totalRunningTaskCount);
-        if (isRunningInElectron()) {
-          const { ipcRenderer } = require("electron");
-          ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
-        }
-      } catch (error) {
-        console.log("error updating task count:", error);
-      }
-    })();
-  }, [totalRunningTaskCount]);
-
-  React.useEffect(() => {
-    if (!projects) {
-      return;
-    }
-
-    const {
-      runningTasksPerProject,
-      totalRunningTaskCount,
-    } = getRunningTasksCountForProjects(projects, runningTasks);
-
-    setProjectsRunningTaskCount(runningTasksPerProject);
-    setTotalRunningTaskCount(totalRunningTaskCount);
-  }, [runningTasks, projects]);
 
   const updateProjects = React.useCallback(() => {
     const reloadProjects = async () => {
@@ -242,7 +194,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       }
     };
     reloadProjects();
-  }, [activeProject, config, setActiveProject, isMounted]);
+  }, [config, setProjects, activeProject._id, setActiveProject, isMounted]);
 
   const deleteTask = React.useCallback(
     (projectId, taskId) => {
@@ -270,7 +222,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       deleteTaskFn();
     },
-    [projects, config]
+    [config, projects, setProjects, setActiveProject]
   );
 
   const renameProject = React.useCallback(
@@ -298,7 +250,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       renameProjectFn();
     },
-    [projects, config, isMounted]
+    [config, projects, isMounted, setProjects, setActiveProject]
   );
 
   const updateProject = React.useCallback(
@@ -326,7 +278,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       updateProjectFn();
     },
-    [projects, config, isMounted]
+    [config, projects, isMounted, setProjects, setActiveProject]
   );
 
   const reorderTasks = React.useCallback(
@@ -356,20 +308,20 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       reorderTasksFn();
     },
-    [projects, config]
+    [config, projects, setProjects, setActiveProject]
   );
 
   const addTask = React.useCallback(
     (projectId: string, task: IProjectCommand) => {
-      const addTaskInFn = async (projectId, task) => {
+      const addTaskInFn = async (projectID, newTask) => {
         try {
-          await saveTaskInDb(config, projectId, task);
+          await saveTaskInDb(config, projectID, newTask);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectId
+            (x) => x._id === projectID
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
-            const updatedTasks = [task, ...projectWithThisTask.commands];
+            const updatedTasks = [newTask, ...projectWithThisTask.commands];
             const updatedProject: IProject = {
               ...projectWithThisTask,
               commands: updatedTasks,
@@ -385,21 +337,21 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       addTaskInFn(projectId, task);
     },
-    [projects, config]
+    [config, projects, setProjects, setActiveProject]
   );
 
   const updateTask = React.useCallback(
     (projectId: string, taskId: string, task) => {
-      const updateTaskFn = async (projectId, taskId, task) => {
+      const updateTaskFn = async (projectID, updatingTaskID, updatedTask) => {
         try {
-          await updateTaskInDb(config, projectId, taskId, task);
+          await updateTaskInDb(config, projectID, updatingTaskID, updatedTask);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectId
+            (x) => x._id === projectID
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
             const taskIndex = projectWithThisTask.commands.findIndex(
-              (task) => task._id === taskId
+              (iterTask) => iterTask._id === updatingTaskID
             );
 
             if (taskIndex < 0) {
@@ -408,7 +360,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
             const updatedTasks = [...projectWithThisTask.commands];
 
-            updatedTasks.splice(taskIndex, 1, task);
+            updatedTasks.splice(taskIndex, 1, updatedTask);
 
             const updatedProject: IProject = {
               ...projectWithThisTask,
@@ -427,7 +379,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       updateTaskFn(projectId, taskId, task);
     },
-    [projects, config]
+    [config, projects, setProjects, setActiveProject]
   );
 
   const addProject = React.useCallback(
@@ -447,7 +399,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       addProjectFn();
     },
-    [projects]
+    [config, projects, setActiveProject, setProjects]
   );
 
   const deleteProject = React.useCallback(
@@ -470,17 +422,50 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       deleteProjectFn();
     },
-    [projects, config, initialProject]
+    [config, projects, setProjects, setActiveProject, initialProject]
   );
 
-  const runAllStoppedTasks = () => {
+  const startJob = React.useCallback(
+    (command: IProjectCommand) => {
+      const taskID = command._id;
+      clearJobOutput(taskID);
+      const shell = command.shell || activeProject.shell || config.shell || "";
+      subscribeToTaskSocket(taskID, command, activeProject.path, shell);
+      updateTask(activeProject._id, taskID, {
+        ...command,
+        lastExecutedAt: new Date(),
+      });
+    },
+    [
+      activeProject._id,
+      activeProject.path,
+      activeProject.shell,
+      clearJobOutput,
+      config.shell,
+      subscribeToTaskSocket,
+      updateTask,
+    ]
+  );
+
+  const startTask = React.useCallback(
+    (command: IProjectCommand) => {
+      try {
+        startJob(command);
+      } catch (error) {
+        console.log(`startTask error: `, error);
+      }
+    },
+    [startJob]
+  );
+
+  const runAllStoppedTasks = React.useCallback(() => {
     const commandsInProject = activeProject.commands;
     commandsInProject.forEach((command) => {
       if (!isTaskRunning(command._id)) {
         startTask(command);
       }
     });
-  };
+  }, [activeProject.commands, isTaskRunning, startTask]);
 
   const stopAllRunningTasks = React.useCallback(() => {
     const commandsInProject = activeProject.commands;
@@ -491,12 +476,37 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     });
   }, [activeProject, stopTask, isTaskRunning]);
 
-  /* eslint-disable */
   React.useEffect(() => {
-    async function updateNewProjects() {
-      await updateProjects();
+    (async () => {
+      try {
+        await updateRunningTaskCountInDB(config, totalRunningTaskCount);
+        if (isRunningInElectron()) {
+          const { ipcRenderer } = require("electron");
+          ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
+        }
+      } catch (error) {
+        console.log("error updating task count:", error);
+      }
+    })();
+  }, [config, totalRunningTaskCount]);
+
+  React.useEffect(() => {
+    if (!projects) {
+      return;
     }
-    updateNewProjects();
+
+    const {
+      runningTasksPerProject,
+      totalRunningTaskCount: nextTotalRunningTaskCount,
+    } = getRunningTasksCountForProjects(projects, runningTasks);
+
+    setProjectsRunningTaskCount(runningTasksPerProject);
+    setTotalRunningTaskCount(nextTotalRunningTaskCount);
+  }, [runningTasks, projects]);
+
+  React.useEffect(() => {
+    updateProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const value = React.useMemo(() => {

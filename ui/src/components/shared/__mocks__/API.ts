@@ -1,7 +1,6 @@
-import { existsSync } from "fs";
 import { getFakeProjects } from "../../../utils/test-utils";
 
-export const getProjects = async (config: IConfig): Promise<IProject[]> => {
+export const getProjects = async (_config: IConfig): Promise<IProject[]> => {
   try {
     const projects = getFakeProjects(5);
     return projects;
@@ -12,8 +11,8 @@ export const getProjects = async (config: IConfig): Promise<IProject[]> => {
 };
 
 export const saveProjectInDb = async (
-  config: IConfig,
-  projectData: any
+  _config: IConfig,
+  _projectData: any
 ): Promise<IProject> => {
   try {
     const project = getFakeProjects(1)[0];
@@ -25,8 +24,8 @@ export const saveProjectInDb = async (
 };
 
 export const renameProjectInDb = async (
-  config: IConfig,
-  projectId: string,
+  _config: IConfig,
+  _projectId: string,
   newName: string
 ): Promise<IProject> => {
   try {
@@ -38,7 +37,10 @@ export const renameProjectInDb = async (
   }
 };
 
-export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
+export const deleteProjectInDb = async (
+  _config: IConfig,
+  _projectId: string
+) => {
   try {
     Promise.resolve();
   } catch (error) {
@@ -48,9 +50,9 @@ export const deleteProjectInDb = async (config: IConfig, projectId: string) => {
 };
 
 export const deleteTaskInDb = async (
-  config: IConfig,
-  projectId: string,
-  taskId: string
+  _config: IConfig,
+  _projectId: string,
+  _taskId: string
 ) => {
   try {
     Promise.resolve();
@@ -61,9 +63,9 @@ export const deleteTaskInDb = async (
 };
 
 export const reorderTasksInDb = async (
-  config: IConfig,
-  projectId: string,
-  commands: IProjectCommand[]
+  _config: IConfig,
+  _projectId: string,
+  _commands: IProjectCommand[]
 ) => {
   try {
     Promise.resolve();
@@ -74,9 +76,9 @@ export const reorderTasksInDb = async (
 };
 
 export const saveTaskInDb = async (
-  config: IConfig,
-  activeProjectId: string,
-  newTask: IProjectCommand
+  _config: IConfig,
+  _activeProjectId: string,
+  _newTask: IProjectCommand
 ): Promise<any> => {
   try {
     return getFakeProjects(1)[0];
@@ -87,7 +89,7 @@ export const saveTaskInDb = async (
 };
 
 export const reorderProjectsInDb = async (
-  config: IConfig,
+  _config: IConfig,
   projectIds: string[]
 ) => {
   try {
@@ -98,7 +100,7 @@ export const reorderProjectsInDb = async (
   }
 };
 
-export const checkIfValidPath = async (config: IConfig, path: string) => {
+export const checkIfValidPath = async (_config: IConfig, _path: string) => {
   try {
     return {
       isValid: true,
@@ -109,7 +111,7 @@ export const checkIfValidPath = async (config: IConfig, path: string) => {
   }
 };
 
-export const getGitRepo = async (config: IConfig, path: string) => {
+export const getGitRepo = async (_config: IConfig, _path: string) => {
   try {
     return {
       branch: "fake-branch",

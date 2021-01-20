@@ -98,6 +98,7 @@ class Job {
 export class JobManager {
   public static _instance: JobManager;
   socketManager: SocketManager;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   public bindSocketManager(socketManager: SocketManager) {

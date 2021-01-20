@@ -27,18 +27,21 @@ export const hideWindowToTray = (mainWindow: BrowserWindow) => {
 };
 
 export const loadReactDevTools = () => {
-  const reactDevToolsFolder = join(
-    require("os").homedir(),
-    "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi"
-  );
+  return new Promise((resolve, reject) => {
+    const reactDevToolsFolder = join(
+      require("os").homedir(),
+      "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi"
+    );
 
-  // Read directory instead of hard-coding version number in path because of new React DevTools releases.
-  readdir(reactDevToolsFolder, async (err, files) => {
-    if (err || !files?.[0]) {
-      console.error("Failed to load react-dev-tools");
-      return;
-    }
-    const reactDevToolsPath = join(reactDevToolsFolder, files[0]);
-    await session.defaultSession.loadExtension(reactDevToolsPath);
+    // Read directory instead of hard-coding version number in path because of new React DevTools releases.
+    readdir(reactDevToolsFolder, async (err, files) => {
+      if (err || !files?.[0]) {
+        console.error("Failed to load react-dev-tools");
+        return reject(false);
+      }
+      const reactDevToolsPath = join(reactDevToolsFolder, files[0]);
+      await session.defaultSession.loadExtension(reactDevToolsPath);
+      return resolve(true);
+    });
   });
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { ItemRenderer, ItemListPredicate } from "@blueprintjs/select";
+import { ItemRenderer } from "@blueprintjs/select";
 import { MenuItem } from "@blueprintjs/core";
 import Fuse from "fuse.js";
 import { throttle } from "lodash";
@@ -14,6 +14,7 @@ function highlightText(text: string, query: string) {
   }
   const regexp = new RegExp(words.join("|"), "gi");
   const tokens: React.ReactNode[] = [];
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const match = regexp.exec(text);
     if (!match) {
@@ -39,6 +40,7 @@ function highlightText(text: string, query: string) {
 }
 
 function escapeRegExpChars(text: string) {
+  // eslint-disable-next-line no-useless-escape
   return text?.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
@@ -92,8 +94,7 @@ export const getCommandSelectProps = (commands: ISearchProjectCommand[]) => {
   });
 
   return {
-    itemListPredicate: (query: string, commands: ISearchProjectCommand[]) =>
-      filterCommands(fuse, query),
+    itemListPredicate: (query: string) => filterCommands(fuse, query),
     itemRenderer: renderCommand,
     items: commands,
   };

@@ -2,9 +2,7 @@ import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
 import { isValidPath } from "../../utils/node";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useRecoilValue } from "recoil";
 import { configAtom } from "../shared/state/atoms";
@@ -80,7 +78,7 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
         }
 
         actions.setSubmitting(true);
-        await updateTask(activeProject._id!, command._id, updatedCommand);
+        await updateTask(activeProject._id, command._id, updatedCommand);
         actions.setSubmitting(false);
         setDrawerOpen(false);
       } catch (error) {
@@ -108,6 +106,7 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
                   type="text"
                   onChange={props.handleChange}
                   value={props.values.name}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                 />
               </FormGroup>
@@ -161,7 +160,7 @@ const UpdateCommandForm: React.FC<IUpdateCommandFormProps> = React.memo(
                     errors.shell
                   ) : (
                     <span>
-                      Absolute path to the shell. Overrides project's shell or
+                      Absolute path to the shell. Overrides project shell or
                       global shell.
                     </span>
                   )

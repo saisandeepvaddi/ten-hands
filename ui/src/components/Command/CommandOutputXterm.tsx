@@ -1,6 +1,5 @@
 import throttle from "lodash/throttle";
 import React, { useEffect } from "react";
-import { useConfig } from "../shared/stores/ConfigStore";
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useTheme } from "../shared/stores/ThemeStore";

@@ -82,7 +82,12 @@ function createWindow() {
     mainWindow.loadURL(uiUrl);
 
     if (isDev) {
-      // loadReactDevTools();
+      try {
+        loadReactDevTools();
+      } catch (error) {
+        console.error("error loading react dev tools: ", error);
+      }
+
       mainWindow.webContents.openDevTools();
     }
     mainWindow.on("closed", () => {

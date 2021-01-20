@@ -39,7 +39,7 @@ export const initialState = {};
 export const jobsReducer = (
   state = initialState,
   action: IJobAction
-): object => {
+): Record<any, any> => {
   switch (action.type) {
     case ACTION_TYPES.UPDATE_JOB: {
       const { taskID, stdout, isRunning } = action;
@@ -80,7 +80,7 @@ export const jobsReducer = (
       };
     }
     case ACTION_TYPES.RESTORE_STATE_FROM_STORAGE: {
-      return action.state!;
+      return action.state ?? state;
     }
     default:
       return state;
@@ -88,9 +88,9 @@ export const jobsReducer = (
 };
 
 interface IJobsContextValue {
-  state: object;
+  state: Record<any, any>;
   dispatch: React.Dispatch<IJobAction>;
-  runningTasks: object;
+  runningTasks: Record<string, boolean>;
   isTaskRunning: (taskId: string) => boolean;
 }
 

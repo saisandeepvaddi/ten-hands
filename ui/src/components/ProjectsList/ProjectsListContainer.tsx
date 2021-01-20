@@ -8,7 +8,6 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
@@ -30,9 +29,7 @@ const ListContainer = styled.div`
   }
 `;
 
-interface IProjectsListContainerProps {}
-
-const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
+const ProjectsListContainer: React.FC = () => {
   const {
     projects: originalProjects,
     setProjects: setOriginalProjects,
@@ -60,12 +57,12 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   const expandOrCollapseAllProjects = React.useCallback(
     (collapse = false) => {
-      const projectTaskListOpenMap = {};
-      originalProjects.map((project) => {
-        projectTaskListOpenMap[project._id!] = collapse;
+      const nextProjectTaskListOpenMap = {};
+      originalProjects.forEach((project) => {
+        nextProjectTaskListOpenMap[project._id] = collapse;
       });
 
-      setProjectTaskListOpenMap(projectTaskListOpenMap);
+      setProjectTaskListOpenMap(nextProjectTaskListOpenMap);
     },
     [originalProjects]
   );
@@ -82,7 +79,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   React.useEffect(() => {
     expandOrCollapseAllProjects(false);
-  }, []);
+  }, [expandOrCollapseAllProjects]);
 
   const updateProjectTaskListOpen = React.useCallback(
     (projectId, shouldOpen) => {
@@ -140,19 +137,19 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   }, [activeProject, projects]);
 
   const saveNewProjectsOrder = React.useCallback(
-    (projects: IProject[]) => {
-      const save = async (projects: IProject[]) => {
+    (reorderedProjects: IProject[]) => {
+      const save = async (projectsWithNewOrder: IProject[]) => {
         try {
           console.info("Saving new projects order");
-          const projectIds = projects.map((project) => project._id!);
+          const projectIds = projectsWithNewOrder.map((project) => project._id);
           await reorderProjectsInDb(config, projectIds);
-          setOriginalProjects(projects);
+          setOriginalProjects(projectsWithNewOrder);
         } catch (error) {
           captureException(error);
           console.log("Error Reordering:", error);
         }
       };
-      save(projects);
+      save(reorderedProjects);
     },
     [projects, config]
   );
@@ -240,7 +237,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                 {projects.map((project: IProject, index: number) => {
                   return (
                     <Draggable
-                      draggableId={project._id!}
+                      draggableId={project._id}
                       index={index}
                       key={project._id}
                     >
@@ -251,7 +248,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                           changeActiveProject={changeActiveProject}
                           itemIndex={index}
                           projectRunningTaskCount={
-                            projectsRunningTaskCount[project._id!]
+                            projectsRunningTaskCount[project._id]
                           }
                           projectTaskListOpenMap={projectTaskListOpenMap}
                           updateProjectTaskListOpen={updateProjectTaskListOpen}

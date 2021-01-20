@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from "recoil";
+import { atom, selector } from "recoil";
 import { IProject } from "../../types";
 
 export const projectsAtom = atom<IProject[]>({
@@ -19,9 +19,9 @@ export const activeProjectAtom = selector<IProject>({
     if (!activeProjectID && allProjects.length > 0) {
       return allProjects[0];
     }
-    const project = allProjects.find(
+    const activeProject = allProjects.find(
       (project) => project._id === activeProjectID
     );
-    return project;
+    return activeProject;
   },
 });

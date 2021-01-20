@@ -2,15 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { useProjects } from "../shared/stores/ProjectStore";
-import {
-  Classes,
-  Button,
-  Icon,
-  Popover,
-  Menu,
-  MenuItem,
-  Tag,
-} from "@blueprintjs/core";
+import { Classes, Button } from "@blueprintjs/core";
 // import { useConfig } from "../shared/stores/ConfigStore";
 import { isRunningInElectron } from "../../utils/electron";
 
@@ -27,9 +19,7 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-interface IStatusbarProps {}
-
-const Statusbar: React.FC<IStatusbarProps> = () => {
+const Statusbar: React.FC = () => {
   const { theme } = useTheme();
   const {
     totalRunningTaskCount,
@@ -84,7 +74,7 @@ const Statusbar: React.FC<IStatusbarProps> = () => {
   }, []);
 
   const activeProjectRunningTaskCount =
-    projectsRunningTaskCount[activeProject._id!];
+    projectsRunningTaskCount[activeProject._id];
 
   return (
     <React.Fragment>

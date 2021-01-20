@@ -1,11 +1,9 @@
 import React from "react";
 
-import { getFakeProjects, render } from "../../utils/test-utils";
-import * as ajaxCalls from "../shared/API";
+import { render } from "../../utils/test-utils";
 import ProjectsList from "./ProjectsList";
 
 describe.only("ProjectsList Component", () => {
-  let projectsSpy: jest.SpyInstance;
   it("renders without crashing", async () => {
     try {
       const { container } = await render(<ProjectsList />);

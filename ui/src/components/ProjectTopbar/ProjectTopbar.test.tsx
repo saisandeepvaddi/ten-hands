@@ -1,15 +1,7 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import * as utils from "../../utils/electron";
-import {
-  cleanup,
-  fireEvent,
-  getFakeProjects,
-  render,
-  wait,
-} from "../../utils/test-utils";
-import * as ajaxCalls from "../shared/API";
+import { cleanup, getFakeProjects, render } from "../../utils/test-utils";
 import ProjectTopbar from "./ProjectTopbar";
 
 describe.only("ProjectTopbar Component", () => {
