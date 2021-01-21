@@ -1,5 +1,5 @@
 const { series, src, dest, parallel } = require("gulp");
-const { task, exec, stream } = require("gulp-execa");
+const { task } = require("gulp-execa");
 const del = require("del");
 const path = require("path");
 const through2 = require("through2");
@@ -122,7 +122,7 @@ const moveAppIconsToBuild = async () => {
 const updateCLIPackageJson = async () => {
   return src("./cli/package.json")
     .pipe(
-      through2.obj(function(file, _, cb) {
+      through2.obj(function (file, _, cb) {
         if (file.isBuffer()) {
           const currentPackageJson = JSON.parse(file.contents.toString());
 

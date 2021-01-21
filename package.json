@@ -43,7 +43,7 @@
     "@saisandeepvaddi/eslint-config-typescript": "^1.1.5",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
-    "del": "^4.1.1",
+    "del": "^6.0.0",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-config-react-app": "^6.0.0",
@@ -53,7 +53,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "gulp": "^4.0.2",
-    "gulp-execa": "^0.5.5",
+    "gulp-execa": "^2.0.0",
     "prettier": "^2.2.1",
     "through2": "^3.0.1"
   }
