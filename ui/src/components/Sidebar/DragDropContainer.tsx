@@ -21,9 +21,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 10px; */
   padding: 10px 0;
-  /* overflow: hidden; */
 `;
 
 const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
@@ -79,40 +77,36 @@ const DragDropContainer: React.FC<IDragDropContainerProps> = ({ children }) => {
     );
   }
 
-  // console.log("Is Drag Active: ", isDragActive);
-
   return (
-    <React.Fragment>
-      <Container
-        theme={theme}
-        className="file-drag-container h-100 w-100"
-        {...getRootProps({ className: "dropzone" })}
+    <Container
+      theme={theme}
+      className="file-drag-container"
+      {...getRootProps({ className: "dropzone" })}
+    >
+      <div
+        className="w-100 h-100"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
       >
-        <div
-          className="w-100 h-100"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
-          {!isDragActive && children}
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <div className="h-100 w-100 d-flex justify-center align-center truncate">
-              Drop the files here ...
-            </div>
-          ) : (
-            <div className="w-100 d-flex justify-center align-center">
-              <span className="truncate">
-                <Icon icon={"lightbulb"} intent="warning" /> Drop{" "}
-                <Code>package.json</Code> here to add project.
-              </span>
-            </div>
-          )}
-        </div>
-      </Container>
-    </React.Fragment>
+        {!isDragActive && children}
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <div className="h-100 w-100 d-flex justify-center align-center truncate">
+            Drop the files here ...
+          </div>
+        ) : (
+          <div className="w-100 d-flex justify-center align-center">
+            <span className="truncate">
+              <Icon icon={"lightbulb"} intent="warning" /> Drop{" "}
+              <Code>package.json</Code> here to add project.
+            </span>
+          </div>
+        )}
+      </div>
+    </Container>
   );
 };
 
