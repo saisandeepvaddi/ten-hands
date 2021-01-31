@@ -128,6 +128,10 @@ const ProjectsListContainer: React.FC = () => {
     updateActiveProjectIndex();
   }, [activeProject, projects]);
 
+  React.useEffect(() => {
+    setProjects(originalProjects);
+  }, [originalProjects]);
+
   const saveNewProjectsOrder = React.useCallback(
     (reorderedProjects: IProject[]) => {
       const save = async (projectsWithNewOrder: IProject[]) => {

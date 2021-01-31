@@ -16747,10 +16747,10 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-react-spaces@^0.1.26:
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/react-spaces/-/react-spaces-0.1.29.tgz"
-  integrity sha512-4EzJZef5lXhU+iytJgt/v6J2fYOqp0EQ9fPiPn1OtTdXTsw41Du97Yv8XcFLSZhPgQnoP6kHGPolBElkRPLwQA==
+react-spaces@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-spaces/-/react-spaces-0.2.0.tgz#4c0ed000085043bfa1e69ab8f519c0dc937184c9"
+  integrity sha512-ioVVn/1cvm63m3U3FRqBF+GWN5klG3YjMAFIchqq0MXUCQYPTgJUl6VO3drMzrhkEhzoiJdZWW6DEvJRF+J/fA==
   dependencies:
     css-element-queries "^1.2.1"
     prop-types "^15.7.2"

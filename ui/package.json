@@ -53,7 +53,7 @@
     "react-query-devtools": "^2.4.4",
     "react-resizable": "^1.11.0",
     "react-scripts": "^4.0.1",
-    "react-spaces": "^0.1.26",
+    "react-spaces": "^0.2.0",
     "recoil": "^0.1.2",
     "socket.io-client": "^3.0.4",
     "styled-components": "^5.2.1",
