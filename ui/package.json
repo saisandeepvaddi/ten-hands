@@ -37,7 +37,7 @@
     "@sentry/react": "^5.22.3",
     "@sentry/tracing": "^5.22.3",
     "@welldone-software/why-did-you-render": "^4.0.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chalk": "^3.0.0",
     "formik": "^2.1.4",
     "framer-motion": "^3.0.0",
