@@ -1,6 +1,6 @@
 {
   "name": "ten-hands-ui",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "One place to run your command-line tasks",
   "private": true,
   "homepage": "./",
@@ -61,7 +61,11 @@
     "xterm": "^4.9.0",
     "xterm-addon-fit": "^0.4.0",
     "xterm-addon-web-links": "^0.4.0",
-    "xterm-addon-webgl": "^0.9.0"
+    "xterm-addon-webgl": "^0.9.0",
+    "@testing-library/cypress": "^6.0.0",
+    "cypress": "^4.9.0",
+    "cypress-file-upload": "^4.0.7",
+    "eslint-plugin-cypress": "^2.11.1"
   },
   "devDependencies": {
     "@blueprintjs/tslint-config": "^2.0.0",
