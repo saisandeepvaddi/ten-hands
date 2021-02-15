@@ -1,4 +1,5 @@
 import fkill from "fkill";
+import treeKill from "tree-kill";
 import path from "path";
 import { exec } from "child_process";
 import SocketManager, { ISocketListener } from "./socket";
@@ -117,6 +118,26 @@ export class JobManager {
   private async killJob(taskID: string, pid: number): Promise<boolean> {
     console.log(`Killing process: ${pid}`);
     try {
+      // There are some issues using fKill to kill nodejs processes in macOS where the port used by nodejs stays locked where tree-kill working.
+      // But using tree-kill has problems killing .NET processes in Windows :(
+      if (process.platform !== "win32") {
+        return new Promise((resolve, reject) => {
+          treeKill(pid, (error) => {
+            if (error) {
+              console.error(`Error killing process: ${pid}\n ${error.message}`);
+              this.socketManager.emit(`job_error`, {
+                taskID,
+                data: `Error killing process: ${pid}.\n ${error.message}`,
+              });
+              return reject(error);
+            }
+            setTimeout(() => {
+              return resolve(true);
+            });
+          });
+        });
+      }
+
       await fkill(pid, {
         force: true,
       });
@@ -135,16 +156,6 @@ export class JobManager {
       });
       return false;
     }
-    // return new Promise((resolve, reject) => {
-    // pKill(pid, (error) => {
-    //   if (error) {
-    //     return reject(error);
-    //   }
-    //   setTimeout(() => {
-    //     return resolve(true);
-    //   });
-    // });
-    // });
   }
 
   /**
