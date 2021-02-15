@@ -2,11 +2,11 @@ import { Button } from "@blueprintjs/core";
 import React from "react";
 
 import NewProjectDrawer from "../NewProjectDrawer";
-import ProjectsList from "../ProjectsList";
+import ProjectsListContainer from "../ProjectsList/ProjectsListContainer";
 import { useProjects } from "../shared/stores/ProjectStore";
 import DragDropContainer from "./DragDropContainer";
 
-const Sidebar = React.memo(() => {
+const Sidebar = () => {
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const { projects } = useProjects();
 
@@ -22,7 +22,7 @@ const Sidebar = React.memo(() => {
         style={{ margin: "0 10px" }}
         onClick={() => setDrawerOpen(true)}
       />
-      {projects.length > 0 && <ProjectsList />}
+      {projects.length > 0 && <ProjectsListContainer />}
 
       <NewProjectDrawer
         isDrawerOpen={isDrawerOpen}
@@ -30,6 +30,6 @@ const Sidebar = React.memo(() => {
       />
     </DragDropContainer>
   );
-});
+};
 
 export default Sidebar;

@@ -1,16 +1,16 @@
 import { Alert, Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useJobs } from "../shared/stores/JobStore";
+import { useJobs, ACTION_TYPES } from "../shared/stores/JobStore";
 import JobTerminalManager from "../shared/JobTerminalManager";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useSockets } from "../shared/stores/SocketStore";
 import CommandOutputXterm from "./CommandOutputXterm";
 import UpdateCommandDrawer from "../UpdateCommandDrawer";
-import { useConfig } from "../shared/stores/ConfigStore";
-import { throttle } from "lodash";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { useMotionValue } from "framer-motion";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -68,24 +68,23 @@ const Command: React.FC<ICommandProps> = React.memo(
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
     const taskID = command._id;
     const terminalManager = JobTerminalManager.getInstance();
-    const { state: jobState, dispatch, ACTION_TYPES } = useJobs();
+    const { state: jobState, dispatch } = useJobs();
     const { activeProject, deleteTask, updateTask } = useProjects();
-    const { config } = useConfig();
-    // const [containerWidth, setContainerWidth] = useState<number>(0);
+    const config = useRecoilValue(configAtom);
     const containerWidth = useMotionValue(0);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = React.useState<boolean>(
       false
     );
     const deleteCommand = async () => {
       try {
-        await deleteTask(activeProject._id!, taskID);
+        await deleteTask(activeProject._id, taskID);
       } catch (error) {
         console.log("error:", error);
         console.error("Error deleting task");
       }
     };
 
-    const updateJobProcess = (taskID, jobProcess) => {
+    const updateJobProcess = (jobProcess) => {
       dispatch({
         taskID,
         type: ACTION_TYPES.UPDATE_JOB_PROCESS,
@@ -93,7 +92,7 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const clearJobOutput = (taskID) => {
+    const clearJobOutput = () => {
       dispatch({
         type: ACTION_TYPES.CLEAR_OUTPUT,
         taskID,
@@ -101,8 +100,8 @@ const Command: React.FC<ICommandProps> = React.memo(
       terminalManager.clearTerminalInRoom(taskID);
     };
 
-    const startJob = (taskID) => {
-      clearJobOutput(taskID);
+    const startJob = () => {
+      clearJobOutput();
       const shell = command.shell || activeProject.shell || config.shell || "";
       subscribeToTaskSocket(taskID, command, projectPath, shell);
       updateTask(projectId, command._id, {
@@ -111,24 +110,24 @@ const Command: React.FC<ICommandProps> = React.memo(
       });
     };
 
-    const stopJob = (taskID) => {
+    const stopJob = () => {
       const process = getJobData(jobState, taskID).process;
       const { pid } = process;
       unsubscribeFromTaskSocket(taskID, pid);
-      updateJobProcess(taskID, {
+      updateJobProcess({
         pid: -1,
       });
     };
 
-    const restartJob = (taskID) => {
+    const restartJob = () => {
       const shell = command.shell || activeProject.shell || config.shell || "";
       const process = getJobData(jobState, taskID).process;
       const { pid } = process;
       restartTask(taskID, pid, command, projectPath, shell);
-      updateJobProcess(taskID, {
+      updateJobProcess({
         pid: -1,
       });
-      clearJobOutput(taskID);
+      clearJobOutput();
       updateTask(projectId, command._id, {
         ...command,
         lastExecutedAt: new Date(),
@@ -153,22 +152,6 @@ const Command: React.FC<ICommandProps> = React.memo(
             <CommandTitleActions>
               <H5 data-testid="command-name">{command.name}</H5>
               {isProcessRunning() ? (
-                // <Popover
-                //   position="right"
-                //   interactionKind={PopoverInteractionKind.HOVER}
-                //   hoverOpenDelay={0}
-                //   content={
-                //     <Button
-                //       data-testid="restart-task-button"
-                //       intent="primary"
-                //       icon="refresh"
-                //       minimal
-                //       disabled={!isProcessRunning()}
-                //       text={"Restart"}
-                //       onClick={() => restartJob(taskID)}
-                //     />
-                //   }
-                // >
                 <React.Fragment>
                   <Button
                     data-testid="stop-task-button"
@@ -177,7 +160,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                     minimal
                     disabled={!isProcessRunning()}
                     text={"Stop"}
-                    onClick={() => stopJob(taskID)}
+                    onClick={() => stopJob()}
                   />
                   <Button
                     data-testid="restart-task-button"
@@ -186,7 +169,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                     minimal
                     disabled={!isProcessRunning()}
                     text={"Restart"}
-                    onClick={() => restartJob(taskID)}
+                    onClick={() => restartJob()}
                   />
                 </React.Fragment>
               ) : (
@@ -198,7 +181,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                   minimal
                   disabled={isProcessRunning()}
                   text={"Start"}
-                  onClick={() => startJob(taskID)}
+                  onClick={() => startJob()}
                 />
               )}
             </CommandTitleActions>
@@ -218,7 +201,7 @@ const Command: React.FC<ICommandProps> = React.memo(
                 title="Edit Task"
               />
               <Button
-                onClick={() => clearJobOutput(taskID)}
+                onClick={() => clearJobOutput()}
                 icon="eraser"
                 minimal={true}
                 title="Clear Output"
@@ -253,21 +236,11 @@ const Command: React.FC<ICommandProps> = React.memo(
                 containerWidth.set(width);
               }}
             >
-              {/* <div
-                className="my-terminal-container"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  padding: 10,
-                  marginBottom: 10,
-                }}
-              > */}
               <CommandOutputXterm
                 index={index}
                 taskID={taskID}
                 containerWidth={containerWidth}
               />
-              {/* </div> */}
             </ResizeSensor>
           </Collapse>
         </Container>

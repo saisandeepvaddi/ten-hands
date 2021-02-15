@@ -1,5 +1,5 @@
-import Axios, { AxiosResponse } from "axios"
-import { config } from "./config"
+import Axios, { AxiosResponse } from "axios";
+import { config } from "./config";
 
 export const DataService = {
   async getProjects() {
@@ -8,5 +8,5 @@ export const DataService = {
     );
     const projects: any = response.data;
     return projects;
-  }
-}
+  },
+};

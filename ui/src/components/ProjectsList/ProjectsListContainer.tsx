@@ -8,7 +8,6 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { reorderProjectsInDb } from "../shared/API";
-import { useConfig } from "../shared/stores/ConfigStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { Container } from "./styles";
 import ProjectItem from "./ProjectItem";
@@ -16,6 +15,8 @@ import { Button, Icon } from "@blueprintjs/core";
 import Search from "../Search";
 import { captureException } from "@sentry/react";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { configAtom } from "../shared/state/atoms";
 
 const ListContainer = styled.div`
   height: 100%;
@@ -28,9 +29,7 @@ const ListContainer = styled.div`
   }
 `;
 
-interface IProjectsListContainerProps {}
-
-const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
+const ProjectsListContainer: React.FC = () => {
   const {
     projects: originalProjects,
     setProjects: setOriginalProjects,
@@ -41,45 +40,38 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
   const [projectTaskListOpenMap, setProjectTaskListOpenMap] = React.useState<{
     [K: string]: boolean;
-  }>({});
+  }>(() => {
+    const initProjectTaskListOpenMap = {};
+    originalProjects.forEach((project) => {
+      initProjectTaskListOpenMap[project._id] = false;
+    });
+
+    return initProjectTaskListOpenMap;
+  });
 
   const [searchbarOpen, setSearchbarOpen] = React.useState<boolean>(false);
-  /* tslint:disable-next-line */
+
   /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
-  const [projects, setProjects] = React.useState<any>([]);
+  const [projects, setProjects] = React.useState<any>(originalProjects ?? []);
   const [
     activeProjectIndexBeforeDrag,
     setActiveProjectIndexBeforeDrag,
   ] = React.useState<number>(0);
 
-  const { config } = useConfig();
+  const config = useRecoilValue(configAtom);
 
   const expandOrCollapseAllProjects = React.useCallback(
-    (collapse: boolean = false) => {
-      let projectTaskListOpenMap = {};
-      originalProjects.map(project => {
-        projectTaskListOpenMap[project._id!] = collapse;
+    (collapse = false) => {
+      const nextProjectTaskListOpenMap = {};
+      originalProjects.forEach((project) => {
+        nextProjectTaskListOpenMap[project._id] = collapse;
       });
 
-      setProjectTaskListOpenMap(projectTaskListOpenMap);
+      setProjectTaskListOpenMap(nextProjectTaskListOpenMap);
     },
     [originalProjects]
   );
-
-  React.useEffect(() => {
-    if (!originalProjects) {
-      return;
-    }
-
-    setProjects(originalProjects);
-
-    // expandOrCollapseAllProjects(false);
-  }, [originalProjects, expandOrCollapseAllProjects]);
-
-  React.useEffect(() => {
-    expandOrCollapseAllProjects(false);
-  }, []);
 
   const updateProjectTaskListOpen = React.useCallback(
     (projectId, shouldOpen) => {
@@ -94,7 +86,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   const changeActiveProject = React.useCallback(
     (projectId, index: number) => {
       const activeProjectWithId = projects.find(
-        project => project._id === projectId
+        (project) => project._id === projectId
       );
       if (activeProjectWithId) {
         setActiveProject(activeProjectWithId);
@@ -118,7 +110,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     // So that, we can move animated blue background only if active project changed position.
     const newProjects = [...projects];
     const activeProjectIndex: number =
-      newProjects.findIndex(x => x._id === activeProject._id) || 0;
+      newProjects.findIndex((x) => x._id === activeProject._id) || 0;
 
     setActiveProjectIndexBeforeDrag(activeProjectIndex);
   };
@@ -127,7 +119,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
   React.useEffect(() => {
     const newProjects = [...projects];
     const newActiveProjectIndex: number = newProjects.findIndex(
-      x => x._id === activeProject._id
+      (x) => x._id === activeProject._id
     );
     if (activeProjectIndexBeforeDrag !== newActiveProjectIndex) {
       setSelectedItemIndex(newActiveProjectIndex);
@@ -136,20 +128,24 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
     updateActiveProjectIndex();
   }, [activeProject, projects]);
 
+  React.useEffect(() => {
+    setProjects(originalProjects);
+  }, [originalProjects]);
+
   const saveNewProjectsOrder = React.useCallback(
-    (projects: IProject[]) => {
-      const save = async (projects: IProject[]) => {
+    (reorderedProjects: IProject[]) => {
+      const save = async (projectsWithNewOrder: IProject[]) => {
         try {
           console.info("Saving new projects order");
-          const projectIds = projects.map(project => project._id!);
+          const projectIds = projectsWithNewOrder.map((project) => project._id);
           await reorderProjectsInDb(config, projectIds);
-          setOriginalProjects(projects);
+          setOriginalProjects(projectsWithNewOrder);
         } catch (error) {
           captureException(error);
           console.log("Error Reordering:", error);
         }
       };
-      save(projects);
+      save(reorderedProjects);
     },
     [projects, config]
   );
@@ -182,7 +178,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
 
     // Check if activeProject is moved
     const activeProjectIndexAfterDrag: number = newProjects.findIndex(
-      x => x._id === activeProject._id
+      (x) => x._id === activeProject._id
     );
     // console.log("activeProjectIndexBeforeDrag:", activeProjectIndexBeforeDrag);
     // console.log("activeProjectIndexAfterDrag:", activeProjectIndexAfterDrag);
@@ -237,7 +233,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                 {projects.map((project: IProject, index: number) => {
                   return (
                     <Draggable
-                      draggableId={project._id!}
+                      draggableId={project._id}
                       index={index}
                       key={project._id}
                     >
@@ -248,7 +244,7 @@ const ProjectsListContainer: React.FC<IProjectsListContainerProps> = () => {
                           changeActiveProject={changeActiveProject}
                           itemIndex={index}
                           projectRunningTaskCount={
-                            projectsRunningTaskCount[project._id!]
+                            projectsRunningTaskCount[project._id]
                           }
                           projectTaskListOpenMap={projectTaskListOpenMap}
                           updateProjectTaskListOpen={updateProjectTaskListOpen}

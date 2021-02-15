@@ -96,7 +96,7 @@ const writeConfigToFS = (config: IConfig) => {
 
 export const getConfig = (): IConfig => {
   try {
-    let conf: IConfig = JSON.parse(
+    const conf: IConfig = JSON.parse(
       fs.readFileSync(CONFIG_FILES.configFile, "utf8")
     );
 

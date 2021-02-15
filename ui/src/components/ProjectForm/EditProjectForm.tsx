@@ -21,27 +21,13 @@ const ProjectForm: React.FC<IProjectFormProps> = ({
   });
 
   const {
-    values,
-    touched,
     errors,
     handleSubmit,
     isValid,
     isSubmitting,
     getFieldProps,
-    setFieldValue,
-    setFieldTouched,
     dirty,
   } = formik;
-  const getError = (field, onlyDirty = true) => {
-    if (onlyDirty) {
-      return errors[field] && touched[field] ? errors[field] : null;
-    }
-    return errors[field] ? errors[field] : null;
-  };
-
-  const getValidateStatus = (field, onlyDirty) => {
-    return getError(field, onlyDirty) ? "error" : "";
-  };
 
   return (
     <React.Fragment>
@@ -61,6 +47,7 @@ const ProjectForm: React.FC<IProjectFormProps> = ({
             type="text"
             required={true}
             placeholder="My Awesome Project"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             {...getFieldProps("name")}
           />

@@ -227,7 +227,7 @@ export const updateRunningTaskCountInDB = async (
 export const getFetcher = async (url) =>
   Axios.get(url)
     .then((res) => res.data)
-    .catch(function(error: AxiosError) {
+    .catch(function (error: AxiosError) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx

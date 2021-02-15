@@ -1,7 +1,7 @@
 import { captureException } from "@sentry/react";
 import handleConfigFiles from "../NewProjectDrawer/handleConfigFiles";
 
-const checkIsFileValid = file => {
+const checkIsFileValid = (file) => {
   const { name, size, type, path } = file;
   if (!path) {
     return {
@@ -41,7 +41,7 @@ const getUploadableFile = async (filePath, fileData) => {
   return uploadableFile;
 };
 
-export const getFileData = file => {
+export const getFileData = (file) => {
   return new Promise((resolve, reject) => {
     try {
       const validityCheck = checkIsFileValid(file);
@@ -66,17 +66,17 @@ export const getFileData = file => {
   });
 };
 
-export const getDraggedFiles = dragContainer => {
-  return new Promise(resolve => {
-    dragContainer.addEventListener("dragover", function(e) {
+export const getDraggedFiles = (dragContainer) => {
+  return new Promise((resolve) => {
+    dragContainer.addEventListener("dragover", function (e) {
       e.preventDefault();
       e.stopPropagation();
     });
 
-    dragContainer.addEventListener("drop", function(e) {
+    dragContainer.addEventListener("drop", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      const files = Array.prototype.slice.call(e.dataTransfer!.files);
+      const files = Array.prototype.slice.call(e.dataTransfer?.files);
       resolve(files);
     });
   });

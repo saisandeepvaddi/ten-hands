@@ -6,11 +6,15 @@ type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";
 
 interface IConfig {
   port: string | number;
-  enableTerminalTheme: boolean;
-  showStatusBar: boolean;
-  taskViewStyle: TaskViewStyle;
-  shell: string;
+  enableTerminalTheme?: boolean;
+  globalHotKey?: string;
+  showAppRunningTrayNotification?: boolean;
+  showStatusBar?: boolean;
+  taskViewStyle?: "tabs" | "rows";
+  shell?: string;
+  hideToTrayOnClose?: boolean;
   terminalRenderer?: "canvas" | "webgl";
+  showTaskCountBadge?: boolean;
   sendErrorReports?: boolean;
 }
 

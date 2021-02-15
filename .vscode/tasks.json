@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ESLint",
+      "type": "shell",
+      "problemMatcher": "$eslint-stylish",
+      "command": "yarn lint",
+      "windows": {
+        "command": "yarn lint"
+      }
+    },
+    {
+      "label": "ESLint:fix",
+      "type": "shell",
+      "problemMatcher": "$eslint-stylish",
+      "command": "yarn lint:fix",
+      "windows": {
+        "command": "yarn lint:fix"
+      }
+    }
+  ]
+}

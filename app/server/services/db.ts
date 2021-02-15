@@ -56,17 +56,17 @@ class Database {
     return currentRunningTaskCount;
   }
 
-  public increaseRunningTaskCount(): Number {
+  public increaseRunningTaskCount(): number {
     this.db.update("runningTaskCount", (n) => n + 1).write();
     return this.getRunningTaskCount();
   }
 
-  public decreaseRunningTaskCount(): Number {
+  public decreaseRunningTaskCount(): number {
     this.db.update("runningTaskCount", (n) => Math.abs(n - 1)).write();
     return this.getRunningTaskCount();
   }
 
-  public setRunningTaskCount(count: number): Number {
+  public setRunningTaskCount(count: number): number {
     this.db.set("runningTaskCount", count).write();
     return this.getRunningTaskCount();
   }
@@ -92,7 +92,7 @@ class Database {
    */
   public getProjects(): IProject[] {
     const projects: IProject[] = this.db.get("projects").value() || [];
-    let projectsOrder = this.db.get("projectsOrder").value() || [];
+    const projectsOrder = this.db.get("projectsOrder").value() || [];
 
     if (projects.length === 0) {
       // Seems there are some inconsistencies when updating the versions. When projects are deleted, the projects order doesn't match.
@@ -125,11 +125,11 @@ class Database {
     }
 
     // To get project in order
-    let projectsMap: {
+    const projectsMap: {
       [id: string]: IProject;
     } = {};
 
-    projects.map((project) => {
+    projects.forEach((project) => {
       projectsMap[project._id] = project;
     });
 
@@ -166,15 +166,9 @@ class Database {
       _id: uuidv4(),
     };
 
-    this.db
-      .get("projects")
-      .push(newProject)
-      .write();
+    this.db.get("projects").push(newProject).write();
 
-    this.db
-      .get("projectsOrder")
-      .push(newProject._id)
-      .write();
+    this.db.get("projectsOrder").push(newProject._id).write();
 
     return newProject;
   }
@@ -209,10 +203,7 @@ class Database {
    */
   public renameProject(projectId: string, newName: string): IProject {
     const hasName =
-      this.db
-        .get("projects")
-        .findIndex({ name: newName })
-        .value() > -1;
+      this.db.get("projects").findIndex({ name: newName }).value() > -1;
 
     if (hasName) {
       throw new Error("Project name already exists");
@@ -236,11 +227,7 @@ class Database {
    * @memberof Database
    */
   public updateProject(projectId: string, newProject: IProject): IProject {
-    this.db
-      .get("projects")
-      .find({ _id: projectId })
-      .assign(newProject)
-      .write();
+    this.db.get("projects").find({ _id: projectId }).assign(newProject).write();
 
     const updatedProject = this.getProject(projectId);
     return updatedProject;
@@ -254,10 +241,7 @@ class Database {
    * @memberof Database
    */
   public getProject(id: string): IProject {
-    const project = this.db
-      .get("projects")
-      .find({ _id: id })
-      .value();
+    const project = this.db.get("projects").find({ _id: id }).value();
     return project;
   }
 
@@ -297,6 +281,7 @@ class Database {
     commandId: string,
     command: IProjectCommand
   ): IProject {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...otherCommandProps } = command;
     this.db
       .get("projects")

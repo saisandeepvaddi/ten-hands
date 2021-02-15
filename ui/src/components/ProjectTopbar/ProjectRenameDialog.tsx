@@ -22,7 +22,7 @@ const ProjectRenameDialog: React.FC<IProjectRenameDialogProps> = ({
   projectNameError,
   setUpdatedProjectName,
   updatedProjectName,
-  isRenaming
+  isRenaming,
 }) => {
   return (
     <Dialog
@@ -44,11 +44,12 @@ const ProjectRenameDialog: React.FC<IProjectRenameDialogProps> = ({
           helperText={projectNameError ? projectNameError : ""}
         >
           <InputGroup
-            autoFocus={true}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
             type="text"
-            required={true}
+            required
             data-testid="updated-project-name"
-            onChange={e => setUpdatedProjectName(e.target.value)}
+            onChange={(e) => setUpdatedProjectName(e.target.value)}
             value={updatedProjectName}
           />
         </FormGroup>

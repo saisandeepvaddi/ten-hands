@@ -12,13 +12,13 @@ describe("Electron Util Functions", () => {
       {
         published_at: "2019-09-26T05:42:08Z",
         prerelease: true,
-        tag_name: "v2.0.0-alpha.0"
+        tag_name: "v2.0.0-alpha.0",
       },
       {
         published_at: "2019-06-05T02:31:29Z",
         prerelease: false,
-        tag_name: "v1.0.0"
-      }
+        tag_name: "v1.0.0",
+      },
     ];
 
     axiosMock.get.mockResolvedValue({ data });
@@ -39,14 +39,14 @@ describe("Electron Util Functions", () => {
       {
         published_at: "2021-06-05T02:31:29Z",
         prerelease: false,
-        tag_name: "v3.0.0"
+        tag_name: "v3.0.0",
       },
       {
         published_at: "2020-06-05T02:31:29Z",
         prerelease: false,
-        tag_name: "v2.0.0"
+        tag_name: "v2.0.0",
       },
-      ...data
+      ...data,
     ];
 
     axiosMock.get.mockResolvedValue({ data });

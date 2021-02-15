@@ -28,7 +28,7 @@ export const Item = styled.div`
   align-items: center;
   &:hover {
     cursor: pointer;
-    color: ${props =>
+    color: ${(props) =>
       props.theme === Classes.DARK ? "#48aff0" : "#106ba3"} !important;
   }
 `;

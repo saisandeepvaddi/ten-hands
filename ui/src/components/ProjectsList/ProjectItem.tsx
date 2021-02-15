@@ -31,7 +31,7 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   const [showDragHandle, setShowDragHandle] = React.useState<boolean>(false);
   const isThisActiveProject = activeProject._id === project._id;
 
-  const isTaskListOpen = projectTaskListOpenMap[project._id!];
+  const isTaskListOpen = projectTaskListOpenMap[project._id];
 
   const handleMouseOver = () => {
     setShowDragHandle(true);
@@ -44,11 +44,11 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
   const handleItemClick = () => {
     // If task list is not open, open it
     updateProjectTaskListOpen(
-      project._id!,
-      !projectTaskListOpenMap[project._id!]
+      project._id,
+      !projectTaskListOpenMap[project._id]
     );
 
-    changeActiveProject(project._id!, itemIndex);
+    changeActiveProject(project._id, itemIndex);
   };
 
   return (
@@ -94,13 +94,13 @@ const ProjectItem: React.FC<IProjectItemProps> = ({
       <div className="w-100">
         <Collapse isOpen={isTaskListOpen}>
           <div style={{ paddingLeft: 20 }}>
-            {project.commands.map(command => (
+            {project.commands.map((command) => (
               <ProjectTaskItem
                 key={command._id}
                 command={command}
                 project={project}
                 changeActiveProject={() =>
-                  changeActiveProject(project._id!, itemIndex)
+                  changeActiveProject(project._id, itemIndex)
                 }
               />
             ))}

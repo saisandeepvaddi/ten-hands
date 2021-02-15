@@ -7,8 +7,12 @@
     "sourceMap": true,
     "outDir": "build",
     "allowJs": true,
-    "typeRoots": ["node_modules/@types", "src"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "__tests__"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "__tests__"
+  ]
 }

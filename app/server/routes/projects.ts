@@ -1,5 +1,4 @@
 import express from "express";
-const router = express.Router();
 import jobRoutes from "./jobs";
 import commandRoutes from "./commands";
 
@@ -11,6 +10,7 @@ import {
   renameProject,
   updateProject,
 } from "../controllers/projects";
+const router = express.Router();
 
 // GET http://localhost:5010/projects
 router.get("/", getAllProjects);

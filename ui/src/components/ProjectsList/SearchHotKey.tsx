@@ -13,6 +13,7 @@ interface ISearchHotKeyProps {
 }
 
 @HotkeysTarget
+// eslint-disable-next-line @typescript-eslint/ban-types
 class SearchHotKey extends Component<ISearchHotKeyProps, {}> {
   public render() {
     return <span style={{ position: "absolute", top: -100, left: -100 }} />;

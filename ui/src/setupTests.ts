@@ -5,7 +5,9 @@ import "jest-canvas-mock";
 
 if (document) {
   document.createRange = (): any => ({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setStart: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setEnd: () => {},
     commonAncestorContainer: {
       nodeName: "BODY",

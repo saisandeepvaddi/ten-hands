@@ -6,7 +6,7 @@ interface IProjectRunningTasksTagProps {
 }
 
 const ProjectRunningTasksTag: React.FC<IProjectRunningTasksTagProps> = ({
-  count = 0
+  count = 0,
 }) => {
   return (
     <React.Fragment>

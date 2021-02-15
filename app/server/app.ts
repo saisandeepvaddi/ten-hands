@@ -56,7 +56,7 @@ app.use("/projects", projectRoutes);
 app.use("/utils", utilsRoutes);
 
 app.get("/___serve-ui", async (req, res) => {
-  let publicPath = path.resolve(__dirname, "..", "ui");
+  const publicPath = path.resolve(__dirname, "..", "ui");
   if (existsSync(publicPath)) {
     return await handler(req, res, {
       public: publicPath,

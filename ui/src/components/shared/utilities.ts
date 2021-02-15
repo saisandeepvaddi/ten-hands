@@ -1,6 +1,6 @@
 export const wait = async (timeout = 1000) => {
   return new Promise((resolve) => {
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (timer) {
         clearTimeout(timer);
       }

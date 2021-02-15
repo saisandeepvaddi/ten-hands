@@ -1,9 +1,8 @@
 // import "jest-dom/extend-expect";
 // import "react-testing-library/cleanup-after-each";
 import React from "react";
-import { fireEvent, getFakeProjects, render } from "../../utils/test-utils";
+import { getFakeProjects, render } from "../../utils/test-utils";
 
-import * as utils from "../../utils/electron";
 import CommandsArea from "./CommandsArea";
 
 describe("CommandsArea Component", () => {

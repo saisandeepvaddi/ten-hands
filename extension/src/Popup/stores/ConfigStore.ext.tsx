@@ -1,9 +1,7 @@
 import { captureException } from "@sentry/react";
 import React from "react";
 
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
-import { IConfig, TaskViewStyle } from "../../types";
+import { IConfig } from "../../types";
 import { getItem, setItem } from "../../common/storage.util";
 
 interface IConfigContextValue {

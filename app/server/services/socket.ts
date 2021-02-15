@@ -1,11 +1,5 @@
-import {
-  default as socketIO,
-  Namespace,
-  Server as SocketIOServer,
-  Socket,
-} from "socket.io";
+import { Namespace, Server as SocketIOServer, Socket } from "socket.io";
 import { Server } from "http";
-type SocketSource = "/desktop" | "/chrome-ext";
 
 export interface ISocketListener {
   readonly event: string;
@@ -116,7 +110,7 @@ class SocketManager {
    * @memberof SocketManager
    */
   emit(event: string, data: any) {
-    for (let [name, nsp] of this.nspMap) {
+    for (const [, nsp] of this.nspMap) {
       nsp.emit(event, data);
     }
   }

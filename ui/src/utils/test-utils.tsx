@@ -1,6 +1,6 @@
 import { act, render } from "@testing-library/react";
 import React from "react";
-import { arrayOf, build, fake, sequence } from "test-data-bot";
+import { arrayOf, build, fake } from "test-data-bot";
 import { ConfigProvider } from "../components/shared/stores/ConfigStore";
 import { JobsProvider } from "../components/shared/stores/JobStore";
 import { ProjectsProvider } from "../components/shared/stores/ProjectStore";
@@ -11,10 +11,10 @@ jest.mock("localforage");
 jest.mock("../components/shared/API");
 jest.mock("socket.io-client", () => {
   const socket: any = {
-    on: jest.fn().mockImplementation((event, cb) => {
+    on: jest.fn().mockImplementation((_event, _cb) => {
       // console.log(`mock on with event: ${event}`);
     }),
-    emit: jest.fn().mockImplementation((event, data) => {
+    emit: jest.fn().mockImplementation((_event, _data) => {
       // console.log(`mock emit with event: ${event}`);
     }),
   };
@@ -46,7 +46,7 @@ jest.mock("../utils/storage", () => {
           return null;
       }
     }),
-    setItem: jest.fn((key, value) => {
+    setItem: jest.fn((_key, _value) => {
       return true;
     }),
   };

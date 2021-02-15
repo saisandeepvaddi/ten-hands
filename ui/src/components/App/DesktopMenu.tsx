@@ -14,7 +14,7 @@ const MenuContainer = styled.div`
   display: flex;
   height: 30px;
   width: 100%;
-  background: ${props =>
+  background: ${(props) =>
     props.theme === Classes.DARK ? "#293742" : "#BFCCD6"};
   justify-content: space-between;
 
@@ -66,10 +66,10 @@ const DesktopMenu = () => {
     ? "duplicate"
     : "square";
 
-  const openAppMenu = e => {
+  const openAppMenu = (e) => {
     ipcRenderer.send(`display-app-menu`, {
       x: e.x,
-      y: e.y
+      y: e.y,
     });
   };
 
@@ -77,9 +77,10 @@ const DesktopMenu = () => {
   const [maximizeIcon, setMaximizeIcon] = React.useState<TMinMaxIconType>(
     startingIcon
   );
-  const [isCloseButtonMinimal, setIsCloseButtonMinimal] = React.useState<
-    boolean
-  >(true);
+  const [
+    isCloseButtonMinimal,
+    setIsCloseButtonMinimal,
+  ] = React.useState<boolean>(true);
 
   return (
     <MenuContainer theme={theme}>
@@ -131,7 +132,7 @@ const DesktopMenu = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
           onClick={() => {
             if (currentWindow.isMaximized()) {

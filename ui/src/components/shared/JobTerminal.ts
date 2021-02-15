@@ -16,7 +16,7 @@ function webLinksOnLinkClick(_event: MouseEvent, uri: string) {
 
 class JobTerminal {
   public _id: string;
-  public isOpened: boolean = false;
+  public isOpened = false;
   private terminal: Terminal;
   public fitAddon: FitAddon;
   public webLinksAddon: WebLinksAddon;
