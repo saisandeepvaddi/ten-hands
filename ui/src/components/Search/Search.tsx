@@ -1,10 +1,11 @@
-import React from "react";
-import { Omnibar } from "@blueprintjs/select";
-import { areCommandsEqual, getCommandSelectProps } from "./task-search";
 import { MenuItem } from "@blueprintjs/core";
-import { wait } from "../shared/utilities";
+import { Omnibar } from "@blueprintjs/select";
+import React from "react";
+
 import SearchHotKey from "../ProjectsList/SearchHotKey";
 import { useTheme } from "../shared/stores/ThemeStore";
+import { wait } from "../shared/utilities";
+import { areCommandsEqual, getCommandSelectProps } from "./task-search";
 
 interface ISearchProps {
   searchbarOpen: boolean;

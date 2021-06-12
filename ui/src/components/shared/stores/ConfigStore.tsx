@@ -1,11 +1,10 @@
 import { captureException } from "@sentry/react";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import React from "react";
 
 import { isRunningInElectron } from "../../../utils/electron";
 import { getItem, setItem } from "../../../utils/storage";
-
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 
 interface IConfigContextValue {
   config: IConfig;
@@ -34,8 +33,7 @@ function ConfigProvider(props: IConfigProviderProps) {
         console.log("serverConfig:", serverConfig);
         if (serverConfig.sendErrorReports) {
           Sentry.init({
-            dsn:
-              "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
+            dsn: "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
             integrations: [new Integrations.BrowserTracing()],
             tracesSampleRate: 1.0,
             beforeSend(event) {

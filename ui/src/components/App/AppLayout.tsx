@@ -1,19 +1,20 @@
+import { captureException } from "@sentry/react";
+import debounce from "lodash/debounce";
 import React, { useEffect } from "react";
+import * as Space from "react-spaces";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import { isRunningInElectron } from "../../utils/electron";
+import { setItem } from "../../utils/storage";
 import Main from "../Main/Main";
+import { configAtom } from "../shared/state/atoms";
+import { siderWidthAtom } from "../shared/state/layout";
 import { useSockets } from "../shared/stores/SocketStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import Sidebar from "../Sidebar";
 import Statusbar from "../Statusbar/Statusbar";
 import Topbar from "../Topbar";
 import DesktopMenu from "./DesktopMenu";
-import * as Space from "react-spaces";
-import { captureException } from "@sentry/react";
-import { setItem } from "../../utils/storage";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { siderWidthAtom } from "../shared/state/layout";
-import debounce from "lodash/debounce";
-import { configAtom } from "../shared/state/atoms";
 
 const isWindows = navigator.platform.toLowerCase() === "win32";
 

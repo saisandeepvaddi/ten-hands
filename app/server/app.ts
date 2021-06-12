@@ -1,15 +1,16 @@
-import express, { Request, Response } from "express";
 import * as SentryNode from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
+import bodyParser from "body-parser";
 import cors from "cors";
+import express, { Request, Response } from "express";
+import { existsSync } from "fs";
+import morgan from "morgan";
 import path from "path";
+import handler from "serve-handler";
+
+import { getConfig } from "../shared/config";
 import projectRoutes from "./routes/projects";
 import utilsRoutes from "./routes/utilities";
-import bodyParser from "body-parser";
-import { existsSync } from "fs";
-import handler from "serve-handler";
-import morgan from "morgan";
-import { getConfig } from "../shared/config";
 
 const __DEV__ = process.env.NODE_ENV !== "production";
 
@@ -17,8 +18,7 @@ const app = express();
 
 if (getConfig().sendErrorReports) {
   SentryNode.init({
-    dsn:
-      "https://5b53cd34eebc4578b8264fae53ffd120@o443842.ingest.sentry.io/5418371",
+    dsn: "https://5b53cd34eebc4578b8264fae53ffd120@o443842.ingest.sentry.io/5418371",
     integrations: [
       // enable HTTP calls tracing
       new SentryNode.Integrations.Http({ tracing: true }),

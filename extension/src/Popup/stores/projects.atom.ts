@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+
 import { IProject } from "../../types";
 
 export const projectsAtom = atom<IProject[]>({

@@ -6,27 +6,27 @@ const through2 = require("through2");
 
 /* DEV START TASKS */
 
-const startUIForElectron = task("yarn start:electron", {
+const startUIForElectron = task("npm run start:electron", {
   cwd: path.join(__dirname, "ui"),
 });
 
-const startUIForBrowser = task("yarn start:browser", {
+const startUIForBrowser = task("npm run start:browser", {
   cwd: path.join(__dirname, "ui"),
 });
 
-const startBuildWatchForApp = task("yarn build:watch", {
+const startBuildWatchForApp = task("npm run build:watch", {
   cwd: path.join(__dirname, "app"),
 });
 
-const startBuildWatchForCLI = task("yarn build:watch", {
+const startBuildWatchForCLI = task("npm run build:watch", {
   cwd: path.join(__dirname, "cli"),
 });
 
-const startAppsForDev = task("yarn dev", {
+const startAppsForDev = task("npm run dev", {
   cwd: path.join(__dirname, "app"),
 });
 
-const startServerForBrowser = task("yarn start:server", {
+const startServerForBrowser = task("npm run start:server", {
   cwd: path.join(__dirname, "app"),
 });
 
@@ -37,23 +37,23 @@ exports.startAppsForDev = startAppsForDev;
 
 /* BUILDING TASKS */
 
-const buildUIForBrowser = task("yarn build:browser", {
+const buildUIForBrowser = task("npm run build:browser", {
   cwd: path.join(__dirname, "ui"),
 });
 
-const buildUIForElectron = task("yarn build:electron", {
+const buildUIForElectron = task("npm run build:electron", {
   cwd: path.join(__dirname, "ui"),
 });
 
-const buildServerForElectron = task("yarn build", {
+const buildServerForElectron = task("npm run build", {
   cwd: path.join(__dirname, "app"),
 });
 
-const buildDesktopAppInstallers = task("yarn build:installers", {
+const buildDesktopAppInstallers = task("npm run build:installers", {
   cwd: path.join(__dirname, "app"),
 });
 
-const buildCLI = task("yarn build", {
+const buildCLI = task("npm run build", {
   cwd: path.join(__dirname, "cli"),
 });
 

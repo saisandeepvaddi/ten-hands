@@ -1,13 +1,14 @@
+import { captureException } from "@sentry/electron";
+import { dialog, MenuItem } from "electron";
+
 import { CONFIG_FILES } from "../shared/config";
+import { logger } from "./logger";
 import {
   getAppUpdate,
+  showUnableToCheckUpdatesMessage,
   showUpdateAvailableMessage,
   showUpdateNotAvailableMessage,
-  showUnableToCheckUpdatesMessage,
 } from "./updates";
-import { MenuItem, dialog } from "electron";
-import { logger } from "./logger";
-import { captureException } from "@sentry/electron";
 
 const { app, Menu, shell } = require("electron");
 

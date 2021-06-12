@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { existsSync } from "fs";
+
 import db from "../services/db";
 
 // Have to use require because it's type-definition doesn't have function that allows path

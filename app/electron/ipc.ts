@@ -1,8 +1,9 @@
-import { ipcMain, shell, BrowserWindow } from "electron";
-import { getConfig } from "../shared/config";
-import { getAppUpdate } from "./updates";
-import { Badge } from "./badge/badge";
 import { captureException } from "@sentry/electron";
+import { BrowserWindow, ipcMain, shell } from "electron";
+
+import { getConfig } from "../shared/config";
+import { Badge } from "./badge/badge";
+import { getAppUpdate } from "./updates";
 
 export default function registerIPC(mainWindow: BrowserWindow) {
   const badge = new Badge(mainWindow);

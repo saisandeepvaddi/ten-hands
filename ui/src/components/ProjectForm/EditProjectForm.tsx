@@ -1,7 +1,8 @@
-import React from "react";
-import { FormGroup, InputGroup, Button } from "@blueprintjs/core";
-import { isRunningInElectron } from "../../utils/electron";
+import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { useFormik } from "formik";
+import React from "react";
+
+import { isRunningInElectron } from "../../utils/electron";
 
 interface IProjectFormProps {
   initialValues: IProject;
@@ -20,14 +21,8 @@ const ProjectForm: React.FC<IProjectFormProps> = ({
     validate,
   });
 
-  const {
-    errors,
-    handleSubmit,
-    isValid,
-    isSubmitting,
-    getFieldProps,
-    dirty,
-  } = formik;
+  const { errors, handleSubmit, isValid, isSubmitting, getFieldProps, dirty } =
+    formik;
 
   return (
     <React.Fragment>

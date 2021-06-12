@@ -2,6 +2,7 @@ import { Classes, Colors, Spinner } from "@blueprintjs/core";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+
 import CommandsArea from "../CommandsArea";
 import ProjectTopbar from "../ProjectTopbar";
 import { activeProjectAtom } from "../shared/state/atoms";

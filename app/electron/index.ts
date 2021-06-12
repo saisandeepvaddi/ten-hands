@@ -1,21 +1,20 @@
 import * as SentryElectron from "@sentry/electron";
-import { BrowserWindow, ipcMain, app, dialog, crashReporter } from "electron";
+import { app, BrowserWindow, crashReporter, dialog, ipcMain } from "electron";
 import windowStateKeeper from "electron-window-state";
 
 import { startServer } from "../server";
-import { createMenu, getMenu } from "./menu";
+import db from "../server/services/db";
 import { getConfig } from "../shared/config";
-import { logger } from "./logger";
-
-import { createTray } from "./tray";
 import { isAppQuitting, setIsAppQuitting } from "./app-state";
 import {
   registerGlobalShortcuts,
   unregisterGlobalShortcuts,
 } from "./global-hot-keys";
-import { hideWindowToTray, loadReactDevTools } from "./utils";
 import registerIPC from "./ipc";
-import db from "../server/services/db";
+import { logger } from "./logger";
+import { createMenu, getMenu } from "./menu";
+import { createTray } from "./tray";
+import { hideWindowToTray } from "./utils";
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 const unhandled = require("electron-unhandled");
 unhandled();
@@ -25,8 +24,7 @@ const isDev = require("electron-is-dev");
 
 if (getConfig().sendErrorReports) {
   SentryElectron.init({
-    dsn:
-      "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
+    dsn: "https://885a9f7ca5304d6087e9ab08502d297a@o443842.ingest.sentry.io/5418372",
     beforeSend(event) {
       // Modify the event here
       if (event.user) {
@@ -81,15 +79,15 @@ function createWindow() {
 
     mainWindow.loadURL(uiUrl);
 
-    if (isDev) {
-      try {
-        loadReactDevTools();
-      } catch (error) {
-        console.error("error loading react dev tools: ", error);
-      }
+    // if (isDev) {
+    //   try {
+    //     loadReactDevTools();
+    //   } catch (error) {
+    //     console.error("error loading react dev tools: ", error);
+    //   }
 
-      mainWindow.webContents.openDevTools();
-    }
+    //   mainWindow.webContents.openDevTools();
+    // }
     mainWindow.on("closed", () => {
       mainWindow = null;
     });

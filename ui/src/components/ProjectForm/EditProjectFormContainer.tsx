@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo } from "react";
+import { useRecoilValue } from "recoil";
+
+import { configAtom } from "../shared/state/atoms";
+import { useProjects } from "../shared/stores/ProjectStore";
 import EditProjectForm from "./EditProjectForm";
 import { validateEditProjectForm } from "./project-form-validators";
-import { useProjects } from "../shared/stores/ProjectStore";
-import { useRecoilValue } from "recoil";
-import { configAtom } from "../shared/state/atoms";
 
 interface IEditProjectFormContainerProps {
   activeProject: IProject;

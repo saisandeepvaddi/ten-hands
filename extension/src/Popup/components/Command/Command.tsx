@@ -1,10 +1,11 @@
 import { Button, H5 } from "@blueprintjs/core";
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+
 import { IProjectCommand } from "../../../types";
 import { useConfig } from "../../stores/ConfigStore.ext";
 import { useJobs } from "../../stores/JobStore.ext";
-import { useRecoilValue } from "recoil";
 import { activeProjectAtom } from "../../stores/projects.atom";
 import { useSockets } from "../../stores/SocketStore.ext";
 
@@ -44,11 +45,8 @@ function getJobData(state, taskID: string) {
 }
 
 const Command: React.FC<ICommandProps> = React.memo(({ command }) => {
-  const {
-    subscribeToTaskSocket,
-    unsubscribeFromTaskSocket,
-    restartTask,
-  } = useSockets();
+  const { subscribeToTaskSocket, unsubscribeFromTaskSocket, restartTask } =
+    useSockets();
   const [] = React.useState<boolean>(false);
   const activeProject = useRecoilValue(activeProjectAtom);
   const taskID = command._id;

@@ -1,9 +1,10 @@
 // import chalk from "chalk";
 import React from "react";
 import io from "socket.io-client";
+
+import { IProjectCommand } from "../../types";
 import { useConfig } from "./ConfigStore.ext";
 import { useJobs } from "./JobStore.ext";
-import { IProjectCommand } from "../../types";
 
 // see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
 // const options: any = { enabled: true, level: 3 };

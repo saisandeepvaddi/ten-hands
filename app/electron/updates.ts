@@ -1,6 +1,7 @@
 import Axios from "axios";
-import { dialog, shell, app } from "electron";
+import { app, dialog, shell } from "electron";
 import readPkg from "read-pkg";
+
 import { logger } from "./logger";
 
 const isDev = require("electron-is-dev");

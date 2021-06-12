@@ -1,4 +1,7 @@
 import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { isRunningInElectron } from "../../../utils/electron";
 import {
   deleteProjectInDb,
   deleteTaskInDb,
@@ -7,17 +10,15 @@ import {
   reorderTasksInDb,
   saveProjectInDb,
   saveTaskInDb,
-  updateTaskInDb,
   updateProjectInDb,
   updateRunningTaskCountInDB,
+  updateTaskInDb,
 } from "../API";
 import { useMountedState } from "../hooks";
-import { useJobs, ACTION_TYPES } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
+import { activeProjectAtom, configAtom, projectsAtom } from "../state/atoms";
+import { ACTION_TYPES, useJobs } from "./JobStore";
 import { useSockets } from "./SocketStore";
-import { isRunningInElectron } from "../../../utils/electron";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { activeProjectAtom, projectsAtom, configAtom } from "../state/atoms";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -105,10 +106,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const [activeProject, setActiveProject] = useRecoilState(activeProjectAtom);
   const [projects, setProjects] = useRecoilState(projectsAtom);
   const [loadingProjects, setLoadingProjects] = React.useState(true);
-  const [
-    projectsRunningTaskCount,
-    setProjectsRunningTaskCount,
-  ] = React.useState<any>({});
+  const [projectsRunningTaskCount, setProjectsRunningTaskCount] =
+    React.useState<any>({});
 
   const clearJobOutput = React.useCallback(
     (taskID) => {
@@ -155,10 +154,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     },
     [stopJob]
   );
-  const [
-    totalRunningTaskCount,
-    setTotalRunningTaskCount,
-  ] = React.useState<number>(0);
+  const [totalRunningTaskCount, setTotalRunningTaskCount] =
+    React.useState<number>(0);
 
   const updateProjects = React.useCallback(() => {
     const reloadProjects = async () => {

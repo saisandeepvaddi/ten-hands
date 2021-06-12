@@ -1,5 +1,6 @@
+import { Card, Elevation, Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
-import { Tabs, Tab, Card, Elevation } from "@blueprintjs/core";
+
 import Command from "../Command/Command";
 
 interface ICommandsTabViewProps {

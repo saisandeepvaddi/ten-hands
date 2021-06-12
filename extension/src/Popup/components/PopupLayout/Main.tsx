@@ -1,9 +1,10 @@
+import { Colors } from "@blueprintjs/core";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+
 import { activeProjectAtom } from "../../stores/projects.atom";
 import Command from "../Command/Command";
-import { Colors } from "@blueprintjs/core";
 
 const ProjectNameContainer = styled.header`
   padding: 10px;

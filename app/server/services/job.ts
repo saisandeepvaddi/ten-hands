@@ -1,7 +1,8 @@
-import fkill from "fkill";
-import treeKill from "tree-kill";
-import path from "path";
 import { exec } from "child_process";
+import fkill from "fkill";
+import path from "path";
+import treeKill from "tree-kill";
+
 import SocketManager, { ISocketListener } from "./socket";
 
 /**

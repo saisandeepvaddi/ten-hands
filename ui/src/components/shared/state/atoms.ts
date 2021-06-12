@@ -1,8 +1,9 @@
-import { atom } from "recoil";
-import { isRunningInElectron } from "../../../utils/electron";
-import { getItem, setItem } from "../../../utils/storage";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { atom } from "recoil";
+
+import { isRunningInElectron } from "../../../utils/electron";
+import { getItem, setItem } from "../../../utils/storage";
 
 export const activeProjectAtom = atom<IProject>({
   key: "activeProject",
@@ -30,8 +31,7 @@ function getConfig(): IConfig {
     console.log("serverConfig:", serverConfig);
     if (serverConfig.sendErrorReports) {
       Sentry.init({
-        dsn:
-          "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
+        dsn: "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 1.0,
         beforeSend(event) {

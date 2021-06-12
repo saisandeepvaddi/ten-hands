@@ -1,5 +1,5 @@
-import React from "react";
 import { Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import React from "react";
 
 interface IProjectMenuProps {
   setIsProjectDrawerOpen: (value: React.SetStateAction<boolean>) => void;

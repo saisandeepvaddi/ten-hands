@@ -1,4 +1,5 @@
 import { captureException } from "@sentry/react";
+
 import handleConfigFiles from "../NewProjectDrawer/handleConfigFiles";
 
 const checkIsFileValid = (file) => {

@@ -1,6 +1,7 @@
 import { Button, Classes, Icon } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
+
 import { useTheme } from "../shared/stores/ThemeStore";
 
 const MenuContainer = styled.div`
@@ -66,7 +67,7 @@ const DesktopMenu = () => {
     ? "duplicate"
     : "square";
 
-  const openAppMenu = (e) => {
+  const openAppMenu = (e: any) => {
     ipcRenderer.send(`display-app-menu`, {
       x: e.x,
       y: e.y,
@@ -74,13 +75,10 @@ const DesktopMenu = () => {
   };
 
   const { theme, setTheme } = useTheme();
-  const [maximizeIcon, setMaximizeIcon] = React.useState<TMinMaxIconType>(
-    startingIcon
-  );
-  const [
-    isCloseButtonMinimal,
-    setIsCloseButtonMinimal,
-  ] = React.useState<boolean>(true);
+  const [maximizeIcon, setMaximizeIcon] =
+    React.useState<TMinMaxIconType>(startingIcon);
+  const [isCloseButtonMinimal, setIsCloseButtonMinimal] =
+    React.useState<boolean>(true);
 
   return (
     <MenuContainer theme={theme}>

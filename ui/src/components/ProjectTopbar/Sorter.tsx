@@ -1,5 +1,6 @@
+import { Button, Dialog, HTMLSelect, Icon } from "@blueprintjs/core";
 import React from "react";
-import { HTMLSelect, Button, Icon, Dialog } from "@blueprintjs/core";
+
 import { getYesterday } from "../../utils/general";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
@@ -21,10 +22,8 @@ const Sorter: React.FC<ISorterProps> = React.memo(
 
     const { theme } = useTheme();
 
-    const [
-      commandsOrderModalOpen,
-      setCommandsOrderModalOpen,
-    ] = React.useState<boolean>(false);
+    const [commandsOrderModalOpen, setCommandsOrderModalOpen] =
+      React.useState<boolean>(false);
 
     const sortTasksBy = React.useCallback(
       (order: TASK_SORT_ORDER = "name-asc") => {

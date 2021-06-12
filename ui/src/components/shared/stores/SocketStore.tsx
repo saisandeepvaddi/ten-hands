@@ -1,10 +1,11 @@
 import chalk from "chalk";
 import React from "react";
-import { io } from "socket.io-client";
-import { useJobs, ACTION_TYPES } from "./JobStore";
-import JobTerminalManager from "../JobTerminalManager";
 import { useRecoilValue } from "recoil";
+import { io } from "socket.io-client";
+
+import JobTerminalManager from "../JobTerminalManager";
 import { configAtom } from "../state/atoms";
+import { ACTION_TYPES, useJobs } from "./JobStore";
 
 // see https://github.com/xtermjs/xterm.js/issues/895#issuecomment-323221447
 const options: any = { enabled: true, level: 3 };

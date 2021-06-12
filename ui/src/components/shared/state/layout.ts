@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+
 import { getItem, setItem } from "../../../utils/storage";
 
 let defaultSiderWidth = Number(getItem("sider-width"));

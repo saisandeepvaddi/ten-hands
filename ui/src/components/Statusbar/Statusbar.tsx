@@ -1,10 +1,11 @@
+import { Button, Classes } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
-import { useTheme } from "../shared/stores/ThemeStore";
-import { useProjects } from "../shared/stores/ProjectStore";
-import { Classes, Button } from "@blueprintjs/core";
+
 // import { useConfig } from "../shared/stores/ConfigStore";
 import { isRunningInElectron } from "../../utils/electron";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useTheme } from "../shared/stores/ThemeStore";
 
 const Container = styled.div`
   background: ${(props) =>
@@ -21,14 +22,10 @@ const Container = styled.div`
 
 const Statusbar: React.FC = () => {
   const { theme } = useTheme();
-  const {
-    totalRunningTaskCount,
-    activeProject,
-    projectsRunningTaskCount,
-  } = useProjects();
-  const [isUpdateAvailable, setIsUpdateAvailable] = React.useState<boolean>(
-    false
-  );
+  const { totalRunningTaskCount, activeProject, projectsRunningTaskCount } =
+    useProjects();
+  const [isUpdateAvailable, setIsUpdateAvailable] =
+    React.useState<boolean>(false);
 
   // const { changeConfigOption, config } = useConfig();
   // const changeTerminalView = () => {

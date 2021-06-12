@@ -5,18 +5,18 @@
       "label": "ESLint",
       "type": "shell",
       "problemMatcher": "$eslint-stylish",
-      "command": "yarn lint",
+      "command": "npm run lint",
       "windows": {
-        "command": "yarn lint"
+        "command": "npm run lint"
       }
     },
     {
       "label": "ESLint:fix",
       "type": "shell",
       "problemMatcher": "$eslint-stylish",
-      "command": "yarn lint:fix",
+      "command": "npm run lint:fix",
       "windows": {
-        "command": "yarn lint:fix"
+        "command": "npm run lint:fix"
       }
     }
   ]
