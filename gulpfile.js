@@ -6,7 +6,7 @@ const through2 = require("through2");
 
 /* DEV START TASKS */
 
-const startUIForElectron = task("npm run start:electron", {
+const startUIForElectron = task("npm run start:desktop", {
   cwd: path.join(__dirname, "ui"),
 });
 
@@ -150,7 +150,7 @@ const updateCLIPackageJson = async () => {
           file.contents = Buffer.from(JSON.stringify(newPackageJson));
         }
         cb(null, file);
-      })
+      }),
     )
     .pipe(dest("./dist/cli"));
 };
@@ -168,15 +168,15 @@ const delay = (time) => {
 // Keep startAppsForDev in parallel. react-scripts/rescripts start is stopping next tasks if put in series
 // Just refresh (Ctrl + R) once to get fresh content once app starts in dev mode
 exports.startDesktop = series(
-  parallel(startUIForElectron, startBuildWatchForApp, startAppsForDev)
+  parallel(startUIForElectron, startBuildWatchForApp, startAppsForDev),
 );
 
 exports.startBrowser = series(
-  parallel(startUIForBrowser, startBuildWatchForApp, startServerForBrowser)
+  parallel(startUIForBrowser, startBuildWatchForApp, startServerForBrowser),
 );
 
 exports.startServer = series(
-  parallel(startBuildWatchForApp, startServerForBrowser)
+  parallel(startBuildWatchForApp, startServerForBrowser),
 );
 
 exports.startCLI = series(startBuildWatchForCLI);
@@ -190,7 +190,7 @@ exports.buildDesktop = series(
   buildDesktopAppInstallers,
   moveDesktopBuildToFinalDist,
   delay(5000),
-  cleanAppDist
+  cleanAppDist,
 );
 
 exports.buildDesktopAzure = series(
@@ -199,7 +199,7 @@ exports.buildDesktopAzure = series(
   moveUIBuilds,
   moveAppIconsToBuild,
   buildDesktopAppInstallers,
-  moveDesktopBuildToFinalDist
+  moveDesktopBuildToFinalDist,
 );
 
 exports.buildCLI = series(
@@ -211,23 +211,23 @@ exports.buildCLI = series(
   moveUIToCLI,
   delay(2000),
   moveCLIBuildToFinalDist,
-  updateCLIPackageJson
+  updateCLIPackageJson,
 );
 
 exports.updateMajorVersion = parallel(
   updateVersion("major", "ui"),
   updateVersion("major", "app"),
-  updateVersion("major", "cli")
+  updateVersion("major", "cli"),
 );
 
 exports.updateMinorVersion = parallel(
   updateVersion("minor", "ui"),
   updateVersion("minor", "app"),
-  updateVersion("minor", "cli")
+  updateVersion("minor", "cli"),
 );
 
 exports.updatePatchVersion = parallel(
   updateVersion("patch", "ui"),
   updateVersion("patch", "app"),
-  updateVersion("patch", "cli")
+  updateVersion("patch", "cli"),
 );

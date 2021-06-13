@@ -17,7 +17,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "start": "concurrently \"yarn build:watch\" && \"yarn electron-only\"",
+    "start": "concurrently \"npm run build:watch\" && \"npm run electron-only\"",
     "start:server": "cross-env PORT=5010 node ./build/server/start",
     "dev": "cross-env NODE_ENV=developement ./node_modules/.bin/nodemon",
     "pack": "./node_modules/.bin/electron-builder --dir",
@@ -50,7 +50,6 @@
     }
   },
   "dependencies": {
-    "@electron/remote": "^1.1.0",
     "@sentry/electron": "^2.0.4",
     "@sentry/node": "^5.29.0",
     "@sentry/tracing": "^5.29.0",

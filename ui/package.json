@@ -6,12 +6,12 @@
   "homepage": "./",
   "main": "./electron/index.ts",
   "scripts": {
-    "start:electron": "cross-env PORT=3010 SKIP_PREFLIGHT_CHECK=true ESLINT_NO_DEV_ERRORS=true BROWSER='none' react-app-rewired start",
-    "start:browser": "cross-env SKIP_PREFLIGHT_CHECK=true ESLINT_NO_DEV_ERRORS=true react-scripts start",
+    "start:desktop": "cross-env PORT=3010 SKIP_PREFLIGHT_CHECK=true ESLINT_NO_DEV_ERRORS=true BROWSER='none' react-scripts start",
+    "start:browser": "cross-env PORT=3000 SKIP_PREFLIGHT_CHECK=true ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "test": "react-scripts test",
-    "build:electron": "cross-env SKIP_PREFLIGHT_CHECK=true react-app-rewired build",
+    "build:desktop": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "build:browser": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "test:electron": "cross-env SKIP_PREFLIGHT_CHECK=true react-app-rewired test",
+    "test:desktop": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts test",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run": "./node_modules/.bin/cypress run",
     "lint": "eslint . --ext .js,.ts,.tsx"
@@ -33,7 +33,6 @@
   "dependencies": {
     "@blueprintjs/core": "^3.36.0",
     "@blueprintjs/select": "^3.15.0",
-    "@electron/remote": "^1.1.0",
     "@koale/useworker": "^3.1.0",
     "@sentry/react": "^5.22.3",
     "@sentry/tracing": "^5.22.3",
@@ -65,7 +64,6 @@
     "xterm-addon-webgl": "^0.9.0"
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
     "@testing-library/dom": "^7.18.1",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
@@ -76,10 +74,8 @@
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.5",
     "cross-env": "^7.0.2",
-    "customize-cra": "^0.9.1",
     "jest-axe": "^3.4.0",
     "jest-canvas-mock": "^2.2.0",
-    "react-app-rewired": "^2.1.8",
     "react-refresh": "^0.8.1",
     "test-data-bot": "^0.8.0",
     "ts-jest": "^26.1.0",
