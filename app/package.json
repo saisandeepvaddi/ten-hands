@@ -83,7 +83,6 @@
     "@types/serve-handler": "^6.1.0",
     "@types/socket.io": "^2.1.12",
     "@types/uuid": "^3.4.6",
-    "electron": "^13.1.2",
     "electron-builder": "^22.9.1",
     "electron-react-devtools": "^0.5.3",
     "eslint-plugin-node": "^11.1.0",
@@ -92,6 +91,7 @@
     "supertest": "^6.0.1",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "electron": "13.1.2"
   }
 }
