@@ -60,19 +60,23 @@ const MenuContainer = styled.div`
 type TMinMaxIconType = "duplicate" | "square";
 
 const DesktopMenu = () => {
+  console.log("desktop: ", window.desktop);
+  const { getCurrentWindowData, displayAppMenu, close } = window.desktop;
   // Importing electron here so that code doesn't give compilation error when running in browser
-  const remote = require("@electron/remote");
-  const { ipcRenderer } = require("electron");
-  const currentWindow = remote.getCurrentWindow();
+  // const remote = require("@electron/remote");
+  // const { ipcRenderer } = require("electron");
+  // const currentWindow = remote.getCurrentWindow();
+  const currentWindow = getCurrentWindowData();
   const startingIcon: TMinMaxIconType = currentWindow.isMaximized()
     ? "duplicate"
     : "square";
 
   const openAppMenu = (e: any) => {
-    ipcRenderer.send(`display-app-menu`, {
-      x: e.x,
-      y: e.y,
-    });
+    displayAppMenu(e.x, e.y);
+    // ipcRenderer.send(`display-app-menu`, {
+    //   x: e.x,
+    //   y: e.y,
+    // });
   };
 
   const { theme, setTheme } = useTheme();
@@ -152,7 +156,8 @@ const DesktopMenu = () => {
           onMouseOver={() => setIsCloseButtonMinimal(false)}
           onMouseOut={() => setIsCloseButtonMinimal(true)}
           onClick={() => {
-            remote.getCurrentWindow().close();
+            // remote.getCurrentWindow().close();
+            close();
           }}
         >
           <Icon icon="cross" />

@@ -11,3 +11,8 @@ interface IConfig {
   showTaskCountBadge?: boolean;
   sendErrorReports?: boolean;
 }
+
+
+declare namespace NodeJS {
+  export type Require = any;
+}

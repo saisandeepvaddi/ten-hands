@@ -106,22 +106,26 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       (filePath, fileData, setFieldValue) => {
         try {
           if (isRunningInElectron()) {
-            const path = require("path");
-            const fileName = path.basename(filePath);
-            const projectPath = path.dirname(filePath);
-            const tenHandsFile: ITenHandsFile = {
-              name: fileName,
-              path: projectPath,
-              data: fileData,
-            };
-            setConfigFileName(fileName);
+            const tenHandsFile = window.desktop.createTenHandsConfigFile(
+              filePath,
+              fileData,
+            );
+            // const path = require("path");
+            // const fileName = path.basename(filePath);
+            // const projectPath = path.dirname(filePath);
+            // const tenHandsFile: ITenHandsFile = {
+            //   name: fileName,
+            //   path: projectPath,
+            //   data: fileData,
+            // };
+            setConfigFileName(tenHandsFile.name);
             fillFormWithProjectConfig(tenHandsFile, setFieldValue);
           }
         } catch (error) {
           console.log("error:", error);
         }
       },
-      []
+      [],
     );
 
     const onProjectFileChange = useCallback((e, setFieldValue) => {
@@ -337,7 +341,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         />
       </Container>
     );
-  }
+  },
 );
 
 export default NewProjectForm;

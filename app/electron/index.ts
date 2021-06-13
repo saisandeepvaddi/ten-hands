@@ -70,10 +70,12 @@ function createWindow() {
       y: mainWindowState.y,
       frame: isWindows ? false : true,
       webPreferences: {
-        nodeIntegration: true,
         enableRemoteModule: true,
         webSecurity: isDev ? false : true,
-        contextIsolation: false
+        nodeIntegration: true,
+        contextIsolation: false,
+        // preload: path.join(__dirname, "preload.js")
+        preload: path.join(__dirname, "preload.js") 
       },
     });
 
@@ -83,15 +85,17 @@ function createWindow() {
 
     mainWindow.loadURL(uiUrl);
 
-    // if (isDev) {
-    //   try {
-    //     loadReactDevTools();
-    //   } catch (error) {
-    //     console.error("error loading react dev tools: ", error);
-    //   }
+    if (isDev) {
+      // try {
+      //   loadReactDevTools();
+      // } catch (error) {
+      //   console.error("error loading react dev tools: ", error);
+      // }
 
-    //   mainWindow.webContents.openDevTools();
-    // }
+      mainWindow.webContents.openDevTools();
+    }
+
+    
     mainWindow.on("closed", () => {
       mainWindow = null;
     });

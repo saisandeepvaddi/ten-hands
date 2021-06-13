@@ -11,7 +11,8 @@ import { isRunningInElectron } from "../../utils/electron";
 
 function webLinksOnLinkClick(_event: MouseEvent, uri: string) {
   if (isRunningInElectron()) {
-    require("electron").shell.openExternal(uri);
+    window.desktop.openWeblink(uri);
+    // require("electron").shell.openExternal(uri);
   }
 }
 

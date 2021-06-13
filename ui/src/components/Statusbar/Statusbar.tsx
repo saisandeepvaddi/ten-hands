@@ -39,8 +39,9 @@ const Statusbar: React.FC = () => {
   const checkUpdates = async (): Promise<any> => {
     try {
       if (isRunningInElectron()) {
-        const { ipcRenderer } = require("electron");
-        const update = ipcRenderer.sendSync("get-updates");
+        // const { ipcRenderer } = require("electron");
+        // const update = ipcRenderer.sendSync("get-updates");
+        const update = await window.desktop.getUpdates();
         // console.log("update:", update);
         if (update && !update.prerelease) {
           setIsUpdateAvailable(true);
@@ -59,8 +60,11 @@ const Statusbar: React.FC = () => {
       e.preventDefault();
       e.stopPropagation();
       if (isRunningInElectron()) {
-        const { ipcRenderer } = require("electron");
-        ipcRenderer.sendSync("open-downloads-page");
+        // const { ipcRenderer } = require("electron");
+        // ipcRenderer.sendSync("open-downloads-page");
+        window.desktop.openWeblink(
+          `https://github.com/saisandeepvaddi/ten-hands/releases`,
+        );
       }
     } catch (error) {
       console.log("error:", error);

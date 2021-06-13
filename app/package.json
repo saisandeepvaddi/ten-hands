@@ -80,6 +80,7 @@
     "@types/jest": "^26.0.19",
     "@types/lowdb": "^1.0.9",
     "@types/morgan": "^1.9.2",
+    "@types/node": "^12.20.15",
     "@types/serve-handler": "^6.1.0",
     "@types/socket.io": "^2.1.12",
     "@types/uuid": "^3.4.6",

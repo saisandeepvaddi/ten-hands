@@ -63,6 +63,7 @@ interface IStateAction {
 
 interface Window {
   tenHands: any;
+  desktop: Record<string, any>;
 }
 
 interface ITenHandsFile {

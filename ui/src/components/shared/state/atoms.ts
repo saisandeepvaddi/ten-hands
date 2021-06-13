@@ -26,8 +26,9 @@ export const projectsAtom = atom<IProject[]>({
 
 function getConfig(): IConfig {
   if (isRunningInElectron()) {
-    const { ipcRenderer } = require("electron");
-    const serverConfig: IConfig = ipcRenderer.sendSync(`get-config`);
+    // const { ipcRenderer } = require("electron");
+    // const serverConfig: IConfig = ipcRenderer.sendSync(`get-config`);
+    const serverConfig: IConfig = window.desktop.getAppConfig();
     console.log("serverConfig:", serverConfig);
     if (serverConfig.sendErrorReports) {
       Sentry.init({

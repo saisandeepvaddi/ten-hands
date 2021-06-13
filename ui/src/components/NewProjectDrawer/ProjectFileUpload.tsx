@@ -19,32 +19,36 @@ interface IProjectFileUploadProps {
 
 const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(
   ({ configFileName, onConfigFileUpload }) => {
-    const openUploadDialog = () => {
+    const openUploadDialog = async () => {
       if (isRunningInElectron()) {
         try {
-          const { dialog } = require("electron").remote;
-          dialog
-            .showOpenDialog({
-              filters: [{ name: "package.json", extensions: ["json"] }],
-            })
-            .then(({ filePaths }) => {
-              const configFilePath: string | undefined =
-                filePaths && filePaths.length > 0 ? filePaths[0] : undefined;
-              if (configFilePath === undefined) {
-                console.log("No file uploaded");
-                return null;
-              }
-              require("fs").readFile(
-                configFilePath,
-                "utf-8",
-                (err, fileData) => {
-                  if (err) {
-                    throw new Error("Error reading config file");
-                  }
-                  onConfigFileUpload(configFilePath, fileData);
-                }
-              );
-            });
+          const { fileData, filePath } =
+            await window.desktop.uploadAndReadPackageJSON();
+          onConfigFileUpload(filePath, fileData);
+
+          // const { dialog } = require("electron").remote;
+          // dialog
+          //   .showOpenDialog({
+          //     filters: [{ name: "package.json", extensions: ["json"] }],
+          //   })
+          //   .then(({ filePaths }) => {
+          //     const configFilePath: string | undefined =
+          //       filePaths && filePaths.length > 0 ? filePaths[0] : undefined;
+          //     if (configFilePath === undefined) {
+          //       console.log("No file uploaded");
+          //       return null;
+          //     }
+          //     require("fs").readFile(
+          //       configFilePath,
+          //       "utf-8",
+          //       (err, fileData) => {
+          //         if (err) {
+          //           throw new Error("Error reading config file");
+          //         }
+          //         onConfigFileUpload(configFilePath, fileData);
+          //       }
+          //     );
+          //   });
         } catch (error) {
           console.log("error:", error);
           captureException(error);
@@ -65,7 +69,7 @@ const ProjectFileUpload: React.FC<IProjectFileUploadProps> = React.memo(
         />
       </ProjectFileFieldContainer>
     );
-  }
+  },
 );
 
 export default ProjectFileUpload;
