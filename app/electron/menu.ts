@@ -1,5 +1,5 @@
 import { captureException } from "@sentry/electron";
-import { dialog, MenuItem } from "electron";
+import { app, dialog, Menu, MenuItem , shell } from "electron";
 
 import { CONFIG_FILES } from "../shared/config";
 import { logger } from "./logger";
@@ -9,8 +9,6 @@ import {
   showUpdateAvailableMessage,
   showUpdateNotAvailableMessage,
 } from "./updates";
-
-const { app, Menu, shell } = require("electron");
 
 const isMac = process.platform === "darwin";
 

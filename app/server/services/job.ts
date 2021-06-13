@@ -51,6 +51,12 @@ class Job {
       }
 
       const n = exec(job, jobOptions);
+      
+      if(!n || !n.pid) {
+        this.socketManager.emit(`job_error`, {taskID, data: `Failed to start process.`})
+        return;
+      }
+
       this.pid = n.pid;
 
       console.log(`Process started with PID: ${n.pid}`);

@@ -50,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@electron/remote": "^1.1.0",
     "@sentry/electron": "^2.0.4",
     "@sentry/node": "^5.29.0",
     "@sentry/tracing": "^5.29.0",
@@ -79,11 +80,10 @@
     "@types/jest": "^26.0.19",
     "@types/lowdb": "^1.0.9",
     "@types/morgan": "^1.9.2",
-    "@types/node": "12.19.14",
     "@types/serve-handler": "^6.1.0",
     "@types/socket.io": "^2.1.12",
     "@types/uuid": "^3.4.6",
-    "electron": "11.2.0",
+    "electron": "^13.1.2",
     "electron-builder": "^22.9.1",
     "electron-react-devtools": "^0.5.3",
     "eslint-plugin-node": "^11.1.0",

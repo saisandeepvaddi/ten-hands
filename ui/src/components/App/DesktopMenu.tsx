@@ -61,7 +61,8 @@ type TMinMaxIconType = "duplicate" | "square";
 
 const DesktopMenu = () => {
   // Importing electron here so that code doesn't give compilation error when running in browser
-  const { remote, ipcRenderer } = require("electron");
+  const remote = require("@electron/remote");
+  const { ipcRenderer } = require("electron");
   const currentWindow = remote.getCurrentWindow();
   const startingIcon: TMinMaxIconType = currentWindow.isMaximized()
     ? "duplicate"

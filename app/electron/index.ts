@@ -1,3 +1,4 @@
+
 import * as SentryElectron from "@sentry/electron";
 import { app, BrowserWindow, crashReporter, dialog, ipcMain } from "electron";
 import windowStateKeeper from "electron-window-state";
@@ -21,6 +22,8 @@ unhandled();
 
 const path = require("path");
 const isDev = require("electron-is-dev");
+
+require('@electron/remote/main').initialize()
 
 if (getConfig().sendErrorReports) {
   SentryElectron.init({
@@ -70,6 +73,7 @@ function createWindow() {
         nodeIntegration: true,
         enableRemoteModule: true,
         webSecurity: isDev ? false : true,
+        contextIsolation: false
       },
     });
 
