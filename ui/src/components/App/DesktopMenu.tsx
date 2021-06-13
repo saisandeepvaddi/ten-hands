@@ -61,13 +61,14 @@ type TMinMaxIconType = "duplicate" | "square";
 
 const DesktopMenu = () => {
   console.log("desktop: ", window.desktop);
-  const { getCurrentWindowData, displayAppMenu, close } = window.desktop;
+  const { getCurrentWindowState, changeCurrentWindowState, displayAppMenu } =
+    window.desktop;
   // Importing electron here so that code doesn't give compilation error when running in browser
   // const remote = require("@electron/remote");
   // const { ipcRenderer } = require("electron");
   // const currentWindow = remote.getCurrentWindow();
-  const currentWindow = getCurrentWindowData();
-  const startingIcon: TMinMaxIconType = currentWindow.isMaximized()
+
+  const startingIcon: TMinMaxIconType = getCurrentWindowState().isMaximized
     ? "duplicate"
     : "square";
 
@@ -124,7 +125,8 @@ const DesktopMenu = () => {
           minimal={true}
           className="window-button minimize-button"
           onClick={() => {
-            currentWindow.isMinimizable() && currentWindow.minimize();
+            getCurrentWindowState().isMinimizable &&
+              changeCurrentWindowState("minimize");
           }}
         >
           <Icon icon="minus" />
@@ -138,11 +140,11 @@ const DesktopMenu = () => {
             alignItems: "center",
           }}
           onClick={() => {
-            if (currentWindow.isMaximized()) {
-              currentWindow.unmaximize();
+            if (getCurrentWindowState().isMaximized) {
+              changeCurrentWindowState("unmaximize");
               setMaximizeIcon("square");
             } else {
-              currentWindow.maximize();
+              changeCurrentWindowState("maximize");
               setMaximizeIcon("duplicate");
             }
           }}
@@ -156,8 +158,9 @@ const DesktopMenu = () => {
           onMouseOver={() => setIsCloseButtonMinimal(false)}
           onMouseOut={() => setIsCloseButtonMinimal(true)}
           onClick={() => {
+            changeCurrentWindowState("close");
             // remote.getCurrentWindow().close();
-            close();
+            // close();
           }}
         >
           <Icon icon="cross" />

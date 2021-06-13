@@ -14,7 +14,7 @@ const { override } = require("customize-cra");
 module.exports = override(
   (config) => ({
     ...config,
-    target: "electron-renderer",
-  })
+    target: "web",
+  }),
   // addReactRefresh({ disableRefreshCheck: true })
 );

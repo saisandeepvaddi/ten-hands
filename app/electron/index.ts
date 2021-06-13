@@ -23,7 +23,7 @@ unhandled();
 const path = require("path");
 const isDev = require("electron-is-dev");
 
-require('@electron/remote/main').initialize()
+// require('@electron/remote/main').initialize()
 
 if (getConfig().sendErrorReports) {
   SentryElectron.init({
@@ -72,9 +72,8 @@ function createWindow() {
       webPreferences: {
         enableRemoteModule: true,
         webSecurity: isDev ? false : true,
-        nodeIntegration: true,
-        contextIsolation: false,
-        // preload: path.join(__dirname, "preload.js")
+        nodeIntegration: false,
+        contextIsolation: true,
         preload: path.join(__dirname, "preload.js") 
       },
     });
