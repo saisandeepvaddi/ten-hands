@@ -41,7 +41,7 @@ const buildUIForBrowser = task("npm run build:browser", {
   cwd: path.join(__dirname, "ui"),
 });
 
-const buildUIForElectron = task("npm run build:electron", {
+const buildUIForElectron = task("npm run build:desktop", {
   cwd: path.join(__dirname, "ui"),
 });
 
