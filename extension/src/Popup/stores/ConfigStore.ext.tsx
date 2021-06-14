@@ -1,8 +1,8 @@
 import { captureException } from "@sentry/react";
 import React from "react";
 
-import { IConfig } from "../../types";
 import { getItem, setItem } from "../../common/storage.util";
+import { IConfig } from "../../types";
 
 interface IConfigContextValue {
   config: IConfig;

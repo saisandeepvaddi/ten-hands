@@ -10,13 +10,13 @@
     "start:desktop": "./node_modules/.bin/gulp startDesktop",
     "start:browser": "./node_modules/.bin/gulp startBrowser",
     "start:server": "./node_modules/.bin/gulp startServer",
-    "test:ui": "cd ./ui && yarn test",
+    "test:ui": "cd ./ui && npm run test",
     "start:cli": "./node_modules/.bin/gulp startCLI",
     "bump-version:major": "./node_modules/.bin/gulp updateMajorVersion",
     "bump-version:minor": "./node_modules/.bin/gulp updateMinorVersion",
     "bump-version:patch": "./node_modules/.bin/gulp updatePatchVersion",
-    "lint": "./node_modules/.bin/eslint . --ext .ts,.tsx",
-    "lint:fix": "./node_modules/.bin/eslint . --ext .ts,.tsx --fix"
+    "lint": "./node_modules/.bin/eslint . --ext .ts,.tsx --ignore-pattern extension/*",
+    "lint:fix": "./node_modules/.bin/eslint . --ext .ts,.tsx --ignore-pattern extension/* --fix"
   },
   "tenHands": {
     "path": "D:\\Programming\\ten-hands"
@@ -40,21 +40,24 @@
   },
   "homepage": "https://github.com/saisandeepvaddi/ten-hands#readme",
   "devDependencies": {
-    "@saisandeepvaddi/eslint-config-typescript": "^1.1.5",
-    "@typescript-eslint/eslint-plugin": "^4.14.0",
-    "@typescript-eslint/parser": "^4.14.0",
+    "@saisandeepvaddi/eslint-config-typescript": "^1.1.6",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "babel-eslint": "^10.1.0",
     "del": "^6.0.0",
-    "eslint": "^7.18.0",
-    "eslint-config-prettier": "^7.2.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "gulp": "^4.0.2",
     "gulp-execa": "^2.0.0",
-    "prettier": "^2.2.1",
+    "prettier": "^2.3.0",
     "through2": "^3.0.1"
   }
 }

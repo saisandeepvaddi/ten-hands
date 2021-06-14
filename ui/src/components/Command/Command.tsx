@@ -1,16 +1,17 @@
 import { Alert, Button, Collapse, H5, ResizeSensor } from "@blueprintjs/core";
+import { useMotionValue } from "framer-motion";
 import React from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { useJobs, ACTION_TYPES } from "../shared/stores/JobStore";
+
 import JobTerminalManager from "../shared/JobTerminalManager";
+import { configAtom } from "../shared/state/atoms";
+import { ACTION_TYPES, useJobs } from "../shared/stores/JobStore";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useSockets } from "../shared/stores/SocketStore";
-import CommandOutputXterm from "./CommandOutputXterm";
-import UpdateCommandDrawer from "../UpdateCommandDrawer";
 import { useTheme } from "../shared/stores/ThemeStore";
-import { useMotionValue } from "framer-motion";
-import { useRecoilValue } from "recoil";
-import { configAtom } from "../shared/state/atoms";
+import UpdateCommandDrawer from "../UpdateCommandDrawer";
+import CommandOutputXterm from "./CommandOutputXterm";
 
 const Container = styled.div`
   display: flex;
@@ -60,11 +61,8 @@ const Command: React.FC<ICommandProps> = React.memo(
   ({ command, projectPath, index, projectId }) => {
     const [isOutputOpen, setOutputOpen] = React.useState(true);
     const { theme } = useTheme();
-    const {
-      subscribeToTaskSocket,
-      unsubscribeFromTaskSocket,
-      restartTask,
-    } = useSockets();
+    const { subscribeToTaskSocket, unsubscribeFromTaskSocket, restartTask } =
+      useSockets();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
     const taskID = command._id;
     const terminalManager = JobTerminalManager.getInstance();
@@ -72,9 +70,8 @@ const Command: React.FC<ICommandProps> = React.memo(
     const { activeProject, deleteTask, updateTask } = useProjects();
     const config = useRecoilValue(configAtom);
     const containerWidth = useMotionValue(0);
-    const [isDeleteAlertOpen, setIsDeleteAlertOpen] = React.useState<boolean>(
-      false
-    );
+    const [isDeleteAlertOpen, setIsDeleteAlertOpen] =
+      React.useState<boolean>(false);
     const deleteCommand = async () => {
       try {
         await deleteTask(activeProject._id, taskID);

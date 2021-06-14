@@ -1,16 +1,18 @@
+// tslint:disable-next-line: no-submodule-imports
+import "xterm/css/xterm.css";
+
 import { Classes } from "@blueprintjs/core";
 import { ITerminalOptions, ITheme, Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
-import { WebglAddon } from "xterm-addon-webgl";
 import { WebLinksAddon } from "xterm-addon-web-links";
+import { WebglAddon } from "xterm-addon-webgl";
 
-// tslint:disable-next-line: no-submodule-imports
-import "xterm/css/xterm.css";
 import { isRunningInElectron } from "../../utils/electron";
 
 function webLinksOnLinkClick(_event: MouseEvent, uri: string) {
   if (isRunningInElectron()) {
-    require("electron").shell.openExternal(uri);
+    window.desktop.openWeblink(uri);
+    // require("electron").shell.openExternal(uri);
   }
 }
 

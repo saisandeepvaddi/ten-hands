@@ -1,5 +1,5 @@
-import { Namespace, Server as SocketIOServer, Socket } from "socket.io";
 import { Server } from "http";
+import { Namespace, Server as SocketIOServer, Socket } from "socket.io";
 
 export interface ISocketListener {
   readonly event: string;

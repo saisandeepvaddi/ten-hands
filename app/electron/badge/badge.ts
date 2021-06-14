@@ -4,7 +4,8 @@
  */
 
 import { captureException } from "@sentry/electron";
-import { nativeImage, BrowserWindow, app } from "electron";
+import { app, BrowserWindow, nativeImage } from "electron";
+
 import { logger } from "../logger";
 
 export class Badge {

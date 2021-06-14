@@ -1,12 +1,13 @@
 import {
-  Tray,
-  Menu,
   app,
   BrowserWindow,
-  nativeImage,
+  Menu,
   NativeImage,
+  nativeImage,
+  Tray,
 } from "electron";
 import path from "path";
+
 import { setIsAppQuitting } from "./app-state";
 import { openAndFocusWindow } from "./utils";
 

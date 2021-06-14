@@ -1,11 +1,11 @@
-import React, { Component } from "react";
 //https://github.com/palantir/blueprint/issues/3604
 //https://github.com/pmclachlan/blink-mind/commit/79511a52ac379ab04f4d7fa96588733bac54b8cd
 import {
-  Hotkeys,
   Hotkey,
+  Hotkeys,
   HotkeysTarget,
 } from "@blueprintjs/core/lib/esnext/components/hotkeys";
+import React, { Component } from "react";
 
 interface ISearchHotKeyProps {
   searchbarOpen: boolean;

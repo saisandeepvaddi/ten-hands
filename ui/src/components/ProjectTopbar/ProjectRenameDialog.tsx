@@ -1,5 +1,5 @@
+import { Button, Dialog, FormGroup, InputGroup } from "@blueprintjs/core";
 import React from "react";
-import { Dialog, FormGroup, Button, InputGroup } from "@blueprintjs/core";
 
 interface IProjectRenameDialogProps {
   activeProject: IProject;

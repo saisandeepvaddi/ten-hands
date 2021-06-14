@@ -1,11 +1,12 @@
+import { Classes, Collapse, Icon } from "@blueprintjs/core";
 import React from "react";
-import { Item } from "./styles";
 import { DraggableProvided } from "react-beautiful-dnd";
-import { useTheme } from "../shared/stores/ThemeStore";
+
 import { useProjects } from "../shared/stores/ProjectStore";
+import { useTheme } from "../shared/stores/ThemeStore";
 import ProjectRunningTasksTag from "./ProjectRunningTasksTag";
-import { Classes, Icon, Collapse } from "@blueprintjs/core";
 import ProjectTaskItem from "./ProjectTaskItem";
+import { Item } from "./styles";
 
 interface IProjectItemProps {
   project: IProject;

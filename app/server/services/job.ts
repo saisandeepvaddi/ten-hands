@@ -1,7 +1,8 @@
-import fkill from "fkill";
-import treeKill from "tree-kill";
-import path from "path";
 import { exec } from "child_process";
+import fkill from "fkill";
+import path from "path";
+import treeKill from "tree-kill";
+
 import SocketManager, { ISocketListener } from "./socket";
 
 /**
@@ -50,6 +51,12 @@ class Job {
       }
 
       const n = exec(job, jobOptions);
+      
+      if(!n || !n.pid) {
+        this.socketManager.emit(`job_error`, {taskID, data: `Failed to start process.`})
+        return;
+      }
+
       this.pid = n.pid;
 
       console.log(`Process started with PID: ${n.pid}`);

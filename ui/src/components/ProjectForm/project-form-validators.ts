@@ -1,5 +1,5 @@
-import { hasDifferentProjectWithSameName } from "../../utils/projects";
 import { isValidPath } from "../../utils/node";
+import { hasDifferentProjectWithSameName } from "../../utils/projects";
 
 export async function validateEditProjectForm(
   values: IProject,

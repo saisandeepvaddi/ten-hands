@@ -1,12 +1,13 @@
+import { MotionValue, useMotionValue } from "framer-motion";
 import throttle from "lodash/throttle";
 import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+
 import JobTerminal from "../shared/JobTerminal";
 import JobTerminalManager from "../shared/JobTerminalManager";
+import { configAtom } from "../shared/state/atoms";
 import { useTheme } from "../shared/stores/ThemeStore";
 import Resizable from "./Resizable";
-import { MotionValue, useMotionValue } from "framer-motion";
-import { configAtom } from "../shared/state/atoms";
-import { useRecoilValue } from "recoil";
 
 interface ICommandProps {
   taskID: string;
@@ -58,9 +59,8 @@ const CommandOutputXterm: React.FC<ICommandProps> = React.memo(
         height.set(parentHeight);
         containerWidth.set(parentWidth);
         if (terminal.current === null) {
-          terminal.current = JobTerminalManager.getInstance().createJobTerminal(
-            taskID
-          );
+          terminal.current =
+            JobTerminalManager.getInstance().createJobTerminal(taskID);
           terminal.current.attachTo(
             elRef.current,
             config.terminalRenderer ?? "canvas"

@@ -1,4 +1,5 @@
 import { browser } from "webextension-polyfill-ts";
+
 import { Messages } from "../common/Messenger";
 import { IMessage } from "../types";
 

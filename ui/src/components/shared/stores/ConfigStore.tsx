@@ -1,18 +1,17 @@
 import { captureException } from "@sentry/react";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import React from "react";
 
 import { isRunningInElectron } from "../../../utils/electron";
 import { getItem, setItem } from "../../../utils/storage";
-
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 
 interface IConfigContextValue {
   config: IConfig;
   setConfig: (config: IConfig) => void;
   changeConfigOption: <K extends keyof IConfig, V extends IConfig[K]>(
     key: K,
-    value: V
+    value: V,
   ) => void;
 }
 
@@ -20,6 +19,22 @@ interface IConfigProviderProps {
   value?: IConfigContextValue;
   children: React.ReactNode;
 }
+
+let port: string | number = getItem("port") || window.location.port || 5010;
+
+console.log("port:", port);
+if (process.env.NODE_ENV !== "production") {
+  port = 5010;
+}
+setItem("port", port);
+const browserOnlyConfig: IConfig = {
+  port,
+  enableTerminalTheme: Boolean(getItem("enableTerminalTheme")) || true,
+  showStatusBar: Boolean(getItem("showStatusBar")) || true,
+  taskViewStyle: (getItem("taskViewStyle") as TaskViewStyle) || "tabs",
+  shell: "",
+  sendErrorReports: false,
+};
 
 export const ConfigContext = React.createContext<
   IConfigContextValue | undefined
@@ -29,13 +44,13 @@ function ConfigProvider(props: IConfigProviderProps) {
   const [config, setConfig] = React.useState(() => {
     try {
       if (isRunningInElectron()) {
-        const { ipcRenderer } = require("electron");
-        const serverConfig = ipcRenderer.sendSync(`get-config`);
+        // const { ipcRenderer } = require("electron");
+        // const serverConfig = ipcRenderer.sendSync(`get-config`);
+        const serverConfig: IConfig = window.desktop.getAppConfig();
         console.log("serverConfig:", serverConfig);
         if (serverConfig.sendErrorReports) {
           Sentry.init({
-            dsn:
-              "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
+            dsn: "https://cf85249eefb245d1a01fe81e2a425e5f@o443842.ingest.sentry.io/5418370",
             integrations: [new Integrations.BrowserTracing()],
             tracesSampleRate: 1.0,
             beforeSend(event) {
@@ -53,47 +68,33 @@ function ConfigProvider(props: IConfigProviderProps) {
         if (serverConfig) {
           return serverConfig;
         }
+        return browserOnlyConfig;
       } else {
-        let port: string | number =
-          getItem("port") || window.location.port || 5010;
-
-        console.log("port:", port);
-        if (process.env.NODE_ENV !== "production") {
-          port = 5010;
-        }
-        setItem("port", port);
-        const browserOnlyConfig: IConfig = {
-          port,
-          enableTerminalTheme: Boolean(getItem("enableTerminalTheme")) || true,
-          showStatusBar: Boolean(getItem("showStatusBar")) || true,
-          taskViewStyle: (getItem("taskViewStyle") as TaskViewStyle) || "tabs",
-          shell: "",
-          sendErrorReports: false,
-        };
         return browserOnlyConfig;
       }
     } catch (error) {
       console.error(`Error getting config.`);
       captureException(error);
+      return browserOnlyConfig;
     }
   });
 
-  React.useEffect(() => {
-    if (!isRunningInElectron()) {
-      return;
-    }
+  // React.useEffect(() => {
+  //   if (!isRunningInElectron()) {
+  //     return;
+  //   }
 
-    const { ipcRenderer } = require("electron");
-    ipcRenderer.on(`config-changed`, (e, newConfig) => {
-      console.log("Config file updated:", newConfig);
-      setConfig(newConfig);
-    });
-    return () => {
-      ipcRenderer.removeListener(`config-changed`, () => {
-        console.log(`config-changed listener removed`);
-      });
-    };
-  }, []);
+  //   const { ipcRenderer } = require("electron");
+  //   ipcRenderer.on(`config-changed`, (e, newConfig) => {
+  //     console.log("Config file updated:", newConfig);
+  //     setConfig(newConfig);
+  //   });
+  //   return () => {
+  //     ipcRenderer.removeListener(`config-changed`, () => {
+  //       console.log(`config-changed listener removed`);
+  //     });
+  //   };
+  // }, []);
 
   const changeConfigOption = React.useCallback(
     <K extends keyof IConfig, V extends IConfig[K]>(key: K, value: V) => {
@@ -104,7 +105,7 @@ function ConfigProvider(props: IConfigProviderProps) {
       setConfig(newConfig);
       //TODO: save new config
     },
-    [config, setConfig]
+    [config, setConfig],
   );
 
   const value = React.useMemo(() => {

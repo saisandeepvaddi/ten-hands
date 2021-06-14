@@ -1,13 +1,14 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import { isValidPath } from "../../utils/node";
-import { useProjects } from "../shared/stores/ProjectStore";
+
 import { getYesterday } from "../../utils/general";
-import { useRecoilValue } from "recoil";
+import { isValidPath } from "../../utils/node";
 import { configAtom } from "../shared/state/atoms";
+import { useProjects } from "../shared/stores/ProjectStore";
 
 const initialCommand: IProjectCommand = {
   _id: "",

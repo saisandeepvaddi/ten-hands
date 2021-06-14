@@ -1,12 +1,12 @@
 import { Classes, Code, Colors, Icon } from "@blueprintjs/core";
 import React, { ReactNodeArray, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { getFileData } from "../App/dragDropProject";
-import { useProjects } from "../shared/stores/ProjectStore";
-
 import styled from "styled-components";
+
 import { isRunningInElectron } from "../../utils/electron";
 import { hasProjectWithSameName } from "../../utils/projects";
+import { getFileData } from "../App/dragDropProject";
+import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import { toaster } from "../shared/Toaster";
 

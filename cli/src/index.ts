@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import meow from "meow";
+
 import { startServer, stopServer } from "./server";
 
 const serverCLI = meow(`

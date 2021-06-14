@@ -1,8 +1,8 @@
+import { captureException } from "@sentry/node";
 import fs from "fs";
-import path from "path";
 import mkdirp from "mkdirp";
 import { homedir } from "os";
-import { captureException } from "@sentry/node";
+import path from "path";
 
 export const CONFIG_FILES_DIR = path.join(homedir(), ".ten-hands");
 
