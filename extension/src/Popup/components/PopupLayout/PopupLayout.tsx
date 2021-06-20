@@ -1,14 +1,14 @@
+import { Colors, Icon, Spinner } from "@blueprintjs/core";
 import React from "react";
 import { useQuery } from "react-query";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+
+import TenHandsLogo from "../../../assets/icons/favicon-48.png";
 import { DataService } from "../../../common/DataService";
 import { projectsAtom } from "../../stores/projects.atom";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
-import { Colors, Icon, Spinner } from "@blueprintjs/core";
-
-import TenHandsLogo from "../../../assets/icons/favicon-48.png";
 
 const MainContainer = styled.div`
   height: 500px;

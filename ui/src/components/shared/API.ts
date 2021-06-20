@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse, AxiosError } from "axios";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 
 export const getProjects = async (config: IConfig): Promise<IProject[]> => {
   try {

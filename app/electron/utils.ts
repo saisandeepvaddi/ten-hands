@@ -1,8 +1,9 @@
 import { BrowserWindow, session } from "electron";
-import { showMessage } from "./tray";
-import { getConfig } from "../shared/config";
-import { join } from "path";
 import { readdir } from "fs";
+import { join } from "path";
+
+import { getConfig } from "../shared/config";
+import { showMessage } from "./tray";
 
 export const openAndFocusWindow = (mainWindow: BrowserWindow) => {
   if (mainWindow) {

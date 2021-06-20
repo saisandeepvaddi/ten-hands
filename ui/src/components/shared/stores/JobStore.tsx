@@ -1,6 +1,7 @@
 import localforage from "localforage";
 import throttle from "lodash/throttle";
 import React from "react";
+
 import { useMountedState } from "../hooks";
 
 localforage.config({

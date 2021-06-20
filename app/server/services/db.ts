@@ -2,6 +2,7 @@ import low, { AdapterSync, LowdbSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import Memory from "lowdb/adapters/Memory";
 import { v4 as uuidv4 } from "uuid";
+
 import { CONFIG_FILES } from "../../shared/config";
 import { areTwoArraysEqual } from "./utils";
 

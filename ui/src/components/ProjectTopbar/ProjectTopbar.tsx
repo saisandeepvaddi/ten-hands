@@ -9,19 +9,20 @@ import {
   Tooltip,
 } from "@blueprintjs/core";
 import React from "react";
+import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+
 import { isRunningInElectron, openInExplorer } from "../../utils/electron";
 import NewCommandDrawer from "../NewCommandDrawer";
+import EditProjectDrawer from "../ProjectForm/EditProjectDrawer";
 import { getGitRepo } from "../shared/API";
+import { configAtom } from "../shared/state/atoms";
 import { useProjects } from "../shared/stores/ProjectStore";
 import { useTheme } from "../shared/stores/ThemeStore";
 import CommandOrderListContainer from "./CommandOrderListContainer";
 import ProjectMenu from "./ProjectMenu";
 import Sorter from "./Sorter";
-import EditProjectDrawer from "../ProjectForm/EditProjectDrawer";
-import { useQuery } from "react-query";
-import { configAtom } from "../shared/state/atoms";
-import { useRecoilValue } from "recoil";
 
 interface IProjectTopbarProps {
   activeProject: IProject;
@@ -38,20 +39,15 @@ const GitBranchContainer = styled.div`
 
 const ProjectTopbar: React.FC<IProjectTopbarProps> = React.memo(
   ({ activeProject }) => {
-    const [isDeleteAlertOpen, setDeleteAlertOpen] = React.useState<boolean>(
-      false
-    );
+    const [isDeleteAlertOpen, setDeleteAlertOpen] =
+      React.useState<boolean>(false);
 
-    const [
-      commandsOrderModalOpen,
-      setCommandsOrderModalOpen,
-    ] = React.useState<boolean>(false);
+    const [commandsOrderModalOpen, setCommandsOrderModalOpen] =
+      React.useState<boolean>(false);
     const { theme } = useTheme();
     const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
-    const [
-      isProjectDrawerOpen,
-      setIsProjectDrawerOpen,
-    ] = React.useState<boolean>(false);
+    const [isProjectDrawerOpen, setIsProjectDrawerOpen] =
+      React.useState<boolean>(false);
 
     // const { config } = useConfig();
     const config = useRecoilValue(configAtom);

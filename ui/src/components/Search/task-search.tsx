@@ -1,8 +1,8 @@
-import React from "react";
-import { ItemRenderer } from "@blueprintjs/select";
 import { MenuItem } from "@blueprintjs/core";
+import { ItemRenderer } from "@blueprintjs/select";
 import Fuse from "fuse.js";
 import { throttle } from "lodash";
+import React from "react";
 function highlightText(text: string, query: string) {
   let lastIndex = 0;
   const words = query

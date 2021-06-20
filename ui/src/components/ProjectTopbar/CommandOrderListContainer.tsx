@@ -1,5 +1,6 @@
 import React from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
+
 import { useProjects } from "../shared/stores/ProjectStore";
 import CommandsOrderList from "./CommandsOrderList";
 
@@ -7,8 +8,8 @@ interface ICommandsOrderListContainerProps {
   activeProject: IProject;
 }
 
-const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = React.memo(
-  ({ activeProject }) => {
+const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> =
+  React.memo(({ activeProject }) => {
     const { reorderTasks } = useProjects();
     const [commands, setCommands] = React.useState(activeProject.commands);
 
@@ -56,7 +57,6 @@ const CommandOrderListContainer: React.FC<ICommandsOrderListContainerProps> = Re
         <CommandsOrderList commands={commands} projectId={activeProject._id} />
       </DragDropContext>
     );
-  }
-);
+  });
 
 export default CommandOrderListContainer;

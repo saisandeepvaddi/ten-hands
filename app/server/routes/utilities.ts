@@ -1,7 +1,8 @@
 import express from "express";
+
 import {
-  isValidPath,
   getGitInfo,
+  isValidPath,
   updateRunningTaskCount,
 } from "../controllers/utilities";
 const router = express.Router();

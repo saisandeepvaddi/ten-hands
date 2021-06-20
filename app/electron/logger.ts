@@ -1,6 +1,7 @@
 import { Logger } from "just-enough-logger";
-import { CONFIG_FILES, CONFIG_FILES_DIR } from "../shared/config";
 import { join } from "path";
+
+import { CONFIG_FILES, CONFIG_FILES_DIR } from "../shared/config";
 
 export const logger = new Logger({
   transports: ["file", "console"],

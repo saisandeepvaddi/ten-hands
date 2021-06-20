@@ -2,9 +2,9 @@ import express from "express";
 
 import {
   addCommand,
-  updateCommand,
   removeCommand,
   reorderCommands,
+  updateCommand,
 } from "../controllers/commands";
 const router = express.Router({ mergeParams: true });
 

@@ -1,14 +1,15 @@
+import { Alignment, Button, Icon } from "@blueprintjs/core";
 import React, { useRef } from "react";
-import { useJobs, ACTION_TYPES } from "../shared/stores/JobStore";
-import { useProjects } from "../shared/stores/ProjectStore";
-import styled from "styled-components";
-import { wait } from "../shared/utilities";
-import { Button, Alignment, Icon } from "@blueprintjs/core";
-import { useSockets } from "../shared/stores/SocketStore";
-import JobTerminalManager from "../shared/JobTerminalManager";
 import { useRecoilValue } from "recoil";
-import { siderWidthAtom } from "../shared/state/layout";
+import styled from "styled-components";
+
+import JobTerminalManager from "../shared/JobTerminalManager";
 import { configAtom } from "../shared/state/atoms";
+import { siderWidthAtom } from "../shared/state/layout";
+import { ACTION_TYPES, useJobs } from "../shared/stores/JobStore";
+import { useProjects } from "../shared/stores/ProjectStore";
+import { useSockets } from "../shared/stores/SocketStore";
+import { wait } from "../shared/utilities";
 
 const TaskContainer = styled.div`
   display: flex;
@@ -46,11 +47,8 @@ const ProjectTaskItem: React.FC<IProjectTaskItemProps> = ({
 
   const { runningTasks, state: jobState, dispatch } = useJobs();
   const { activeProject, updateTask } = useProjects();
-  const {
-    subscribeToTaskSocket,
-    unsubscribeFromTaskSocket,
-    restartTask,
-  } = useSockets();
+  const { subscribeToTaskSocket, unsubscribeFromTaskSocket, restartTask } =
+    useSockets();
   // const { config } = useConfig();
   const config = useRecoilValue(configAtom);
   const siderWidth = useRecoilValue(siderWidthAtom);

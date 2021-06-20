@@ -1,8 +1,9 @@
-import { getConfig } from "../shared/config";
-import { globalShortcut, BrowserWindow } from "electron";
-import { getMainWindow } from ".";
-import { openAndFocusWindow, hideWindowToTray } from "./utils";
 import { captureException } from "@sentry/electron";
+import { BrowserWindow, globalShortcut } from "electron";
+
+import { getConfig } from "../shared/config";
+import { getMainWindow } from ".";
+import { hideWindowToTray, openAndFocusWindow } from "./utils";
 
 const config: IConfig = getConfig();
 

@@ -1,9 +1,10 @@
+import "./index.css";
+
+import * as Sentry from "@sentry/react";
 import React from "react";
 import ReactDOM from "react-dom";
-import * as Sentry from "@sentry/react";
-import App from "./components/App";
 
-import "./index.css";
+import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
 // if (process.env.NODE_ENV === "development") {
@@ -16,7 +17,8 @@ import * as serviceWorker from "./serviceWorker";
 ReactDOM.render(
   <Sentry.ErrorBoundary fallback={"An error has occured"}>
     <App />
-  </Sentry.ErrorBoundary>,
+  </Sentry.ErrorBoundary>
+  ,
   document.getElementById("root")
 );
 

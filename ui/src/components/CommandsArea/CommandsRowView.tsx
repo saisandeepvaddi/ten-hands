@@ -1,6 +1,7 @@
-import React from "react";
-import Command from "../Command/Command";
 import { Card, Elevation } from "@blueprintjs/core";
+import React from "react";
+
+import Command from "../Command/Command";
 
 interface ICommandsRowViewProps {
   commands: IProjectCommand[];

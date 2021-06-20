@@ -1,4 +1,5 @@
 import { captureException } from "@sentry/react";
+
 import handleConfigFiles from "../NewProjectDrawer/handleConfigFiles";
 
 const checkIsFileValid = (file) => {
@@ -27,43 +28,48 @@ const checkIsFileValid = (file) => {
   return { isValid: true };
 };
 
-const getUploadableFile = async (filePath, fileData) => {
-  const path = require("path");
-  const fileName = path.basename(filePath);
-  const projectPath = path.dirname(filePath);
-  const tenHandsFile: ITenHandsFile = {
-    name: fileName,
-    path: projectPath,
-    data: fileData,
-  };
+// const getUploadableFile = async (tenHandsFile: ITenHandsFile) => {
+//   const uploadableFile = handleConfigFiles(tenHandsFile);
+//   return uploadableFile;
+// };
 
-  const uploadableFile = handleConfigFiles(tenHandsFile);
-  return uploadableFile;
-};
-
-export const getFileData = (file) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const validityCheck = checkIsFileValid(file);
-      if (!validityCheck.isValid) {
-        throw new Error(validityCheck.reason);
-      }
-
-      const { path } = file;
-
-      require("fs").readFile(path, "utf8", (err, fileData) => {
-        if (err) {
-          throw new Error("Error reading config file.");
-        }
-        const uploadableFileData = getUploadableFile(path, fileData);
-        resolve(uploadableFileData);
-      });
-    } catch (error) {
-      console.log("error:", error);
-      captureException(error);
-      reject(error.message);
+export const getFileData = async (file) => {
+  try {
+    const validityCheck = checkIsFileValid(file);
+    if (!validityCheck.isValid) {
+      throw new Error(validityCheck.reason);
     }
-  });
+
+    const tenHandsFile = await window.desktop.readUploadedConfigFile(file.path);
+    const uploadableFile = handleConfigFiles(tenHandsFile);
+    return uploadableFile;
+  } catch (error) {
+    console.error("error: ", error);
+    captureException(error);
+    throw error;
+  }
+  // return new Promise((resolve, reject) => {
+  //   try {
+  //     const validityCheck = checkIsFileValid(file);
+  //     if (!validityCheck.isValid) {
+  //       throw new Error(validityCheck.reason);
+  //     }
+
+  //     const { path } = file;
+
+  //     require("fs").readFile(path, "utf8", (err, fileData) => {
+  //       if (err) {
+  //         throw new Error("Error reading config file.");
+  //       }
+  //       const uploadableFileData = getUploadableFile(path, fileData);
+  //       resolve(uploadableFileData);
+  //     });
+  //   } catch (error) {
+  //     console.log("error:", error);
+  //     captureException(error);
+  //     reject(error.message);
+  //   }
+  // });
 };
 
 export const getDraggedFiles = (dragContainer) => {

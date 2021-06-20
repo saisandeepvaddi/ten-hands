@@ -1,6 +1,7 @@
 import { Drawer } from "@blueprintjs/core";
 import React from "react";
 import styled from "styled-components";
+
 import { useTheme } from "../shared/stores/ThemeStore";
 import NewProjectForm from "./NewProjectForm";
 

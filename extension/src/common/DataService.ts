@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse } from "axios";
+
 import { config } from "./config";
 
 export const DataService = {

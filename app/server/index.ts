@@ -1,10 +1,11 @@
+import { captureException } from "@sentry/node";
+import fixPath from "fix-path";
 import { createServer } from "http";
+
+import { getConfig } from "../shared/config";
 import app from "./app";
 import { JobManager } from "./services/job";
-import { getConfig } from "../shared/config";
 import SocketManager from "./services/socket";
-import fixPath from "fix-path";
-import { captureException } from "@sentry/node";
 
 /**
  * Starts Node server for ten-hands project.

@@ -1,7 +1,8 @@
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { activeProjectIDAtom, projectsAtom } from "../../stores/projects.atom";
 import styled from "styled-components";
+
+import { activeProjectIDAtom, projectsAtom } from "../../stores/projects.atom";
 
 export const Item = styled.div`
   width: 100%;
@@ -14,9 +15,8 @@ export const Item = styled.div`
 
 const Sidebar = () => {
   const projects = useRecoilValue(projectsAtom);
-  const [activeProjectId, updateActiveProjectID] = useRecoilState(
-    activeProjectIDAtom
-  );
+  const [activeProjectId, updateActiveProjectID] =
+    useRecoilState(activeProjectIDAtom);
 
   return (
     <div>

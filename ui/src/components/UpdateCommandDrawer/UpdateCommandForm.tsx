@@ -1,11 +1,12 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useState } from "react";
-import styled from "styled-components";
-import { isValidPath } from "../../utils/node";
-import { useProjects } from "../shared/stores/ProjectStore";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
+
+import { isValidPath } from "../../utils/node";
 import { configAtom } from "../shared/state/atoms";
+import { useProjects } from "../shared/stores/ProjectStore";
 
 const Container = styled.div`
   height: 100%;

@@ -1,17 +1,18 @@
 import { Button, FileInput, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik } from "formik";
 import React, { useCallback, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
+
 import { isRunningInElectron } from "../../utils/electron";
 import { isValidPath } from "../../utils/node";
 import { hasProjectWithSameName } from "../../utils/projects";
+import { configAtom } from "../shared/state/atoms";
 import { useProjects } from "../shared/stores/ProjectStore";
 import handleConfigFiles from "./handleConfigFiles";
 import NewProjectCommands from "./NewProjectCommands";
 import ProjectFileUpload from "./ProjectFileUpload";
-import { v4 as uuidv4 } from "uuid";
-import { useRecoilValue } from "recoil";
-import { configAtom } from "../shared/state/atoms";
 
 const emptyProject: IProject = {
   _id: uuidv4(),
@@ -105,22 +106,26 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
       (filePath, fileData, setFieldValue) => {
         try {
           if (isRunningInElectron()) {
-            const path = require("path");
-            const fileName = path.basename(filePath);
-            const projectPath = path.dirname(filePath);
-            const tenHandsFile: ITenHandsFile = {
-              name: fileName,
-              path: projectPath,
-              data: fileData,
-            };
-            setConfigFileName(fileName);
+            const tenHandsFile = window.desktop.createTenHandsConfigFile(
+              filePath,
+              fileData,
+            );
+            // const path = require("path");
+            // const fileName = path.basename(filePath);
+            // const projectPath = path.dirname(filePath);
+            // const tenHandsFile: ITenHandsFile = {
+            //   name: fileName,
+            //   path: projectPath,
+            //   data: fileData,
+            // };
+            setConfigFileName(tenHandsFile.name);
             fillFormWithProjectConfig(tenHandsFile, setFieldValue);
           }
         } catch (error) {
           console.log("error:", error);
         }
       },
-      []
+      [],
     );
 
     const onProjectFileChange = useCallback((e, setFieldValue) => {
@@ -336,7 +341,7 @@ const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
         />
       </Container>
     );
-  }
+  },
 );
 
 export default NewProjectForm;

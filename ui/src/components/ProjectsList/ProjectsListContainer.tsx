@@ -1,3 +1,5 @@
+import { Button, Icon } from "@blueprintjs/core";
+import { captureException } from "@sentry/react";
 import React from "react";
 import {
   DragDropContext,
@@ -7,16 +9,15 @@ import {
   DroppableProvided,
   DropResult,
 } from "react-beautiful-dnd";
-import { reorderProjectsInDb } from "../shared/API";
-import { useProjects } from "../shared/stores/ProjectStore";
-import { Container } from "./styles";
-import ProjectItem from "./ProjectItem";
-import { Button, Icon } from "@blueprintjs/core";
-import Search from "../Search";
-import { captureException } from "@sentry/react";
-import styled from "styled-components";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
+
+import Search from "../Search";
+import { reorderProjectsInDb } from "../shared/API";
 import { configAtom } from "../shared/state/atoms";
+import { useProjects } from "../shared/stores/ProjectStore";
+import ProjectItem from "./ProjectItem";
+import { Container } from "./styles";
 
 const ListContainer = styled.div`
   height: 100%;
@@ -54,10 +55,8 @@ const ProjectsListContainer: React.FC = () => {
   /* eslint-disable-next-line */
   const [_, setSelectedItemIndex] = React.useState<number>(0);
   const [projects, setProjects] = React.useState<any>(originalProjects ?? []);
-  const [
-    activeProjectIndexBeforeDrag,
-    setActiveProjectIndexBeforeDrag,
-  ] = React.useState<number>(0);
+  const [activeProjectIndexBeforeDrag, setActiveProjectIndexBeforeDrag] =
+    React.useState<number>(0);
 
   const config = useRecoilValue(configAtom);
 

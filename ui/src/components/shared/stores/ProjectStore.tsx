@@ -1,4 +1,7 @@
 import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { isRunningInElectron } from "../../../utils/electron";
 import {
   deleteProjectInDb,
   deleteTaskInDb,
@@ -7,17 +10,15 @@ import {
   reorderTasksInDb,
   saveProjectInDb,
   saveTaskInDb,
-  updateTaskInDb,
   updateProjectInDb,
   updateRunningTaskCountInDB,
+  updateTaskInDb,
 } from "../API";
 import { useMountedState } from "../hooks";
-import { useJobs, ACTION_TYPES } from "./JobStore";
 import JobTerminalManager from "../JobTerminalManager";
+import { activeProjectAtom, configAtom, projectsAtom } from "../state/atoms";
+import { ACTION_TYPES, useJobs } from "./JobStore";
 import { useSockets } from "./SocketStore";
-import { isRunningInElectron } from "../../../utils/electron";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { activeProjectAtom, projectsAtom, configAtom } from "../state/atoms";
 
 interface IProjectContextValue {
   projectsRunningTaskCount: { [key: string]: number };
@@ -35,7 +36,7 @@ interface IProjectContextValue {
   reorderTasks: (
     projectId: string,
     newTasks: IProjectCommand[],
-    taskSortOrder?: TASK_SORT_ORDER
+    taskSortOrder?: TASK_SORT_ORDER,
   ) => any;
   loadingProjects: boolean;
   renameProject: (projectId: string, newName: string) => any;
@@ -55,7 +56,7 @@ function getJobData(state, taskID: string) {
 
 const getRunningTasksCountForProjects = (
   projects: IProject[],
-  runningTasks: any
+  runningTasks: any,
 ): {
   runningTasksPerProject: Record<string, number>;
   totalRunningTaskCount: number;
@@ -92,7 +93,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       shell: "",
       commands: [],
     }),
-    []
+    [],
   );
 
   const isMounted = useMountedState();
@@ -105,10 +106,8 @@ function ProjectsProvider(props: IProjectsProviderProps) {
   const [activeProject, setActiveProject] = useRecoilState(activeProjectAtom);
   const [projects, setProjects] = useRecoilState(projectsAtom);
   const [loadingProjects, setLoadingProjects] = React.useState(true);
-  const [
-    projectsRunningTaskCount,
-    setProjectsRunningTaskCount,
-  ] = React.useState<any>({});
+  const [projectsRunningTaskCount, setProjectsRunningTaskCount] =
+    React.useState<any>({});
 
   const clearJobOutput = React.useCallback(
     (taskID) => {
@@ -118,7 +117,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       });
       terminalManager.clearTerminalInRoom(taskID);
     },
-    [dispatch, terminalManager]
+    [dispatch, terminalManager],
   );
 
   const updateJobProcess = React.useCallback(
@@ -129,7 +128,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         process: jobProcess,
       });
     },
-    [dispatch]
+    [dispatch],
   );
 
   const stopJob = React.useCallback(
@@ -142,7 +141,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         pid: -1,
       });
     },
-    [jobState, updateJobProcess, unsubscribeFromTaskSocket]
+    [jobState, updateJobProcess, unsubscribeFromTaskSocket],
   );
 
   const stopTask = React.useCallback(
@@ -153,12 +152,10 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         console.log(`stopTask error: `, error);
       }
     },
-    [stopJob]
+    [stopJob],
   );
-  const [
-    totalRunningTaskCount,
-    setTotalRunningTaskCount,
-  ] = React.useState<number>(0);
+  const [totalRunningTaskCount, setTotalRunningTaskCount] =
+    React.useState<number>(0);
 
   const updateProjects = React.useCallback(() => {
     const reloadProjects = async () => {
@@ -172,7 +169,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
           } else {
             // Commands order might be changed.
             const newActiveProject = receivedProjects.find(
-              (project) => project._id === activeProject._id
+              (project) => project._id === activeProject._id,
             );
 
             // If the project was deleted
@@ -201,14 +198,14 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const deleteTaskFn = async () => {
         await deleteTaskInDb(config, projectId, taskId);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          (x) => x._id === projectId,
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
         if (projectWithThisTask) {
           const currentTasks = [...projectWithThisTask.commands];
           const updatedTasks = currentTasks.filter(
-            (x: IProjectCommand) => x._id !== taskId
+            (x: IProjectCommand) => x._id !== taskId,
           );
           const updatedProject: IProject = {
             ...projectWithThisTask,
@@ -222,7 +219,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       deleteTaskFn();
     },
-    [config, projects, setProjects, setActiveProject]
+    [config, projects, setProjects, setActiveProject],
   );
 
   const renameProject = React.useCallback(
@@ -230,7 +227,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const renameProjectFn = async () => {
         await renameProjectInDb(config, projectId, newName);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          (x) => x._id === projectId,
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -250,7 +247,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       renameProjectFn();
     },
-    [config, projects, isMounted, setProjects, setActiveProject]
+    [config, projects, isMounted, setProjects, setActiveProject],
   );
 
   const updateProject = React.useCallback(
@@ -258,7 +255,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       const updateProjectFn = async () => {
         await updateProjectInDb(config, projectId, newProjectData);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          (x) => x._id === projectId,
         );
         const renamingProject = projects[currentProjectIndex];
 
@@ -278,19 +275,19 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       updateProjectFn();
     },
-    [config, projects, isMounted, setProjects, setActiveProject]
+    [config, projects, isMounted, setProjects, setActiveProject],
   );
 
   const reorderTasks = React.useCallback(
     (
       projectId: string,
       commands: IProjectCommand[],
-      taskSortOrder: TASK_SORT_ORDER = "name-asc"
+      taskSortOrder: TASK_SORT_ORDER = "name-asc",
     ) => {
       const reorderTasksFn = async () => {
         await reorderTasksInDb(config, projectId, commands, taskSortOrder);
         const currentProjectIndex = projects.findIndex(
-          (x) => x._id === projectId
+          (x) => x._id === projectId,
         );
         const projectWithThisTask = projects[currentProjectIndex];
 
@@ -308,7 +305,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       reorderTasksFn();
     },
-    [config, projects, setProjects, setActiveProject]
+    [config, projects, setProjects, setActiveProject],
   );
 
   const addTask = React.useCallback(
@@ -317,7 +314,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await saveTaskInDb(config, projectID, newTask);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectID
+            (x) => x._id === projectID,
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
@@ -337,7 +334,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       addTaskInFn(projectId, task);
     },
-    [config, projects, setProjects, setActiveProject]
+    [config, projects, setProjects, setActiveProject],
   );
 
   const updateTask = React.useCallback(
@@ -346,12 +343,12 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         try {
           await updateTaskInDb(config, projectID, updatingTaskID, updatedTask);
           const currentProjectIndex = projects.findIndex(
-            (x) => x._id === projectID
+            (x) => x._id === projectID,
           );
           const projectWithThisTask = projects[currentProjectIndex];
           if (projectWithThisTask) {
             const taskIndex = projectWithThisTask.commands.findIndex(
-              (iterTask) => iterTask._id === updatingTaskID
+              (iterTask) => iterTask._id === updatingTaskID,
             );
 
             if (taskIndex < 0) {
@@ -379,7 +376,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       updateTaskFn(projectId, taskId, task);
     },
-    [config, projects, setProjects, setActiveProject]
+    [config, projects, setProjects, setActiveProject],
   );
 
   const addProject = React.useCallback(
@@ -388,7 +385,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         const newProject = await saveProjectInDb(config, projectData);
         if (!newProject) {
           throw new Error(
-            "Failed to add project. Something wrong with server."
+            "Failed to add project. Something wrong with server.",
           );
         }
 
@@ -399,7 +396,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       };
       addProjectFn();
     },
-    [config, projects, setActiveProject, setProjects]
+    [config, projects, setActiveProject, setProjects],
   );
 
   const deleteProject = React.useCallback(
@@ -410,7 +407,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         }
         await deleteProjectInDb(config, projectId);
         const newProjects = projects.filter(
-          (x: IProject) => x._id !== projectId
+          (x: IProject) => x._id !== projectId,
         );
         setProjects(newProjects);
         if (newProjects && newProjects?.length > 0) {
@@ -422,7 +419,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
 
       deleteProjectFn();
     },
-    [config, projects, setProjects, setActiveProject, initialProject]
+    [config, projects, setProjects, setActiveProject, initialProject],
   );
 
   const startJob = React.useCallback(
@@ -444,7 +441,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       config.shell,
       subscribeToTaskSocket,
       updateTask,
-    ]
+    ],
   );
 
   const startTask = React.useCallback(
@@ -455,7 +452,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
         console.log(`startTask error: `, error);
       }
     },
-    [startJob]
+    [startJob],
   );
 
   const runAllStoppedTasks = React.useCallback(() => {
@@ -481,8 +478,9 @@ function ProjectsProvider(props: IProjectsProviderProps) {
       try {
         await updateRunningTaskCountInDB(config, totalRunningTaskCount);
         if (isRunningInElectron()) {
-          const { ipcRenderer } = require("electron");
-          ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
+          // const { ipcRenderer } = require("electron");
+          // ipcRenderer.sendSync(`update-task-count`, totalRunningTaskCount);
+          window.desktop.updateTaskCount(totalRunningTaskCount);
         }
       } catch (error) {
         console.log("error updating task count:", error);

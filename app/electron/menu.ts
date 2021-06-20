@@ -1,15 +1,14 @@
+import { captureException } from "@sentry/electron";
+import { app, dialog, Menu, MenuItem , shell } from "electron";
+
 import { CONFIG_FILES } from "../shared/config";
+import { logger } from "./logger";
 import {
   getAppUpdate,
+  showUnableToCheckUpdatesMessage,
   showUpdateAvailableMessage,
   showUpdateNotAvailableMessage,
-  showUnableToCheckUpdatesMessage,
 } from "./updates";
-import { MenuItem, dialog } from "electron";
-import { logger } from "./logger";
-import { captureException } from "@sentry/electron";
-
-const { app, Menu, shell } = require("electron");
 
 const isMac = process.platform === "darwin";
 

@@ -1,15 +1,15 @@
 import express from "express";
-import jobRoutes from "./jobs";
-import commandRoutes from "./commands";
 
 import {
-  getAllProjects,
   addProject,
   deleteProject,
-  reorderProjects,
+  getAllProjects,
   renameProject,
+  reorderProjects,
   updateProject,
 } from "../controllers/projects";
+import commandRoutes from "./commands";
+import jobRoutes from "./jobs";
 const router = express.Router();
 
 // GET http://localhost:5010/projects
