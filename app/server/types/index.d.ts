@@ -5,6 +5,7 @@ interface IProjectCommand {
   execDir: string;
   lastExecutedAt: Date;
   shell?: string;
+  arguments?: Record<string, string>;
 }
 
 type TASK_SORT_ORDER = "name-asc" | "name-desc" | "last-executed" | "custom";

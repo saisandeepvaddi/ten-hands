@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTheme } from "../shared/stores/ThemeStore";
-import UpdateCommandForm from "./UpdateCommandForm";
+import UpdateCommandForm from "./UpdateCommandFormContainer";
 
 const DrawerContainer = styled.div`
   height: 100%;
@@ -32,7 +32,7 @@ const UpdateCommandDrawer: React.FC<INewDrawerProps> = React.memo(
         </DrawerContainer>
       </Drawer>
     );
-  }
+  },
 );
 
 export default UpdateCommandDrawer;

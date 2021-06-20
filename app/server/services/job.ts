@@ -33,13 +33,25 @@ class Job {
    */
   public start(command: IProjectCommand, projectPath: string) {
     try {
-      const job = command.cmd;
+      let job = command.cmd;
+      
+
+      if(command.arguments && Object.keys(command.arguments).length > 0) {
+      
+        Object.entries(command.arguments).forEach(([argName, argValue]) => {
+          job = job.replaceAll(argName, argValue);
+        })
+      }
+
       const execPath =
         command.execDir.length > 0
           ? path.resolve(command.execDir)
           : path.resolve(projectPath);
 
-      console.log("execPath:", execPath);
+      
+      
+
+      console.log(`Task ${job} executing at ${execPath}`);
       const taskID = this.taskID;
       const jobOptions: any = {
         cwd: execPath || process.cwd(),

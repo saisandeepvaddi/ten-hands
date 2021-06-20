@@ -1,195 +1,223 @@
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
-import { Formik } from "formik";
-import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
+import { useFormik } from "formik";
+import React, { ChangeEvent, useState } from "react";
 
-import { getYesterday } from "../../utils/general";
-import { isValidPath } from "../../utils/node";
-import { configAtom } from "../shared/state/atoms";
-import { useProjects } from "../shared/stores/ProjectStore";
-
-const initialCommand: IProjectCommand = {
-  _id: "",
-  name: "",
-  execDir: "",
-  cmd: "",
-  lastExecutedAt: getYesterday(),
-  shell: "",
-};
-
-const Container = styled.div`
-  height: 100%;
-  overflow: auto;
-`;
-
-interface INewProjectFormProps {
-  setDrawerOpen: (isOpen: boolean) => any;
+interface INewCommandFormProps {
+  onSubmit: (values: Record<string, string>, actions: any) => Promise<any>;
+  initialValues: IProjectCommand;
+  customErrors: Record<string, string>;
 }
 
-const NewProjectForm: React.FC<INewProjectFormProps> = React.memo(
-  ({ setDrawerOpen }) => {
-    const { activeProject, addTask } = useProjects();
-    // const { config } = useConfig();
-    const config = useRecoilValue(configAtom);
+// const parseArgs = (cmd: string): Map<string, string> => {
+//   const argv = Parser(cmd);
 
-    const [errors, setErrors] = useState<any>({
-      path: "",
+//   const { _, ...other } = argv;
+
+//   const myArgs: Map<string, string> = new Map();
+
+//   if (_ && _.length > 0) {
+//     for (const ar of _) {
+//       if (ar.startsWith("$")) {
+//         myArgs.set(ar, "");
+//       }
+//     }
+//   }
+
+//   Object.keys(other).forEach((argName) => {
+//     myArgs.set(argName, "");
+//   });
+
+//   return myArgs;
+// };
+const parseArgs = (cmd: string): Map<string, string> => {
+  const argv = cmd.split(" ");
+
+  const myArgs: Map<string, string> = new Map();
+
+  for (const ar of argv) {
+    if (ar.startsWith("$")) {
+      myArgs.set(ar, "");
+    }
+  }
+
+  return myArgs;
+};
+
+const NewCommandForm: React.FC<INewCommandFormProps> = React.memo(
+  ({ onSubmit, initialValues, customErrors }) => {
+    const formik = useFormik({
+      initialValues,
+      onSubmit,
     });
 
-    const validatePath = async (value) => {
-      try {
-        let error = "";
-        if (!value) {
-          return "";
-        }
-        const isPathValid = await isValidPath(config, value);
-
-        if (!isPathValid) {
-          error = "This path doesn't exist. You can leave path empty.";
-        }
-
-        return error;
-      } catch (error) {
-        console.log("error:", error);
+    const [args, setArgs] = useState<Map<string, string> | null>(() => {
+      if (!initialValues.arguments) {
+        return null;
       }
+
+      if (
+        initialValues.arguments &&
+        Object.keys(initialValues.arguments).length > 0
+      ) {
+        return new Map(Object.entries(initialValues.arguments));
+      }
+
+      return parseArgs(initialValues.cmd);
+    });
+
+    const handleCommandChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+
+      const myArgs = parseArgs(value);
+      console.log("myArgs:", myArgs);
+      setArgs(myArgs);
+
+      formik.setFieldValue("cmd", value);
     };
 
-    const handleSubmit = async (values, actions): Promise<any> => {
-      try {
-        const newCommand: IProjectCommand = {
-          ...values,
-          _id: uuidv4(),
-        };
-        const pathError = await validatePath(newCommand.execDir);
-        const shellError = await validatePath(newCommand.shell);
-        if (pathError || shellError) {
-          actions.setSubmitting(false);
-          setErrors({
-            path: pathError,
-            shell: shellError,
-          });
-          return;
-        }
-        actions.setSubmitting(true);
-        await addTask(activeProject._id, newCommand);
-        actions.setSubmitting(false);
-        setDrawerOpen(false);
-      } catch (error) {
-        console.error(error);
-        actions.setSubmitting(false);
+    const handleArgChange = (argName: string, value: string) => {
+      if (args?.has(argName)) {
+        const newArgs = new Map(args.entries());
+        newArgs.set(argName, value);
+        setArgs(newArgs);
+        formik.setFieldValue(
+          "arguments",
+          Object.fromEntries(newArgs.entries()),
+        );
       }
     };
 
     return (
-      <Container>
-        <Formik
-          initialValues={initialCommand}
-          onSubmit={handleSubmit}
-          render={(props) => (
-            <form onSubmit={props.handleSubmit} data-testid="new-task-form">
-              <FormGroup
-                label="Name"
-                labelFor="name"
-                helperText="A short name for your task."
-              >
-                <InputGroup
-                  required={true}
-                  placeholder="E.g., Start DB"
-                  id="name"
-                  type="text"
-                  onChange={props.handleChange}
-                  value={props.values.name}
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus
-                />
-              </FormGroup>
+      <form onSubmit={formik.handleSubmit} data-testid="new-task-form">
+        <FormGroup
+          label="Name"
+          labelFor="name"
+          helperText="A short name for your task."
+        >
+          <InputGroup
+            required={true}
+            placeholder="E.g., Start DB"
+            id="name"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.name}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+          />
+        </FormGroup>
 
-              <FormGroup
-                label="Task"
-                labelFor="cmd"
-                helperText="Actual task to run in terminal."
-              >
-                <InputGroup
-                  required={true}
-                  id="cmd"
-                  type="text"
-                  placeholder="e.g., yarn test"
-                  onChange={props.handleChange}
-                  value={props.values.cmd}
-                />
-              </FormGroup>
-              <FormGroup
-                label="Path (optional)"
-                labelFor="execDir"
-                intent={errors.path ? "danger" : "none"}
-                helperText={
-                  errors.path ? (
-                    errors.path
-                  ) : (
-                    <span>
-                      Use this{" "}
-                      <b>
-                        <i>only</i>
-                      </b>{" "}
-                      when task path is different from the project path.
-                    </span>
-                  )
-                }
-              >
-                <InputGroup
-                  placeholder="E.g., Absolute path where to execute the task."
-                  id="execDir"
-                  type="text"
-                  onChange={props.handleChange}
-                  value={props.values.execDir}
-                />
-              </FormGroup>
-              <FormGroup
-                label="Shell (optional)"
-                labelFor="shell"
-                intent={errors.shell ? "danger" : "none"}
-                helperText={
-                  errors.shell ? (
-                    errors.shell
-                  ) : (
-                    <span>
-                      Absolute path to the shell. Overrides project&apos;s shell
-                      or global shell.
-                    </span>
-                  )
-                }
-              >
-                <InputGroup
-                  placeholder={
-                    navigator.platform.toLowerCase() === "win32"
-                      ? "C:\\Windows\\System32\\cmd.exe"
-                      : "/bin/sh"
-                  }
-                  id="shell"
-                  type="text"
-                  onChange={props.handleChange}
-                  value={props.values.shell}
-                />
-              </FormGroup>
+        <FormGroup
+          label="Task"
+          labelFor="cmd"
+          helperText="Actual task to run in terminal."
+        >
+          <InputGroup
+            required={true}
+            id="cmd"
+            type="text"
+            placeholder="e.g., yarn test"
+            onChange={handleCommandChange}
+            value={formik.values.cmd}
+          />
+        </FormGroup>
+        {args && args.size > 0 ? (
+          <div style={{ paddingLeft: 20, maxHeight: 900, overflow: "auto" }}>
+            <h5>Arguments</h5>
+            <FormGroup>
+              {Array.from(args).map(([argName, value]) => {
+                return (
+                  <div
+                    key={argName}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      paddingBottom: 10,
+                    }}
+                  >
+                    <div
+                      style={{ width: 50, textAlign: "right", marginRight: 10 }}
+                    >
+                      <label htmlFor={argName}>{argName}</label>
+                    </div>
+                    <InputGroup
+                      id={argName}
+                      value={value}
+                      placeholder="Default value"
+                      onChange={(e) => handleArgChange(argName, e.target.value)}
+                    />
+                  </div>
+                );
+              })}
+            </FormGroup>
+          </div>
+        ) : null}
+        <FormGroup
+          label="Path (optional)"
+          labelFor="execDir"
+          intent={customErrors.path ? "danger" : "none"}
+          helperText={
+            customErrors.path ? (
+              customErrors.path
+            ) : (
+              <span>
+                Use this{" "}
+                <b>
+                  <i>only</i>
+                </b>{" "}
+                when task path is different from the project path.
+              </span>
+            )
+          }
+        >
+          <InputGroup
+            placeholder="E.g., Absolute path where to execute the task."
+            id="execDir"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.execDir}
+          />
+        </FormGroup>
+        <FormGroup
+          label="Shell (optional)"
+          labelFor="shell"
+          intent={customErrors.shell ? "danger" : "none"}
+          helperText={
+            customErrors.shell ? (
+              customErrors.shell
+            ) : (
+              <span>
+                Absolute path to the shell. Overrides project&apos;s shell or
+                global shell.
+              </span>
+            )
+          }
+        >
+          <InputGroup
+            placeholder={
+              navigator.platform.toLowerCase() === "win32"
+                ? "C:\\Windows\\System32\\cmd.exe"
+                : "/bin/sh"
+            }
+            id="shell"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.shell}
+          />
+        </FormGroup>
 
-              <FormGroup>
-                <Button
-                  data-testid="save-task-button"
-                  intent="primary"
-                  text="Save Task"
-                  type="submit"
-                  loading={props.isSubmitting}
-                  large={true}
-                />
-              </FormGroup>
-            </form>
-          )}
-        />
-      </Container>
+        <FormGroup>
+          <Button
+            data-testid="save-task-button"
+            intent="primary"
+            text="Save Task"
+            type="submit"
+            loading={formik.isSubmitting}
+            large={true}
+          />
+        </FormGroup>
+      </form>
     );
-  }
+  },
 );
 
-export default NewProjectForm;
+export default NewCommandForm;

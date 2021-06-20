@@ -27,6 +27,7 @@ interface IProjectCommand {
   _id: string;
   lastExecutedAt: Date;
   shell?: string;
+  arguments?: Record<string, string>;
   [name: string]: any;
 }
 

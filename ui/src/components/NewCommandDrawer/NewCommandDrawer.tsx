@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTheme } from "../shared/stores/ThemeStore";
-import NewCommandForm from "./NewCommandForm";
+import NewCommandFormContainer from "./NewCommandFormContainer";
 
 const DrawerContainer = styled.div`
   height: 100%;
@@ -27,11 +27,11 @@ const NewCommandDrawer: React.FC<INewDrawerProps> = React.memo(
         onClose={() => setDrawerOpen(false)}
       >
         <DrawerContainer>
-          <NewCommandForm setDrawerOpen={setDrawerOpen} />
+          <NewCommandFormContainer setDrawerOpen={setDrawerOpen} />
         </DrawerContainer>
       </Drawer>
     );
-  }
+  },
 );
 
 export default NewCommandDrawer;

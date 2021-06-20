@@ -341,6 +341,7 @@ function ProjectsProvider(props: IProjectsProviderProps) {
     (projectId: string, taskId: string, task) => {
       const updateTaskFn = async (projectID, updatingTaskID, updatedTask) => {
         try {
+          console.log("updatedTask:", updatedTask);
           await updateTaskInDb(config, projectID, updatingTaskID, updatedTask);
           const currentProjectIndex = projects.findIndex(
             (x) => x._id === projectID,
