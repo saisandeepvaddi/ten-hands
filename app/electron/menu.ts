@@ -27,6 +27,8 @@ const editMenu: MenuItem = new MenuItem({
         shell.openPath(CONFIG_FILES.dbFile);
       },
     },
+    {role: "copy"},
+    {role: "paste"}
   ],
 });
 
