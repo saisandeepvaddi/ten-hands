@@ -27,6 +27,10 @@ const editMenu: MenuItem = new MenuItem({
         shell.openPath(CONFIG_FILES.dbFile);
       },
     },
+    {role: "cut", visible: false},
+    {role: "copy", visible: false},
+    {role: "paste", visible:false},
+    {role: 'selectAll', visible: false}
   ],
 });
 
