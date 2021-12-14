@@ -77,3 +77,4 @@ dist
 
 ui/cypress/screenshots/**
 ui/cypress/videos/**
+.DS_Store
