@@ -1,7 +1,32 @@
 {
   "folders": [
     {
+      "name": "Everything",
       "path": "."
+    },
+    {
+      "name": "old-UI",
+      "path": "./ui"
+    },
+    {
+      "name": "old-core",
+      "path": "./app"
+    },
+    {
+      "name": "old-cli",
+      "path": "./cli"
+    },
+    {
+      "name": "landing-page",
+      "path": "./docs"
+    },
+    {
+      "name": "web-next",
+      "path": "./web-next"
+    },
+    {
+      "name": "core",
+      "path": "./core"
     }
   ],
   "settings": {
